@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Үйлчилгээ — КиноЭзэн</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
+.nav-links a.active{color:#4ade80;}
+.nav-right{display:flex;gap:8px;}
+.btn-login{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
+.btn-join{padding:7px 16px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+.hero{text-align:center;padding:40px 18px 30px;}
+.hero h1{font-size:26px;font-weight:700;margin-bottom:10px;}
+.hero h1 span{color:#4ade80;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:500px;margin:0 auto;}
+.services{padding:20px 18px;max-width:800px;margin:0 auto;}
+.svc-card{background:#1e1e2e;border-radius:16px;padding:20px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.07);cursor:pointer;transition:border-color 0.2s;}
+.svc-card:hover{border-color:rgba(74,222,128,0.3);}
+.svc-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.svc-ico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.svc-ico.green{background:linear-gradient(135deg,#059669,#4ade80);}
+.svc-ico.orange{background:linear-gradient(135deg,#d97706,#f4a261);}
+.svc-ico.blue{background:linear-gradient(135deg,#2563eb,#6b7ff7);}
+.svc-ico.purple{background:linear-gradient(135deg,#7c3aed,#c084fc);}
+.svc-ico.red{background:linear-gradient(135deg,#dc2626,#e63946);}
+.svc-info{flex:1;}
+.svc-name{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;}
+.svc-desc{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
+.badges{display:flex;gap:6px;margin-top:8px;}
+.badge{font-size:10px;padding:2px 9px;border-radius:20px;font-weight:600;}
+.badge-free{background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);}
+.badge-pro{background:rgba(244,162,97,0.15);color:#f4a261;border:1px solid rgba(244,162,97,0.3);}
+.badge-hot{background:rgba(230,57,70,0.15);color:#e63946;border:1px solid rgba(230,57,70,0.3);}
+.svc-btn{width:100%;padding:11px;border-radius:10px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:13px;font-weight:500;cursor:pointer;}
+.svc-btn:hover{background:rgba(74,222,128,0.15);}
+
+/* TTS хэсэг */
+.tts-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
+.tts-box.show{display:block;}
+.form-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;display:block;}
+textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:13px;height:90px;resize:none;font-family:Arial,sans-serif;}
+textarea:focus{outline:none;border-color:#4ade80;}
+.voice-row{display:flex;gap:8px;margin:10px 0;}
+.vbtn{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
+.vbtn.on{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.08);}
+.run-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
+.result{background:#1e1e2e;border-radius:10px;padding:14px;margin-top:12px;border:1px solid rgba(74,222,128,0.2);display:none;}
+.result.show{display:block;}
+.result-label{font-size:11px;color:#4ade80;font-weight:600;margin-bottom:10px;}
+.audio-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.play-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.wave{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.1);}
+.dl-btn{width:100%;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
+
+/* Humanizer хэсэг */
+.hum-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
+.hum-box.show{display:block;}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+.split-card{background:#1e1e2e;border-radius:10px;padding:12px;}
+.split-label{font-size:11px;font-weight:600;margin-bottom:8px;}
+.split-label.red{color:#e63946;}
+.split-label.grn{color:#4ade80;}
+.split-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
+
+.footer{margin-top:30px;padding:16px 18px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:12px;color:rgba(255,255,255,0.3);}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="logo">
+    <div class="logo-text">КиноЭзэн</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Нүүр</a>
+    <a href="services.html" class="active">Үйлчилгээ</a>
+    <a href="login.html">Нэвтрэх</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+    <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>AI <span>үйлчилгээнүүд</span></h1>
+  <p>Монгол хэлний хамгийн дэвшилтэт AI хэрэгслүүд нэг дор</p>
+</div>
+
+<div class="services">
+
+  <!-- TTS -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico green">🎤</div>
+      <div class="svc-info">
+        <div class="svc-name">Монгол TTS — Дуу үүсгэгч</div>
+        <div class="svc-desc">Текстийг байгалийн Монгол дуугаар уншуулна. Батаа (эрэгтэй) ба Есүй (эмэгтэй) хоёр дуу сонголттой.</div>
+        <div class="badges">
+          <span class="badge badge-free">Үнэгүй</span>
+          <span class="badge badge-hot">Хамгийн алдартай</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="toggleTTS()">▶ Туршиж үзэх</button>
+    <div class="tts-box" id="tts-box">
+      <label class="form-label">Монгол текст оруулах</label>
+      <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..."></textarea>
+      <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
+      <div class="voice-row">
+        <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа (эрэгтэй)</div>
+        <div class="vbtn" onclick="selVoice(this)">🎤 Есүй (эмэгтэй)</div>
+      </div>
+      <button class="run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
+      <div class="result" id="tts-result">
+        <div class="result-label">✓ Бэлэн боллоо!</div>
+        <div class="audio-row">
+          <button class="play-btn">▶</button>
+          <div class="wave"></div>
+          <span style="font-size:11px;color:rgba(255,255,255,0.4)">0:08</span>
+        </div>
+        <button class="dl-btn">⬇ MP3 татах</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Humanizer -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico orange">✨</div>
+      <div class="svc-info">
+        <div class="svc-name">Монгол Humanizer</div>
+        <div class="svc-desc">AI орчуулгыг байгалийн, жинхэнэ монгол хэлрүү хөрвүүлнэ. Яаж ч мэдэгдэхгүй.</div>
+        <div class="badges">
+          <span class="badge badge-free">Үнэгүй</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="toggleHum()">✨ Туршиж үзэх</button>
+    <div class="hum-box" id="hum-box">
+      <label class="form-label">AI орчуулга / хатуу текст</label>
+      <textarea id="hum-input" placeholder="Машинаар орчуулсан монгол текстийг энд оруулна уу..."></textarea>
+      <button class="run-btn" style="margin-top:10px" onclick="runHum()">✨ Хүмүүнжүүлэх</button>
+      <div class="split" id="hum-result" style="display:none">
+        <div class="split-card">
+          <div class="split-label red">Анхны текст</div>
+          <div class="split-text" id="hum-before"></div>
+        </div>
+        <div class="split-card">
+          <div class="split-label grn">Засагдсан текст</div>
+          <div class="split-text" id="hum-after">Байгалийн монгол хэлээр боловсруулсан текст энд харагдана...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SRT -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico blue">📄</div>
+      <div class="svc-info">
+        <div class="svc-name">SRT Субтитр орчуулагч</div>
+        <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно. Видео хийгчдэд зориулсан.</div>
+        <div class="badges">
+          <span class="badge badge-pro">Премиум</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
+  </div>
+
+  <!-- Script -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico purple">✍️</div>
+      <div class="svc-info">
+        <div class="svc-name">Монгол Script бичигч</div>
+        <div class="svc-desc">YouTube видео, подкаст, кино тайлбарын script монголоор автоматаар бичнэ.</div>
+        <div class="badges">
+          <span class="badge badge-pro">Премиум</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
+  </div>
+
+</div>
+
+<div class="footer">© 2025 КиноЭзэн — Монгол хэлний кино платформ</div>
+
+<script>
+function toggleTTS(){
+  const b=document.getElementById('tts-box');
+  b.classList.toggle('show');
+}
+function toggleHum(){
+  const b=document.getElementById('hum-box');
+  b.classList.toggle('show');
+}
+function selVoice(el){
+  document.querySelectorAll('.vbtn').forEach(v=>v.classList.remove('on'));
+  el.classList.add('on');
+}
+function runTTS(){
+  document.getElementById('tts-result').classList.add('show');
+}
+function runHum(){
+  const inp=document.getElementById('hum-input').value||'Энэ бол машинаар орчуулсан хатуу текст байна.';
+  document.getElementById('hum-before').textContent=inp;
+  document.getElementById('hum-result').style.display='grid';
+}
+</script>
+</body>
+</html>
