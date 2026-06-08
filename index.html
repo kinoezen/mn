@@ -375,10 +375,16 @@ const d=new Date();
 document.getElementById('today-date').textContent=d.getFullYear()+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getDate().toString().padStart(2,'0');
 
 // Цаг агаар
-fetch('https://wttr.in/Ulaanbaatar?format=%t+%C')
-  .then(r=>r.text())
-  .then(t=>{ document.getElementById('weather-temp').textContent=t.trim(); })
-  .catch(()=>{ document.getElementById('weather-temp').textContent='-5°C ☀️'; });
+fetch('https://wttr.in/Ulaanbaatar?format=j1')
+  .then(r => r.json())
+  .then(data => {
+    const temp = data.current_condition[0].temp_C;
+    const desc = data.current_condition[0].weatherDesc[0].value;
+    document.getElementById('weather-temp').textContent = temp + '°C ' + desc;
+  })
+  .catch(() => {
+    document.getElementById('weather-temp').textContent = '-5°C ☀️';
+  });
 
 function selCat(el){
   document.querySelectorAll('.cat-btn').forEach(c=>c.classList.remove('on'));
