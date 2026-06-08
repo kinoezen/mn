@@ -178,7 +178,6 @@ body {
 .nav-toggle:hover { background: var(--bg3); }
 
 /* ===== WEATHER BAR ===== */
-/* FIX #1: Цаг агаарыг монголоор харуулах */
 .weather-bar {
   display: flex;
   align-items: center;
@@ -225,7 +224,7 @@ body {
 .ad-btn:hover { opacity: 0.85; }
 .ad-label { font-size: 10px; color: var(--text4); text-align: right; padding: 4px 24px; margin-bottom: 4px; }
 
-/* ===== HERO ===== */
+/* ===== HERO / FEATURED CAROUSEL ===== */
 .hero-section { padding: 20px 24px 12px; animation: fadeUp 0.4s ease; }
 .hero-label { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .hero-label-icon {
@@ -235,6 +234,19 @@ body {
   font-size: 14px; animation: float 3s ease-in-out infinite;
 }
 .hero-label-text { font-family: var(--font-display); font-size: 20px; letter-spacing: 1px; color: var(--accent); }
+
+/* ===== FEATURED CAROUSEL — 4 карт харагдах, урсдаг ===== */
+.featured-carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.featured-track {
+  display: flex;
+  gap: 14px;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+/* Нэг карт = (100% - 3*14px gap) / 4 */
 .featured-card {
   border-radius: var(--radius);
   overflow: hidden;
@@ -242,47 +254,90 @@ body {
   cursor: pointer;
   position: relative;
   border: 1px solid var(--border);
-  transition: border-color 0.3s, transform 0.3s;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
   will-change: transform;
+  flex: 0 0 calc(25% - 11px);
+  min-width: calc(25% - 11px);
 }
-.featured-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.featured-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(74,222,128,0.15);
+}
 .featured-img {
-  width: 100%; height: 240px;
+  width: 100%; height: 200px;
   background: linear-gradient(160deg, #0d0d25, #1a1050);
   display: flex; align-items: center; justify-content: center;
-  font-size: 60px; position: relative; overflow: hidden;
+  font-size: 48px; position: relative; overflow: hidden;
 }
-.featured-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+.featured-img img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; transition: transform 0.4s; }
+.featured-card:hover .featured-img img { transform: scale(1.05); }
 .featured-overlay {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 140px;
+  position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
   background: linear-gradient(to top, var(--bg3), transparent);
 }
-.featured-tags { position: absolute; top: 14px; left: 14px; display: flex; gap: 7px; z-index: 2; }
-.ftag { font-size: 10px; padding: 4px 12px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; }
+.featured-tags { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; z-index: 2; }
+.ftag { font-size: 9px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.5px; }
 .ftag-top { background: linear-gradient(90deg, var(--red), var(--accent2)); color: #fff; }
 .ftag-new { background: var(--accent); color: #0a2a0a; }
-.featured-body { padding: 16px 18px 18px; }
-.featured-cats { display: flex; gap: 6px; margin-bottom: 10px; }
-.cpill { font-size: 10px; padding: 3px 10px; border-radius: 20px; font-weight: 700; letter-spacing: 0.3px; }
+.featured-body { padding: 12px 14px 14px; }
+.featured-cats { display: flex; gap: 5px; margin-bottom: 8px; }
+.cpill { font-size: 9px; padding: 3px 9px; border-radius: 20px; font-weight: 700; letter-spacing: 0.3px; }
 .cp-act { background: var(--red); color: #fff; }
 .cp-sci { background: #3b4fd4; color: #fff; }
 .cp-drm { background: #2d8a4e; color: #fff; }
-.featured-title { font-family: var(--font-display); font-size: 22px; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 8px; }
-.featured-desc { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 14px; }
-.featured-foot { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-.author { display: flex; align-items: center; gap: 10px; }
-.ava { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; flex-shrink: 0; }
-.ava-name { font-size: 12px; color: var(--text3); font-weight: 600; }
-.stats-row { display: flex; gap: 14px; }
-.stat-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text3); font-weight: 600; }
+.featured-title { font-family: var(--font-display); font-size: 16px; letter-spacing: 0.5px; line-height: 1.2; margin-bottom: 6px; }
+.featured-desc { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.55; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.featured-foot { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 6px; }
+.author { display: flex; align-items: center; gap: 8px; }
+.ava { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.ava-name { font-size: 11px; color: var(--text3); font-weight: 600; }
+.stats-row { display: flex; gap: 10px; }
+.stat-item { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--text3); font-weight: 600; }
 .watch-btn {
-  width: 100%; padding: 13px; border-radius: 10px;
+  width: 100%; padding: 10px; border-radius: 8px;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border: none; color: #0a2a0a; font-size: 15px;
+  border: none; color: #0a2a0a; font-size: 13px;
   font-family: var(--font-display); letter-spacing: 1px;
   cursor: pointer; transition: opacity 0.2s, transform 0.2s;
 }
-.watch-btn:hover { opacity: 0.9; transform: translateY(-1px); outline: 2px solid var(--accent); outline-offset: 2px; }
+.watch-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ===== CAROUSEL CONTROLS ===== */
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+.carousel-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--border);
+  color: var(--text2); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.carousel-btn:hover { background: var(--accent); color: #0a2a0a; border-color: var(--accent); }
+.carousel-dots { display: flex; gap: 6px; align-items: center; }
+.dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--border); cursor: pointer; transition: all 0.3s;
+}
+.dot.active { width: 20px; border-radius: 3px; background: var(--accent); }
+.carousel-auto-bar {
+  position: absolute; bottom: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 1px;
+  animation: none;
+}
+@keyframes autoProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.carousel-auto-bar.running {
+  animation: autoProgress 4s linear forwards;
+}
 
 /* ===== SECTIONS ===== */
 .section { padding: 20px 24px 10px; }
@@ -328,7 +383,6 @@ body {
   display: flex; align-items: center; justify-content: center;
   font-size: 28px; position: relative; overflow: hidden;
 }
-/* FIX #2: img loading lazy — HTML attribute, CSS-д биш */
 .grid-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
 .grid-card:hover .grid-img img { transform: scale(1.05); }
 .grid-badge { position: absolute; top: 7px; left: 7px; font-size: 9px; padding: 3px 8px; border-radius: 20px; font-weight: 700; }
@@ -361,7 +415,7 @@ body {
 .skel-line { height: 11px; border-radius: 4px; margin-bottom: 7px; }
 .skel-line.short { width: 55%; }
 
-/* ===== NEWS — FIX #3: 2 column grid, зөв хэмжээ ===== */
+/* ===== NEWS ===== */
 .news-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -374,7 +428,6 @@ body {
   display: flex; flex-direction: row;
   transition: border-color 0.25s, transform 0.25s;
   will-change: transform; animation: fadeUp 0.5s ease both;
-  /* FIX: max height тогтоож доошоо цувахгүй болгох */
   max-height: 140px;
 }
 .news-card:hover { border-color: var(--border2); transform: translateY(-2px); }
@@ -402,7 +455,7 @@ body {
 .news-date { font-size: 10px; color: var(--text4); font-weight: 500; }
 .news-views { font-size: 10px; color: var(--text4); font-weight: 500; }
 
-/* ===== EMOJI REACTIONS — FIX #4: tag дулий, ажиллахгүй байсан ===== */
+/* ===== EMOJI REACTIONS ===== */
 .emoji-reaction {
   display: flex; gap: 4px; flex-wrap: wrap;
   padding-top: 6px; border-top: 1px solid var(--border);
@@ -413,7 +466,6 @@ body {
   background: rgba(255,255,255,0.04); border: 1px solid var(--border);
   border-radius: 6px; padding: 3px 7px; cursor: pointer;
   transition: all 0.18s; font-family: var(--font-body);
-  /* FIX: pointer-events нэмсэн — дарах боломжтой болгох */
   pointer-events: auto; user-select: none;
 }
 .e-btn:hover { background: rgba(255,255,255,0.1); transform: scale(1.12); }
@@ -475,7 +527,10 @@ body {
 .news-card:nth-child(3){animation-delay:.3s}.news-card:nth-child(4){animation-delay:.4s}
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1024px) { .grid-4 { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1024px) {
+  .grid-4 { grid-template-columns: repeat(3, 1fr); }
+  .featured-card { flex: 0 0 calc(33.333% - 10px); min-width: calc(33.333% - 10px); }
+}
 @media (max-width: 768px) {
   .nav { padding: 10px 16px; flex-wrap: wrap; gap: 8px; }
   .nav-links { display: none; width: 100%; flex-direction: column; gap: 4px; padding: 10px 0; border-top: 1px solid var(--border); }
@@ -490,11 +545,10 @@ body {
   .ad-banner { flex-direction: column; gap: 12px; padding: 14px 16px; }
   .ad-btn { width: 100%; }
   .hero-section { padding: 14px 16px 10px; }
-  .featured-img { height: 200px; }
-  .featured-title { font-size: 19px; }
+  .featured-card { flex: 0 0 calc(50% - 7px); min-width: calc(50% - 7px); }
+  .featured-img { height: 150px; }
   .section { padding: 14px 16px 8px; }
   .grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 16px 16px; }
-  /* FIX: Mobile-д нэг баган мэдээ */
   .news-grid { grid-template-columns: 1fr; padding: 0 16px 16px; }
   .news-card { max-height: 120px; }
   .news-img { width: 90px; min-width: 90px; }
@@ -505,6 +559,7 @@ body {
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .logo-text { font-size: 22px; }
   .news-img { width: 75px; min-width: 75px; }
+  .featured-card { flex: 0 0 calc(100% - 0px); min-width: calc(100%); }
   .featured-img { height: 170px; }
 }
 </style>
@@ -568,41 +623,27 @@ body {
   </div>
 </div>
 
-<!-- HERO -->
+<!-- HERO — 4-карт урсдаг carousel -->
 <section class="hero-section" aria-label="Онцлох кино">
   <div class="hero-label">
     <div class="hero-label-icon">⭐</div>
     <div class="hero-label-text">Онцлох кино</div>
   </div>
-  <article class="featured-card" id="featured-card" tabindex="0" aria-label="Онцлох кино">
-    <div class="featured-img">🎬
-      <div class="featured-overlay"></div>
-      <div class="featured-tags">
-        <span class="ftag ftag-top">✦ Онцлох</span>
-        <span class="ftag ftag-new">Шинэ</span>
-      </div>
+
+  <div class="featured-carousel-wrapper" id="featured-wrapper">
+    <div class="featured-track" id="featured-track">
+      <!-- JS-ээр дүүргэнэ -->
     </div>
-    <div class="featured-body">
-      <div class="featured-cats">
-        <span class="cpill cp-act">Экшн</span>
-        <span class="cpill cp-sci">Фантастик</span>
-      </div>
-      <h2 class="featured-title">Дюн: Хоёрдугаар хэсэг — Монгол дуу</h2>
-      <p class="featured-desc">Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор үзэ...</p>
-      <div class="featured-foot">
-        <div class="author">
-          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">КЭ</div>
-          <div class="ava-name">КиноЭзэн · 18 мин</div>
-        </div>
-        <div class="stats-row">
-          <div class="stat-item">👁 <span>1.2к</span></div>
-          <div class="stat-item">❤️ <span>234</span></div>
-          <div class="stat-item">💬 <span>45</span></div>
-        </div>
-      </div>
-      <button class="watch-btn" onclick="location.href='movie.html'">▶ Үзэх</button>
-    </div>
-  </article>
+    <!-- Progress bar -->
+    <div class="carousel-auto-bar" id="carousel-bar"></div>
+  </div>
+
+  <!-- Dots + arrows -->
+  <div class="carousel-controls">
+    <button class="carousel-btn" id="carousel-prev" aria-label="Өмнөх">‹</button>
+    <div class="carousel-dots" id="carousel-dots"></div>
+    <button class="carousel-btn" id="carousel-next" aria-label="Дараах">›</button>
+  </div>
 </section>
 
 <!-- CATEGORY FILTER -->
@@ -634,7 +675,7 @@ body {
   </div>
 </section>
 
-<!-- NEWS — FIX: 4 мэдээ харуулах -->
+<!-- NEWS -->
 <section id="news" aria-label="Мэдээ мэдээлэл">
   <div class="section">
     <div class="section-header">
@@ -691,7 +732,6 @@ body {
 const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 
-// ===== SANITIZE — XSS хамгаалалт =====
 function sanitize(str) {
   if (!str) return '';
   const div = document.createElement('div');
@@ -699,7 +739,6 @@ function sanitize(str) {
   return div.innerHTML;
 }
 
-// ===== SUPABASE FETCH =====
 async function supaFetch(table, params = '') {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
     headers: {
@@ -723,7 +762,7 @@ if (dateEl) {
   dateEl.setAttribute('datetime', now.toISOString().split('T')[0]);
 }
 
-// ===== FIX #1: WEATHER — Монгол тайлбартай =====
+// ===== WEATHER — Монголоор =====
 const WEATHER_MN = {
   'Sunny': 'Нартай', 'Clear': 'Цэлмэг', 'Partly cloudy': 'Үүлэрхэг',
   'Cloudy': 'Бүрхэг', 'Overcast': 'Бүрхэг', 'Mist': 'Манантай',
@@ -733,23 +772,21 @@ const WEATHER_MN = {
   'Patchy rain possible': 'Зарим газар борoo', 'Patchy snow possible': 'Зарим газар цас',
   'Freezing drizzle': 'Мөсөн шиврээ', 'Light drizzle': 'Шиврээ борoo',
   'Patchy light drizzle': 'Хийссэн борoo', 'Light sleet': 'Мөндөр',
-  'Moderate or heavy sleet': 'Их мөндөр', 'Ice pellets': 'Мөсөн мөндөр'
+  'Moderate or heavy sleet': 'Их мөндөр', 'Ice pellets': 'Мөсөн мөндөр',
+  'Patchy rain nearby': 'Ойр хавьд борoo', 'Blowing snow': 'Цасан шуурга',
+  'Freezing fog': 'Мөсөн манан', 'Thunderstorm': 'Аянга бороо'
 };
-
 async function loadWeather() {
   const tempEl = document.getElementById('weather-temp');
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 6000);
-    const res = await fetch('https://wttr.in/Ulaanbaatar?format=j1', {
-      signal: controller.signal
-    });
+    const res = await fetch('https://wttr.in/Ulaanbaatar?format=j1', { signal: controller.signal });
     clearTimeout(timeout);
     if (!res.ok) throw new Error('Weather API алдаа');
     const data = await res.json();
     const temp = data.current_condition[0].temp_C;
     const descEn = data.current_condition[0].weatherDesc[0].value;
-    // Монгол руу орчуулах — тохирохгүй бол Англиараа харуулна
     const descMn = WEATHER_MN[descEn] || descEn;
     if (tempEl) tempEl.textContent = `${temp}°C · ${descMn}`;
   } catch {
@@ -794,6 +831,152 @@ const genreGradients = {
   'Аниме': 'linear-gradient(135deg,#0a0a2a,#1f1f6b)'
 };
 
+// ===== FEATURED CAROUSEL =====
+const FEATURED_MOVIES = [
+  { id:'f1', title:'Дюн: Хоёрдугаар хэсэг', genre:'Фантастик', genre2:'Экшн', desc:'Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор үзэ...', views:'1.2к', likes:'234', mins:'18', tags:['Онцлох','Шинэ'], emoji:'🏜️' },
+  { id:'f2', title:'Оппенхаймер', genre:'Драм', genre2:'Түүх', desc:'Атомын бөмбөгийг бүтээсэн эрдэмтний амьдрал, шийдвэрийн тухай эпик туурви...', views:'980', likes:'187', mins:'12', tags:['Онцлох'], emoji:'💥' },
+  { id:'f3', title:'Интерстеллар', genre:'Фантастик', genre2:'Драм', desc:'Хүн төрөлхтний нүүдэл — сансрын гүнд хайлт хайж гарсан нисгэгчдийн тухай...', views:'1.5к', likes:'312', mins:'22', tags:['Онцлох','Дуу'], emoji:'🚀' },
+  { id:'f4', title:'Жон Вик 4', genre:'Экшн', genre2:'', desc:'Дэлхийн хамгийн аюулт алуурчин Жон Викийн дараагийн тулааны аялал...', views:'870', likes:'201', mins:'15', tags:['Шинэ'], emoji:'🔫' },
+  { id:'f5', title:'Аватар: Усны зам', genre:'Фантастик', genre2:'Экшн', desc:'Пандорагийн далайн гүнд шинэ аялал — Сулли гэр бүлийн тулаан...', views:'2.1к', likes:'445', mins:'25', tags:['Онцлох','Шинэ'], emoji:'🌊' },
+  { id:'f6', title:'Барби', genre:'Романтик', genre2:'Инээдэм', desc:'Барбилэнд-ийн хамгийн төгс Барби жинхэнэ ертөнцийг нээж олж мэднэ...', views:'760', likes:'143', mins:'10', tags:['Шинэ'], emoji:'💗' },
+  { id:'f7', title:'Хүнлэг яс', genre:'Аниме', genre2:'Фантастик', desc:'Монгол дуутай аниме — гайхалтай дайчдын тулааны өгүүллэг...', views:'640', likes:'118', mins:'8', tags:['Шинэ','Монгол'], emoji:'⚔️' },
+  { id:'f8', title:'Аянга хүн', genre:'Экшн', genre2:'Фантастик', desc:'Цахилгааны хүчтэй баатар нийслэлийг аварах тулаанд оров...', views:'530', likes:'96', mins:'14', tags:['Шинэ'], emoji:'⚡' },
+];
+
+let carouselIndex = 0;
+let carouselAuto;
+const CARDS_VISIBLE = 4;
+const AUTO_INTERVAL = 4000;
+
+function buildFeaturedCard(movie) {
+  const g1cls = genreColors[movie.genre] || 'cp-sci';
+  const g2cls = genreColors[movie.genre2] || 'cp-sci';
+  const bg = genreGradients[movie.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+  const tagHtml = movie.tags.map(t =>
+    t === 'Онцлох' ? `<span class="ftag ftag-top">✦ ${t}</span>` : `<span class="ftag ftag-new">${t}</span>`
+  ).join('');
+  const avaGrad = bg;
+  return `<article class="featured-card" tabindex="0"
+    onclick="location.href='movie.html?id=${sanitize(movie.id)}'"
+    onkeydown="if(event.key==='Enter')location.href='movie.html?id=${sanitize(movie.id)}'"
+    aria-label="${sanitize(movie.title)}">
+    <div class="featured-img" style="background:${bg}">
+      <span style="font-size:52px;z-index:1;position:relative">${movie.emoji}</span>
+      <div class="featured-overlay"></div>
+      <div class="featured-tags">${tagHtml}</div>
+    </div>
+    <div class="featured-body">
+      <div class="featured-cats">
+        <span class="cpill ${g1cls}">${sanitize(movie.genre)}</span>
+        ${movie.genre2 ? `<span class="cpill ${g2cls}">${sanitize(movie.genre2)}</span>` : ''}
+      </div>
+      <h2 class="featured-title">${sanitize(movie.title)}</h2>
+      <p class="featured-desc">${sanitize(movie.desc)}</p>
+      <div class="featured-foot">
+        <div class="author">
+          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">КЭ</div>
+          <div class="ava-name">КиноЭзэн · ${movie.mins} мин</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">👁 <span>${movie.views}</span></div>
+          <div class="stat-item">❤️ <span>${movie.likes}</span></div>
+        </div>
+      </div>
+      <button class="watch-btn" onclick="event.stopPropagation();location.href='movie.html?id=${sanitize(movie.id)}'">▶ Үзэх</button>
+    </div>
+  </article>`;
+}
+
+function initCarousel() {
+  const track = document.getElementById('featured-track');
+  const dotsEl = document.getElementById('carousel-dots');
+
+  // Карт бүтээх
+  track.innerHTML = FEATURED_MOVIES.map(buildFeaturedCard).join('');
+
+  // Dots — хэдэн хуудас байхаа тооцоо
+  const totalPages = Math.ceil(FEATURED_MOVIES.length / CARDS_VISIBLE);
+  dotsEl.innerHTML = Array.from({length: totalPages}, (_, i) =>
+    `<div class="dot ${i === 0 ? 'active' : ''}" onclick="goToPage(${i})" aria-label="Хуудас ${i+1}"></div>`
+  ).join('');
+
+  document.getElementById('carousel-prev').onclick = () => { prevPage(); resetAuto(); };
+  document.getElementById('carousel-next').onclick = () => { nextPage(); resetAuto(); };
+
+  startAuto();
+}
+
+function getCardWidth() {
+  const track = document.getElementById('featured-track');
+  const card = track.querySelector('.featured-card');
+  if (!card) return 0;
+  return card.offsetWidth + 14; // gap 14px
+}
+
+function goToPage(page) {
+  const totalPages = Math.ceil(FEATURED_MOVIES.length / CARDS_VISIBLE);
+  carouselIndex = Math.max(0, Math.min(page, totalPages - 1));
+  updateCarousel();
+}
+
+function nextPage() {
+  const totalPages = Math.ceil(FEATURED_MOVIES.length / CARDS_VISIBLE);
+  carouselIndex = (carouselIndex + 1) % totalPages;
+  updateCarousel();
+}
+
+function prevPage() {
+  const totalPages = Math.ceil(FEATURED_MOVIES.length / CARDS_VISIBLE);
+  carouselIndex = (carouselIndex - 1 + totalPages) % totalPages;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const track = document.getElementById('featured-track');
+  const dotsEl = document.getElementById('carousel-dots');
+  const cardW = getCardWidth();
+  // 4 карт нэг зэрэг шилжих
+  const offset = carouselIndex * CARDS_VISIBLE * cardW;
+  track.style.transform = `translateX(-${offset}px)`;
+
+  // Dots update
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => {
+    d.classList.toggle('active', i === carouselIndex);
+  });
+
+  // Progress bar restart
+  restartBar();
+}
+
+function restartBar() {
+  const bar = document.getElementById('carousel-bar');
+  bar.classList.remove('running');
+  void bar.offsetWidth; // reflow
+  bar.classList.add('running');
+}
+
+function startAuto() {
+  restartBar();
+  carouselAuto = setInterval(nextPage, AUTO_INTERVAL);
+}
+
+function resetAuto() {
+  clearInterval(carouselAuto);
+  startAuto();
+}
+
+// Touch/swipe дэмжлэг
+let touchStartX = 0;
+const wrapper = document.getElementById('featured-wrapper');
+if (wrapper) {
+  wrapper.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  wrapper.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { diff > 0 ? nextPage() : prevPage(); resetAuto(); }
+  }, { passive: true });
+}
+
+// ===== MOVIE GRID =====
 function buildSkeletons(count = 4) {
   return Array(count).fill(0).map(() =>
     `<div class="skel-card skeleton" aria-hidden="true">
@@ -818,7 +1001,6 @@ function selCat(el, genre) {
   loadMovies(genre);
 }
 
-// ===== LOAD MOVIES =====
 async function loadMovies(genre = '') {
   const list = document.getElementById('movies-list');
   list.innerHTML = buildSkeletons(4);
@@ -838,7 +1020,6 @@ async function loadMovies(genre = '') {
       const views = parseInt(movie.views) || 0;
       const cls = genreColors[movie.genre] || 'cp-sci';
       const bg = genreGradients[movie.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-      // FIX #2: loading="lazy" HTML attribute болгов
       const thumb = movie.thumbnail
         ? `<img src="${sanitize(movie.thumbnail)}" alt="${title}" loading="lazy" decoding="async" onerror="this.style.display='none'">`
         : '🎬';
@@ -891,7 +1072,6 @@ async function loadMovies(genre = '') {
 
 // ===== NEWS =====
 const NEWS_EMOJIS = ['🌍','🎭','🚀','💡','🎬','📰','🏆','🔬'];
-// FIX #4 & #5: Emoji reaction — tag дулий, onclick зөв бичсэн
 const EMOJIS = ['😮','😆','❤️','👍','😢','😡','🤗'];
 
 function makeEmojis(id) {
@@ -903,20 +1083,17 @@ function makeEmojis(id) {
   ).join('');
 }
 
-// FIX #4: Event delegation — динамик элементэд ажиллана
 document.addEventListener('click', function(e) {
   const eBtn = e.target.closest('.e-btn');
   if (!eBtn) return;
   e.stopPropagation();
   const reaction = eBtn.closest('.emoji-reaction');
   const wasActive = eBtn.classList.contains('active');
-  // Бүх active-г цэвэрлэ
   reaction.querySelectorAll('.e-btn.active').forEach(b => {
     b.classList.remove('active');
     const c = b.querySelector('.e-count');
     c.textContent = Math.max(0, parseInt(c.textContent) - 1);
   });
-  // Toggle
   if (!wasActive) {
     eBtn.classList.add('active');
     const c = eBtn.querySelector('.e-count');
@@ -924,7 +1101,6 @@ document.addEventListener('click', function(e) {
   }
 });
 
-// ===== FIX #3: 4 мэдээ харуулах, зөв layout =====
 async function loadNews() {
   const list = document.getElementById('news-list');
   try {
@@ -985,7 +1161,6 @@ function renderStaticNews() {
   ).join('');
 }
 
-// ===== AD LOAD — FIX: зөв container =====
 async function loadAd() {
   try {
     const ads = await supaFetch('ads', 'active=eq.true&limit=1');
@@ -1001,12 +1176,9 @@ async function loadAd() {
         </div>
         <div class="ad-label">Реклам</div>`;
     }
-  } catch {
-    // Default ad хэвээр үлдэнэ
-  }
+  } catch { }
 }
 
-// ===== SEARCH — DB хайлт + debounce =====
 let searchTimeout;
 function searchMovies() {
   clearTimeout(searchTimeout);
@@ -1016,14 +1188,12 @@ function searchMovies() {
     const list = document.getElementById('movies-list');
     list.innerHTML = buildSkeletons(4);
     try {
-      // Supabase ilike хайлт
       const params = `title=ilike.*${encodeURIComponent(query)}*&limit=8`;
       const movies = await supaFetch('movies', params);
       if (!movies || movies.length === 0) {
         list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>"${sanitize(query)}" олдсонгүй</p></div>`;
         return;
       }
-      // loadMovies-тай адил render — товчхон
       list.innerHTML = movies.map(movie => {
         const title = sanitize(movie.title);
         const g = sanitize(movie.genre);
@@ -1048,7 +1218,6 @@ function searchMovies() {
         </article>`;
       }).join('');
     } catch {
-      // Fallback: DOM шүүлт
       document.querySelectorAll('.grid-card').forEach(card => {
         const t = card.querySelector('.grid-title');
         if (t) card.style.display = t.textContent.toLowerCase().includes(query.toLowerCase()) ? '' : 'none';
@@ -1057,7 +1226,6 @@ function searchMovies() {
   }, 300);
 }
 
-// ===== LIKE TOGGLE =====
 function toggleLike(btn) {
   const isLiked = btn.classList.toggle('liked');
   const countEl = btn.querySelector('span');
@@ -1066,7 +1234,6 @@ function toggleLike(btn) {
   showToast(isLiked ? '❤️ Дуртай жагсаалтад нэмлээ' : '💔 Дуртай жагсаалтаас хаслаа');
 }
 
-// ===== TOAST =====
 function showToast(msg) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
@@ -1080,9 +1247,12 @@ function showToast(msg) {
 }
 
 // ===== INIT =====
-loadMovies();
-loadNews();
-loadAd();
+document.addEventListener('DOMContentLoaded', () => {
+  initCarousel();
+  loadMovies();
+  loadNews();
+  loadAd();
+});
 </script>
 </body>
 </html>
