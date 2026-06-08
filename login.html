@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Нэвтрэх — КиноЭзэн</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#e63946,#f4a261);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
+.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 18px;}
+.box{width:100%;max-width:400px;background:#1e1e2e;border-radius:18px;padding:28px 24px;border:1px solid rgba(255,255,255,0.07);}
+.box-logo{text-align:center;margin-bottom:20px;}
+.box-logo-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#e63946,#f4a261);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;margin:0 auto 10px;}
+.box-logo h1{font-size:20px;font-weight:600;}
+.box-logo h1 span{color:#4ade80;}
+.box-logo p{font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.tab-sw{display:flex;background:rgba(255,255,255,0.06);border-radius:10px;padding:3px;margin-bottom:20px;}
+.tab-sw button{flex:1;padding:9px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:rgba(255,255,255,0.4);}
+.tab-sw button.active{background:linear-gradient(90deg,#e63946,#f4a261);color:#fff;}
+.google-btn{width:100%;padding:11px;border-radius:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;}
+.g-circle{width:18px;height:18px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#e63946;}
+.divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.divider-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.divider span{font-size:11px;color:rgba(255,255,255,0.3);}
+.form-group{margin-bottom:13px;}
+.form-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;display:block;}
+.form-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;color:#fff;font-size:13px;}
+.form-input:focus{outline:none;border-color:#4ade80;}
+.btn-main{width:100%;padding:12px;border-radius:11px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;}
+.forgot{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.35);}
+.forgot a{color:#4ade80;text-decoration:none;}
+.back{text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,0.4);}
+.back a{color:#4ade80;text-decoration:none;}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <div class="logo-icon">КЭ</div>
+    <div class="logo-text">КиноЭзэн</div>
+  </a>
+</nav>
+<div class="wrap">
+  <div class="box">
+    <div class="box-logo">
+      <div class="box-logo-icon">КЭ</div>
+      <h1>Тавтай морил, <span>найз</span> аа</h1>
+      <p>Монгол хэлний кино платформд нэгдэ</p>
+    </div>
+    <div class="tab-sw">
+      <button class="active" onclick="switchTab('login',this)">Нэвтрэх</button>
+      <button onclick="switchTab('register',this)">Бүртгүүлэх</button>
+    </div>
+    <button class="google-btn">
+      <div class="g-circle">G</div>
+      Google-ээр нэвтрэх
+    </button>
+    <div class="divider"><div class="divider-line"></div><span>эсвэл</span><div class="divider-line"></div></div>
+    <div id="login-form">
+      <div class="form-group">
+        <label class="form-label">И-мэйл</label>
+        <input class="form-input" type="email" placeholder="name@gmail.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Нууц үг</label>
+        <input class="form-input" type="password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-main">Нэвтрэх</button>
+      <div class="forgot">Нууц үг мартсан уу? <a href="#">Сэргээх</a></div>
+    </div>
+    <div id="register-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Нэр</label>
+        <input class="form-input" type="text" placeholder="Таны нэр"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">И-мэйл</label>
+        <input class="form-input" type="email" placeholder="name@gmail.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Нууц үг</label>
+        <input class="form-input" type="password" placeholder="••••••••"/>
+      </div>
+      <button class="btn-main">Бүртгүүлэх</button>
+    </div>
+    <div class="back"><a href="index.html">← Нүүр хуудас руу буцах</a></div>
+  </div>
+</div>
+<script>
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-sw button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('login-form').style.display = tab==='login'?'block':'none';
+  document.getElementById('register-form').style.display = tab==='register'?'block':'none';
+}
+</script>
+</body>
+</html>
