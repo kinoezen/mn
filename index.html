@@ -10,11 +10,14 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:#12121e;z-index:100;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
 .logo img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
-.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.logo-text{font-size:22px;font-weight:700;color:#fff;}
 .nav-links{display:flex;gap:20px;}
 .nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
 .nav-links a:hover{color:#4ade80;}
-.nav-right{display:flex;gap:8px;}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.nav-search{display:flex;align-items:center;gap:8px;background:#1e1e2e;border-radius:10px;padding:7px 14px;border:1px solid rgba(255,255,255,0.08);}
+.nav-search input{background:transparent;border:none;color:#fff;font-size:13px;outline:none;width:160px;}
+.nav-search input::placeholder{color:rgba(255,255,255,0.3);}
 .btn-login{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
 .btn-join{padding:7px 16px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
 
@@ -96,6 +99,10 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
     <a href="profile.html">Профайл</a>
   </div>
   <div class="nav-right">
+    <div class="nav-search">
+      <span>🔍</span>
+      <input type="text" placeholder="Кино хайх..." oninput="searchMovies()">
+    </div>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
