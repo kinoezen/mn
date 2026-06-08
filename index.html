@@ -1,1 +1,97 @@
-<h1>Kino Ezen</h1>
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кино Эзэн</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logo{display:flex;align-items:center;gap:8px;}
+.logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#e63946,#f4a261);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
+.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
+.nav-right{display:flex;gap:8px;}
+.btn-login{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
+.btn-join{padding:7px 16px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+.hero{padding:50px 18px 30px;max-width:600px;}
+.hero-badge{display:inline-block;font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid #4ade80;color:#4ade80;margin-bottom:16px;}
+.hero h1{font-size:30px;font-weight:700;line-height:1.3;margin-bottom:12px;}
+.hero h1 span{color:#4ade80;}
+.hero p{font-size:14px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:22px;}
+.hero-btns{display:flex;gap:12px;}
+.btn-primary{padding:11px 24px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;border-radius:10px;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-secondary{padding:11px 24px;background:transparent;border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:rgba(255,255,255,0.7);font-size:14px;cursor:pointer;}
+.section{padding:24px 18px 12px;}
+.section-title{font-size:15px;font-weight:600;margin-bottom:14px;color:#fff;}
+.section-title span{color:#4ade80;}
+.cards{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;}
+.cards::-webkit-scrollbar{display:none;}
+.card{min-width:140px;background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
+.card-img{height:85px;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:28px;}
+.card-body{padding:8px 10px;}
+.card-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:3px;}
+.card-meta{font-size:10px;color:rgba(255,255,255,0.4);}
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:4px 18px 18px;}
+.cat{background:#1e1e2e;border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.06);position:relative;}
+.cat.active{border-color:#4ade80;}
+.cat-name{font-size:11px;color:rgba(255,255,255,0.6);}
+.cat.active .cat-name{color:#4ade80;}
+.cat-count{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:#e63946;color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;}
+.cat.active .cat-count{background:#4ade80;color:#0a2a0a;}
+.footer{margin-top:30px;padding:16px 18px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:12px;color:rgba(255,255,255,0.3);}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="logo">
+    <div class="logo-icon">КЭ</div>
+    <div class="logo-text">КиноЭзэн</div>
+  </div>
+  <div class="nav-links">
+    <a href="#">Нүүр</a>
+    <a href="#">Кинонууд</a>
+    <a href="#">Үйлчилгээ</a>
+    <a href="#">Топ</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-login">Нэвтрэх</button>
+    <button class="btn-join">Бүртгүүлэх</button>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-badge">🇲🇳 Монгол хэлээр</div>
+  <h1>Дэлхийн шилдэг кинонуудыг<br><span>монголоор</span> үзэ</h1>
+  <p>Товчилсон хувилбар, монгол дуутай. Бүртгүүлж орсноор бүх контентийг үнэгүй үзнэ.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">▶ Одоо үзэх</button>
+    <button class="btn-secondary">Дэлгэрэнгүй</button>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title"><span>Онцлох</span> кинонууд</div>
+  <div class="cards">
+    <div class="card"><div class="card-img">🎬</div><div class="card-body"><div class="card-title">Дюн 2</div><div class="card-meta">18 мин · Фантастик</div></div></div>
+    <div class="card"><div class="card-img" style="background:linear-gradient(135deg,#0a1a0a,#1a3a20)">🎬</div><div class="card-body"><div class="card-title">Интерстеллар</div><div class="card-meta">15 мин · Фантастик</div></div></div>
+    <div class="card"><div class="card-img" style="background:linear-gradient(135deg,#1a1a0a,#3a2a0a)">🎬</div><div class="card-body"><div class="card-title">Оппенхаймер</div><div class="card-meta">20 мин · Драм</div></div></div>
+    <div class="card"><div class="card-img" style="background:linear-gradient(135deg,#2a0a0a,#6b1f1f)">🎬</div><div class="card-body"><div class="card-title">Жон Вик 4</div><div class="card-meta">14 мин · Экшн</div></div></div>
+  </div>
+</div>
+<div class="section">
+  <div class="section-title">Ангилал</div>
+</div>
+<div class="cat-grid">
+  <div class="cat active"><div class="cat-name">Бүгд</div><div class="cat-count">80</div></div>
+  <div class="cat"><div class="cat-name">Экшн</div><div class="cat-count">24</div></div>
+  <div class="cat"><div class="cat-name">Фантастик</div><div class="cat-count">18</div></div>
+  <div class="cat"><div class="cat-name">Драм</div><div class="cat-count">10</div></div>
+  <div class="cat"><div class="cat-name">Аймаар</div><div class="cat-count">8</div></div>
+  <div class="cat"><div class="cat-name">Романтик</div><div class="cat-count">6</div></div>
+  <div class="cat"><div class="cat-name">Аниме</div><div class="cat-count">6</div></div>
+  <div class="cat"><div class="cat-name">Танин мэдхүй</div><div class="cat-count">12</div></div>
+</div>
+<div class="footer">© 2025 КиноЭзэн — Монгол хэлний кино платформ</div>
+</body>
+</html>
