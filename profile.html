@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Профайл — КиноЭзэн</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.nav-links{display:flex;gap:20px;}
+.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
+.nav-links a.active{color:#4ade80;}
+.wrap{max-width:600px;margin:0 auto;padding:24px 18px;}
+.cover{height:100px;border-radius:16px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-40px;}
+.ava-row{display:flex;justify-content:space-between;align-items:flex-end;padding:0 10px;position:relative;z-index:2;}
+.ava{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#e63946,#f4a261);border:3px solid #12121e;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;}
+.edit-btn{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer;margin-bottom:6px;}
+.prof-info{padding:12px 10px 0;}
+.prof-name{font-size:18px;font-weight:600;}
+.prof-email{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;}
+.stats{display:flex;gap:0;margin-top:16px;border-radius:12px;overflow:hidden;}
+.stat{flex:1;text-align:center;padding:14px 8px;background:#1e1e2e;border-right:1px solid rgba(255,255,255,0.06);}
+.stat:last-child{border-right:none;}
+.stat-val{font-size:18px;font-weight:600;color:#4ade80;}
+.stat-label{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.menu{margin-top:16px;}
+.mitem{display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;cursor:pointer;margin-bottom:6px;background:#1e1e2e;border:1px solid rgba(255,255,255,0.06);}
+.mitem:hover{border-color:rgba(74,222,128,0.2);}
+.mico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.mico.g{background:rgba(74,222,128,0.12);}
+.mico.r{background:rgba(230,57,70,0.12);}
+.mico.b{background:rgba(107,127,247,0.15);}
+.mico.o{background:rgba(244,162,97,0.15);}
+.mico.p{background:rgba(192,132,252,0.15);}
+.mtext{flex:1;}
+.mname{font-size:14px;font-weight:500;color:#fff;}
+.msub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
+.marrow{color:rgba(255,255,255,0.2);font-size:18px;}
+.logout-btn{width:100%;padding:12px;border-radius:11px;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.25);color:#e63946;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.logout-btn:hover{background:rgba(230,57,70,0.2);}
+.premium-card{background:linear-gradient(135deg,#1a1050,#2d1b69);border-radius:14px;padding:16px;margin-top:16px;border:1px solid rgba(107,127,247,0.3);}
+.premium-title{font-size:14px;font-weight:600;color:#c084fc;margin-bottom:4px;}
+.premium-desc{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:12px;line-height:1.6;}
+.premium-btn{width:100%;padding:11px;border-radius:10px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="logo">
+    <div class="logo-text">КиноЭзэн</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Нүүр</a>
+    <a href="services.html">Үйлчилгээ</a>
+    <a href="profile.html" class="active">Профайл</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="cover"></div>
+  <div class="ava-row">
+    <div class="ava">Л</div>
+    <button class="edit-btn">✏️ Засах</button>
+  </div>
+  <div class="prof-info">
+    <div class="prof-name">Лхагваа</div>
+    <div class="prof-email">lkhagvaa@gmail.com</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">34</div><div class="stat-label">Үзсэн</div></div>
+    <div class="stat"><div class="stat-val">12</div><div class="stat-label">Хадгалсан</div></div>
+    <div class="stat"><div class="stat-val">8</div><div class="stat-label">TTS</div></div>
+    <div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
+  </div>
+
+  <div class="menu">
+    <div class="mitem" onclick="location.href='services.html'">
+      <div class="mico g">🎤</div>
+      <div class="mtext"><div class="mname">TTS үйлчилгээ</div><div class="msub">Монгол дуу үүсгэх</div></div>
+      <div class="marrow">›</div>
+    </div>
+    <div class="mitem" onclick="location.href='services.html'">
+      <div class="mico o">✨</div>
+      <div class="mtext"><div class="mname">Humanizer</div><div class="msub">Текст хүмүүнжүүлэх</div></div>
+      <div class="marrow">›</div>
+    </div>
+    <div class="mitem">
+      <div class="mico r">❤️</div>
+      <div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub">12 кино хадгалсан</div></div>
+      <div class="marrow">›</div>
+    </div>
+    <div class="mitem">
+      <div class="mico b">📋</div>
+      <div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub">34 кино үзсэн</div></div>
+      <div class="marrow">›</div>
+    </div>
+  </div>
+
+  <div class="premium-card">
+    <div class="premium-title">👑 Премиум авах</div>
+    <div class="premium-desc">SRT субтитр орчуулагч, Script бичигч болон бусад дэлгэрэнгүй функцүүдийг авах.</div>
+    <button class="premium-btn">Премиум авах →</button>
+  </div>
+
+  <button class="logout-btn" onclick="location.href='login.html'">🚪 Гарах</button>
+</div>
+
+</body>
+</html>
