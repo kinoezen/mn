@@ -9,7 +9,7 @@
 body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:#12121e;z-index:100;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
 .logo-text{font-size:22px;font-weight:700;color:#fff;}
 .nav-links{display:flex;gap:20px;}
 .nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
@@ -21,20 +21,28 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .btn-login{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
 .btn-join{padding:7px 16px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
 
-/* Хайлт */
-.search-wrap{padding:16px 18px;}
-.search-box{display:flex;align-items:center;gap:10px;background:#1e1e2e;border-radius:12px;padding:10px 16px;border:1px solid rgba(255,255,255,0.08);}
-.search-box input{flex:1;background:transparent;border:none;color:#fff;font-size:14px;outline:none;}
-.search-box input::placeholder{color:rgba(255,255,255,0.3);}
-.search-icon{font-size:18px;color:rgba(255,255,255,0.3);}
+/* Цаг агаар + огноо */
+.weather-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 18px;background:#1a1a2e;border-bottom:1px solid rgba(255,255,255,0.06);}
+.weather-left{display:flex;align-items:center;gap:14px;}
+.weather-item{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.7);}
+.weather-item span{font-size:16px;}
+.weather-temp{font-size:14px;font-weight:600;color:#4ade80;}
+.date-text{font-size:12px;color:rgba(255,255,255,0.5);}
+
+/* Реклам */
+.ad-banner{margin:14px 18px;border-radius:12px;overflow:hidden;background:linear-gradient(90deg,#1a1050,#2d1b69);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(107,127,247,0.3);}
+.ad-text{font-size:13px;color:rgba(255,255,255,0.8);line-height:1.5;}
+.ad-text strong{color:#c084fc;font-size:15px;display:block;margin-bottom:3px;}
+.ad-btn{padding:8px 16px;border-radius:8px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.ad-label{font-size:9px;color:rgba(255,255,255,0.3);text-align:right;margin-top:4px;}
 
 /* Hero */
-.hero-section{padding:0 18px 20px;}
+.hero-section{padding:14px 18px 10px;}
 .hero-label{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
 .hero-label-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#e63946,#f4a261);display:flex;align-items:center;justify-content:center;font-size:13px;}
 .hero-label-text{font-size:15px;font-weight:600;color:#4ade80;}
 .featured-card{border-radius:16px;overflow:hidden;background:#1e1e2e;cursor:pointer;position:relative;}
-.featured-img{width:100%;height:220px;object-fit:cover;background:linear-gradient(160deg,#0d0d25,#1a1050 50%,#0a180a);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
+.featured-img{width:100%;height:220px;background:linear-gradient(160deg,#0d0d25,#1a1050);display:flex;align-items:center;justify-content:center;font-size:60px;position:relative;}
 .featured-overlay{position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(to top,#1e1e2e,transparent);}
 .featured-tags{position:absolute;top:12px;left:12px;display:flex;gap:6px;}
 .ftag{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;}
@@ -54,40 +62,70 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .ava-name{font-size:12px;color:rgba(255,255,255,0.6);}
 .stats-row{display:flex;gap:12px;}
 .stat-item{display:flex;align-items:center;gap:4px;font-size:12px;color:rgba(255,255,255,0.5);}
-.stat-item span{font-size:15px;}
 .watch-btn{width:100%;padding:11px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
 
 /* Ангилал */
 .section{padding:16px 18px 8px;}
 .section-title{font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:12px;}
 .section-title span{color:#4ade80;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.see-all{font-size:12px;color:#4ade80;cursor:pointer;}
 .cat-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
 .cat-row::-webkit-scrollbar{display:none;}
 .cat-btn{padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .cat-btn.on{background:#4ade80;color:#0a2a0a;border-color:#4ade80;font-weight:700;}
 
-/* Кино карт */
-.cards-wrap{padding:0 18px 20px;}
-.card-item{background:#1e1e2e;border-radius:14px;overflow:hidden;margin-bottom:12px;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
-.card-item:hover{border-color:rgba(74,222,128,0.2);}
-.card-img{width:100%;height:160px;object-fit:cover;display:flex;align-items:center;justify-content:center;font-size:40px;position:relative;}
-.card-img-overlay{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to top,#1e1e2e,transparent);}
-.card-badge{position:absolute;top:10px;left:10px;}
-.card-body{padding:12px 14px;}
-.card-title{font-size:14px;font-weight:600;margin-bottom:6px;}
-.card-desc{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.55;margin-bottom:10px;}
-.card-foot{display:flex;align-items:center;justify-content:space-between;}
-.card-author{display:flex;align-items:center;gap:7px;}
-.card-stats{display:flex;gap:10px;}
-.cstat{display:flex;align-items:center;gap:3px;font-size:12px;color:rgba(255,255,255,0.45);cursor:pointer;}
-.cstat:hover{color:#4ade80;}
-.cstat.liked{color:#e63946;}
-.cstat span{font-size:14px;}
+/* 4 Grid кино карт */
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 18px 16px;}
+.grid-card{background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
+.grid-card:hover{border-color:rgba(74,222,128,0.25);}
+.grid-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;}
+.grid-img img{width:100%;height:100%;object-fit:cover;}
+.grid-badge{position:absolute;top:6px;left:6px;font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;}
+.grid-body{padding:8px 10px;}
+.grid-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3;}
+.grid-meta{font-size:10px;color:rgba(255,255,255,0.4);margin-bottom:6px;}
+.grid-stats{display:flex;gap:8px;}
+.gstat{display:flex;align-items:center;gap:2px;font-size:10px;color:rgba(255,255,255,0.4);cursor:pointer;}
+.gstat:hover{color:#4ade80;}
+.gstat.liked{color:#e63946;}
 
-.footer{padding:16px 18px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:12px;color:rgba(255,255,255,0.3);}
+/* Мэдээ хэсэг */
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 18px 16px;}
+.news-card{background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
+.news-card:hover{border-color:rgba(74,222,128,0.2);}
+.news-img{width:100%;height:100px;background:linear-gradient(135deg,#1a1a0a,#2a2a10);display:flex;align-items:center;justify-content:center;font-size:30px;}
+.news-body{padding:10px;}
+.news-cat{font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;background:rgba(74,222,128,0.15);color:#4ade80;display:inline-block;margin-bottom:6px;}
+.news-title{font-size:12px;font-weight:600;color:#fff;line-height:1.4;margin-bottom:6px;}
+.news-foot{display:flex;align-items:center;justify-content:space-between;}
+.news-date{font-size:10px;color:rgba(255,255,255,0.35);}
+.news-views{font-size:10px;color:rgba(255,255,255,0.35);}
+
+/* Мессенжер FAB */
+.messenger-fab{position:fixed;bottom:24px;right:20px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:24px;}
+
+/* Footer */
+.footer{background:#0d0d1a;padding:24px 18px 16px;border-top:1px solid rgba(255,255,255,0.08);}
+.footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:20px;}
+.footer-col h4{font-size:13px;font-weight:600;color:#4ade80;margin-bottom:10px;}
+.footer-col p{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.7;}
+.footer-col a{display:block;font-size:12px;color:rgba(255,255,255,0.45);text-decoration:none;margin-bottom:5px;}
+.footer-col a:hover{color:#4ade80;}
+.footer-social{display:flex;gap:10px;margin-top:10px;}
+.social-btn{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;cursor:pointer;}
+.fb{background:#1877f2;}
+.ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+.yt{background:#ff0000;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;display:flex;align-items:center;justify-content:space-between;}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3);}
+.footer-links{display:flex;gap:14px;}
+.footer-links a{font-size:11px;color:rgba(255,255,255,0.3);text-decoration:none;}
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav class="nav">
   <a href="index.html" class="logo">
     <img src="logo.png" alt="logo">
@@ -95,33 +133,49 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
   </a>
   <div class="nav-links">
     <a href="index.html">Нүүр</a>
+    <a href="#movies">Кинонууд</a>
+    <a href="#news">Мэдээ</a>
     <a href="services.html">Үйлчилгээ</a>
     <a href="profile.html">Профайл</a>
   </div>
   <div class="nav-right">
     <div class="nav-search">
       <span>🔍</span>
-      <input type="text" placeholder="Кино хайх..." oninput="searchMovies()">
+      <input type="text" placeholder="Кино хайх..." id="search-input" oninput="searchMovies()">
     </div>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
 </nav>
 
-<div class="search-wrap">
-  <div class="search-box">
-    <span class="search-icon">🔍</span>
-    <input type="text" placeholder="Кино, жанр хайх..." id="search-input" oninput="searchMovies()">
+<!-- ЦАГ АГААР -->
+<div class="weather-bar">
+  <div class="weather-left">
+    <div class="weather-item"><span>📅</span><span id="today-date"></span></div>
+    <div class="weather-item"><span>🌤️</span><span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
+    <div class="weather-item"><span>📍</span>Улаанбаатар</div>
   </div>
+  <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
 </div>
 
+<!-- РЕКЛАМ -->
+<div class="ad-banner">
+  <div class="ad-text">
+    <strong>🏢 Таны компанийн реклам энд</strong>
+    Сарын 50,000₮-өөс эхлэн рекламаа байршуул
+  </div>
+  <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
+</div>
+<div style="text-align:right;padding:0 18px;margin-top:-8px;"><span class="ad-label" style="font-size:10px;color:rgba(255,255,255,0.25);">Реклам</span></div>
+
+<!-- FEATURED -->
 <div class="hero-section">
   <div class="hero-label">
     <div class="hero-label-icon">⭐</div>
     <div class="hero-label-text">Онцлох кино</div>
   </div>
   <div class="featured-card">
-    <div class="featured-img" style="background:linear-gradient(160deg,#0d0d25,#1a1050)">
+    <div class="featured-img">
       🎬
       <div class="featured-overlay"></div>
       <div class="featured-tags">
@@ -134,17 +188,17 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
         <span class="cpill cp-act">Экшн</span>
         <span class="cpill cp-sci">Фантастик</span>
       </div>
-      <div class="featured-title">Дюн: Хоёрдугаар хэсэг</div>
+      <div class="featured-title">Дюн: Хоёрдугаар хэсэг — Монгол дуу</div>
       <div class="featured-desc">Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор үзэ...</div>
       <div class="featured-foot">
         <div class="author">
           <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">КЭ</div>
-          <div class="ava-name">КиноЭзэн</div>
+          <div class="ava-name">КиноЭзэн · 18 мин</div>
         </div>
         <div class="stats-row">
-          <div class="stat-item"><span>👁</span> 1.2к</div>
-          <div class="stat-item"><span>❤️</span> 234</div>
-          <div class="stat-item"><span>💬</span> 45</div>
+          <div class="stat-item">👁 1.2к</div>
+          <div class="stat-item">❤️ 234</div>
+          <div class="stat-item">💬 45</div>
         </div>
       </div>
       <button class="watch-btn">▶ Үзэх</button>
@@ -152,8 +206,8 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
   </div>
 </div>
 
+<!-- АНГИЛАЛ -->
 <div class="section">
-  <div class="section-title"><span>Ангилал</span> сонгох</div>
   <div class="cat-row">
     <div class="cat-btn on" onclick="selCat(this)">Бүгд</div>
     <div class="cat-btn" onclick="selCat(this)">Экшн</div>
@@ -162,119 +216,180 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
     <div class="cat-btn" onclick="selCat(this)">Аймаар</div>
     <div class="cat-btn" onclick="selCat(this)">Романтик</div>
     <div class="cat-btn" onclick="selCat(this)">Аниме</div>
-    <div class="cat-btn" onclick="selCat(this)">Танин мэдхүй</div>
+    <div class="cat-btn" onclick="selCat(this)">Мэдээ</div>
   </div>
 </div>
 
-<div class="cards-wrap" id="movies-list">
-  <!-- Кино 1 -->
-  <div class="card-item">
-    <div class="card-img" style="background:linear-gradient(135deg,#1a0a2e,#3b1f6b);position:relative;">
-      🎬<div class="card-img-overlay"></div>
-      <div class="card-badge"><span class="cpill cp-sci">Фантастик</span></div>
-    </div>
-    <div class="card-body">
-      <div class="card-title">Интерстеллар — Монгол дуу</div>
-      <div class="card-desc">Хүн төрөлхтний ирээдүйн төлөө сансарт аялсан нисгэгчийн үлгэр...</div>
-      <div class="card-foot">
-        <div class="card-author">
-          <div class="ava" style="background:linear-gradient(135deg,#3b4fd4,#6b7ff7);font-size:10px">КЭ</div>
-          <div class="ava-name" style="font-size:11px">КиноЭзэн · 15 мин</div>
-        </div>
-        <div class="card-stats">
-          <div class="cstat" onclick="toggleLike(this)"><span>❤️</span> 187</div>
-          <div class="cstat"><span>👁</span> 980</div>
-          <div class="cstat"><span>💬</span> 32</div>
-        </div>
+<!-- 4 GRID КИНО -->
+<div class="section" id="movies">
+  <div class="section-header">
+    <div class="section-title"><span>Шинэ</span> кинонууд</div>
+    <div class="see-all">Бүгдийг харах →</div>
+  </div>
+</div>
+<div class="grid-4" id="movies-list">
+  <div class="grid-card">
+    <div class="grid-img" style="background:linear-gradient(135deg,#1a0a2e,#3b1f6b)">🎬<div class="grid-badge cp-sci">Фантастик</div></div>
+    <div class="grid-body">
+      <div class="grid-title">Интерстеллар</div>
+      <div class="grid-meta">15 мин · КиноЭзэн</div>
+      <div class="grid-stats">
+        <div class="gstat" onclick="toggleLike(this)">❤️ 187</div>
+        <div class="gstat">👁 980</div>
+        <div class="gstat">💬 32</div>
       </div>
     </div>
   </div>
-
-  <!-- Кино 2 -->
-  <div class="card-item">
-    <div class="card-img" style="background:linear-gradient(135deg,#0a1a0a,#1a3a20);position:relative;">
-      🎬<div class="card-img-overlay"></div>
-      <div class="card-badge"><span class="cpill cp-drm">Драм</span></div>
-    </div>
-    <div class="card-body">
-      <div class="card-title">Оппенхаймер — Монгол дуу</div>
-      <div class="card-desc">Атомын бөмбөг зохион бүтээгч эрдэмтний тухай түүхэн кино...</div>
-      <div class="card-foot">
-        <div class="card-author">
-          <div class="ava" style="background:linear-gradient(135deg,#059669,#4ade80);font-size:10px">КЭ</div>
-          <div class="ava-name" style="font-size:11px">КиноЭзэн · 20 мин</div>
-        </div>
-        <div class="card-stats">
-          <div class="cstat" onclick="toggleLike(this)"><span>❤️</span> 143</div>
-          <div class="cstat"><span>👁</span> 870</div>
-          <div class="cstat"><span>💬</span> 28</div>
-        </div>
+  <div class="grid-card">
+    <div class="grid-img" style="background:linear-gradient(135deg,#0a1a0a,#1a3a20)">🎬<div class="grid-badge cp-drm">Драм</div></div>
+    <div class="grid-body">
+      <div class="grid-title">Оппенхаймер</div>
+      <div class="grid-meta">20 мин · КиноЭзэн</div>
+      <div class="grid-stats">
+        <div class="gstat" onclick="toggleLike(this)">❤️ 143</div>
+        <div class="gstat">👁 870</div>
+        <div class="gstat">💬 28</div>
       </div>
     </div>
   </div>
-
-  <!-- Кино 3 -->
-  <div class="card-item">
-    <div class="card-img" style="background:linear-gradient(135deg,#2a0a0a,#6b1f1f);position:relative;">
-      🎬<div class="card-img-overlay"></div>
-      <div class="card-badge"><span class="cpill cp-act">Экшн</span></div>
-    </div>
-    <div class="card-body">
-      <div class="card-title">Жон Вик 4 — Монгол дуу</div>
-      <div class="card-desc">Жон Вик дэлхийн хамгийн аюултай аллагачидтай тулалдана...</div>
-      <div class="card-foot">
-        <div class="card-author">
-          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261);font-size:10px">КЭ</div>
-          <div class="ava-name" style="font-size:11px">КиноЭзэн · 14 мин</div>
-        </div>
-        <div class="card-stats">
-          <div class="cstat" onclick="toggleLike(this)"><span>❤️</span> 201</div>
-          <div class="cstat"><span>👁</span> 760</div>
-          <div class="cstat"><span>💬</span> 41</div>
-        </div>
+  <div class="grid-card">
+    <div class="grid-img" style="background:linear-gradient(135deg,#2a0a0a,#6b1f1f)">🎬<div class="grid-badge cp-act">Экшн</div></div>
+    <div class="grid-body">
+      <div class="grid-title">Жон Вик 4</div>
+      <div class="grid-meta">14 мин · КиноЭзэн</div>
+      <div class="grid-stats">
+        <div class="gstat" onclick="toggleLike(this)">❤️ 201</div>
+        <div class="gstat">👁 760</div>
+        <div class="gstat">💬 41</div>
       </div>
     </div>
   </div>
-
-  <!-- Кино 4 -->
-  <div class="card-item">
-    <div class="card-img" style="background:linear-gradient(135deg,#1a1a0a,#3a2a0a);position:relative;">
-      🎬<div class="card-img-overlay"></div>
-      <div class="card-badge"><span class="cpill cp-sci">Фантастик</span></div>
-    </div>
-    <div class="card-body">
-      <div class="card-title">Аватар 2 — Монгол дуу</div>
-      <div class="card-desc">Пандорагийн далайн ертөнцөд шинэ аяллын эхлэл...</div>
-      <div class="card-foot">
-        <div class="card-author">
-          <div class="ava" style="background:linear-gradient(135deg,#0891b2,#38bdf8);font-size:10px">КЭ</div>
-          <div class="ava-name" style="font-size:11px">КиноЭзэн · 16 мин</div>
-        </div>
-        <div class="card-stats">
-          <div class="cstat" onclick="toggleLike(this)"><span>❤️</span> 165</div>
-          <div class="cstat"><span>👁</span> 640</div>
-          <div class="cstat"><span>💬</span> 19</div>
-        </div>
+  <div class="grid-card">
+    <div class="grid-img" style="background:linear-gradient(135deg,#1a1a0a,#3a2a0a)">🎬<div class="grid-badge cp-sci">Фантастик</div></div>
+    <div class="grid-body">
+      <div class="grid-title">Аватар 2</div>
+      <div class="grid-meta">16 мин · КиноЭзэн</div>
+      <div class="grid-stats">
+        <div class="gstat" onclick="toggleLike(this)">❤️ 165</div>
+        <div class="gstat">👁 640</div>
+        <div class="gstat">💬 19</div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="footer">© 2025 КиноЭзэн — Монгол хэлний кино платформ</div>
+<!-- МЭДЭЭ -->
+<div class="section" id="news">
+  <div class="section-header">
+    <div class="section-title"><span>Мэдээ</span> мэдээлэл</div>
+    <div class="see-all">Бүгдийг харах →</div>
+  </div>
+</div>
+<div class="news-grid">
+  <div class="news-card">
+    <div class="news-img">🌍</div>
+    <div class="news-body">
+      <span class="news-cat">Түүх</span>
+      <div class="news-title">Монголын эзэнт гүрний хамгийн том дайлалт</div>
+      <div class="news-foot">
+        <span class="news-date">2025.06.08</span>
+        <span class="news-views">👁 1.2к</span>
+      </div>
+    </div>
+  </div>
+  <div class="news-card">
+    <div class="news-img">🎭</div>
+    <div class="news-body">
+      <span class="news-cat">Кино мэдээ</span>
+      <div class="news-title">2025 оны хамгийн их орлого олсон кинонууд</div>
+      <div class="news-foot">
+        <span class="news-date">2025.06.07</span>
+        <span class="news-views">👁 890</span>
+      </div>
+    </div>
+  </div>
+  <div class="news-card">
+    <div class="news-img">🚀</div>
+    <div class="news-body">
+      <span class="news-cat">Шинжлэх ухаан</span>
+      <div class="news-title">Сансрын судалгааны шинэ нээлт</div>
+      <div class="news-foot">
+        <span class="news-date">2025.06.06</span>
+        <span class="news-views">👁 654</span>
+      </div>
+    </div>
+  </div>
+  <div class="news-card">
+    <div class="news-img">💡</div>
+    <div class="news-body">
+      <span class="news-cat">Сонирхолтой</span>
+      <div class="news-title">Дэлхийн хамгийн гайхалтай 10 газар</div>
+      <div class="news-foot">
+        <span class="news-date">2025.06.05</span>
+        <span class="news-views">👁 432</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- МЕССЕНЖЕР -->
+<a class="messenger-fab" href="https://m.me/YOUR_PAGE" target="_blank">💬</a>
+
+<!-- FOOTER -->
+<div class="footer" id="contact">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>КиноЭзэн</h4>
+      <p>Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.</p>
+      <div class="footer-social">
+        <a class="social-btn fb" href="#" target="_blank">f</a>
+        <a class="social-btn ig" href="#" target="_blank">📷</a>
+        <a class="social-btn yt" href="#" target="_blank">▶</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Холбоо барих</h4>
+      <a href="#">📧 kinoezen@gmail.com</a>
+      <a href="#">📱 Facebook: КиноЭзэн</a>
+      <a href="#">💬 Messenger холбоо</a>
+    </div>
+    <div class="footer-col">
+      <h4>Реклам</h4>
+      <p>Сайт дээр реклам байршуулахыг хүсвэл бидэнтэй холбоо барина уу.</p>
+      <a href="#">📨 Реклам авах →</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+    <div class="footer-links">
+      <a href="#">Нууцлал</a>
+      <a href="#">Үйлчилгээний нөхцөл</a>
+      <a href="#">Бидний тухай</a>
+    </div>
+  </div>
+</div>
 
 <script>
+// Огноо
+const d=new Date();
+document.getElementById('today-date').textContent=d.getFullYear()+'.'+(d.getMonth()+1).toString().padStart(2,'0')+'.'+d.getDate().toString().padStart(2,'0');
+
+// Цаг агаар
+fetch('https://wttr.in/Ulaanbaatar?format=%t+%C')
+  .then(r=>r.text())
+  .then(t=>{ document.getElementById('weather-temp').textContent=t.trim(); })
+  .catch(()=>{ document.getElementById('weather-temp').textContent='-5°C ☀️'; });
+
 function selCat(el){
   document.querySelectorAll('.cat-btn').forEach(c=>c.classList.remove('on'));
   el.classList.add('on');
 }
-function toggleLike(el){
-  el.classList.toggle('liked');
-}
+function toggleLike(el){ el.classList.toggle('liked'); }
 function searchMovies(){
   const q=document.getElementById('search-input').value.toLowerCase();
-  document.querySelectorAll('.card-item').forEach(card=>{
-    const title=card.querySelector('.card-title').textContent.toLowerCase();
-    card.style.display=title.includes(q)||q===''?'block':'none';
+  document.querySelectorAll('.grid-card').forEach(card=>{
+    const t=card.querySelector('.grid-title').textContent.toLowerCase();
+    card.style.display=t.includes(q)||q===''?'block':'none';
   });
 }
 </script>
