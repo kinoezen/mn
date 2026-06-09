@@ -29,11 +29,15 @@ body{background:#0f0f1a;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .page-title{font-size:20px;font-weight:700;margin-bottom:20px;}
 .page{display:none;}
 .page.active{display:block;}
+
+/* ===== ХЯНАХ САМБАР ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
 .stat-card{background:#1e1e2e;border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.06);}
 .stat-label{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:6px;}
 .stat-val{font-size:24px;font-weight:700;color:#4ade80;}
 .stat-icon{font-size:20px;margin-bottom:8px;}
+
+/* ===== ФОРМ ===== */
 .form-card{background:#1e1e2e;border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.06);margin-bottom:20px;}
 .form-title{font-size:14px;font-weight:600;color:#4ade80;margin-bottom:16px;}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
@@ -46,6 +50,8 @@ textarea.form-inp{resize:vertical;min-height:80px;}
 .form-btn{margin-top:14px;padding:10px 24px;border-radius:8px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:13px;font-weight:700;cursor:pointer;}
 .success-msg{display:none;color:#4ade80;font-size:12px;margin-top:8px;}
 .error-msg2{display:none;color:#e63946;font-size:12px;margin-top:8px;}
+
+/* ===== ЖАГСААЛТ ХҮСНЭГТ ===== */
 .table-card{background:#1e1e2e;border-radius:12px;border:1px solid rgba(255,255,255,0.06);overflow:hidden;}
 .table-head{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06);}
 .table-head-title{font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);}
@@ -58,7 +64,10 @@ tr:last-child td{border-bottom:none;}
 .badge-blue{background:rgba(59,79,212,0.2);color:#818cf8;}
 .action-btn{padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;border:none;font-weight:600;}
 .del-btn{background:rgba(230,57,70,0.15);color:#e63946;}
+.edit-btn{background:rgba(74,222,128,0.15);color:#4ade80;margin-right:4px;}
 .loading{text-align:center;padding:30px;color:rgba(255,255,255,0.3);font-size:13px;}
+
+/* ===== UPLOAD ===== */
 .upload-tabs{display:flex;gap:8px;margin-bottom:10px;}
 .upload-tab{padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.5);font-size:12px;cursor:pointer;}
 .upload-tab.on{background:#4ade80;color:#0a2a0a;border-color:#4ade80;font-weight:700;}
@@ -77,17 +86,57 @@ tr:last-child td{border-bottom:none;}
 .progress-bar{width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;}
 .progress-fill{height:100%;background:linear-gradient(90deg,#4ade80,#f4a261);border-radius:3px;width:0%;transition:width 0.3s;}
 .progress-text{font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px;text-align:center;}
+
+/* ===== АНГИЛАЛ GRID (зураг 1 загвар) ===== */
+.cat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px;}
+.cat-item{
+  background:#12121e;border-radius:10px;padding:10px 6px 8px;cursor:pointer;
+  border:2px solid rgba(255,255,255,0.08);transition:all 0.2s;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.cat-item:hover{border-color:rgba(255,255,255,0.2);transform:translateY(-2px);}
+.cat-item.selected{border-color:#4ade80;background:rgba(74,222,128,0.08);}
+.cat-item-icon{width:36px;height:36px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+.cat-item-icon svg{width:36px;height:36px;display:block;}
+.cat-item-icon.round{border-radius:50%;}
+.cat-item-label{font-size:11px;font-weight:700;color:#fff;line-height:1.2;}
+.cat-item-sub{font-size:9px;color:rgba(255,255,255,0.35);}
+
+/* ===== ОНЦЛОХ TOGGLE ===== */
+.featured-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#12121e;border-radius:8px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;user-select:none;}
+.featured-toggle input[type=checkbox]{display:none;}
+.toggle-track{width:40px;height:22px;background:rgba(255,255,255,0.15);border-radius:11px;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle-track.on{background:#4ade80;}
+.toggle-thumb{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.toggle-track.on .toggle-thumb{transform:translateX(18px);}
+.toggle-label{font-size:13px;color:rgba(255,255,255,0.7);font-weight:600;}
+.toggle-badge{padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:rgba(74,222,128,0.15);color:#4ade80;}
+
+/* ===== EDIT MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#1e1e2e;border-radius:16px;padding:24px;width:100%;max-width:500px;border:1px solid rgba(255,255,255,0.1);max-height:90vh;overflow-y:auto;}
+.modal-title{font-size:16px;font-weight:700;color:#4ade80;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,0.4);font-size:20px;cursor:pointer;padding:0;}
+.modal-close:hover{color:#fff;}
+.modal-btns{display:flex;gap:8px;margin-top:16px;}
+.modal-save-btn{flex:1;padding:10px;border-radius:8px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:13px;font-weight:700;cursor:pointer;}
+.modal-cancel-btn{padding:10px 18px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:13px;cursor:pointer;}
+
 @media(max-width:768px){
-.sidebar{width:100%;height:auto;position:relative;}
-.sidebar-bottom{position:relative;}
-.main-content{margin-left:0;padding:14px;}
-.stats-grid{grid-template-columns:repeat(2,1fr);}
-.form-grid{grid-template-columns:1fr;}
-.form-group.full{grid-column:1;}
+  .sidebar{width:100%;height:auto;position:relative;}
+  .sidebar-bottom{position:relative;}
+  .main-content{margin-left:0;padding:14px;}
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .form-grid{grid-template-columns:1fr;}
+  .form-group.full{grid-column:1;}
+  .cat-grid{grid-template-columns:repeat(3,1fr);}
 }
 </style>
 </head>
 <body>
+
+<!-- LOGIN -->
 <div class="login-wrap" id="login-page">
   <div class="login-box">
     <div class="login-logo">КиноЭзэн</div>
@@ -100,6 +149,8 @@ tr:last-child td{border-bottom:none;}
     <div class="err-msg" id="login-err">Нэвтрэх нэр эсвэл нууц үг буруу!</div>
   </div>
 </div>
+
+<!-- ADMIN -->
 <div class="admin-wrap" id="admin-page">
   <div class="sidebar">
     <div class="sidebar-logo">Кино<span>Эзэн</span></div>
@@ -109,9 +160,12 @@ tr:last-child td{border-bottom:none;}
     <div class="nav-item" onclick="showPage('ads',this)"><span>📢</span> Реклам</div>
     <div class="nav-item" onclick="showPage('list-movies',this)"><span>📋</span> Кино жагсаалт</div>
     <div class="nav-item" onclick="showPage('list-news',this)"><span>📋</span> Мэдээ жагсаалт</div>
+    <div class="nav-item" onclick="showPage('list-ads',this)"><span>📋</span> Реклам жагсаалт</div>
     <div class="sidebar-bottom"><button class="logout-btn" onclick="doLogout()">🚪 Гарах</button></div>
   </div>
   <div class="main-content">
+
+    <!-- ХЯНАХ САМБАР -->
     <div class="page active" id="page-dashboard">
       <div class="page-title">📊 Хянах самбар</div>
       <div class="stats-grid">
@@ -119,14 +173,29 @@ tr:last-child td{border-bottom:none;}
         <div class="stat-card"><div class="stat-icon">📰</div><div class="stat-label">Нийт мэдээ</div><div class="stat-val" id="st-news">-</div></div>
         <div class="stat-card"><div class="stat-icon">📢</div><div class="stat-label">Идэвхтэй реклам</div><div class="stat-val" id="st-ads">-</div></div>
         <div class="stat-card"><div class="stat-icon">👁</div><div class="stat-label">Нийт үзэлт</div><div class="stat-val" id="st-views">-</div></div>
+        <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-label">Онцлох кино</div><div class="stat-val" id="st-featured">-</div></div>
+        <div class="stat-card"><div class="stat-icon">❤️</div><div class="stat-label">Нийт like</div><div class="stat-val" id="st-likes">-</div></div>
+        <div class="stat-card"><div class="stat-icon">🗓</div><div class="stat-label">Өнөөдрийн огноо</div><div class="stat-val" id="st-date" style="font-size:13px;margin-top:4px;">-</div></div>
+        <div class="stat-card"><div class="stat-icon">🌐</div><div class="stat-label">Нийт агуулга</div><div class="stat-val" id="st-total">-</div></div>
       </div>
       <div class="form-card">
         <div class="form-title">🚀 Хурдан холбоосууд</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button class="form-btn" onclick="showPage('movies',null)">+ Кино нэмэх</button>
-          <button class="form-btn" style="background:linear-gradient(90deg,#3b4fd4,#818cf8)" onclick="showPage('news',null)">+ Мэдээ нэмэх</button>
-          <button class="form-btn" style="background:linear-gradient(90deg,#7c3aed,#c084fc)" onclick="showPage('ads',null)">+ Реклам нэмэх</button>
+          <button class="form-btn" style="margin-top:0;" onclick="showPage('movies',null)">+ Кино нэмэх</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#3b4fd4,#818cf8)" onclick="showPage('news',null)">+ Мэдээ нэмэх</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#7c3aed,#c084fc)" onclick="showPage('ads',null)">+ Реклам нэмэх</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#e63946,#f4a261)" onclick="showPage('list-movies',null)">📋 Кино жагсаалт</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#06b6d4,#3b82f6)" onclick="showPage('list-news',null)">📋 Мэдээ жагсаалт</button>
         </div>
+      </div>
+      <!-- Сүүлийн нэмэгдсэн кинонууд -->
+      <div class="form-card">
+        <div class="form-title">🎬 Сүүлд нэмэгдсэн кинонууд</div>
+        <div id="dash-movies"><div class="loading">Ачааллаж байна...</div></div>
+      </div>
+      <div class="form-card">
+        <div class="form-title">📰 Сүүлд нэмэгдсэн мэдээнүүд</div>
+        <div id="dash-news"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
 
@@ -138,9 +207,24 @@ tr:last-child td{border-bottom:none;}
         <div class="form-grid">
           <div class="form-group"><label class="form-label">Киноны нэр *</label><input class="form-inp" id="m-title" placeholder="жш: Интерстеллар"></div>
           <div class="form-group"><label class="form-label">Жанр</label>
-            <select class="form-inp" id="m-genre"><option>Фантастик</option><option>Экшн</option><option>Драм</option><option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Бусад</option></select>
+            <select class="form-inp" id="m-genre">
+              <option>Фантастик</option><option>Экшн</option><option>Драм</option>
+              <option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Бусад</option>
+            </select>
           </div>
           <div class="form-group full"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="m-desc" placeholder="Киноны товч тайлбар..."></textarea></div>
+
+          <!-- ОНЦЛОХ TOGGLE -->
+          <div class="form-group full">
+            <label class="form-label">Онцлох тохиргоо</label>
+            <div class="featured-toggle" onclick="toggleFeatured()" id="featured-toggle-wrap">
+              <div class="toggle-track" id="featured-track-el"><div class="toggle-thumb"></div></div>
+              <span class="toggle-label">Онцлох кинонд оруулах</span>
+              <span class="toggle-badge" id="featured-badge">Идэвхгүй</span>
+            </div>
+            <input type="hidden" id="m-featured" value="false">
+          </div>
+
           <div class="form-group full">
             <label class="form-label">Постер зураг</label>
             <div class="upload-tabs">
@@ -167,6 +251,7 @@ tr:last-child td{border-bottom:none;}
               <input class="form-inp" id="m-thumb-url" placeholder="https://...jpg">
             </div>
           </div>
+
           <div class="form-group full">
             <label class="form-label">Видео</label>
             <div class="upload-tabs">
@@ -208,9 +293,97 @@ tr:last-child td{border-bottom:none;}
         <div class="form-title">➕ Шинэ мэдээ</div>
         <div class="form-grid">
           <div class="form-group full"><label class="form-label">Гарчиг *</label><input class="form-inp" id="n-title" placeholder="жш: Шинэ кино гарлаа..."></div>
-          <div class="form-group"><label class="form-label">Ангилал</label>
-            <select class="form-inp" id="n-cat"><option>Кино мэдээ</option><option>Түүх</option><option>Шинжлэх ухаан</option><option>Сонирхолтой</option><option>Спорт</option><option>Технологи</option><option>Бусад</option></select>
+
+          <!-- АНГИЛАЛ — ЗУРАГ 1 ЗАГВАР -->
+          <div class="form-group full">
+            <label class="form-label">Ангилал сонгох</label>
+            <input type="hidden" id="n-cat-val" value="Кино мэдээ">
+            <div class="cat-grid" id="news-cat-grid">
+
+              <!-- Бүгд -->
+              <div class="cat-item selected" onclick="selectNewsCat(this,'Бүгд')">
+                <div class="cat-item-icon round">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="18" fill="url(#ncAll)"/><defs><linearGradient id="ncAll" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="18" cy="18" r="6" fill="white" fill-opacity="0.9"/><circle cx="18" cy="18" r="9" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="18" cy="18" r="13" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.2"/></svg>
+                </div>
+                <div class="cat-item-label">Бүгд</div>
+                <div class="cat-item-sub">Бүх агуулга</div>
+              </div>
+
+              <!-- Кино -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Кино мэдээ')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncMov)"/><defs><linearGradient id="ncMov" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="6" y="11" width="24" height="15" rx="2.5" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.8"/><path d="M10 11v15M26 11v15M6 18h24" stroke="white" stroke-width="1.3"/><circle cx="8" cy="13.5" r="1.3" fill="white"/><circle cx="8" cy="23.5" r="1.3" fill="white"/><circle cx="28" cy="13.5" r="1.3" fill="white"/><circle cx="28" cy="23.5" r="1.3" fill="white"/><path d="M15.5 15.5l6 2.5-6 2.5V15.5z" fill="white"/></svg>
+                </div>
+                <div class="cat-item-label">Кино</div>
+                <div class="cat-item-sub">Монгол дуутай</div>
+              </div>
+
+              <!-- Мэдээ -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Мэдээ')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncNews)"/><defs><linearGradient id="ncNews" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="7" y="9" width="22" height="19" rx="2.5" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.8"/><line x1="11" y1="14.5" x2="25" y2="14.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="18" x2="25" y2="18" stroke="white" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="21.5" x2="19" y2="21.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+                </div>
+                <div class="cat-item-label">Мэдээ</div>
+                <div class="cat-item-sub">Шинэ мэдээлэл</div>
+              </div>
+
+              <!-- Аялал -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Аялал')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncTrav)"/><defs><linearGradient id="ncTrav" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M18 7C12.5 7 8 11.5 8 17c0 7 10 14 10 14s10-7 10-14c0-5.5-4.5-10-10-10z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1.8"/><circle cx="18" cy="16.5" r="3" fill="white"/></svg>
+                </div>
+                <div class="cat-item-label">Аялал</div>
+                <div class="cat-item-sub">Дэлхийн газрууд</div>
+              </div>
+
+              <!-- Шинжлэх ухаан -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Шинжлэх ухаан')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncSci)"/><defs><linearGradient id="ncSci" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M14 8v7.5L9 25h18l-5-9.5V8" stroke="white" stroke-width="1.8" stroke-linejoin="round"/><line x1="12" y1="8" x2="24" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="22" r="1.5" fill="white"/><circle cx="21" cy="24" r="1.1" fill="white"/></svg>
+                </div>
+                <div class="cat-item-label">Шинжлэх ухаан</div>
+                <div class="cat-item-sub">Нээлт судалгаа</div>
+              </div>
+
+              <!-- Бүтээгдэхүүн -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Бүтээгдэхүүн')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncProd)"/><defs><linearGradient id="ncProd" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="6.5" y="6.5" width="9.5" height="9.5" rx="2" fill="white" fill-opacity="0.85"/><rect x="20" y="6.5" width="9.5" height="9.5" rx="2" fill="white" fill-opacity="0.6"/><rect x="6.5" y="20" width="9.5" height="9.5" rx="2" fill="white" fill-opacity="0.6"/><rect x="20" y="20" width="9.5" height="9.5" rx="2" fill="white" fill-opacity="0.85"/></svg>
+                </div>
+                <div class="cat-item-label">Бүтээгдэхүүн</div>
+                <div class="cat-item-sub">Манай үйлчилгээ</div>
+              </div>
+
+              <!-- AI -->
+              <div class="cat-item" onclick="selectNewsCat(this,'AI')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncAI)"/><defs><linearGradient id="ncAI" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="9" y="9" width="18" height="18" rx="3.5" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.8"/><circle cx="14.5" cy="16.5" r="1.8" fill="white"/><circle cx="21.5" cy="16.5" r="1.8" fill="white"/><path d="M13 22c0 0 1.8 2 5 2s5-2 5-2" stroke="white" stroke-width="1.4" stroke-linecap="round"/><line x1="14.5" y1="9" x2="14.5" y2="6.5" stroke="white" stroke-width="1.8"/><line x1="21.5" y1="9" x2="21.5" y2="6.5" stroke="white" stroke-width="1.8"/><line x1="18" y1="9" x2="18" y2="5.5" stroke="white" stroke-width="1.8"/></svg>
+                </div>
+                <div class="cat-item-label">AI</div>
+                <div class="cat-item-sub">Хиймэл оюун</div>
+              </div>
+
+              <!-- Кино түүх -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Кино түүх')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncHist)"/><defs><linearGradient id="ncHist" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="18" cy="18" r="10" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.8"/><polyline points="18,11 18,18 23,21.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="cat-item-label">Кино түүх</div>
+                <div class="cat-item-sub">Классик кинонууд</div>
+              </div>
+
+              <!-- Одод ёртөнц -->
+              <div class="cat-item" onclick="selectNewsCat(this,'Одод ёртөнц')">
+                <div class="cat-item-icon">
+                  <svg viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="url(#ncStars)"/><defs><linearGradient id="ncStars" x1="0" y1="0" x2="36" y2="36"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="18,7 21,15 29,15 23,20 25.5,28 18,23 10.5,28 13,20 7,15 15,15" fill="white" fill-opacity="0.9"/></svg>
+                </div>
+                <div class="cat-item-label">Одод ёртөнц</div>
+                <div class="cat-item-sub">Алдартнууд</div>
+              </div>
+
+            </div>
           </div>
+
           <div class="form-group">
             <label class="form-label">Зураг</label>
             <div class="upload-tabs">
@@ -245,7 +418,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- РЕКЛАМ -->
+    <!-- РЕКЛАМ НЭМЭХ -->
     <div class="page" id="page-ads">
       <div class="page-title">📢 Реклам нэмэх</div>
       <div class="form-card">
@@ -268,7 +441,10 @@ tr:last-child td{border-bottom:none;}
     <div class="page" id="page-list-movies">
       <div class="page-title">📋 Кино жагсаалт</div>
       <div class="table-card">
-        <div class="table-head"><div class="table-head-title">Бүх кинонууд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadMovieList()">🔄 Шинэчлэх</button></div>
+        <div class="table-head">
+          <div class="table-head-title">Бүх кинонууд</div>
+          <button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadMovieList()">🔄 Шинэчлэх</button>
+        </div>
         <div id="movie-table"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
@@ -277,10 +453,121 @@ tr:last-child td{border-bottom:none;}
     <div class="page" id="page-list-news">
       <div class="page-title">📋 Мэдээ жагсаалт</div>
       <div class="table-card">
-        <div class="table-head"><div class="table-head-title">Бүх мэдээнүүд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadNewsList()">🔄 Шинэчлэх</button></div>
+        <div class="table-head">
+          <div class="table-head-title">Бүх мэдээнүүд</div>
+          <button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadNewsList()">🔄 Шинэчлэх</button>
+        </div>
         <div id="news-table"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
+
+    <!-- РЕКЛАМ ЖАГСААЛТ -->
+    <div class="page" id="page-list-ads">
+      <div class="page-title">📋 Реклам жагсаалт</div>
+      <div class="table-card">
+        <div class="table-head">
+          <div class="table-head-title">Бүх рекламнууд</div>
+          <button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadAdList()">🔄 Шинэчлэх</button>
+        </div>
+        <div id="ads-table"><div class="loading">Ачааллаж байна...</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EDIT MODAL — Кино -->
+<div class="modal-overlay" id="modal-movie">
+  <div class="modal-box">
+    <div class="modal-title">
+      ✏️ Кино засах
+      <button class="modal-close" onclick="closeModal('modal-movie')">✕</button>
+    </div>
+    <input type="hidden" id="edit-movie-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-m-title" placeholder="Киноны нэр"></div>
+      <div class="form-group"><label class="form-label">Жанр</label>
+        <select class="form-inp" id="edit-m-genre">
+          <option>Фантастик</option><option>Экшн</option><option>Драм</option>
+          <option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Бусад</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-m-desc" style="min-height:70px;"></textarea></div>
+      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-m-thumb" placeholder="https://...jpg"></div>
+      <div class="form-group"><label class="form-label">Видео URL</label><input class="form-inp" id="edit-m-video" placeholder="https://...mp4"></div>
+      <div class="form-group">
+        <label class="form-label">Онцлох</label>
+        <div class="featured-toggle" onclick="toggleEditFeatured()" id="edit-featured-wrap">
+          <div class="toggle-track" id="edit-featured-track"><div class="toggle-thumb"></div></div>
+          <span class="toggle-label">Онцлох кинонд оруулах</span>
+          <span class="toggle-badge" id="edit-featured-badge">Идэвхгүй</span>
+        </div>
+        <input type="hidden" id="edit-m-featured" value="false">
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-movie')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveMovie()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-m-ok" style="margin-top:8px;">✅ Амжилттай хадгаллаа!</div>
+    <div class="error-msg2" id="edit-m-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL — Мэдээ -->
+<div class="modal-overlay" id="modal-news">
+  <div class="modal-box">
+    <div class="modal-title">
+      ✏️ Мэдээ засах
+      <button class="modal-close" onclick="closeModal('modal-news')">✕</button>
+    </div>
+    <input type="hidden" id="edit-news-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Гарчиг *</label><input class="form-inp" id="edit-n-title" placeholder="Гарчиг"></div>
+      <div class="form-group"><label class="form-label">Ангилал</label>
+        <select class="form-inp" id="edit-n-cat">
+          <option>Бүгд</option><option>Кино мэдээ</option><option>Мэдээ</option><option>Аялал</option>
+          <option>Шинжлэх ухаан</option><option>Бүтээгдэхүүн</option><option>AI</option>
+          <option>Кино түүх</option><option>Одод ёртөнц</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-n-thumb" placeholder="https://...jpg"></div>
+      <div class="form-group"><label class="form-label">Агуулга</label><textarea class="form-inp" id="edit-n-content" style="min-height:90px;"></textarea></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-news')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveNews()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-n-ok" style="margin-top:8px;">✅ Амжилттай хадгаллаа!</div>
+    <div class="error-msg2" id="edit-n-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
+  </div>
+</div>
+
+<!-- EDIT MODAL — Реклам -->
+<div class="modal-overlay" id="modal-ad">
+  <div class="modal-box">
+    <div class="modal-title">
+      ✏️ Реклам засах
+      <button class="modal-close" onclick="closeModal('modal-ad')">✕</button>
+    </div>
+    <input type="hidden" id="edit-ad-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Гарчиг *</label><input class="form-inp" id="edit-a-title"></div>
+      <div class="form-group"><label class="form-label">Тайлбар</label><input class="form-inp" id="edit-a-desc"></div>
+      <div class="form-group"><label class="form-label">Товчны текст</label><input class="form-inp" id="edit-a-btn"></div>
+      <div class="form-group"><label class="form-label">Идэвхтэй эсэх</label>
+        <select class="form-inp" id="edit-a-active">
+          <option value="true">✅ Идэвхтэй</option>
+          <option value="false">❌ Идэвхгүй</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-ad')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveAd()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-a-ok" style="margin-top:8px;">✅ Амжилттай хадгаллаа!</div>
+    <div class="error-msg2" id="edit-a-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
   </div>
 </div>
 
@@ -291,25 +578,32 @@ const ADMIN_USER='admin';
 const ADMIN_PASS='kinoezen2026';
 const BUCKET='images';
 
+/* ===== AUTH ===== */
 function doLogin(){
   const u=document.getElementById('admin-user').value;
   const p=document.getElementById('admin-pass').value;
   if(u===ADMIN_USER&&p===ADMIN_PASS){
     document.getElementById('login-page').style.display='none';
     document.getElementById('admin-page').style.display='flex';
-    loadStats();
+    loadStats();loadDashPreviews();
   }else{document.getElementById('login-err').style.display='block';}
 }
 function doLogout(){
   document.getElementById('login-page').style.display='flex';
   document.getElementById('admin-page').style.display='none';
 }
+
+/* ===== SUPABASE ===== */
 async function supaFetch(table,params=''){
   const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
   return r.json();
 }
 async function supaInsert(table,data){
   const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+  return r.ok;
+}
+async function supaUpdate(table,id,data){
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
   return r.ok;
 }
 async function supaDelete(table,id){
@@ -333,12 +627,14 @@ async function uploadFile(file,folder,progressId){
     if(ptext)ptext.textContent='Дууслаа ✅';
     setTimeout(()=>{if(prog)prog.style.display='none';},2000);
     if(!r.ok){const e=await r.json();throw new Error(e.message||'Upload failed');}
-    return `${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
+    return`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
   }catch(err){
     if(ptext)ptext.textContent='❌ Алдаа: '+err.message;
     throw err;
   }
 }
+
+/* ===== UI HELPERS ===== */
 function switchTab(prefix,mode,el){
   el.closest('.upload-tabs').querySelectorAll('.upload-tab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
@@ -350,12 +646,10 @@ function switchTab(prefix,mode,el){
   if(bs)bs.style.display=mode==='bs'?'block':'none';
 }
 function previewFile(input,previewId,type){
-  const file=input.files[0];
-  if(!file)return;
-  const preview=document.getElementById(previewId);
-  preview.style.display='block';
-  if(type==='image'){document.getElementById(previewId+'-img').src=URL.createObjectURL(file);}
-  else if(type==='video'){document.getElementById(previewId+'-vid').src=URL.createObjectURL(file);}
+  const file=input.files[0];if(!file)return;
+  const preview=document.getElementById(previewId);preview.style.display='block';
+  if(type==='image')document.getElementById(previewId+'-img').src=URL.createObjectURL(file);
+  else if(type==='video')document.getElementById(previewId+'-vid').src=URL.createObjectURL(file);
   const nameEl=document.getElementById(previewId+'-name');
   if(nameEl)nameEl.textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
 }
@@ -375,17 +669,107 @@ function showPage(name,el){
   if(el)el.classList.add('active');
   if(name==='list-movies')loadMovieList();
   if(name==='list-news')loadNewsList();
+  if(name==='list-ads')loadAdList();
+  if(name==='dashboard'){loadStats();loadDashPreviews();}
 }
+
+/* ===== MODAL ===== */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  ['edit-m-ok','edit-m-err','edit-n-ok','edit-n-err','edit-a-ok','edit-a-err'].forEach(i=>{const e=document.getElementById(i);if(e)e.style.display='none';});
+}
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
+});
+
+/* ===== FEATURED TOGGLE ===== */
+function toggleFeatured(){
+  const cur=document.getElementById('m-featured').value==='true';
+  const next=!cur;
+  document.getElementById('m-featured').value=String(next);
+  const track=document.getElementById('featured-track-el');
+  const badge=document.getElementById('featured-badge');
+  track.classList.toggle('on',next);
+  badge.textContent=next?'Идэвхтэй':'Идэвхгүй';
+  badge.style.background=next?'rgba(74,222,128,0.2)':'rgba(255,255,255,0.08)';
+  badge.style.color=next?'#4ade80':'rgba(255,255,255,0.4)';
+}
+function toggleEditFeatured(){
+  const cur=document.getElementById('edit-m-featured').value==='true';
+  const next=!cur;
+  document.getElementById('edit-m-featured').value=String(next);
+  const track=document.getElementById('edit-featured-track');
+  const badge=document.getElementById('edit-featured-badge');
+  track.classList.toggle('on',next);
+  badge.textContent=next?'Идэвхтэй':'Идэвхгүй';
+}
+function setEditFeatured(val){
+  document.getElementById('edit-m-featured').value=String(val);
+  const track=document.getElementById('edit-featured-track');
+  const badge=document.getElementById('edit-featured-badge');
+  track.classList.toggle('on',val);
+  badge.textContent=val?'Идэвхтэй':'Идэвхгүй';
+}
+
+/* ===== МЭДЭЭ АНГИЛАЛ ===== */
+function selectNewsCat(el,cat){
+  document.querySelectorAll('#news-cat-grid .cat-item').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('n-cat-val').value=cat;
+}
+
+/* ===== ХЯНАХ САМБАР ===== */
 async function loadStats(){
   try{
-    const[movies,news,ads]=await Promise.all([supaFetch('movies','select=id'),supaFetch('news','select=id'),supaFetch('ads','active=eq.true&select=id')]);
-    document.getElementById('st-movies').textContent=movies.length||0;
-    document.getElementById('st-news').textContent=news.length||0;
-    document.getElementById('st-ads').textContent=ads.length||0;
-    const all=await supaFetch('movies','select=views');
-    document.getElementById('st-views').textContent=all.reduce((s,m)=>s+(m.views||0),0);
+    const now=new Date();
+    document.getElementById('st-date').textContent=now.getFullYear()+'.'+(now.getMonth()+1).toString().padStart(2,'0')+'.'+now.getDate().toString().padStart(2,'0');
+    const[movies,news,ads,allMovies]=await Promise.all([
+      supaFetch('movies','select=id'),
+      supaFetch('news','select=id'),
+      supaFetch('ads','active=eq.true&select=id'),
+      supaFetch('movies','select=views,likes,featured')
+    ]);
+    const mc=movies.length||0;
+    const nc=news.length||0;
+    const ac=ads.length||0;
+    const totalViews=allMovies.reduce((s,m)=>s+(parseInt(m.views)||0),0);
+    const totalLikes=allMovies.reduce((s,m)=>s+(parseInt(m.likes)||0),0);
+    const featuredCount=allMovies.filter(m=>m.featured).length;
+    document.getElementById('st-movies').textContent=mc;
+    document.getElementById('st-news').textContent=nc;
+    document.getElementById('st-ads').textContent=ac;
+    document.getElementById('st-views').textContent=totalViews>999?(totalViews/1000).toFixed(1)+'к':totalViews;
+    document.getElementById('st-likes').textContent=totalLikes;
+    document.getElementById('st-featured').textContent=featuredCount;
+    document.getElementById('st-total').textContent=mc+nc;
   }catch(e){}
 }
+async function loadDashPreviews(){
+  try{
+    const movies=await supaFetch('movies','order=created_at.desc&limit=5');
+    const dm=document.getElementById('dash-movies');
+    if(!movies||movies.length===0){dm.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:13px;padding:10px;">Кино байхгүй</div>';return;}
+    dm.innerHTML=`<table style="width:100%;border-collapse:collapse;">${movies.map(m=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+      <td style="padding:8px 4px;font-size:12px;">${m.thumbnail?`<img src="${m.thumbnail}" style="width:40px;height:24px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px;">`:''}${m.title}</td>
+      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.genre||'-'}</td>
+      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.featured?'⭐ Онцлох':''}</td>
+      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${m.views||0}</td>
+    </tr>`).join('')}</table>`;
+  }catch{}
+  try{
+    const news=await supaFetch('news','order=created_at.desc&limit=5');
+    const dn=document.getElementById('dash-news');
+    if(!news||news.length===0){dn.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:13px;padding:10px;">Мэдээ байхгүй</div>';return;}
+    dn.innerHTML=`<table style="width:100%;border-collapse:collapse;">${news.map(n=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+      <td style="padding:8px 4px;font-size:12px;">${n.title}</td>
+      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${n.category||'-'}</td>
+      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${n.views||0}</td>
+    </tr>`).join('')}</table>`;
+  }catch{}
+}
+
+/* ===== КИНО НЭМЭХ ===== */
 async function addMovie(){
   const title=document.getElementById('m-title').value.trim();
   if(!title){alert('Киноны нэрийг оруулна уу!');return;}
@@ -403,17 +787,23 @@ async function addMovie(){
       const vidFile=document.getElementById('m-vid-file');
       if(vidFile&&vidFile.files.length>0)videoUrl=await uploadFile(vidFile.files[0],'videos','m-vid');
     }else{videoUrl=document.getElementById('m-video-url').value.trim()||null;}
-    const ok=await supaInsert('movies',{title,genre:document.getElementById('m-genre').value,description:document.getElementById('m-desc').value,thumbnail:thumbUrl,video_url:videoUrl});
+    const featured=document.getElementById('m-featured').value==='true';
+    const ok=await supaInsert('movies',{title,genre:document.getElementById('m-genre').value,description:document.getElementById('m-desc').value,thumbnail:thumbUrl,video_url:videoUrl,featured});
     if(ok){
       document.getElementById('m-ok').style.display='block';
       ['m-title','m-desc','m-thumb-url','m-video-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
       ['m-img-preview','m-vid-preview'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+      document.getElementById('m-featured').value='false';
+      const track=document.getElementById('featured-track-el');track.classList.remove('on');
+      document.getElementById('featured-badge').textContent='Идэвхгүй';
       setTimeout(()=>document.getElementById('m-ok').style.display='none',3000);
       loadStats();
     }else{document.getElementById('m-err').style.display='block';}
   }catch(e){document.getElementById('m-err').textContent='❌ Алдаа: '+e.message;document.getElementById('m-err').style.display='block';}
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
+
+/* ===== МЭДЭЭ НЭМЭХ ===== */
 async function addNews(){
   const title=document.getElementById('n-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
@@ -425,17 +815,22 @@ async function addNews(){
       const imgFile=document.getElementById('n-img-file');
       if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'news','n-img');
     }else{thumbUrl=document.getElementById('n-thumb-url').value.trim()||null;}
-    const ok=await supaInsert('news',{title,category:document.getElementById('n-cat').value,thumbnail:thumbUrl,content:document.getElementById('n-content').value});
+    const cat=document.getElementById('n-cat-val').value||'Мэдээ';
+    const ok=await supaInsert('news',{title,category:cat,thumbnail:thumbUrl,content:document.getElementById('n-content').value});
     if(ok){
       document.getElementById('n-ok').style.display='block';
       ['n-title','n-content','n-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
       const np=document.getElementById('n-img-preview');if(np)np.style.display='none';
+      document.getElementById('n-cat-val').value='Бүгд';
+      document.querySelectorAll('#news-cat-grid .cat-item').forEach((c,i)=>{c.classList.toggle('selected',i===0);});
       setTimeout(()=>document.getElementById('n-ok').style.display='none',3000);
       loadStats();
     }else{document.getElementById('n-err').style.display='block';}
   }catch(e){document.getElementById('n-err').textContent='❌ Алдаа: '+e.message;document.getElementById('n-err').style.display='block';}
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
+
+/* ===== РЕКЛАМ НЭМЭХ ===== */
 async function addAd(){
   const title=document.getElementById('a-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
@@ -443,22 +838,154 @@ async function addAd(){
   if(ok){document.getElementById('a-ok').style.display='block';document.getElementById('a-title').value='';setTimeout(()=>document.getElementById('a-ok').style.display='none',3000);}
   else{document.getElementById('a-err').style.display='block';}
 }
+
+/* ===== КИНО ЖАГСААЛТ ===== */
 async function loadMovieList(){
   const el=document.getElementById('movie-table');
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const movies=await supaFetch('movies','order=created_at.desc');
   if(!movies||movies.length===0){el.innerHTML='<div class="loading">Кино байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Нэр</th><th>Жанр</th><th>Зураг</th><th>Видео</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>${movies.map(m=>`<tr><td>${m.title}</td><td><span class="badge badge-blue">${m.genre||'-'}</span></td><td>${m.thumbnail?`<img src="${m.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td><td>${m.video_url?`<a href="${m.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Линк</a>`:'—'}</td><td>👁 ${m.views||0}</td><td>${new Date(m.created_at).toLocaleDateString('mn-MN')}</td><td><button class="action-btn del-btn" onclick="deleteMovie('${m.id}')">🗑 Устгах</button></td></tr>`).join('')}</tbody></table>`;
+  el.innerHTML=`<table><thead><tr>
+    <th>Нэр</th><th>Жанр</th><th>Зураг</th><th>Видео</th><th>Үзэлт</th><th>Онцлох</th><th>Огноо</th><th>Үйлдэл</th>
+  </tr></thead><tbody>${movies.map(m=>`<tr>
+    <td>${m.title}</td>
+    <td><span class="badge badge-blue">${m.genre||'-'}</span></td>
+    <td>${m.thumbnail?`<img src="${m.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+    <td>${m.video_url?`<a href="${m.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Линк</a>`:'—'}</td>
+    <td>👁 ${m.views||0}</td>
+    <td>${m.featured?'<span class="badge badge-green">⭐ Тийм</span>':'—'}</td>
+    <td>${new Date(m.created_at).toLocaleDateString('mn-MN')}</td>
+    <td style="white-space:nowrap;">
+      <button class="action-btn edit-btn" onclick="openEditMovie('${m.id}','${escStr(m.title)}','${m.genre||''}','${escStr(m.description||'')}','${m.thumbnail||''}','${m.video_url||''}',${!!m.featured})">✏️ Засах</button>
+      <button class="action-btn del-btn" onclick="deleteMovie('${m.id}')">🗑 Устгах</button>
+    </td>
+  </tr>`).join('')}</tbody></table>`;
 }
+function escStr(s){return(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
 async function deleteMovie(id){if(!confirm('Устгах уу?'))return;await supaDelete('movies',id);loadMovieList();loadStats();}
+function openEditMovie(id,title,genre,desc,thumb,video,featured){
+  document.getElementById('edit-movie-id').value=id;
+  document.getElementById('edit-m-title').value=title;
+  document.getElementById('edit-m-genre').value=genre||'Фантастик';
+  document.getElementById('edit-m-desc').value=desc;
+  document.getElementById('edit-m-thumb').value=thumb;
+  document.getElementById('edit-m-video').value=video;
+  setEditFeatured(featured);
+  document.getElementById('edit-m-ok').style.display='none';
+  document.getElementById('edit-m-err').style.display='none';
+  openModal('modal-movie');
+}
+async function saveMovie(){
+  const id=document.getElementById('edit-movie-id').value;
+  const title=document.getElementById('edit-m-title').value.trim();
+  if(!title){alert('Нэр оруулна уу!');return;}
+  const ok=await supaUpdate('movies',id,{
+    title,
+    genre:document.getElementById('edit-m-genre').value,
+    description:document.getElementById('edit-m-desc').value,
+    thumbnail:document.getElementById('edit-m-thumb').value||null,
+    video_url:document.getElementById('edit-m-video').value||null,
+    featured:document.getElementById('edit-m-featured').value==='true'
+  });
+  if(ok){
+    document.getElementById('edit-m-ok').style.display='block';
+    setTimeout(()=>{closeModal('modal-movie');loadMovieList();loadStats();},1200);
+  }else{document.getElementById('edit-m-err').style.display='block';}
+}
+
+/* ===== МЭДЭЭ ЖАГСААЛТ ===== */
 async function loadNewsList(){
   const el=document.getElementById('news-table');
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const news=await supaFetch('news','order=created_at.desc');
   if(!news||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>${news.map(n=>`<tr><td>${n.title}</td><td><span class="badge badge-green">${n.category||'-'}</span></td><td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td><td>👁 ${n.views||0}</td><td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td><td><button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button></td></tr>`).join('')}</tbody></table>`;
+  el.innerHTML=`<table><thead><tr>
+    <th>Гарчиг</th><th>Ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th>
+  </tr></thead><tbody>${news.map(n=>`<tr>
+    <td>${n.title}</td>
+    <td><span class="badge badge-green">${n.category||'-'}</span></td>
+    <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+    <td>👁 ${n.views||0}</td>
+    <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
+    <td style="white-space:nowrap;">
+      <button class="action-btn edit-btn" onclick="openEditNews('${n.id}','${escStr(n.title)}','${n.category||''}','${n.thumbnail||''}','${escStr(n.content||'')}')">✏️ Засах</button>
+      <button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button>
+    </td>
+  </tr>`).join('')}</tbody></table>`;
 }
 async function deleteNews(id){if(!confirm('Устгах уу?'))return;await supaDelete('news',id);loadNewsList();loadStats();}
+function openEditNews(id,title,cat,thumb,content){
+  document.getElementById('edit-news-id').value=id;
+  document.getElementById('edit-n-title').value=title;
+  document.getElementById('edit-n-cat').value=cat||'Мэдээ';
+  document.getElementById('edit-n-thumb').value=thumb;
+  document.getElementById('edit-n-content').value=content;
+  document.getElementById('edit-n-ok').style.display='none';
+  document.getElementById('edit-n-err').style.display='none';
+  openModal('modal-news');
+}
+async function saveNews(){
+  const id=document.getElementById('edit-news-id').value;
+  const title=document.getElementById('edit-n-title').value.trim();
+  if(!title){alert('Гарчиг оруулна уу!');return;}
+  const ok=await supaUpdate('news',id,{
+    title,
+    category:document.getElementById('edit-n-cat').value,
+    thumbnail:document.getElementById('edit-n-thumb').value||null,
+    content:document.getElementById('edit-n-content').value
+  });
+  if(ok){
+    document.getElementById('edit-n-ok').style.display='block';
+    setTimeout(()=>{closeModal('modal-news');loadNewsList();loadStats();},1200);
+  }else{document.getElementById('edit-n-err').style.display='block';}
+}
+
+/* ===== РЕКЛАМ ЖАГСААЛТ ===== */
+async function loadAdList(){
+  const el=document.getElementById('ads-table');
+  el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
+  const ads=await supaFetch('ads','order=created_at.desc');
+  if(!ads||ads.length===0){el.innerHTML='<div class="loading">Реклам байхгүй байна</div>';return;}
+  el.innerHTML=`<table><thead><tr>
+    <th>Гарчиг</th><th>Тайлбар</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th>
+  </tr></thead><tbody>${ads.map(a=>`<tr>
+    <td>${a.title}</td>
+    <td style="color:rgba(255,255,255,0.5);font-size:11px;">${a.description||'-'}</td>
+    <td><span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${a.button_text||'-'}</span></td>
+    <td>${a.active?'<span class="badge badge-green">✅ Тийм</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌ Үгүй</span>'}</td>
+    <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
+    <td style="white-space:nowrap;">
+      <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}',${!!a.active})">✏️ Засах</button>
+      <button class="action-btn del-btn" onclick="deleteAd('${a.id}')">🗑 Устгах</button>
+    </td>
+  </tr>`).join('')}</tbody></table>`;
+}
+async function deleteAd(id){if(!confirm('Рекламыг устгах уу?'))return;await supaDelete('ads',id);loadAdList();loadStats();}
+function openEditAd(id,title,desc,btn,active){
+  document.getElementById('edit-ad-id').value=id;
+  document.getElementById('edit-a-title').value=title;
+  document.getElementById('edit-a-desc').value=desc;
+  document.getElementById('edit-a-btn').value=btn;
+  document.getElementById('edit-a-active').value=String(active);
+  document.getElementById('edit-a-ok').style.display='none';
+  document.getElementById('edit-a-err').style.display='none';
+  openModal('modal-ad');
+}
+async function saveAd(){
+  const id=document.getElementById('edit-ad-id').value;
+  const title=document.getElementById('edit-a-title').value.trim();
+  if(!title){alert('Гарчиг оруулна уу!');return;}
+  const ok=await supaUpdate('ads',id,{
+    title,
+    description:document.getElementById('edit-a-desc').value,
+    button_text:document.getElementById('edit-a-btn').value||'Холбоо барих',
+    active:document.getElementById('edit-a-active').value==='true'
+  });
+  if(ok){
+    document.getElementById('edit-a-ok').style.display='block';
+    setTimeout(()=>{closeModal('modal-ad');loadAdList();loadStats();},1200);
+  }else{document.getElementById('edit-a-err').style.display='block';}
+}
 </script>
 </body>
 </html>
