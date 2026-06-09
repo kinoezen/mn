@@ -9,7 +9,6 @@
 body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#e63946,#f4a261);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;}
 .logo-text{font-size:16px;font-weight:700;color:#fff;}
 .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 18px;}
 .box{width:100%;max-width:400px;background:#1e1e2e;border-radius:18px;padding:28px 24px;border:1px solid rgba(255,255,255,0.07);}
@@ -22,6 +21,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .tab-sw button{flex:1;padding:9px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:rgba(255,255,255,0.4);}
 .tab-sw button.active{background:linear-gradient(90deg,#e63946,#f4a261);color:#fff;}
 .google-btn{width:100%;padding:11px;border-radius:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;}
+.google-btn:hover{background:rgba(255,255,255,0.12);}
 .g-circle{width:18px;height:18px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#e63946;}
 .divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .divider-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
@@ -31,10 +31,14 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .form-input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:11px 14px;color:#fff;font-size:13px;}
 .form-input:focus{outline:none;border-color:#4ade80;}
 .btn-main{width:100%;padding:12px;border-radius:11px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;margin-top:4px;}
+.btn-main:disabled{opacity:0.6;cursor:not-allowed;}
 .forgot{text-align:center;margin-top:12px;font-size:12px;color:rgba(255,255,255,0.35);}
-.forgot a{color:#4ade80;text-decoration:none;}
+.forgot a{color:#4ade80;text-decoration:none;cursor:pointer;}
 .back{text-align:center;margin-top:14px;font-size:12px;color:rgba(255,255,255,0.4);}
 .back a{color:#4ade80;text-decoration:none;}
+.msg{padding:10px 14px;border-radius:8px;font-size:12px;margin-top:10px;display:none;}
+.msg.success{background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;}
+.msg.error{background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;}
 </style>
 </head>
 <body>
@@ -55,48 +59,150 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
       <button class="active" onclick="switchTab('login',this)">Нэвтрэх</button>
       <button onclick="switchTab('register',this)">Бүртгүүлэх</button>
     </div>
-    <button class="google-btn">
+
+    <button class="google-btn" onclick="googleLogin()">
       <div class="g-circle">G</div>
       Google-ээр нэвтрэх
     </button>
     <div class="divider"><div class="divider-line"></div><span>эсвэл</span><div class="divider-line"></div></div>
+
+    <!-- НЭВТРЭХ -->
     <div id="login-form">
       <div class="form-group">
         <label class="form-label">И-мэйл</label>
-        <input class="form-input" type="email" placeholder="name@gmail.com"/>
+        <input class="form-input" type="email" id="login-email" placeholder="name@gmail.com">
       </div>
       <div class="form-group">
         <label class="form-label">Нууц үг</label>
-        <input class="form-input" type="password" placeholder="••••••••"/>
+        <input class="form-input" type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
-      <button class="btn-main">Нэвтрэх</button>
-      <div class="forgot">Нууц үг мартсан уу? <a href="#">Сэргээх</a></div>
+      <button class="btn-main" id="login-btn" onclick="doLogin()">Нэвтрэх</button>
+      <div class="msg" id="login-msg"></div>
+      <div class="forgot">Нууц үг мартсан уу? <a onclick="forgotPass()">Сэргээх</a></div>
     </div>
+
+    <!-- БҮРТГҮҮЛЭХ -->
     <div id="register-form" style="display:none">
       <div class="form-group">
         <label class="form-label">Нэр</label>
-        <input class="form-input" type="text" placeholder="Таны нэр"/>
+        <input class="form-input" type="text" id="reg-name" placeholder="Таны нэр">
       </div>
       <div class="form-group">
         <label class="form-label">И-мэйл</label>
-        <input class="form-input" type="email" placeholder="name@gmail.com"/>
+        <input class="form-input" type="email" id="reg-email" placeholder="name@gmail.com">
       </div>
       <div class="form-group">
         <label class="form-label">Нууц үг</label>
-        <input class="form-input" type="password" placeholder="••••••••"/>
+        <input class="form-input" type="password" id="reg-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doRegister()">
       </div>
-      <button class="btn-main">Бүртгүүлэх</button>
+      <button class="btn-main" id="reg-btn" onclick="doRegister()">Бүртгүүлэх</button>
+      <div class="msg" id="reg-msg"></div>
     </div>
+
     <div class="back"><a href="index.html">← Нүүр хуудас руу буцах</a></div>
   </div>
 </div>
+
 <script>
-function switchTab(tab, btn) {
+const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+function switchTab(tab,btn){
   document.querySelectorAll('.tab-sw button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('login-form').style.display = tab==='login'?'block':'none';
-  document.getElementById('register-form').style.display = tab==='register'?'block':'none';
+  document.getElementById('login-form').style.display=tab==='login'?'block':'none';
+  document.getElementById('register-form').style.display=tab==='register'?'block':'none';
 }
+
+function showMsg(id,text,type){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className='msg '+type;
+  el.style.display='block';
+}
+
+// НЭВТРЭХ
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  if(!email||!pass){showMsg('login-msg','И-мэйл болон нууц үгээ оруулна уу!','error');return;}
+  const btn=document.getElementById('login-btn');
+  btn.textContent='⏳ Нэвтэрч байна...';btn.disabled=true;
+  try{
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pass})
+    });
+    const data=await r.json();
+    if(data.access_token){
+      localStorage.setItem('sb_token',data.access_token);
+      localStorage.setItem('sb_user',JSON.stringify(data.user));
+      showMsg('login-msg','✅ Амжилттай нэвтэрлээ! Шилжиж байна...','success');
+      setTimeout(()=>location.href='index.html',1000);
+    }else{
+      showMsg('login-msg',data.error_description||'И-мэйл эсвэл нууц үг буруу байна!','error');
+    }
+  }catch(e){showMsg('login-msg','Алдаа гарлаа. Дахин оролдоно уу.','error');}
+  btn.textContent='Нэвтрэх';btn.disabled=false;
+}
+
+// БҮРТГҮҮЛЭХ
+async function doRegister(){
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  if(!name||!email||!pass){showMsg('reg-msg','Бүх талбарыг бөглөнө үү!','error');return;}
+  if(pass.length<6){showMsg('reg-msg','Нууц үг хамгийн багадаа 6 тэмдэгт байх ёстой!','error');return;}
+  const btn=document.getElementById('reg-btn');
+  btn.textContent='⏳ Бүртгэж байна...';btn.disabled=true;
+  try{
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/signup`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pass,data:{full_name:name}})
+    });
+    const data=await r.json();
+    if(data.id||data.user){
+      showMsg('reg-msg','✅ Бүртгэл амжилттай! И-мэйлээ шалгаж баталгаажуулна уу.','success');
+      document.getElementById('reg-name').value='';
+      document.getElementById('reg-email').value='';
+      document.getElementById('reg-pass').value='';
+    }else{
+      showMsg('reg-msg',data.error_description||data.msg||'Бүртгэл амжилтгүй боллоо.','error');
+    }
+  }catch(e){showMsg('reg-msg','Алдаа гарлаа. Дахин оролдоно уу.','error');}
+  btn.textContent='Бүртгүүлэх';btn.disabled=false;
+}
+
+// GOOGLE
+async function googleLogin(){
+  try{
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.origin+'/index.html')}`,{
+      headers:{'apikey':SUPABASE_KEY}
+    });
+    const data=await r.json();
+    if(data.url)location.href=data.url;
+  }catch(e){alert('Google нэвтрэх алдаатай байна.');}
+}
+
+// НУУЦ ҮГ СЭРГЭЭХ
+async function forgotPass(){
+  const email=document.getElementById('login-email').value.trim();
+  if(!email){showMsg('login-msg','И-мэйл хаягаа оруулаад дахин дарна уу!','error');return;}
+  try{
+    await fetch(`${SUPABASE_URL}/auth/v1/recover`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email})
+    });
+    showMsg('login-msg','✅ Нууц үг сэргээх и-мэйл илгээгдлээ!','success');
+  }catch(e){showMsg('login-msg','Алдаа гарлаа.','error');}
+}
+
+// Аль хэдийн нэвтэрсэн бол шилжүүлэх
+const token=localStorage.getItem('sb_token');
+if(token) location.href='index.html';
 </script>
 </body>
 </html>
