@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КиноЭзэн — Кино</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:#12121e;z-index:100;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
+.logo-text{font-size:22px;font-weight:700;color:#fff;}
+.nav-back{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;cursor:pointer;}
+.nav-back:hover{color:#4ade80;}
+
+/* VIDEO PLAYER */
+.player-wrap{width:100%;background:#000;position:relative;}
+.player-wrap iframe,.player-wrap video{width:100%;aspect-ratio:16/9;display:block;border:none;}
+.player-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(160deg,#0d0d25,#1a1050);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
+.player-placeholder .play-icon{font-size:64px;cursor:pointer;transition:transform 0.2s;}
+.player-placeholder .play-icon:hover{transform:scale(1.1);}
+.player-placeholder p{font-size:14px;color:rgba(255,255,255,0.4);}
+
+/* MOVIE INFO */
+.movie-wrap{max-width:900px;margin:0 auto;padding:20px 18px;}
+.movie-header{display:flex;gap:16px;margin-bottom:20px;}
+.movie-poster{width:120px;min-width:120px;height:170px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:40px;}
+.movie-poster img{width:100%;height:100%;object-fit:cover;}
+.movie-info{flex:1;}
+.movie-genre{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.gpill{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;}
+.gp-act{background:#e63946;color:#fff;}
+.gp-sci{background:#3b4fd4;color:#fff;}
+.gp-drm{background:#2d8a4e;color:#fff;}
+.movie-title{font-size:22px;font-weight:700;line-height:1.3;margin-bottom:8px;}
+.movie-stats{display:flex;gap:14px;margin-bottom:10px;flex-wrap:wrap;}
+.mstat{display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);}
+.movie-desc{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;}
+
+/* ACTION BUTTONS */
+.action-row{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;}
+.act-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.act-play{background:linear-gradient(90deg,#4ade80,#f4a261);color:#0a2a0a;flex:1;justify-content:center;}
+.act-like{background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;}
+.act-like.liked{background:#e63946;color:#fff;}
+.act-share{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);}
+.act-share:hover{background:rgba(255,255,255,0.12);}
+
+/* DIVIDER */
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:20px 0;}
+
+/* RELATED */
+.section-title{font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:12px;}
+.section-title span{color:#4ade80;}
+.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.grid-card{background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
+.grid-card:hover{border-color:rgba(74,222,128,0.25);}
+.grid-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;overflow:hidden;}
+.grid-img img{width:100%;height:100%;object-fit:cover;}
+.grid-badge{position:absolute;top:6px;left:6px;font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;}
+.grid-body{padding:8px 10px;}
+.grid-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3;}
+.grid-meta{font-size:10px;color:rgba(255,255,255,0.4);}
+
+/* LOADING */
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;}
+.loading-wrap p{color:rgba(255,255,255,0.4);font-size:14px;}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#4ade80;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,#1e1e2e 25%,#2a2a3e 50%,#1e1e2e 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* FOOTER */
+.footer{background:#0d0d1a;padding:20px 18px;border-top:1px solid rgba(255,255,255,0.08);margin-top:30px;}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.3);text-align:center;}
+
+@media(max-width:768px){
+  .movie-header{flex-direction:column;}
+  .movie-poster{width:100%;height:200px;}
+  .movie-title{font-size:18px;}
+  .related-grid{grid-template-columns:repeat(2,1fr);}
+  .act-play{flex:none;width:100%;}
+  .action-row{flex-wrap:wrap;}
+  .movie-wrap{padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="logo">
+    <div class="logo-text">КиноЭзэн</div>
+  </a>
+  <a href="index.html" class="nav-back">← Буцах</a>
+</nav>
+
+<!-- VIDEO PLAYER -->
+<div class="player-wrap" id="player-wrap">
+  <div class="player-placeholder">
+    <div class="spinner"></div>
+    <p>Ачааллаж байна...</p>
+  </div>
+</div>
+
+<!-- MOVIE INFO -->
+<div class="movie-wrap">
+  <div id="movie-content">
+    <div class="loading-wrap">
+      <div class="spinner"></div>
+      <p>Кино мэдээлэл ачааллаж байна...</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-copy">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+</div>
+
+<script>
+const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+const genreColors={'Фантастик':'gp-sci','Экшн':'gp-act','Драм':'gp-drm','Аймаар':'gp-act','Романтик':'gp-drm','Аниме':'gp-sci'};
+const genreGradients={'Фантастик':'linear-gradient(135deg,#1a0a2e,#3b1f6b)','Экшн':'linear-gradient(135deg,#2a0a0a,#6b1f1f)','Драм':'linear-gradient(135deg,#0a1a0a,#1a3a20)','Аймаар':'linear-gradient(135deg,#1a0a1a,#3b1f3b)','Романтик':'linear-gradient(135deg,#1a0a0a,#3b1010)','Аниме':'linear-gradient(135deg,#0a0a2a,#1f1f6b)'};
+
+// URL-аас id авах
+const params=new URLSearchParams(window.location.search);
+const movieId=params.get('id');
+
+async function supaFetch(table,query=''){
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}
+  });
+  return r.json();
+}
+
+async function loadMovie(){
+  if(!movieId){
+    document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';
+    return;
+  }
+  try{
+    const movies=await supaFetch('movies',`id=eq.${movieId}`);
+    if(!movies||movies.length===0){
+      document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';
+      return;
+    }
+    const m=movies[0];
+    document.title=`${m.title} — КиноЭзэн`;
+
+    // ВИДЕО PLAYER
+    renderPlayer(m.video_url, m.thumbnail);
+
+    // КИНО МЭДЭЭЛЭЛ
+    const cls=genreColors[m.genre]||'gp-sci';
+    const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+    const poster=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
+
+    document.getElementById('movie-content').innerHTML=`
+      <div class="movie-header">
+        <div class="movie-poster" style="background:${bg}">${poster}</div>
+        <div class="movie-info">
+          <div class="movie-genre"><span class="gpill ${cls}">${m.genre||'Кино'}</span></div>
+          <div class="movie-title">${m.title}</div>
+          <div class="movie-stats">
+            <div class="mstat">👁 ${m.views||0} үзэлт</div>
+            <div class="mstat">❤️ ${m.likes||0} like</div>
+            <div class="mstat">📅 ${new Date(m.created_at).toLocaleDateString('mn-MN')}</div>
+          </div>
+          <div class="movie-desc">${m.description||'Тайлбар байхгүй байна.'}</div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="act-btn act-play" onclick="scrollToPlayer()">▶ Үзэх</button>
+        <button class="act-btn act-like" id="like-btn" onclick="toggleLike('${m.id}')">❤️ Like</button>
+        <button class="act-btn act-share" onclick="shareMovie('${m.title}')">🔗 Хуваалцах</button>
+      </div>
+      <div class="divider"></div>
+      <div class="section-title"><span>Холбоотой</span> кинонууд</div>
+      <div class="related-grid" id="related-list">
+        <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
+        <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
+        <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
+        <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
+      </div>`;
+
+    // Үзэлт нэмэх
+    updateViews(m.id, m.views||0);
+    // Холбоотой кино
+    loadRelated(m.genre, m.id);
+
+  }catch(e){
+    document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Алдаа гарлаа. Дахин оролдоно уу.</p></div>';
+  }
+}
+
+function renderPlayer(videoUrl, thumbnail){
+  const wrap=document.getElementById('player-wrap');
+  if(!videoUrl){
+    // Видео байхгүй — зураг харуулна
+    const bg=thumbnail?`background:url('${thumbnail}') center/cover`:'background:linear-gradient(160deg,#0d0d25,#1a1050)';
+    wrap.innerHTML=`<div class="player-placeholder" style="${bg}">
+      <div class="play-icon">🎬</div>
+      <p>Видео тавигдаагүй байна</p>
+    </div>`;
+    return;
+  }
+  // YouTube линк шалгах
+  if(videoUrl.includes('youtube.com')||videoUrl.includes('youtu.be')){
+    let vid='';
+    if(videoUrl.includes('v='))vid=videoUrl.split('v=')[1].split('&')[0];
+    else if(videoUrl.includes('youtu.be/'))vid=videoUrl.split('youtu.be/')[1].split('?')[0];
+    if(vid){
+      wrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&rel=0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+      return;
+    }
+  }
+  // Supabase storage видео
+  if(videoUrl.includes('supabase')||videoUrl.endsWith('.mp4')||videoUrl.endsWith('.webm')){
+    wrap.innerHTML=`<video controls poster="${thumbnail||''}" preload="metadata">
+      <source src="${videoUrl}" type="video/mp4">
+      Таны браузер видео тоглуулахыг дэмжихгүй байна.
+    </video>`;
+    return;
+  }
+  // Бусад embed линк (Streamtape, Doodstream гэх мэт)
+  wrap.innerHTML=`<iframe src="${videoUrl}" allowfullscreen scrolling="no" frameborder="0"></iframe>`;
+}
+
+async function updateViews(id, currentViews){
+  try{
+    await fetch(`${SUPABASE_URL}/rest/v1/movies?id=eq.${id}`,{
+      method:'PATCH',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},
+      body:JSON.stringify({views: currentViews+1})
+    });
+  }catch(e){}
+}
+
+async function loadRelated(genre, currentId){
+  try{
+    const movies=await supaFetch('movies',`genre=eq.${encodeURIComponent(genre)}&id=neq.${currentId}&limit=4&order=created_at.desc`);
+    const el=document.getElementById('related-list');
+    if(!el)return;
+    if(!movies||movies.length===0){
+      el.innerHTML='<div style="grid-column:1/-1;color:rgba(255,255,255,0.3);font-size:13px;">Холбоотой кино байхгүй байна</div>';
+      return;
+    }
+    const cls_map={'Фантастик':'gp-sci','Экшн':'gp-act','Драм':'gp-drm'};
+    el.innerHTML=movies.map(m=>{
+      const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+      const thumb=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
+      const cls=genreColors[m.genre]||'gp-sci';
+      return `<div class="grid-card" onclick="location.href='movie.html?id=${m.id}'">
+        <div class="grid-img" style="background:${bg}">${thumb}<div class="grid-badge ${cls}">${m.genre||'Кино'}</div></div>
+        <div class="grid-body">
+          <div class="grid-title">${m.title}</div>
+          <div class="grid-meta">👁 ${m.views||0}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){}
+}
+
+function toggleLike(id){
+  const btn=document.getElementById('like-btn');
+  btn.classList.toggle('liked');
+  btn.textContent=btn.classList.contains('liked')?'❤️ Liked':'❤️ Like';
+}
+
+function scrollToPlayer(){
+  document.getElementById('player-wrap').scrollIntoView({behavior:'smooth'});
+}
+
+function shareMovie(title){
+  if(navigator.share){
+    navigator.share({title,url:window.location.href});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert('Линк хуулагдлаа!');
+  }
+}
+
+loadMovie();
+</script>
+</body>
+</html>
