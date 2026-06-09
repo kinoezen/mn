@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мэдээ — КиноЭзэн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0e18;--bg2:#161624;--bg3:#1e1e32;--bg4:#252540;
+  --accent:#4ade80;--accent2:#f4a261;--red:#e63946;
+  --border:rgba(255,255,255,0.08);--border2:rgba(74,222,128,0.2);
+  --text:#ffffff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
+  --radius:14px;--radius-sm:8px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
+.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
+.logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:4px;}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--radius-sm);transition:all 0.2s;}
+.nav-links a:hover{color:var(--accent);background:rgba(74,222,128,0.08);}
+.nav-right{display:flex;gap:8px;}
+.btn-login{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-login:hover{border-color:var(--accent);color:var(--accent);}
+.btn-join{padding:7px 14px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--red),var(--accent2));border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;}
+.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;}
+
+/* WEATHER */
+.weather-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.weather-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.weather-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);}
+.weather-temp{font-size:12px;font-weight:700;color:var(--accent);}
+.date-text{font-size:11px;color:var(--text4);}
+
+/* LAYOUT */
+.container{max-width:820px;margin:0 auto;padding:32px 24px 48px;}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text4);margin-bottom:20px;}
+.breadcrumb a{color:var(--text4);text-decoration:none;transition:color 0.2s;}
+.breadcrumb a:hover{color:var(--accent);}
+
+/* SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
+
+/* ARTICLE */
+.article{animation:fadeUp 0.4s ease both;}
+.article-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(74,222,128,0.12);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:14px;}
+.article-title{font-family:var(--font-display);font-size:32px;letter-spacing:1px;line-height:1.15;margin-bottom:14px;}
+.article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
+.meta-item{font-size:12px;color:var(--text4);display:flex;align-items:center;gap:4px;}
+.article-img{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius);margin-bottom:24px;border:1px solid var(--border);}
+.article-img-placeholder{width:100%;height:280px;border-radius:var(--radius);margin-bottom:24px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:80px;}
+.article-body{font-size:15px;color:var(--text2);line-height:1.85;white-space:pre-wrap;word-break:break-word;}
+
+/* DIVIDER */
+.divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
+
+/* SHARE */
+.share-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.share-label{font-size:13px;color:var(--text3);font-weight:600;}
+.share-btn{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;}
+.share-btn:hover{border-color:var(--border2);color:var(--accent);}
+
+/* BACK BTN */
+.back-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:28px;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* RELATED */
+.related-title{font-family:var(--font-display);font-size:19px;letter-spacing:1px;color:var(--text2);margin-bottom:14px;}
+.related-title span{color:var(--accent);}
+.related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.related-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:border-color 0.2s,transform 0.2s;}
+.related-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.related-img{width:100%;height:110px;object-fit:cover;display:block;}
+.related-img-ph{width:100%;height:110px;display:flex;align-items:center;justify-content:center;font-size:32px;}
+.related-body{padding:8px 10px 10px;}
+.related-cat{font-size:9px;padding:2px 7px;border-radius:20px;background:rgba(74,222,128,0.1);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:4px;}
+.related-title-text{font-size:11px;font-weight:700;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* ERROR */
+.error-box{text-align:center;padding:60px 20px;}
+.error-box .icon{font-size:48px;margin-bottom:14px;}
+.error-box h2{font-family:var(--font-display);font-size:24px;color:var(--text2);margin-bottom:8px;}
+.error-box p{font-size:13px;color:var(--text4);}
+
+/* MESSENGER FAB */
+.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s;}
+.messenger-fab:hover{transform:scale(1.1);}
+
+/* FOOTER */
+.footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-copy{font-size:11px;color:var(--text4);}
+.footer-links{display:flex;gap:14px;}
+.footer-links a{font-size:11px;color:var(--text4);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--accent);}
+
+@media(max-width:768px){
+  .nav{padding:10px 16px;flex-wrap:wrap;}
+  .nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid var(--border);}
+  .nav-links.open{display:flex;}
+  .nav-right{display:none;width:100%;flex-direction:column;gap:8px;}
+  .nav-right.open{display:flex;}
+  .nav-toggle{display:block;}
+  .weather-bar{flex-direction:column;align-items:flex-start;gap:5px;padding:7px 16px;}
+  .container{padding:20px 16px 36px;}
+  .article-title{font-size:24px;}
+  .related-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:480px){
+  .related-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="КиноЭзэн" onerror="this.style.display='none'">
+    <div class="logo-text">КиноЭзэн</div>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Нүүр</a>
+    <a href="movies.html">Кинонууд</a>
+    <a href="news.html" style="color:var(--accent)">Мэдээ</a>
+    <a href="services.html">Үйлчилгээ</a>
+    <a href="profile.html">Профайл</a>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+    <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">☰</button>
+</nav>
+
+<div class="weather-bar">
+  <div class="weather-left">
+    <div class="weather-item">📅 <time id="today-date"></time></div>
+    <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">...</span></div>
+    <div class="weather-item">📍 Улаанбаатар</div>
+  </div>
+  <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
+</div>
+
+<div class="container">
+  <div class="breadcrumb">
+    <a href="index.html">Нүүр</a> ›
+    <a href="news.html">Мэдээ</a> ›
+    <span id="bc-title" style="color:var(--text2);">...</span>
+  </div>
+
+  <a href="news.html" class="back-btn">← Мэдээ рүү буцах</a>
+
+  <!-- SKELETON -->
+  <div id="skeleton-wrap">
+    <div class="skeleton" style="height:22px;width:80px;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:36px;width:100%;margin-bottom:10px;"></div>
+    <div class="skeleton" style="height:36px;width:70%;margin-bottom:16px;"></div>
+    <div class="skeleton" style="height:18px;width:200px;margin-bottom:22px;"></div>
+    <div class="skeleton" style="height:300px;margin-bottom:24px;"></div>
+    <div class="skeleton" style="height:14px;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:14px;margin-bottom:8px;"></div>
+    <div class="skeleton" style="height:14px;width:80%;"></div>
+  </div>
+
+  <!-- ARTICLE -->
+  <article id="article-wrap" style="display:none;" class="article"></article>
+
+  <!-- ERROR -->
+  <div id="error-wrap" style="display:none;" class="error-box">
+    <div class="icon">📭</div>
+    <h2>Мэдээ олдсонгүй</h2>
+    <p>Энэ мэдээ устгагдсан эсвэл байхгүй байна.</p>
+  </div>
+
+  <hr class="divider" id="divider" style="display:none;">
+
+  <!-- RELATED -->
+  <div id="related-wrap" style="display:none;">
+    <div class="related-title">Холбоотой <span>мэдээнүүд</span></div>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</div>
+
+<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer">💬</a>
+
+<footer class="footer">
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+    <nav class="footer-links">
+      <a href="privacy.html">Нууцлал</a>
+      <a href="terms.html">Үйлчилгээний нөхцөл</a>
+      <a href="about.html">Бидний тухай</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+function sanitize(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = String(s);
+  return d.innerHTML;
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+  if (diff < 60) return 'Саяхан';
+  if (diff < 3600) return Math.floor(diff / 60) + ' мин өмнө';
+  if (diff < 86400) return Math.floor(diff / 3600) + ' цаг өмнө';
+  if (diff < 604800) return Math.floor(diff / 86400) + ' өдрийн өмнө';
+  const d = new Date(dateStr);
+  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+}
+
+const CAT_EMOJI = {
+  'Кино мэдээ':'🎬','Мэдээ':'📰','Танин мэдэхүй':'🧠',
+  'Шинжлэх ухаан':'🔬','AI':'🤖','Кино түүх':'🎞️',
+  'Аялал':'✈️','Одод ёртөнц':'⭐','Бүтээгдэхүүн':'🛍️'
+};
+const CAT_BG = {
+  'Кино мэдээ':'linear-gradient(135deg,#2a0d0d,#5a1a10)',
+  'Мэдээ':'linear-gradient(135deg,#0d2a0d,#1a5a1a)',
+  'Танин мэдэхүй':'linear-gradient(135deg,#0d1a2a,#1a3a5a)',
+  'Шинжлэх ухаан':'linear-gradient(135deg,#1a0d2a,#3a1a5a)',
+  'AI':'linear-gradient(135deg,#2a2a0d,#4a4a10)',
+  'Кино түүх':'linear-gradient(135deg,#2a1a0d,#5a3010)',
+  'Аялал':'linear-gradient(135deg,#0d2a2a,#1a5a5a)',
+  'Одод ёртөнц':'linear-gradient(135deg,#2a2a0a,#4a4a0a)',
+  'Бүтээгдэхүүн':'linear-gradient(135deg,#2a0d2a,#5a105a)',
+};
+
+// Date
+const now = new Date();
+document.getElementById('today-date').textContent =
+  now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+
+// Weather
+async function loadWeather() {
+  const el = document.getElementById('weather-temp');
+  try {
+    const ctrl = new AbortController();
+    setTimeout(() => ctrl.abort(), 5000);
+    const res = await fetch('https://wttr.in/Ulaanbaatar?format=j1', { signal: ctrl.signal });
+    if (!res.ok) throw 0;
+    const data = await res.json();
+    const temp = data.current_condition[0].temp_C;
+    if (el) el.textContent = temp + '°C';
+  } catch { if (el) el.textContent = '—'; }
+}
+loadWeather();
+
+// Nav toggle
+let navOpen = false;
+function toggleNav() {
+  navOpen = !navOpen;
+  document.getElementById('nav-links').classList.toggle('open', navOpen);
+  document.getElementById('nav-right').classList.toggle('open', navOpen);
+  document.getElementById('nav-toggle').textContent = navOpen ? '✕' : '☰';
+}
+document.addEventListener('click', e => {
+  if (navOpen && !e.target.closest('.nav')) {
+    navOpen = false;
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('nav-right').classList.remove('open');
+    document.getElementById('nav-toggle').textContent = '☰';
+  }
+});
+
+// Get ID from URL
+const newsId = new URLSearchParams(window.location.search).get('id');
+
+async function loadNews() {
+  if (!newsId) { showError(); return; }
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/news?id=eq.${newsId}`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    const data = await res.json();
+    if (!data || data.length === 0) { showError(); return; }
+    const n = data[0];
+
+    // Increment views
+    fetch(`${SUPABASE_URL}/rest/v1/news?id=eq.${newsId}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json', 'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ views: (parseInt(n.views) || 0) + 1 })
+    }).catch(() => {});
+
+    // Update page title & breadcrumb
+    document.title = (n.title || 'Мэдээ') + ' — КиноЭзэн';
+    document.getElementById('bc-title').textContent = n.title || '';
+
+    // Render article
+    const emoji = CAT_EMOJI[n.category] || '📰';
+    const bg = CAT_BG[n.category] || 'linear-gradient(135deg,#1a1a2a,#2a2a4a)';
+    const imgHTML = n.thumbnail
+      ? `<img class="article-img" src="${sanitize(n.thumbnail)}" alt="${sanitize(n.title)}" loading="lazy">`
+      : `<div class="article-img-placeholder" style="background:${bg}">${emoji}</div>`;
+
+    document.getElementById('article-wrap').innerHTML = `
+      <span class="article-cat">${sanitize(n.category || 'Мэдээ')}</span>
+      <h1 class="article-title">${sanitize(n.title)}</h1>
+      <div class="article-meta">
+        <span class="meta-item">🕐 ${timeAgo(n.created_at)}</span>
+        <span class="meta-item">👁 ${parseInt(n.views || 0) + 1} үзэлт</span>
+        <span class="meta-item">✍️ КиноЭзэн</span>
+      </div>
+      ${imgHTML}
+      <div class="article-body">${sanitize(n.content || 'Агуулга байхгүй байна.')}</div>
+      <hr class="divider">
+      <div class="share-row">
+        <span class="share-label">Хуваалцах:</span>
+        <button class="share-btn" onclick="shareFB()">📘 Facebook</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Холбоос хуулах</button>
+      </div>
+    `;
+
+    document.getElementById('skeleton-wrap').style.display = 'none';
+    document.getElementById('article-wrap').style.display = 'block';
+    document.getElementById('divider').style.display = 'none'; // divider inside article
+
+    // Load related
+    loadRelated(n.category, newsId);
+
+  } catch (e) {
+    showError();
+  }
+}
+
+async function loadRelated(cat, currentId) {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/news?category=eq.${encodeURIComponent(cat)}&id=neq.${currentId}&order=created_at.desc&limit=3`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const data = await res.json();
+    if (!data || data.length === 0) return;
+
+    const grid = document.getElementById('related-grid');
+    grid.innerHTML = data.map(n => {
+      const emoji = CAT_EMOJI[n.category] || '📰';
+      const bg = CAT_BG[n.category] || 'linear-gradient(135deg,#1a1a2a,#2a2a4a)';
+      const imgEl = n.thumbnail
+        ? `<img class="related-img" src="${sanitize(n.thumbnail)}" alt="${sanitize(n.title)}" loading="lazy">`
+        : `<div class="related-img-ph" style="background:${bg}">${emoji}</div>`;
+      return `<div class="related-card" onclick="location.href='news-detail.html?id=${sanitize(n.id)}'">
+        ${imgEl}
+        <div class="related-body">
+          <span class="related-cat">${sanitize(n.category || 'Мэдээ')}</span>
+          <div class="related-title-text">${sanitize(n.title)}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('related-wrap').style.display = 'block';
+  } catch {}
+}
+
+function showError() {
+  document.getElementById('skeleton-wrap').style.display = 'none';
+  document.getElementById('error-wrap').style.display = 'block';
+}
+
+function shareFB() {
+  window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(location.href), '_blank');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅ Хуулагдлаа';
+    setTimeout(() => btn.textContent = '🔗 Холбоос хуулах', 2000);
+  });
+}
+
+loadNews();
+</script>
+</body>
+</html>
