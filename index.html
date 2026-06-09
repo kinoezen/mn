@@ -1081,21 +1081,6 @@ function updateCharCount(){
   document.getElementById('char-count').textContent=`${len} / 300`;
 }
 
-function submitComment(){
-  const ta=document.getElementById('comment-textarea');
-  const text=ta.value.trim();
-  if(!text){ta.focus();showToast('Сэтгэгдэл бичнэ үү 💬');return;}
-  if(text.length>300){showToast('Хэт урт байна, 300 тэмдэгтээс бага байх ёстой');return;}
-  const now2=new Date();
-  const time=now2.getFullYear()+'.'+String(now2.getMonth()+1).padStart(2,'0')+'.'+String(now2.getDate()).padStart(2,'0')+' · '+String(now2.getHours()).padStart(2,'0')+':'+String(now2.getMinutes()).padStart(2,'0');
-  const rndName=COMMENT_NAMES[Math.floor(Math.random()*COMMENT_NAMES.length)];
-  const rndBg=COMMENT_AVABGS[Math.floor(Math.random()*COMMENT_AVABGS.length)];
-  comments.unshift({name:rndName,text,time,bg:rndBg,likes:0});
-  ta.value='';updateCharCount();
-  renderComments();
-  showToast('✅ Сэтгэгдэл нийтлэгдлээ!');
-  setTimeout(()=>{const first=document.querySelector('.comment-item');if(first)first.scrollIntoView({behavior:'smooth',block:'nearest'});},200);
-}
 
 document.getElementById('comment-textarea').addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){submitComment();}
