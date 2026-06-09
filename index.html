@@ -1032,15 +1032,6 @@ function showAll(el){
   setTimeout(()=>goSection('movies'),100);
 }
 
-// COMMENT SYSTEM
-let comments=[];
-const COMMENT_NAMES=['Батболд','Солонго','Мөнх-Эрдэнэ','Анхмаа','Тэмүүжин','Номин','Ганбаяр','Сарнай','Эрдэнэбат','Цэцэгмаа'];
-const COMMENT_AVABGS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(135deg,#4ade80,#22c55e)','linear-gradient(135deg,#06b6d4,#3b82f6)','linear-gradient(135deg,#a855f7,#7c3aed)','linear-gradient(135deg,#f59e0b,#ef4444)','linear-gradient(135deg,#ec4899,#8b5cf6)','linear-gradient(135deg,#10b981,#0891b2)'];
-const DEMO_COMMENTS=[
-  {name:'Батболд',text:'Маш гоё платформ байна! 🔥',time:'2026.06.09 · 10:32',bg:COMMENT_AVABGS[0],likes:5},
-  {name:'Солонго',text:'Мэдээнүүд маш сонирхолтой байна 😍',time:'2026.06.09 · 09:15',bg:COMMENT_AVABGS[1],likes:3},
-  {name:'Мөнх-Эрдэнэ',text:'Кино хайх функц гайхалтай ажиллаж байна 👍',time:'2026.06.08 · 21:44',bg:COMMENT_AVABGS[2],likes:7},
-];
 
 function renderComments(){
   const list=document.getElementById('comment-list');
