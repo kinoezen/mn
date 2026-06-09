@@ -123,16 +123,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .see-all{font-size:12px;color:var(--accent);font-weight:700;text-decoration:none;padding:5px 10px;border-radius:6px;transition:background 0.2s;}
 .see-all:hover{background:rgba(74,222,128,0.1);}
 
-/* ===== MAIN CATEGORY GRID — ШИНЭЧИЛСЭН ===== */
+/* ===== MAIN CATEGORY GRID — 10 цэс: 5+5 ===== */
 .main-cats-section{padding:0 0 8px;}
-/* 4+4+1 = 9 цэс: эхний мөр 5 (Бүгд+4), хоёрдахь мөр 4 */
 .main-cats-grid{
   display:grid;
   grid-template-columns:repeat(5,1fr);
   gap:10px;
   padding:0 24px 8px;
 }
-/* Бүгд цэс — тусгай өнгө */
 .mcat-card{
   background:var(--bg3);
   border-radius:12px;
@@ -155,7 +153,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .mcat-card:hover::before{opacity:1;}
 .mcat-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
-/* Бүгд - special */
 .mcat-all{border-color:rgba(74,222,128,0.25);background:linear-gradient(135deg,rgba(74,222,128,0.08),rgba(74,222,128,0.03));}
 .mcat-all::before{background:linear-gradient(135deg,rgba(74,222,128,0.14),rgba(244,162,97,0.08));}
 .mcat-all.selected{border-color:var(--accent);background:rgba(74,222,128,0.12);}
@@ -168,8 +165,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .mcat-history::before{background:linear-gradient(135deg,rgba(249,115,22,0.1),rgba(220,38,38,0.07));}
 .mcat-knowledge::before{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(8,145,178,0.07));}
 .mcat-product::before{background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(139,92,246,0.07));}
+.mcat-stars::before{background:linear-gradient(135deg,rgba(250,204,21,0.12),rgba(251,146,60,0.08));}
 
-/* Icon тойрог */
 .mcat-icon{
   width:42px;height:42px;
   margin-bottom:7px;
@@ -199,8 +196,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .mcat-history .mcat-badge{background:rgba(249,115,22,0.18);color:#fb923c;}
 .mcat-knowledge .mcat-badge{background:rgba(16,185,129,0.18);color:#34d399;}
 .mcat-product .mcat-badge{background:rgba(236,72,153,0.18);color:#f472b6;}
+.mcat-stars .mcat-badge{background:rgba(250,204,21,0.2);color:#fbbf24;}
 
-/* Responsive: мобайл дээр 4+4+1 */
 @media(max-width:900px){
   .main-cats-grid{grid-template-columns:repeat(5,1fr);gap:7px;padding:0 16px 8px;}
   .mcat-icon{width:36px;height:36px;}
@@ -262,7 +259,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .skel-line{height:11px;border-radius:4px;margin-bottom:7px;}
 .skel-line.short{width:55%;}
 
-/* ===== NEWS GRID — ЗУРАГ БҮТЭН ХАРАГДАХ ===== */
+/* ===== NEWS GRID — ЗУРАГ ГОЛЛУУЛСАН, ХАЙРЦАГТ БАГТААСАН ===== */
 .news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 24px 20px;}
 .news-card{
   background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;
@@ -270,54 +267,56 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   transition:border-color 0.25s,transform 0.25s;animation:fadeUp 0.5s ease both;
 }
 .news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
+
+/* ===== ЗУРГИЙН ХАЙРЦАГ — object-fit:cover, тогтмол өндөр ===== */
 .news-img{
   width:100%;
-  height:160px;  /* нэмсэн */
+  height:160px;
   background:linear-gradient(135deg,#1a1a0a,#2a2a10);
-  display:flex;align-items:center;justify-content:center;
-  overflow:hidden;flex-shrink:0;position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 .news-img img{
-  width:100%;height:100%;
-  object-fit:cover;   /* бүтэн дүүргэнэ */
-  object-position:center;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
   display:block;
+  position:absolute;
+  top:0;left:0;
   transition:transform 0.4s;
 }
 .news-card:hover .news-img img{transform:scale(1.04);}
-.news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));transition:transform 0.3s;}
+.news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));transition:transform 0.3s;position:relative;z-index:1;}
 .news-card:hover .n-emoji{transform:scale(1.12) rotate(-4deg);}
+
 .news-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
 .news-cat{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.12);color:var(--accent);display:inline-block;margin-bottom:5px;}
 .news-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.news-foot{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.news-foot{display:flex;align-items:center;justify-content:space-between;}
 .news-date{font-size:10px;color:var(--text4);}
 .news-views{font-size:10px;color:var(--text4);}
 
-/* EMOJI REACTIONS */
-.emoji-reaction{display:flex;gap:4px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--border);margin-top:4px;}
-.e-btn{display:flex;flex-direction:row;align-items:center;gap:3px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer;transition:all 0.18s;font-family:var(--font-body);}
-.e-btn:hover{background:rgba(255,255,255,0.1);transform:scale(1.12);border-color:rgba(255,255,255,0.2);}
-.e-btn.active{background:rgba(74,222,128,0.12);border-color:var(--accent);animation:pulse-glow 0.4s ease;}
-.e-emoji{font-size:14px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transition:transform 0.2s;}
-.e-btn:hover .e-emoji{transform:scale(1.3) rotate(-8deg);}
-.e-count{font-size:10px;color:var(--text3);font-weight:700;}
-.e-btn.active .e-count{color:var(--accent);}
+/* MESSENGER FAB */
+.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s,box-shadow 0.2s;}
+.messenger-fab:hover{transform:scale(1.1);}
 
-/* ===== COMMENT SECTION ===== */
+/* ===== СЭТГЭГДЭЛ — ХЯЛБАРШУУЛСАН ===== */
 .comment-section{padding:0 24px 24px;}
 .comment-box{background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
 .comment-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .comment-header-title{font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;color:var(--text2);}
 .comment-count{font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;font-weight:700;}
-/* Write area */
 .comment-write{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
 .comment-ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
 .comment-input-wrap{flex:1;background:var(--bg3);border-radius:10px;border:1px solid var(--border);overflow:hidden;transition:border-color 0.2s;}
 .comment-input-wrap:focus-within{border-color:var(--accent);}
 .comment-textarea{width:100%;background:transparent;border:none;padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font-body);resize:none;outline:none;min-height:60px;line-height:1.5;}
 .comment-textarea::placeholder{color:var(--text4);}
-/* Emoji picker bar */
 .emoji-bar{display:flex;align-items:center;gap:4px;padding:8px 12px;border-top:1px solid var(--border);flex-wrap:wrap;}
 .emoji-bar span{font-size:18px;cursor:pointer;transition:transform 0.15s;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3));}
 .emoji-bar span:hover{transform:scale(1.35);}
@@ -325,7 +324,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .char-count{font-size:11px;color:var(--text4);}
 .btn-comment-submit{padding:7px 18px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
 .btn-comment-submit:hover{opacity:0.9;transform:translateY(-1px);}
-/* Comment list */
 .comment-list{padding:0 16px;}
 .comment-item{padding:12px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;animation:slideIn 0.3s ease;}
 .comment-item:last-child{border-bottom:none;}
@@ -340,10 +338,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .ci-like-btn:hover{color:var(--red);}
 .ci-like-btn.liked{color:var(--red);}
 .comment-empty{text-align:center;padding:20px;color:var(--text4);font-size:13px;}
-
-/* MESSENGER FAB */
-.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s,box-shadow 0.2s;}
-.messenger-fab:hover{transform:scale(1.1);}
 
 /* FOOTER */
 .footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);margin-top:8px;}
@@ -486,7 +480,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </section>
 
-<!-- ===== MAIN CATEGORY GRID — ШИНЭЧИЛСЭН ===== -->
+<!-- ===== АНГИЛАЛ СОНГОХ — 10 цэс: Бүгд, Бүтээгдэхүүн, Одод ёртөнц, + 7 ===== -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -495,7 +489,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
   <div class="main-cats-grid" id="main-cats-grid">
 
-    <!-- БҮГД — эхний -->
+    <!-- 1. БҮГД -->
     <div class="mcat-card mcat-all selected" id="mcat-all" onclick="showAll(this)" tabindex="0" role="button" aria-label="Бүгд">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg>
@@ -505,7 +499,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge" id="badge-all">—</div>
     </div>
 
-    <!-- КИНО -->
+    <!-- 2. БҮТЭЭГДЭХҮҮН ҮЙЛЧИЛГЭЭ — Бүгдийн дараа -->
+    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн үйлчилгээ">
+      <div class="mcat-icon">
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg>
+      </div>
+      <div class="mcat-label">Бүтээгдэхүүн</div>
+      <div class="mcat-sub">Манай үйлчилгээ</div>
+      <div class="mcat-badge">→</div>
+    </div>
+
+    <!-- 3. ОДОД ЁРТӨНЦ — шинэ цэс -->
+    <div class="mcat-card mcat-stars" onclick="location.href='stars.html'" tabindex="0" role="button" aria-label="Одод ёртөнц">
+      <div class="mcat-icon">
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg>
+      </div>
+      <div class="mcat-label">Одод ёртөнц</div>
+      <div class="mcat-sub">Алдартнууд</div>
+      <div class="mcat-badge">✦</div>
+    </div>
+
+    <!-- 4. КИНО -->
     <div class="mcat-card mcat-movie" onclick="goSection('movies')" tabindex="0" role="button" aria-label="Кино">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg>
@@ -515,7 +529,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge" id="badge-movie">8</div>
     </div>
 
-    <!-- МЭДЭЭ -->
+    <!-- 5. МЭДЭЭ -->
     <div class="mcat-card mcat-news" onclick="goSection('news')" tabindex="0" role="button" aria-label="Мэдээ">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
@@ -525,7 +539,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge" id="badge-news">4</div>
     </div>
 
-    <!-- АЯЛАЛ -->
+    <!-- 6. АЯЛАЛ -->
     <div class="mcat-card mcat-travel" onclick="location.href='news.html?cat=Аялал'" tabindex="0" role="button" aria-label="Аялал">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg>
@@ -535,7 +549,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge">3</div>
     </div>
 
-    <!-- ШИНЖЛЭХ УХААН -->
+    <!-- 7. ШИНЖЛЭХ УХААН -->
     <div class="mcat-card mcat-science" onclick="selNewsCatById('Шинжлэх ухаан')" tabindex="0" role="button" aria-label="Шинжлэх ухаан">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg>
@@ -545,7 +559,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge">4</div>
     </div>
 
-    <!-- AI -->
+    <!-- 8. AI -->
     <div class="mcat-card mcat-ai" onclick="selNewsCatById('AI')" tabindex="0" role="button" aria-label="AI">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg>
@@ -555,7 +569,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge">4</div>
     </div>
 
-    <!-- КИНО ТҮҮХ -->
+    <!-- 9. КИНО ТҮҮХ -->
     <div class="mcat-card mcat-history" onclick="selNewsCatById('Кино түүх')" tabindex="0" role="button" aria-label="Кино түүх">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -565,7 +579,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-badge">4</div>
     </div>
 
-    <!-- ТАНИН МЭДЭХҮЙ -->
+    <!-- 10. ТАНИН МЭДЭХҮЙ -->
     <div class="mcat-card mcat-knowledge" onclick="selNewsCatById('Танин мэдэхүй')" tabindex="0" role="button" aria-label="Танин мэдэхүй">
       <div class="mcat-icon">
         <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg>
@@ -573,16 +587,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <div class="mcat-label">Танин мэдэхүй</div>
       <div class="mcat-sub">Мэдлэг боловсрол</div>
       <div class="mcat-badge">4</div>
-    </div>
-
-    <!-- БҮТЭЭГДЭХҮҮН ҮЙЛЧИЛГЭЭ (хуучин Аниме) -->
-    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн үйлчилгээ">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg>
-      </div>
-      <div class="mcat-label">Бүтээгдэхүүн үйлчилгээ</div>
-      <div class="mcat-sub">Манай үйлчилгээ</div>
-      <div class="mcat-badge">→</div>
     </div>
 
   </div>
@@ -633,14 +637,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <button class="ncat-btn" role="tab" aria-selected="false" onclick="selNewsCat(this,'Кино түүх')">🎬 Кино түүх</button>
   </div>
   <div class="news-grid" id="news-list" role="list">
-    <div class="skel-card skeleton" style="height:230px"></div>
-    <div class="skel-card skeleton" style="height:230px"></div>
-    <div class="skel-card skeleton" style="height:230px"></div>
-    <div class="skel-card skeleton" style="height:230px"></div>
+    <div class="skel-card skeleton" style="height:240px"></div>
+    <div class="skel-card skeleton" style="height:240px"></div>
+    <div class="skel-card skeleton" style="height:240px"></div>
+    <div class="skel-card skeleton" style="height:240px"></div>
   </div>
 </section>
 
-<!-- ===== СЭТГЭГДЭЛ ХЭСЭГ ===== -->
+<!-- ===== СЭТГЭГДЭЛ — ЦЭВЭР, ХЯЛБАР ===== -->
 <section class="comment-section" id="comments" aria-label="Сэтгэгдлүүд">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
     <h2 class="section-title" style="padding:0;"><span>Сэтгэгдэл</span> бичих</h2>
@@ -650,29 +654,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <span class="comment-header-title">💬 Сэтгэгдлүүд</span>
       <span class="comment-count" id="comment-count">0 сэтгэгдэл</span>
     </div>
-    <!-- Write area -->
     <div class="comment-write">
       <div class="comment-ava" id="user-ava">Т</div>
       <div class="comment-input-wrap">
         <textarea class="comment-textarea" id="comment-textarea" placeholder="Сэтгэгдлээ бичнэ үү..." maxlength="300" oninput="updateCharCount()"></textarea>
-        <!-- Emoji picker -->
         <div class="emoji-bar" id="emoji-bar">
-          <span onclick="insertEmoji('😂')" title="Инээх">😂</span>
-          <span onclick="insertEmoji('❤️')" title="Дуртай">❤️</span>
-          <span onclick="insertEmoji('😮')" title="Гайхах">😮</span>
-          <span onclick="insertEmoji('👍')" title="Сайн">👍</span>
-          <span onclick="insertEmoji('🔥')" title="Гал">🔥</span>
-          <span onclick="insertEmoji('😢')" title="Уйлах">😢</span>
-          <span onclick="insertEmoji('😡')" title="Уурлах">😡</span>
-          <span onclick="insertEmoji('🎬')" title="Кино">🎬</span>
-          <span onclick="insertEmoji('⭐')" title="Одон">⭐</span>
-          <span onclick="insertEmoji('🙏')" title="Баярлалаа">🙏</span>
-          <span onclick="insertEmoji('😍')" title="Гоё">😍</span>
-          <span onclick="insertEmoji('🤔')" title="Бодох">🤔</span>
-          <span onclick="insertEmoji('💪')" title="Хүч">💪</span>
-          <span onclick="insertEmoji('🥳')" title="Баяр">🥳</span>
-          <span onclick="insertEmoji('👀')" title="Харах">👀</span>
-          <span onclick="insertEmoji('💯')" title="100%">💯</span>
+          <span onclick="insertEmoji('😂')">😂</span>
+          <span onclick="insertEmoji('❤️')">❤️</span>
+          <span onclick="insertEmoji('😮')">😮</span>
+          <span onclick="insertEmoji('👍')">👍</span>
+          <span onclick="insertEmoji('🔥')">🔥</span>
+          <span onclick="insertEmoji('😢')">😢</span>
+          <span onclick="insertEmoji('😡')">😡</span>
+          <span onclick="insertEmoji('🎬')">🎬</span>
+          <span onclick="insertEmoji('⭐')">⭐</span>
+          <span onclick="insertEmoji('🙏')">🙏</span>
+          <span onclick="insertEmoji('😍')">😍</span>
+          <span onclick="insertEmoji('🤔')">🤔</span>
+          <span onclick="insertEmoji('💪')">💪</span>
+          <span onclick="insertEmoji('🥳')">🥳</span>
+          <span onclick="insertEmoji('👀')">👀</span>
+          <span onclick="insertEmoji('💯')">💯</span>
         </div>
         <div class="comment-actions">
           <span class="char-count" id="char-count">0 / 300</span>
@@ -680,7 +682,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
         </div>
       </div>
     </div>
-    <!-- Comment list -->
     <div class="comment-list" id="comment-list">
       <div class="comment-empty" id="comment-empty">Одоогоор сэтгэгдэл байхгүй байна. Эхлэгч болоорой! 💬</div>
     </div>
@@ -900,7 +901,7 @@ function renderMovieCards(movies,list){
   }).join('');
 }
 
-// NEWS
+// NEWS — emoji reaction хасагдсан, цэвэр карт
 const NEWS_DATA={
   '':[
     {id:'s1',emoji:'🌍',cat:'Түүх',title:'Монголын эзэнт гүрний хамгийн том дайлалт',date:'2026.06.08',views:'1.2к',img:''},
@@ -933,22 +934,6 @@ const NEWS_DATA={
     {id:'kh4',emoji:'📽️',cat:'Кино түүх',title:'Хамгийн нөлөөтэй найруулагчид',date:'2026.06.05',views:'321',img:''},
   ],
 };
-const EMOJIS=['😮','😆','❤️','👍','😢','😡','🤗'];
-
-function makeEmojis(id){
-  return EMOJIS.map((em,i)=>`<button class="e-btn" data-news="${sanitize(id)}" data-idx="${i}" aria-label="${em}"><span class="e-emoji">${em}</span><span class="e-count">0</span></button>`).join('');
-}
-
-// Emoji reaction click — delegated
-document.addEventListener('click',function(e){
-  const eBtn=e.target.closest('.e-btn');
-  if(!eBtn||eBtn.closest('.comment-input-wrap'))return;
-  e.stopPropagation();
-  const reaction=eBtn.closest('.emoji-reaction');
-  const wasActive=eBtn.classList.contains('active');
-  reaction.querySelectorAll('.e-btn.active').forEach(b=>{b.classList.remove('active');const c=b.querySelector('.e-count');c.textContent=Math.max(0,parseInt(c.textContent)-1);});
-  if(!wasActive){eBtn.classList.add('active');const c=eBtn.querySelector('.e-count');c.textContent=parseInt(c.textContent)+1;}
-});
 
 let currentNewsCat='';
 function selNewsCat(el,cat){
@@ -962,7 +947,9 @@ function renderNews(cat=''){
   const items=NEWS_DATA[cat]||NEWS_DATA[''];
   list.innerHTML=items.map(item=>`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${item.id}'" aria-label="${item.title}">
     <div class="news-img">
-      ${item.img?`<img src="${item.img}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
+      ${item.img
+        ?`<img src="${item.img}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.n-emoji').style.display='flex'">`
+        :''}
       <span class="n-emoji" style="${item.img?'display:none':''}">${item.emoji}</span>
     </div>
     <div class="news-body">
@@ -972,7 +959,6 @@ function renderNews(cat=''){
         <time class="news-date">${item.date}</time>
         <span class="news-views">👁 ${item.views}</span>
       </div>
-      <div class="emoji-reaction">${makeEmojis(item.id)}</div>
     </div>
   </article>`).join('');
 }
@@ -985,12 +971,19 @@ async function loadNews(){
     list.innerHTML=news.map((item,i)=>{
       const title=sanitize(item.title);const cat=sanitize(item.category||'Мэдээ');const id=sanitize(item.id);
       const views=parseInt(item.views)||0;const date=new Date(item.created_at).toLocaleDateString('mn-MN');
-      const thumb=item.thumbnail?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`:`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
+      const thumb=item.thumbnail
+        ?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
+        :`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
       return`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}">
         <div class="news-img">${thumb}</div>
-        <div class="news-body"><span class="news-cat">${cat}</span><h3 class="news-title">${title}</h3>
-        <div class="news-foot"><time class="news-date">${date}</time><span class="news-views">👁 ${views}</span></div>
-        <div class="emoji-reaction">${makeEmojis(id)}</div></div>
+        <div class="news-body">
+          <span class="news-cat">${cat}</span>
+          <h3 class="news-title">${title}</h3>
+          <div class="news-foot">
+            <time class="news-date">${date}</time>
+            <span class="news-views">👁 ${views}</span>
+          </div>
+        </div>
       </article>`;
     }).join('');
   }catch{renderNews('');}
@@ -1055,31 +1048,24 @@ function selNewsCatById(cat){
   currentNewsCat=cat;renderNews(cat);
 }
 
-// ===== БҮГД товч — кино+мэдээ хоёуланг харуулна =====
 function showAll(el){
-  // Цэсүүдийн selected арилга
   document.querySelectorAll('.mcat-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  // Кинонуудыг ангиллалгүй харуул
   currentGenre='';
   document.querySelectorAll('.cat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
   const allBtn=document.querySelector('.cat-btn');if(allBtn){allBtn.classList.add('on');allBtn.setAttribute('aria-selected','true');}
   loadMovies('');
-  // Мэдээг бүгд харуул
   currentNewsCat='';
   document.querySelectorAll('.ncat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
   const allNcat=document.querySelector('.ncat-btn');if(allNcat){allNcat.classList.add('on');allNcat.setAttribute('aria-selected','true');}
   renderNews('');
-  // Хоёуланд scroll
   setTimeout(()=>goSection('movies'),100);
 }
 
-// ===== COMMENT SYSTEM =====
+// COMMENT SYSTEM
 let comments=[];
 const COMMENT_NAMES=['Батболд','Солонго','Мөнх-Эрдэнэ','Анхмаа','Тэмүүжин','Номин','Ганбаяр','Сарнай','Эрдэнэбат','Цэцэгмаа'];
 const COMMENT_AVABGS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(135deg,#4ade80,#22c55e)','linear-gradient(135deg,#06b6d4,#3b82f6)','linear-gradient(135deg,#a855f7,#7c3aed)','linear-gradient(135deg,#f59e0b,#ef4444)','linear-gradient(135deg,#ec4899,#8b5cf6)','linear-gradient(135deg,#10b981,#0891b2)'];
-
-// Demo comments
 const DEMO_COMMENTS=[
   {name:'Батболд',text:'Маш гоё платформ байна! 🔥',time:'2026.06.09 · 10:32',bg:COMMENT_AVABGS[0],likes:5},
   {name:'Солонго',text:'Мэдээнүүд маш сонирхолтой байна 😍',time:'2026.06.09 · 09:15',bg:COMMENT_AVABGS[1],likes:3},
@@ -1105,7 +1091,7 @@ function renderComments(){
         </div>
         <div class="ci-text">${sanitize(c.text)}</div>
         <div class="ci-foot">
-          <button class="ci-like-btn" onclick="likeComment(this,${DEMO_COMMENTS.length+i})">❤️ <span>${c.likes||0}</span></button>
+          <button class="ci-like-btn" onclick="likeComment(this)">❤️ <span>${c.likes||0}</span></button>
         </div>
       </div>
     </div>`;
@@ -1147,11 +1133,9 @@ function submitComment(){
   ta.value='';updateCharCount();
   renderComments();
   showToast('✅ Сэтгэгдэл нийтлэгдлээ!');
-  // Scroll to new comment
   setTimeout(()=>{const first=document.querySelector('.comment-item');if(first)first.scrollIntoView({behavior:'smooth',block:'nearest'});},200);
 }
 
-// Textarea keyboard shortcut: Ctrl+Enter submit
 document.getElementById('comment-textarea').addEventListener('keydown',function(e){
   if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){submitComment();}
 });
