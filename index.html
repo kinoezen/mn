@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>КиноЭзэн — Монгол хэлний кино платформ</title>
-<meta name="description" content="КиноЭзэн — Монгол хэлний кино товчлол, шинэ кинонууд, мэдээ мэдээлэл. Монголын тэргүүлэх кино платформ.">
+<meta name="description" content="КиноЭзэн — Монгол хэлний кино товчлол, шинэ кинонууд, мэдээ мэдээлэл.">
 <meta name="keywords" content="монгол кино, кино үзэх, монгол дуу, кино мэдээ, КиноЭзэн">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
 <meta property="og:title" content="КиноЭзэн — Монгол хэлний кино платформ">
 <meta property="og:description" content="Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.">
-<meta property="og:image" content="https://kinoezen.mn/og-image.jpg">
 <meta property="og:url" content="https://kinoezen.mn">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="https://kinoezen.mn">
@@ -18,29 +17,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"КиноЭзэн","url":"https://kinoezen.mn","description":"Монгол хэлний кино платформ","potentialAction":{"@type":"SearchAction","target":"https://kinoezen.mn/search?q={search_term_string}","query-input":"required name=search_term_string"}}
+{"@context":"https://schema.org","@type":"WebSite","name":"КиноЭзэн","url":"https://kinoezen.mn"}
 </script>
 <style>
-:root {
-  --bg: #0e0e18;
-  --bg2: #161624;
-  --bg3: #1e1e32;
-  --bg4: #252540;
-  --accent: #4ade80;
-  --accent2: #f4a261;
-  --red: #e63946;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(74,222,128,0.2);
-  --text: #ffffff;
-  --text2: rgba(255,255,255,0.7);
-  --text3: rgba(255,255,255,0.45);
-  --text4: rgba(255,255,255,0.25);
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Nunito', sans-serif;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --shadow: 0 8px 32px rgba(0,0,0,0.4);
-  --shadow-accent: 0 4px 24px rgba(74,222,128,0.2);
+:root{
+  --bg:#0e0e18;--bg2:#161624;--bg3:#1e1e32;--bg4:#252540;
+  --accent:#4ade80;--accent2:#f4a261;--red:#e63946;
+  --border:rgba(255,255,255,0.08);--border2:rgba(74,222,128,0.2);
+  --text:#ffffff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
+  --radius:14px;--radius-sm:8px;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--shadow-accent:0 4px 24px rgba(74,222,128,0.2);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -50,250 +37,358 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 @keyframes pulse-glow{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.3)}50%{box-shadow:0 0 0 8px rgba(74,222,128,0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 @keyframes autoProgress{from{width:0%}to{width:100%}}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
 /* NAVBAR */
-.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;gap:12px;}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
-.logo img{width:38px;height:38px;border-radius:10px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
-.logo-text{font-family:var(--font-display);font-size:26px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.nav-links{display:flex;gap:6px;align-items:center;}
-.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 12px;border-radius:var(--radius-sm);transition:all 0.2s;}
-.nav-links a:hover,.nav-links a:focus-visible{color:var(--accent);background:rgba(74,222,128,0.08);outline:none;}
-.nav-links a.active{color:var(--accent);}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;gap:12px;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
+.logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:4px;align-items:center;}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--radius-sm);transition:all 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(74,222,128,0.08);}
 .nav-right{display:flex;gap:8px;align-items:center;}
-.nav-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:8px 14px;border:1px solid var(--border);transition:border-color 0.2s;}
+.nav-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:7px 12px;border:1px solid var(--border);transition:border-color 0.2s;}
 .nav-search:focus-within{border-color:var(--accent);}
-.nav-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;width:160px;}
+.nav-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;width:140px;}
 .nav-search input::placeholder{color:var(--text4);}
-.btn-login{padding:8px 16px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-login{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-login:hover{border-color:var(--accent);color:var(--accent);}
-.btn-join{padding:8px 16px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--red),var(--accent2));border:none;color:#fff;font-size:13px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
+.btn-join{padding:7px 14px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--red),var(--accent2));border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
 .btn-join:hover{opacity:0.9;transform:translateY(-1px);}
-.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:22px;cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm);}
-.nav-toggle:hover{background:var(--bg3);}
+.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm);}
 
 /* WEATHER */
-.weather-bar{display:flex;align-items:center;justify-content:space-between;padding:8px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
-.weather-left{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-.weather-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3);font-weight:500;}
-.weather-temp{font-size:13px;font-weight:700;color:var(--accent);}
-.date-text{font-size:11px;color:var(--text4);font-weight:500;}
+.weather-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 24px;background:var(--bg2);border-bottom:1px solid var(--border);}
+.weather-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.weather-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);font-weight:500;}
+.weather-temp{font-size:12px;font-weight:700;color:var(--accent);}
+.date-text{font-size:11px;color:var(--text4);}
 
 /* AD */
-.ad-wrapper{margin:16px 24px 0;}
-.ad-banner{border-radius:var(--radius);overflow:hidden;background:linear-gradient(90deg,#1a1050,#2d1b69);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(107,127,247,0.3);gap:16px;animation:fadeUp 0.5s ease;}
-.ad-text{font-size:13px;color:var(--text2);line-height:1.5;}
-.ad-text strong{color:#c084fc;font-size:14px;display:block;margin-bottom:3px;}
-.ad-btn{padding:9px 18px;border-radius:var(--radius-sm);background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:opacity 0.2s;}
-.ad-btn:hover{opacity:0.85;}
-.ad-label{font-size:10px;color:var(--text4);text-align:right;padding:4px 24px;margin-bottom:4px;}
+.ad-wrapper{margin:12px 24px 0;}
+.ad-banner{border-radius:var(--radius);overflow:hidden;background:linear-gradient(90deg,#1a1050,#2d1b69);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(107,127,247,0.3);gap:14px;}
+.ad-text{font-size:12px;color:var(--text2);line-height:1.5;}
+.ad-text strong{color:#c084fc;font-size:13px;display:block;margin-bottom:2px;}
+.ad-btn{padding:8px 16px;border-radius:var(--radius-sm);background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.ad-label{font-size:10px;color:var(--text4);text-align:right;padding:3px 24px 4px;}
 
 /* HERO */
-.hero-section{padding:20px 24px 12px;animation:fadeUp 0.4s ease;}
-.hero-label{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.hero-label-icon{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;animation:float 3s ease-in-out infinite;}
-.hero-label-text{font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:var(--accent);}
+.hero-section{padding:16px 24px 10px;}
+.hero-label{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.hero-label-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;animation:float 3s ease-in-out infinite;}
+.hero-label-text{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--accent);}
 
-/* FEATURED CAROUSEL */
+/* CAROUSEL */
 .featured-carousel-wrapper{position:relative;overflow:hidden;}
-.featured-track{display:flex;gap:14px;transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
-.featured-card{border-radius:var(--radius);overflow:hidden;background:var(--bg3);cursor:pointer;position:relative;border:1px solid var(--border);transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;will-change:transform;flex:0 0 calc(25% - 11px);min-width:calc(25% - 11px);}
+.featured-track{display:flex;gap:12px;transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
+.featured-card{border-radius:var(--radius);overflow:hidden;background:var(--bg3);cursor:pointer;position:relative;border:1px solid var(--border);transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;flex:0 0 calc(25% - 9px);min-width:calc(25% - 9px);}
 .featured-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:0 12px 40px rgba(74,222,128,0.15);}
-.featured-img{width:100%;height:200px;background:linear-gradient(160deg,#0d0d25,#1a1050);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative;overflow:hidden;}
+.featured-img{width:100%;height:180px;background:linear-gradient(160deg,#0d0d25,#1a1050);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .featured-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;transition:transform 0.4s;}
 .featured-card:hover .featured-img img{transform:scale(1.05);}
-.featured-overlay{position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,var(--bg3),transparent);}
-.featured-tags{position:absolute;top:10px;left:10px;display:flex;gap:6px;z-index:2;}
-.ftag{font-size:9px;padding:3px 10px;border-radius:20px;font-weight:700;letter-spacing:0.5px;}
+.featured-overlay{position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to top,var(--bg3),transparent);}
+.featured-tags{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2;}
+.ftag{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:0.5px;}
 .ftag-top{background:linear-gradient(90deg,var(--red),var(--accent2));color:#fff;}
 .ftag-new{background:var(--accent);color:#0a2a0a;}
-.featured-body{padding:12px 14px 14px;}
-.featured-cats{display:flex;gap:5px;margin-bottom:8px;}
-.cpill{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:0.3px;}
-.cp-act{background:var(--red);color:#fff;}
-.cp-sci{background:#3b4fd4;color:#fff;}
-.cp-drm{background:#2d8a4e;color:#fff;}
-.featured-title{font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;line-height:1.2;margin-bottom:6px;}
-.featured-desc{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.featured-foot{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
-.author{display:flex;align-items:center;gap:8px;}
-.ava{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;}
-.ava-name{font-size:11px;color:var(--text3);font-weight:600;}
-.stats-row{display:flex;gap:10px;}
-.stat-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text3);font-weight:600;}
-.watch-btn{width:100%;padding:10px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:13px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
-.watch-btn:hover{opacity:0.9;transform:translateY(-1px);}
-.carousel-controls{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:16px;}
-.carousel-btn{width:36px;height:36px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.featured-body{padding:10px 12px 12px;}
+.featured-cats{display:flex;gap:4px;margin-bottom:6px;}
+.cpill{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;}
+.cp-act{background:var(--red);color:#fff;}.cp-sci{background:#3b4fd4;color:#fff;}.cp-drm{background:#2d8a4e;color:#fff;}
+.featured-title{font-family:var(--font-display);font-size:15px;letter-spacing:0.5px;line-height:1.2;margin-bottom:5px;}
+.featured-desc{font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.featured-foot{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:4px;}
+.author{display:flex;align-items:center;gap:6px;}
+.ava{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff;flex-shrink:0;}
+.ava-name{font-size:10px;color:var(--text3);font-weight:600;}
+.stats-row{display:flex;gap:8px;}
+.stat-item{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text3);}
+.watch-btn{width:100%;padding:9px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;transition:opacity 0.2s;}
+.watch-btn:hover{opacity:0.9;}
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;}
+.carousel-btn{width:34px;height:34px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .carousel-btn:hover{background:var(--accent);color:#0a2a0a;border-color:var(--accent);}
-.carousel-dots{display:flex;gap:6px;align-items:center;}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.3s;}
-.dot.active{width:20px;border-radius:3px;background:var(--accent);}
+.carousel-dots{display:flex;gap:5px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.3s;}
+.dot.active{width:18px;border-radius:3px;background:var(--accent);}
 .carousel-auto-bar{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:1px;}
 .carousel-auto-bar.running{animation:autoProgress 4s linear forwards;}
 
 /* SECTIONS */
-.section{padding:20px 24px 10px;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-.section-title{font-family:var(--font-display);font-size:20px;letter-spacing:1px;color:var(--text2);}
+.section{padding:16px 24px 8px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-title{font-family:var(--font-display);font-size:19px;letter-spacing:1px;color:var(--text2);}
 .section-title span{color:var(--accent);}
 .see-all{font-size:12px;color:var(--accent);font-weight:700;text-decoration:none;padding:5px 10px;border-radius:6px;transition:background 0.2s;}
 .see-all:hover{background:rgba(74,222,128,0.1);}
 
-/* MAIN CATEGORY GRID */
+/* ===== MAIN CATEGORY GRID — ШИНЭЧИЛСЭН ===== */
 .main-cats-section{padding:0 0 8px;}
-.main-cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 24px 8px;}
-.mcat-card{background:var(--bg3);border-radius:16px;padding:16px 14px 14px;cursor:pointer;border:1px solid var(--border);transition:transform 0.25s,box-shadow 0.25s,border-color 0.25s;position:relative;overflow:hidden;animation:fadeUp 0.4s ease both;user-select:none;}
-.mcat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.25s;border-radius:16px;}
-.mcat-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.15);}
+/* 4+4+1 = 9 цэс: эхний мөр 5 (Бүгд+4), хоёрдахь мөр 4 */
+.main-cats-grid{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:10px;
+  padding:0 24px 8px;
+}
+/* Бүгд цэс — тусгай өнгө */
+.mcat-card{
+  background:var(--bg3);
+  border-radius:12px;
+  padding:12px 10px 10px;
+  cursor:pointer;
+  border:1px solid var(--border);
+  transition:transform 0.22s,box-shadow 0.22s,border-color 0.22s;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:0;
+  user-select:none;
+  animation:fadeUp 0.4s ease both;
+}
+.mcat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.22s;border-radius:12px;}
+.mcat-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.14);}
 .mcat-card:hover::before{opacity:1;}
-.mcat-movie::before{background:linear-gradient(135deg,rgba(230,57,70,0.12),rgba(244,162,97,0.08));}
-.mcat-news::before{background:linear-gradient(135deg,rgba(74,222,128,0.12),rgba(34,197,94,0.08));}
-.mcat-travel::before{background:linear-gradient(135deg,rgba(6,182,212,0.12),rgba(59,130,246,0.08));}
-.mcat-science::before{background:linear-gradient(135deg,rgba(168,85,247,0.12),rgba(124,58,237,0.08));}
-.mcat-ai::before{background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(239,68,68,0.08));}
-.mcat-history::before{background:linear-gradient(135deg,rgba(249,115,22,0.12),rgba(220,38,38,0.08));}
-.mcat-knowledge::before{background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(8,145,178,0.08));}
-.mcat-anime::before{background:linear-gradient(135deg,rgba(236,72,153,0.12),rgba(139,92,246,0.08));}
-.mcat-icon{width:48px;height:48px;margin-bottom:10px;border-radius:14px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:transform 0.3s;}
-.mcat-card:hover .mcat-icon{transform:scale(1.08) rotate(-3deg);}
-.mcat-icon svg{width:48px;height:48px;display:block;}
-.mcat-label{font-family:var(--font-display);font-size:15px;letter-spacing:0.5px;color:var(--text);margin-bottom:2px;}
-.mcat-sub{font-size:10px;color:var(--text4);font-weight:500;margin-bottom:6px;}
-.mcat-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;background:rgba(255,255,255,0.1);border-radius:10px;font-size:10px;font-weight:700;color:var(--text3);}
-.mcat-movie .mcat-badge{background:rgba(230,57,70,0.2);color:#ff6b7a;}
-.mcat-news .mcat-badge{background:rgba(74,222,128,0.2);color:var(--accent);}
-.mcat-travel .mcat-badge{background:rgba(6,182,212,0.2);color:#06b6d4;}
-.mcat-science .mcat-badge{background:rgba(168,85,247,0.2);color:#c084fc;}
-.mcat-ai .mcat-badge{background:rgba(245,158,11,0.2);color:#fbbf24;}
-.mcat-history .mcat-badge{background:rgba(249,115,22,0.2);color:#fb923c;}
-.mcat-knowledge .mcat-badge{background:rgba(16,185,129,0.2);color:#34d399;}
-.mcat-anime .mcat-badge{background:rgba(236,72,153,0.2);color:#f472b6;}
-@media(max-width:768px){.main-cats-grid{grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 8px;}.mcat-card{padding:12px 10px 10px;}.mcat-icon{width:40px;height:40px;}.mcat-icon svg{width:40px;height:40px;}.mcat-label{font-size:12px;}.mcat-sub{display:none;}}
-@media(max-width:480px){.main-cats-grid{grid-template-columns:repeat(4,1fr);gap:6px;}.mcat-card{padding:10px 8px 8px;}.mcat-label{font-size:11px;}}
+.mcat-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
-/* NEWS CATEGORY TABS */
+/* Бүгд - special */
+.mcat-all{border-color:rgba(74,222,128,0.25);background:linear-gradient(135deg,rgba(74,222,128,0.08),rgba(74,222,128,0.03));}
+.mcat-all::before{background:linear-gradient(135deg,rgba(74,222,128,0.14),rgba(244,162,97,0.08));}
+.mcat-all.selected{border-color:var(--accent);background:rgba(74,222,128,0.12);}
+
+.mcat-movie::before{background:linear-gradient(135deg,rgba(230,57,70,0.1),rgba(244,162,97,0.07));}
+.mcat-news::before{background:linear-gradient(135deg,rgba(74,222,128,0.1),rgba(34,197,94,0.07));}
+.mcat-travel::before{background:linear-gradient(135deg,rgba(6,182,212,0.1),rgba(59,130,246,0.07));}
+.mcat-science::before{background:linear-gradient(135deg,rgba(168,85,247,0.1),rgba(124,58,237,0.07));}
+.mcat-ai::before{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(239,68,68,0.07));}
+.mcat-history::before{background:linear-gradient(135deg,rgba(249,115,22,0.1),rgba(220,38,38,0.07));}
+.mcat-knowledge::before{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(8,145,178,0.07));}
+.mcat-product::before{background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(139,92,246,0.07));}
+
+/* Icon тойрог */
+.mcat-icon{
+  width:42px;height:42px;
+  margin-bottom:7px;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 3px 12px rgba(0,0,0,0.3);
+  transition:transform 0.25s;
+  flex-shrink:0;
+}
+.mcat-all .mcat-icon{border-radius:50%;}
+.mcat-card:hover .mcat-icon{transform:scale(1.1) rotate(-3deg);}
+.mcat-icon svg{width:42px;height:42px;display:block;}
+.mcat-label{font-family:var(--font-display);font-size:13px;letter-spacing:0.4px;color:var(--text);margin-bottom:2px;line-height:1.1;}
+.mcat-sub{font-size:9px;color:var(--text4);font-weight:500;margin-bottom:5px;line-height:1.2;}
+.mcat-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;padding:0 5px;
+  background:rgba(255,255,255,0.08);border-radius:9px;
+  font-size:10px;font-weight:700;color:var(--text3);
+}
+.mcat-all .mcat-badge{background:rgba(74,222,128,0.2);color:var(--accent);}
+.mcat-movie .mcat-badge{background:rgba(230,57,70,0.18);color:#ff6b7a;}
+.mcat-news .mcat-badge{background:rgba(74,222,128,0.18);color:var(--accent);}
+.mcat-travel .mcat-badge{background:rgba(6,182,212,0.18);color:#06b6d4;}
+.mcat-science .mcat-badge{background:rgba(168,85,247,0.18);color:#c084fc;}
+.mcat-ai .mcat-badge{background:rgba(245,158,11,0.18);color:#fbbf24;}
+.mcat-history .mcat-badge{background:rgba(249,115,22,0.18);color:#fb923c;}
+.mcat-knowledge .mcat-badge{background:rgba(16,185,129,0.18);color:#34d399;}
+.mcat-product .mcat-badge{background:rgba(236,72,153,0.18);color:#f472b6;}
+
+/* Responsive: мобайл дээр 4+4+1 */
+@media(max-width:900px){
+  .main-cats-grid{grid-template-columns:repeat(5,1fr);gap:7px;padding:0 16px 8px;}
+  .mcat-icon{width:36px;height:36px;}
+  .mcat-icon svg{width:36px;height:36px;}
+  .mcat-label{font-size:11px;}
+  .mcat-sub{display:none;}
+}
+@media(max-width:600px){
+  .main-cats-grid{grid-template-columns:repeat(5,1fr);gap:5px;padding:0 12px 8px;}
+  .mcat-card{padding:9px 5px 8px;border-radius:10px;}
+  .mcat-icon{width:30px;height:30px;}
+  .mcat-icon svg{width:30px;height:30px;}
+  .mcat-label{font-size:10px;}
+  .mcat-badge{display:none;}
+}
+@media(max-width:400px){
+  .main-cats-grid{grid-template-columns:repeat(5,1fr);gap:4px;}
+  .mcat-card{padding:7px 3px 6px;}
+  .mcat-icon{width:26px;height:26px;}
+  .mcat-icon svg{width:26px;height:26px;}
+  .mcat-label{font-size:9px;}
+}
+
+/* NEWS CATS */
 .news-cats{display:flex;gap:8px;overflow-x:auto;padding:0 24px 12px;scrollbar-width:none;}
 .news-cats::-webkit-scrollbar{display:none;}
-.ncat-btn{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
+.ncat-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
 .ncat-btn:hover{border-color:var(--border2);color:var(--accent);}
 .ncat-btn.on{background:rgba(74,222,128,0.12);color:var(--accent);border-color:var(--accent);}
 
 /* CAT PILLS */
 .cat-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
 .cat-row::-webkit-scrollbar{display:none;}
-.cat-btn{padding:8px 16px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
+.cat-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
 .cat-btn:hover{border-color:var(--border2);color:var(--accent);}
 .cat-btn.on{background:var(--accent);color:#0a2a0a;border-color:var(--accent);}
 
 /* MOVIE GRID */
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 24px 20px;}
-.grid-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;will-change:transform;animation:fadeUp 0.4s ease both;}
+.grid-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;}
 .grid-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
-.grid-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 .grid-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:28px;position:relative;overflow:hidden;}
 .grid-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
 .grid-card:hover .grid-img img{transform:scale(1.05);}
 .grid-badge{position:absolute;top:7px;left:7px;font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;}
 .grid-body{padding:10px 12px 12px;}
 .grid-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.grid-meta{font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px;font-weight:500;}
+.grid-meta{font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:8px;}
 .grid-stats{display:flex;gap:10px;}
 .gstat{display:flex;align-items:center;gap:4px;font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;font-weight:600;transition:color 0.2s;padding:2px 0;background:none;border:none;font-family:var(--font-body);}
 .gstat:hover{color:var(--accent);}
 .gstat.liked{color:var(--red);}
 
 /* SKELETON */
-.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;will-change:background-position;}
+.skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
 .skel-card{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
 .skel-img{width:100%;aspect-ratio:16/9;}
 .skel-body{padding:10px 12px;}
 .skel-line{height:11px;border-radius:4px;margin-bottom:7px;}
 .skel-line.short{width:55%;}
 
-/* NEWS GRID — 4 column */
+/* ===== NEWS GRID — ЗУРАГ БҮТЭН ХАРАГДАХ ===== */
 .news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 24px 20px;}
-.news-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);display:flex;flex-direction:column;transition:border-color 0.25s,transform 0.25s;will-change:transform;animation:fadeUp 0.5s ease both;}
+.news-card{
+  background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;
+  border:1px solid var(--border);display:flex;flex-direction:column;
+  transition:border-color 0.25s,transform 0.25s;animation:fadeUp 0.5s ease both;
+}
 .news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
-.news-img{width:100%;height:120px;background:linear-gradient(135deg,#1a1a0a,#2a2a10);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;position:relative;}
-/* 3D colorful emoji */
-.news-img .n-emoji{font-size:48px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));transition:transform 0.3s;}
-.news-card:hover .n-emoji{transform:scale(1.15) rotate(-5deg);}
-.news-img img{width:100%;height:100%;object-fit:cover;}
-.news-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;min-width:0;}
+.news-img{
+  width:100%;
+  height:160px;  /* нэмсэн */
+  background:linear-gradient(135deg,#1a1a0a,#2a2a10);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;flex-shrink:0;position:relative;
+}
+.news-img img{
+  width:100%;height:100%;
+  object-fit:cover;   /* бүтэн дүүргэнэ */
+  object-position:center;
+  display:block;
+  transition:transform 0.4s;
+}
+.news-card:hover .news-img img{transform:scale(1.04);}
+.news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));transition:transform 0.3s;}
+.news-card:hover .n-emoji{transform:scale(1.12) rotate(-4deg);}
+.news-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
 .news-cat{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.12);color:var(--accent);display:inline-block;margin-bottom:5px;}
 .news-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .news-foot{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.news-date{font-size:10px;color:var(--text4);font-weight:500;}
-.news-views{font-size:10px;color:var(--text4);font-weight:500;}
+.news-date{font-size:10px;color:var(--text4);}
+.news-views{font-size:10px;color:var(--text4);}
 
-/* EMOJI REACTIONS — 3D colorful */
+/* EMOJI REACTIONS */
 .emoji-reaction{display:flex;gap:4px;flex-wrap:wrap;padding-top:6px;border-top:1px solid var(--border);margin-top:4px;}
-.e-btn{display:flex;flex-direction:row;align-items:center;gap:3px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer;transition:all 0.18s;font-family:var(--font-body);pointer-events:auto;user-select:none;}
-.e-btn:hover{background:rgba(255,255,255,0.1);transform:scale(1.15);border-color:rgba(255,255,255,0.2);}
-.e-btn:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+.e-btn{display:flex;flex-direction:row;align-items:center;gap:3px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:3px 7px;cursor:pointer;transition:all 0.18s;font-family:var(--font-body);}
+.e-btn:hover{background:rgba(255,255,255,0.1);transform:scale(1.12);border-color:rgba(255,255,255,0.2);}
 .e-btn.active{background:rgba(74,222,128,0.12);border-color:var(--accent);animation:pulse-glow 0.4s ease;}
-/* 3D emoji effect */
 .e-emoji{font-size:14px;line-height:1;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.4));transition:transform 0.2s;}
-.e-btn:hover .e-emoji{transform:scale(1.3) rotate(-10deg);}
-.e-btn.active .e-emoji{filter:drop-shadow(0 2px 8px rgba(74,222,128,0.6));}
-.e-count{font-size:10px;color:var(--text3);font-weight:700;line-height:1;}
+.e-btn:hover .e-emoji{transform:scale(1.3) rotate(-8deg);}
+.e-count{font-size:10px;color:var(--text3);font-weight:700;}
 .e-btn.active .e-count{color:var(--accent);}
 
+/* ===== COMMENT SECTION ===== */
+.comment-section{padding:0 24px 24px;}
+.comment-box{background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
+.comment-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.comment-header-title{font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;color:var(--text2);}
+.comment-count{font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;font-weight:700;}
+/* Write area */
+.comment-write{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
+.comment-ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.comment-input-wrap{flex:1;background:var(--bg3);border-radius:10px;border:1px solid var(--border);overflow:hidden;transition:border-color 0.2s;}
+.comment-input-wrap:focus-within{border-color:var(--accent);}
+.comment-textarea{width:100%;background:transparent;border:none;padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font-body);resize:none;outline:none;min-height:60px;line-height:1.5;}
+.comment-textarea::placeholder{color:var(--text4);}
+/* Emoji picker bar */
+.emoji-bar{display:flex;align-items:center;gap:4px;padding:8px 12px;border-top:1px solid var(--border);flex-wrap:wrap;}
+.emoji-bar span{font-size:18px;cursor:pointer;transition:transform 0.15s;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3));}
+.emoji-bar span:hover{transform:scale(1.35);}
+.comment-actions{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--border);}
+.char-count{font-size:11px;color:var(--text4);}
+.btn-comment-submit{padding:7px 18px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
+.btn-comment-submit:hover{opacity:0.9;transform:translateY(-1px);}
+/* Comment list */
+.comment-list{padding:0 16px;}
+.comment-item{padding:12px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;animation:slideIn 0.3s ease;}
+.comment-item:last-child{border-bottom:none;}
+.ci-ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.ci-body{flex:1;min-width:0;}
+.ci-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.ci-name{font-size:12px;font-weight:700;color:var(--text2);}
+.ci-date{font-size:10px;color:var(--text4);}
+.ci-text{font-size:13px;color:var(--text);line-height:1.5;word-break:break-word;}
+.ci-foot{display:flex;gap:12px;margin-top:6px;}
+.ci-like-btn{background:none;border:none;color:var(--text4);font-size:11px;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;gap:3px;transition:color 0.2s;padding:0;}
+.ci-like-btn:hover{color:var(--red);}
+.ci-like-btn.liked{color:var(--red);}
+.comment-empty{text-align:center;padding:20px;color:var(--text4);font-size:13px;}
+
 /* MESSENGER FAB */
-.messenger-fab{position:fixed;bottom:24px;right:20px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.45);z-index:999;text-decoration:none;font-size:24px;transition:transform 0.2s,box-shadow 0.2s;}
-.messenger-fab:hover{transform:scale(1.1);box-shadow:0 6px 32px rgba(0,132,255,0.6);}
+.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s,box-shadow 0.2s;}
+.messenger-fab:hover{transform:scale(1.1);}
 
 /* FOOTER */
-.footer{background:#0a0a14;padding:32px 24px 20px;border-top:1px solid var(--border);margin-top:8px;}
-.footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-bottom:28px;}
-.footer-col h4{font-family:var(--font-display);font-size:16px;letter-spacing:1px;color:var(--accent);margin-bottom:14px;}
+.footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);margin-top:8px;}
+.footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px;}
+.footer-col h4{font-family:var(--font-display);font-size:15px;letter-spacing:1px;color:var(--accent);margin-bottom:12px;}
 .footer-col p{font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;}
-.footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;margin-bottom:8px;font-weight:500;transition:color 0.2s;}
+.footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;margin-bottom:7px;font-weight:500;transition:color 0.2s;}
 .footer-col a:hover{color:var(--accent);}
-/* SOCIAL BUTTONS — modern icons */
-.footer-social{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;}
-.social-btn{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer;font-weight:700;color:#fff;transition:transform 0.2s,opacity 0.2s,box-shadow 0.2s;border:none;font-family:var(--font-body);}
-.social-btn:hover{transform:translateY(-3px);opacity:0.9;box-shadow:0 6px 20px rgba(0,0,0,0.4);}
+.footer-social{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+.social-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer;color:#fff;transition:transform 0.2s,opacity 0.2s;border:none;}
+.social-btn:hover{transform:translateY(-3px);opacity:0.9;}
 .sb-fb{background:linear-gradient(135deg,#1877f2,#0a5ab4);}
 .sb-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#bc1888);}
 .sb-yt{background:linear-gradient(135deg,#ff0000,#cc0000);}
 .sb-x{background:linear-gradient(135deg,#000000,#333333);}
-/* SVG icons inside social buttons */
-.social-btn svg{width:18px;height:18px;fill:#fff;}
-/* Phone */
-.footer-phone{display:flex;align-items:center;gap:8px;margin-top:10px;padding:10px 14px;background:rgba(74,222,128,0.06);border:1px solid var(--border2);border-radius:10px;font-size:13px;color:var(--accent);font-weight:700;}
-.footer-phone span{font-size:16px;}
-.footer-bottom{border-top:1px solid var(--border);padding-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.footer-copy{font-size:11px;color:var(--text4);font-weight:500;}
-.footer-links{display:flex;gap:16px;}
-.footer-links a{font-size:11px;color:var(--text4);text-decoration:none;transition:color 0.2s;display:inline;margin:0;}
+.social-btn svg{width:17px;height:17px;fill:#fff;}
+.footer-phone{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:rgba(74,222,128,0.06);border:1px solid var(--border2);border-radius:10px;font-size:13px;color:var(--accent);font-weight:700;}
+.footer-bottom{border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.footer-copy{font-size:11px;color:var(--text4);}
+.footer-links{display:flex;gap:14px;}
+.footer-links a{font-size:11px;color:var(--text4);text-decoration:none;transition:color 0.2s;}
 .footer-links a:hover{color:var(--accent);}
 
-/* EMPTY STATE */
-.empty-state{grid-column:1/-1;text-align:center;padding:40px 20px;color:var(--text3);}
-.empty-state .icon{font-size:40px;margin-bottom:12px;}
+/* EMPTY / TOAST */
+.empty-state{grid-column:1/-1;text-align:center;padding:36px 20px;color:var(--text3);}
+.empty-state .icon{font-size:36px;margin-bottom:10px;}
 .empty-state p{font-size:14px;font-weight:600;}
-
-/* TOAST */
-.toast{position:fixed;bottom:90px;right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;animation:fadeUp 0.3s ease;box-shadow:var(--shadow);}
+.toast{position:fixed;bottom:86px;right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;animation:fadeUp 0.3s ease;box-shadow:var(--shadow);}
 
 /* STAGGER */
-.grid-card:nth-child(1){animation-delay:.05s}.grid-card:nth-child(2){animation-delay:.1s}
-.grid-card:nth-child(3){animation-delay:.15s}.grid-card:nth-child(4){animation-delay:.2s}
-.grid-card:nth-child(5){animation-delay:.25s}.grid-card:nth-child(6){animation-delay:.3s}
-.grid-card:nth-child(7){animation-delay:.35s}.grid-card:nth-child(8){animation-delay:.4s}
-.news-card:nth-child(1){animation-delay:.05s}.news-card:nth-child(2){animation-delay:.1s}
-.news-card:nth-child(3){animation-delay:.15s}.news-card:nth-child(4){animation-delay:.2s}
+.grid-card:nth-child(1){animation-delay:.04s}.grid-card:nth-child(2){animation-delay:.08s}
+.grid-card:nth-child(3){animation-delay:.12s}.grid-card:nth-child(4){animation-delay:.16s}
+.grid-card:nth-child(5){animation-delay:.20s}.grid-card:nth-child(6){animation-delay:.24s}
+.grid-card:nth-child(7){animation-delay:.28s}.grid-card:nth-child(8){animation-delay:.32s}
+.news-card:nth-child(1){animation-delay:.04s}.news-card:nth-child(2){animation-delay:.08s}
+.news-card:nth-child(3){animation-delay:.12s}.news-card:nth-child(4){animation-delay:.16s}
 
 /* RESPONSIVE */
 @media(max-width:1024px){
   .grid-4{grid-template-columns:repeat(3,1fr);}
-  .featured-card{flex:0 0 calc(33.333% - 10px);min-width:calc(33.333% - 10px);}
+  .featured-card{flex:0 0 calc(33.333% - 8px);min-width:calc(33.333% - 8px);}
   .news-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:768px){
-  .nav{padding:10px 16px;flex-wrap:wrap;gap:8px;}
+  .nav{padding:10px 16px;flex-wrap:wrap;}
   .nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:10px 0;border-top:1px solid var(--border);}
   .nav-links.open{display:flex;}
   .nav-right{display:none;width:100%;flex-direction:column;gap:8px;}
@@ -301,26 +396,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .nav-toggle{display:block;}
   .nav-search{width:100%;}
   .nav-search input{width:100%;}
-  .weather-bar{flex-direction:column;align-items:flex-start;gap:6px;padding:8px 16px;}
-  .ad-wrapper{margin:12px 16px 0;}
-  .ad-banner{flex-direction:column;gap:12px;padding:14px 16px;}
-  .ad-btn{width:100%;}
-  .hero-section{padding:14px 16px 10px;}
-  .featured-card{flex:0 0 calc(50% - 7px);min-width:calc(50% - 7px);}
-  .featured-img{height:150px;}
-  .section{padding:14px 16px 8px;}
-  .grid-4{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 16px;}
-  .news-grid{grid-template-columns:repeat(2,1fr);padding:0 16px 16px;}
-  .news-cats{padding:0 16px 12px;}
-  .footer-grid{grid-template-columns:1fr;gap:18px;}
-  .footer{padding:22px 16px 16px;}
+  .weather-bar{flex-direction:column;align-items:flex-start;gap:5px;padding:7px 16px;}
+  .ad-wrapper{margin:10px 16px 0;}
+  .hero-section{padding:12px 16px 8px;}
+  .featured-card{flex:0 0 calc(50% - 6px);min-width:calc(50% - 6px);}
+  .featured-img{height:140px;}
+  .section{padding:12px 16px 6px;}
+  .grid-4{grid-template-columns:repeat(2,1fr);gap:9px;padding:0 16px 14px;}
+  .news-grid{grid-template-columns:repeat(2,1fr);padding:0 16px 14px;}
+  .news-cats{padding:0 16px 10px;}
+  .footer-grid{grid-template-columns:1fr;gap:16px;}
+  .footer{padding:20px 16px 14px;}
+  .comment-section{padding:0 16px 20px;}
 }
 @media(max-width:480px){
   .news-grid{grid-template-columns:1fr;}
-  .featured-card{flex:0 0 calc(100%);min-width:calc(100%);}
+  .featured-card{flex:0 0 100%;min-width:100%;}
   .grid-4{grid-template-columns:repeat(2,1fr);}
-  .logo-text{font-size:22px;}
-  .featured-img{height:170px;}
+  .logo-text{font-size:21px;}
+  .featured-img{height:160px;}
+  .news-img{height:140px;}
 }
 </style>
 </head>
@@ -329,7 +424,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <!-- NAVBAR -->
 <nav class="nav" role="navigation" aria-label="Үндсэн цэс">
   <a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
-    <img src="logo.png" alt="КиноЭзэн лого" width="38" height="38" onerror="this.style.display='none'">
+    <img src="logo.png" alt="КиноЭзэн лого" width="34" height="34" onerror="this.style.display='none'">
     <div class="logo-text">КиноЭзэн</div>
   </a>
   <div class="nav-links" id="nav-links">
@@ -347,24 +442,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
-  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс нээх/хаах" aria-expanded="false">☰</button>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс" aria-expanded="false">☰</button>
 </nav>
 
 <!-- WEATHER BAR -->
 <div class="weather-bar" role="complementary" aria-label="Цаг агаар">
   <div class="weather-left">
-    <div class="weather-item">
-      <span>📅</span>
-      <time id="today-date"></time>
-    </div>
-    <div class="weather-item">
-      <span>🌤️</span>
-      <span class="weather-temp" id="weather-temp" aria-live="polite">Ачааллаж байна...</span>
-    </div>
-    <div class="weather-item">
-      <span>📍</span>
-      <span>Улаанбаатар</span>
-    </div>
+    <div class="weather-item">📅 <time id="today-date"></time></div>
+    <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
+    <div class="weather-item">📍 Улаанбаатар</div>
   </div>
   <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
 </div>
@@ -372,7 +458,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <!-- AD BANNER -->
 <div class="ad-wrapper">
   <div id="ad-inner">
-    <div class="ad-banner" role="complementary" aria-label="Реклам">
+    <div class="ad-banner" role="complementary">
       <div class="ad-text">
         <strong>🏢 Таны компанийн реклам энд</strong>
         Сарын 50,000₮-өөс эхлэн рекламаа байршуул
@@ -383,7 +469,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </div>
 
-<!-- HERO — 4-карт урсдаг carousel -->
+<!-- HERO CAROUSEL -->
 <section class="hero-section" aria-label="Онцлох кино">
   <div class="hero-label">
     <div class="hero-label-icon">⭐</div>
@@ -400,7 +486,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </section>
 
-<!-- MAIN CATEGORY GRID -->
+<!-- ===== MAIN CATEGORY GRID — ШИНЭЧИЛСЭН ===== -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -408,76 +494,103 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     </div>
   </div>
   <div class="main-cats-grid" id="main-cats-grid">
+
+    <!-- БҮГД — эхний -->
+    <div class="mcat-card mcat-all selected" id="mcat-all" onclick="showAll(this)" tabindex="0" role="button" aria-label="Бүгд">
+      <div class="mcat-icon">
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg>
+      </div>
+      <div class="mcat-label">Бүгд</div>
+      <div class="mcat-sub">Бүх агуулга</div>
+      <div class="mcat-badge" id="badge-all">—</div>
+    </div>
+
+    <!-- КИНО -->
     <div class="mcat-card mcat-movie" onclick="goSection('movies')" tabindex="0" role="button" aria-label="Кино">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="8" y="14" width="32" height="22" rx="3" fill="white" fill-opacity="0.15"/><rect x="8" y="14" width="32" height="22" rx="3" stroke="white" stroke-width="2"/><path d="M14 14v20M34 14v20M8 24h32" stroke="white" stroke-width="1.5"/><circle cx="11" cy="17" r="2" fill="white"/><circle cx="11" cy="31" r="2" fill="white"/><circle cx="37" cy="17" r="2" fill="white"/><circle cx="37" cy="31" r="2" fill="white"/><path d="M20 20l8 4-8 4V20z" fill="white"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg>
       </div>
       <div class="mcat-label">Кино</div>
       <div class="mcat-sub">Монгол дуутай</div>
       <div class="mcat-badge" id="badge-movie">8</div>
     </div>
+
+    <!-- МЭДЭЭ -->
     <div class="mcat-card mcat-news" onclick="goSection('news')" tabindex="0" role="button" aria-label="Мэдээ">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="10" y="12" width="28" height="26" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="15" y1="19" x2="33" y2="19" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="24" x2="33" y2="24" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="29" x2="25" y2="29" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
       </div>
       <div class="mcat-label">Мэдээ</div>
       <div class="mcat-sub">Шинэ мэдээлэл</div>
       <div class="mcat-badge" id="badge-news">4</div>
     </div>
+
+    <!-- АЯЛАЛ -->
     <div class="mcat-card mcat-travel" onclick="location.href='news.html?cat=Аялал'" tabindex="0" role="button" aria-label="Аялал">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M24 10C17.37 10 12 15.37 12 22c0 9 12 18 12 18s12-9 12-18c0-6.63-5.37-12-12-12z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="24" cy="22" r="4" fill="white"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg>
       </div>
       <div class="mcat-label">Аялал</div>
       <div class="mcat-sub">Дэлхийн газрууд</div>
       <div class="mcat-badge">3</div>
     </div>
+
+    <!-- ШИНЖЛЭХ УХААН -->
     <div class="mcat-card mcat-science" onclick="selNewsCatById('Шинжлэх ухаан')" tabindex="0" role="button" aria-label="Шинжлэх ухаан">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M18 10v10l-6 14h24L30 20V10" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="16" y1="10" x2="32" y2="10" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="21" cy="28" r="2" fill="white"/><circle cx="27" cy="32" r="1.5" fill="white"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg>
       </div>
       <div class="mcat-label">Шинжлэх ухаан</div>
       <div class="mcat-sub">Нээлт судалгаа</div>
       <div class="mcat-badge">4</div>
     </div>
+
+    <!-- AI -->
     <div class="mcat-card mcat-ai" onclick="selNewsCatById('AI')" tabindex="0" role="button" aria-label="AI">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="13" y="13" width="22" height="22" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="19" cy="21" r="2" fill="white"/><circle cx="29" cy="21" r="2" fill="white"/><path d="M17 28c0 0 2 3 7 3s7-3 7-3" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="13" x2="19" y2="10" stroke="white" stroke-width="2"/><line x1="29" y1="13" x2="29" y2="10" stroke="white" stroke-width="2"/><line x1="24" y1="13" x2="24" y2="9" stroke="white" stroke-width="2"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg>
       </div>
       <div class="mcat-label">AI</div>
       <div class="mcat-sub">Хиймэл оюун</div>
       <div class="mcat-badge">4</div>
     </div>
+
+    <!-- КИНО ТҮҮХ -->
     <div class="mcat-card mcat-history" onclick="selNewsCatById('Кино түүх')" tabindex="0" role="button" aria-label="Кино түүх">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="24" cy="24" r="12" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="24,16 24,24 30,28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="mcat-label">Кино түүх</div>
       <div class="mcat-sub">Классик кинонууд</div>
       <div class="mcat-badge">4</div>
     </div>
+
+    <!-- ТАНИН МЭДЭХҮЙ -->
     <div class="mcat-card mcat-knowledge" onclick="selNewsCatById('Танин мэдэхүй')" tabindex="0" role="button" aria-label="Танин мэдэхүй">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M24 10c-5.5 0-10 4.5-10 10 0 3.8 2.1 7.1 5.2 8.8V32h9.6v-3.2C31.9 27.1 34 23.8 34 20c0-5.5-4.5-10-10-10z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="19" y="32" width="10" height="3" rx="1" fill="white"/><rect x="20" y="35" width="8" height="2" rx="1" fill="white"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg>
       </div>
       <div class="mcat-label">Танин мэдэхүй</div>
       <div class="mcat-sub">Мэдлэг боловсрол</div>
       <div class="mcat-badge">4</div>
     </div>
-    <div class="mcat-card mcat-anime" onclick="selCatById('Аниме')" tabindex="0" role="button" aria-label="Аниме">
+
+    <!-- БҮТЭЭГДЭХҮҮН ҮЙЛЧИЛГЭЭ (хуучин Аниме) -->
+    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн үйлчилгээ">
       <div class="mcat-icon">
-        <svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="14" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="48" y2="48"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="24" cy="22" r="10" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="20" cy="20" r="2.5" fill="white"/><circle cx="28" cy="20" r="2.5" fill="white"/><circle cx="20.8" cy="19.2" r="1" fill="#1a0a2e"/><circle cx="28.8" cy="19.2" r="1" fill="#1a0a2e"/><path d="M19 26c0 0 2 2.5 5 2.5s5-2.5 5-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><path d="M14 16c2-4 6-4 8-2M26 14c2-2 6-2 8 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg>
       </div>
-      <div class="mcat-label">Аниме</div>
-      <div class="mcat-sub">Японы анимэ</div>
-      <div class="mcat-badge">3</div>
+      <div class="mcat-label">Бүтээгдэхүүн үйлчилгээ</div>
+      <div class="mcat-sub">Манай үйлчилгээ</div>
+      <div class="mcat-badge">→</div>
     </div>
+
   </div>
 </section>
 
 <!-- CATEGORY FILTER -->
 <section class="section" aria-label="Төрлөөр шүүх">
-  <div class="cat-row" role="tablist" aria-label="Киноны төрөл">
+  <div class="cat-row" role="tablist">
     <button class="cat-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
     <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Экшн')">Экшн</button>
     <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Фантастик')">Фантастик</button>
@@ -504,7 +617,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </section>
 
-<!-- NEWS — 4 эгнээ + категори цэс -->
+<!-- NEWS -->
 <section id="news" aria-label="Мэдээ мэдээлэл">
   <div class="section">
     <div class="section-header">
@@ -512,8 +625,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <a href="news.html" class="see-all">Бүгдийг харах →</a>
     </div>
   </div>
-  <!-- Категори цэс -->
-  <div class="news-cats" role="tablist" aria-label="Мэдээний ангилал">
+  <div class="news-cats" role="tablist">
     <button class="ncat-btn on" role="tab" aria-selected="true" onclick="selNewsCat(this,'')">Бүгд</button>
     <button class="ncat-btn" role="tab" aria-selected="false" onclick="selNewsCat(this,'Танин мэдэхүй')">🧠 Танин мэдэхүй</button>
     <button class="ncat-btn" role="tab" aria-selected="false" onclick="selNewsCat(this,'Шинжлэх ухаан')">🔬 Шинжлэх ухаан</button>
@@ -521,14 +633,61 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <button class="ncat-btn" role="tab" aria-selected="false" onclick="selNewsCat(this,'Кино түүх')">🎬 Кино түүх</button>
   </div>
   <div class="news-grid" id="news-list" role="list">
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:230px"></div>
+    <div class="skel-card skeleton" style="height:230px"></div>
+    <div class="skel-card skeleton" style="height:230px"></div>
+    <div class="skel-card skeleton" style="height:230px"></div>
   </div>
 </section>
 
-<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger-ээр холбоо барих">💬</a>
+<!-- ===== СЭТГЭГДЭЛ ХЭСЭГ ===== -->
+<section class="comment-section" id="comments" aria-label="Сэтгэгдлүүд">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <h2 class="section-title" style="padding:0;"><span>Сэтгэгдэл</span> бичих</h2>
+  </div>
+  <div class="comment-box">
+    <div class="comment-header">
+      <span class="comment-header-title">💬 Сэтгэгдлүүд</span>
+      <span class="comment-count" id="comment-count">0 сэтгэгдэл</span>
+    </div>
+    <!-- Write area -->
+    <div class="comment-write">
+      <div class="comment-ava" id="user-ava">Т</div>
+      <div class="comment-input-wrap">
+        <textarea class="comment-textarea" id="comment-textarea" placeholder="Сэтгэгдлээ бичнэ үү..." maxlength="300" oninput="updateCharCount()"></textarea>
+        <!-- Emoji picker -->
+        <div class="emoji-bar" id="emoji-bar">
+          <span onclick="insertEmoji('😂')" title="Инээх">😂</span>
+          <span onclick="insertEmoji('❤️')" title="Дуртай">❤️</span>
+          <span onclick="insertEmoji('😮')" title="Гайхах">😮</span>
+          <span onclick="insertEmoji('👍')" title="Сайн">👍</span>
+          <span onclick="insertEmoji('🔥')" title="Гал">🔥</span>
+          <span onclick="insertEmoji('😢')" title="Уйлах">😢</span>
+          <span onclick="insertEmoji('😡')" title="Уурлах">😡</span>
+          <span onclick="insertEmoji('🎬')" title="Кино">🎬</span>
+          <span onclick="insertEmoji('⭐')" title="Одон">⭐</span>
+          <span onclick="insertEmoji('🙏')" title="Баярлалаа">🙏</span>
+          <span onclick="insertEmoji('😍')" title="Гоё">😍</span>
+          <span onclick="insertEmoji('🤔')" title="Бодох">🤔</span>
+          <span onclick="insertEmoji('💪')" title="Хүч">💪</span>
+          <span onclick="insertEmoji('🥳')" title="Баяр">🥳</span>
+          <span onclick="insertEmoji('👀')" title="Харах">👀</span>
+          <span onclick="insertEmoji('💯')" title="100%">💯</span>
+        </div>
+        <div class="comment-actions">
+          <span class="char-count" id="char-count">0 / 300</span>
+          <button class="btn-comment-submit" onclick="submitComment()">Нийтлэх →</button>
+        </div>
+      </div>
+    </div>
+    <!-- Comment list -->
+    <div class="comment-list" id="comment-list">
+      <div class="comment-empty" id="comment-empty">Одоогоор сэтгэгдэл байхгүй байна. Эхлэгч болоорой! 💬</div>
+    </div>
+  </div>
+</section>
+
+<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
 
 <!-- FOOTER -->
 <footer class="footer" id="contact" role="contentinfo">
@@ -537,27 +696,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
       <h4>КиноЭзэн</h4>
       <p>Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.</p>
       <div class="footer-social">
-        <!-- Facebook -->
         <a class="social-btn sb-fb" href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
           <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </a>
-        <!-- Instagram -->
         <a class="social-btn sb-ig" href="https://instagram.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
-        <!-- YouTube -->
         <a class="social-btn sb-yt" href="https://youtube.com/@kinoezen" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
           <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
         </a>
-        <!-- X (Twitter) -->
-        <a class="social-btn sb-x" href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)">
+        <a class="social-btn sb-x" href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="X">
           <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
         </a>
       </div>
-      <!-- Утасны дугаар -->
-      <div class="footer-phone">
-        <span>📞</span> +976 8551-05**
-      </div>
+      <div class="footer-phone"><span>📞</span> +976 8551-05**</div>
     </div>
     <div class="footer-col">
       <h4>Холбоо барих</h4>
@@ -597,27 +749,21 @@ async function supaFetch(table,params=''){
 // DATE
 const now=new Date();
 const dateEl=document.getElementById('today-date');
-if(dateEl){
-  dateEl.textContent=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
-  dateEl.setAttribute('datetime',now.toISOString().split('T')[0]);
-}
+if(dateEl){dateEl.textContent=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');}
 
-// WEATHER — Монголоор
-const WEATHER_MN={'Sunny':'Нартай','Clear':'Цэлмэг','Partly cloudy':'Үүлэрхэг','Cloudy':'Бүрхэг','Overcast':'Бүрхэг','Mist':'Манантай','Fog':'Манантай','Light rain':'Бага бороо','Moderate rain':'Бороо','Heavy rain':'Их бороо','Light snow':'Бага цас','Moderate snow':'Цас','Heavy snow':'Их цас','Blizzard':'Цасан шуурга','Thundery outbreaks':'Аянга','Patchy rain possible':'Зарим газар бороо','Patchy snow possible':'Зарим газар цас','Freezing drizzle':'Мөсөн шиврээ','Light drizzle':'Шиврээ бороо','Patchy light drizzle':'Хийссэн бороо','Light sleet':'Мөндөр','Moderate or heavy sleet':'Их мөндөр','Ice pellets':'Мөсөн мөндөр','Patchy rain nearby':'Ойр хавьд бороо','Blowing snow':'Цасан шуурга','Freezing fog':'Мөсөн манан','Thunderstorm':'Аянга бороо'};
+// WEATHER
+const WEATHER_MN={'Sunny':'Нартай','Clear':'Цэлмэг','Partly cloudy':'Үүлэрхэг','Cloudy':'Бүрхэг','Overcast':'Бүрхэг','Mist':'Манантай','Fog':'Манантай','Light rain':'Бага бороо','Moderate rain':'Бороо','Heavy rain':'Их бороо','Light snow':'Бага цас','Moderate snow':'Цас','Heavy snow':'Их цас','Blizzard':'Цасан шуурга','Thundery outbreaks':'Аянга','Patchy rain possible':'Зарим газар бороо','Freezing drizzle':'Мөсөн шиврээ','Light drizzle':'Шиврээ бороо','Ice pellets':'Мөсөн мөндөр'};
 async function loadWeather(){
   const el=document.getElementById('weather-temp');
   try{
-    const ctrl=new AbortController();
-    const t=setTimeout(()=>ctrl.abort(),6000);
+    const ctrl=new AbortController();const t=setTimeout(()=>ctrl.abort(),6000);
     const res=await fetch('https://wttr.in/Ulaanbaatar?format=j1',{signal:ctrl.signal});
-    clearTimeout(t);
-    if(!res.ok)throw new Error();
+    clearTimeout(t);if(!res.ok)throw new Error();
     const data=await res.json();
     const temp=data.current_condition[0].temp_C;
     const descEn=data.current_condition[0].weatherDesc[0].value;
-    const descMn=WEATHER_MN[descEn]||descEn;
-    if(el)el.textContent=`${temp}°C · ${descMn}`;
-  }catch{if(el)el.textContent='Мэдэгдэхгүй';}
+    if(el)el.textContent=`${temp}°C · ${WEATHER_MN[descEn]||descEn}`;
+  }catch{if(el)el.textContent='—';}
 }
 loadWeather();
 
@@ -628,30 +774,24 @@ function toggleNav(){
   document.getElementById('nav-links').classList.toggle('open',navOpen);
   document.getElementById('nav-right').classList.toggle('open',navOpen);
   const t=document.getElementById('nav-toggle');
-  t.textContent=navOpen?'✕':'☰';
-  t.setAttribute('aria-expanded',navOpen);
+  t.textContent=navOpen?'✕':'☰';t.setAttribute('aria-expanded',navOpen);
 }
 document.addEventListener('click',e=>{
-  if(navOpen&&!e.target.closest('.nav')){
-    navOpen=false;
-    document.getElementById('nav-links').classList.remove('open');
-    document.getElementById('nav-right').classList.remove('open');
-    document.getElementById('nav-toggle').textContent='☰';
-  }
+  if(navOpen&&!e.target.closest('.nav')){navOpen=false;document.getElementById('nav-links').classList.remove('open');document.getElementById('nav-right').classList.remove('open');document.getElementById('nav-toggle').textContent='☰';}
 });
 
-// GENRE CONFIG
+// GENRE
 const genreColors={'Фантастик':'cp-sci','Экшн':'cp-act','Драм':'cp-drm','Аймаар':'cp-act','Романтик':'cp-drm','Аниме':'cp-sci'};
 const genreGradients={'Фантастик':'linear-gradient(135deg,#1a0a2e,#3b1f6b)','Экшн':'linear-gradient(135deg,#2a0a0a,#6b1f1f)','Драм':'linear-gradient(135deg,#0a1a0a,#1a3a20)','Аймаар':'linear-gradient(135deg,#1a0a1a,#3b1f3b)','Романтик':'linear-gradient(135deg,#1a0a0a,#3b1010)','Аниме':'linear-gradient(135deg,#0a0a2a,#1f1f6b)'};
 
 // FEATURED CAROUSEL
 const FEATURED_MOVIES=[
-  {id:'f1',title:'Дюн: Хоёрдугаар хэсэг',genre:'Фантастик',genre2:'Экшн',desc:'Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор үзэ...',views:'1.2к',likes:'234',mins:'18',tags:['Онцлох','Шинэ'],emoji:'🏜️'},
-  {id:'f2',title:'Оппенхаймер',genre:'Драм',genre2:'Түүх',desc:'Атомын бөмбөгийг бүтээсэн эрдэмтний амьдрал, шийдвэрийн тухай эпик туурви...',views:'980',likes:'187',mins:'12',tags:['Онцлох'],emoji:'💥'},
-  {id:'f3',title:'Интерстеллар',genre:'Фантастик',genre2:'Драм',desc:'Хүн төрөлхтний нүүдэл — сансрын гүнд хайлт хайж гарсан нисгэгчдийн тухай...',views:'1.5к',likes:'312',mins:'22',tags:['Онцлох','Дуу'],emoji:'🚀'},
+  {id:'f1',title:'Дюн: Хоёрдугаар хэсэг',genre:'Фантастик',genre2:'Экшн',desc:'Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор...',views:'1.2к',likes:'234',mins:'18',tags:['Онцлох','Шинэ'],emoji:'🏜️'},
+  {id:'f2',title:'Оппенхаймер',genre:'Драм',genre2:'Түүх',desc:'Атомын бөмбөгийг бүтээсэн эрдэмтний амьдрал, шийдвэрийн тухай...',views:'980',likes:'187',mins:'12',tags:['Онцлох'],emoji:'💥'},
+  {id:'f3',title:'Интерстеллар',genre:'Фантастик',genre2:'Драм',desc:'Хүн төрөлхтний нүүдэл — сансрын гүнд хайлт хайж гарсан нисгэгчид...',views:'1.5к',likes:'312',mins:'22',tags:['Онцлох','Дуу'],emoji:'🚀'},
   {id:'f4',title:'Жон Вик 4',genre:'Экшн',genre2:'',desc:'Дэлхийн хамгийн аюулт алуурчин Жон Викийн дараагийн тулааны аялал...',views:'870',likes:'201',mins:'15',tags:['Шинэ'],emoji:'🔫'},
   {id:'f5',title:'Аватар: Усны зам',genre:'Фантастик',genre2:'Экшн',desc:'Пандорагийн далайн гүнд шинэ аялал — Сулли гэр бүлийн тулаан...',views:'2.1к',likes:'445',mins:'25',tags:['Онцлох','Шинэ'],emoji:'🌊'},
-  {id:'f6',title:'Барби',genre:'Романтик',genre2:'Инээдэм',desc:'Барбилэнд-ийн хамгийн төгс Барби жинхэнэ ертөнцийг нээж олж мэднэ...',views:'760',likes:'143',mins:'10',tags:['Шинэ'],emoji:'💗'},
+  {id:'f6',title:'Барби',genre:'Романтик',genre2:'Инээдэм',desc:'Барбилэнд-ийн хамгийн төгс Барби жинхэнэ ертөнцийг нээж олж...',views:'760',likes:'143',mins:'10',tags:['Шинэ'],emoji:'💗'},
   {id:'f7',title:'Хүнлэг яс',genre:'Аниме',genre2:'Фантастик',desc:'Монгол дуутай аниме — гайхалтай дайчдын тулааны өгүүллэг...',views:'640',likes:'118',mins:'8',tags:['Шинэ','Монгол'],emoji:'⚔️'},
   {id:'f8',title:'Аянга хүн',genre:'Экшн',genre2:'Фантастик',desc:'Цахилгааны хүчтэй баатар нийслэлийг аварах тулаанд оров...',views:'530',likes:'96',mins:'14',tags:['Шинэ'],emoji:'⚡'},
 ];
@@ -663,9 +803,9 @@ function buildFeaturedCard(m){
   const g2=genreColors[m.genre2]||'cp-sci';
   const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
   const tags=m.tags.map(t=>t==='Онцлох'?`<span class="ftag ftag-top">✦ ${t}</span>`:`<span class="ftag ftag-new">${t}</span>`).join('');
-  return`<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" onkeydown="if(event.key==='Enter')location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
+  return`<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
     <div class="featured-img" style="background:${bg}">
-      <span style="font-size:52px;z-index:1;position:relative;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.6))">${m.emoji}</span>
+      <span style="font-size:48px;z-index:1;position:relative;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.6))">${m.emoji}</span>
       <div class="featured-overlay"></div>
       <div class="featured-tags">${tags}</div>
     </div>
@@ -696,17 +836,16 @@ function initCarousel(){
   const dotsEl=document.getElementById('carousel-dots');
   track.innerHTML=FEATURED_MOVIES.map(buildFeaturedCard).join('');
   const totalPages=Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);
-  dotsEl.innerHTML=Array.from({length:totalPages},(_,i)=>`<div class="dot${i===0?' active':''}" onclick="goToPage(${i})" aria-label="Хуудас ${i+1}"></div>`).join('');
+  dotsEl.innerHTML=Array.from({length:totalPages},(_,i)=>`<div class="dot${i===0?' active':''}" onclick="goToPage(${i})"></div>`).join('');
   document.getElementById('carousel-prev').onclick=()=>{prevPage();resetAuto();};
   document.getElementById('carousel-next').onclick=()=>{nextPage();resetAuto();};
   startAuto();
-  // swipe
   let tx=0;
   const w=document.getElementById('featured-wrapper');
   w.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
   w.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50){d>0?nextPage():prevPage();resetAuto();}},{passive:true});
 }
-function getCardWidth(){const c=document.querySelector('.featured-card');return c?c.offsetWidth+14:0;}
+function getCardWidth(){const c=document.querySelector('.featured-card');return c?c.offsetWidth+12:0;}
 function goToPage(p){carouselIndex=Math.max(0,Math.min(p,Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE)-1));updateCarousel();}
 function nextPage(){carouselIndex=(carouselIndex+1)%Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);updateCarousel();}
 function prevPage(){const t=Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);carouselIndex=(carouselIndex-1+t)%t;updateCarousel();}
@@ -719,8 +858,8 @@ function restartBar(){const b=document.getElementById('carousel-bar');b.classLis
 function startAuto(){restartBar();carouselAuto=setInterval(nextPage,AUTO_INTERVAL);}
 function resetAuto(){clearInterval(carouselAuto);startAuto();}
 
-// MOVIE GRID
-function buildSkeletons(n=4){return Array(n).fill(0).map(()=>`<div class="skel-card skeleton" aria-hidden="true"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`).join('');}
+// MOVIES
+function buildSkeletons(n=4){return Array(n).fill(0).map(()=>`<div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`).join('');}
 
 let currentGenre='';
 function selCat(el,genre){
@@ -737,68 +876,73 @@ async function loadMovies(genre=''){
     if(genre)params+=`&genre=eq.${encodeURIComponent(genre)}`;
     const movies=await supaFetch('movies',params);
     if(!movies||movies.length===0){list.innerHTML=`<div class="empty-state"><div class="icon">🎬</div><p>Кино байхгүй байна</p></div>`;return;}
-    list.innerHTML=movies.map(m=>{
-      const title=sanitize(m.title);const g=sanitize(m.genre);const id=encodeURIComponent(sanitize(m.id));
-      const likes=parseInt(m.likes)||0;const views=parseInt(m.views)||0;
-      const cls=genreColors[m.genre]||'cp-sci';const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-      const thumb=m.thumbnail?`<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" decoding="async" onerror="this.style.display='none'">`:'🎬';
-      return`<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" onkeydown="if(event.key==='Enter')location.href='movie.html?id=${id}'" aria-label="${title}">
-        <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g||'Кино'}</span></div>
-        <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">КиноЭзэн</div>
-        <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div>
-      </article>`;
-    }).join('');
-  }catch(err){
-    console.error('Кино ачаалах алдаа:',err);
-    list.innerHTML=[{title:'Интерстеллар',genre:'Фантастик',likes:187,views:980},{title:'Оппенхаймер',genre:'Драм',likes:143,views:870},{title:'Жон Вик 4',genre:'Экшн',likes:201,views:760},{title:'Аватар 2',genre:'Фантастик',likes:165,views:640}].map(m=>{
-      const cls=genreColors[m.genre]||'cp-sci';const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-      return`<article class="grid-card" role="listitem" tabindex="0" aria-label="${m.title}"><div class="grid-img" style="background:${bg}">🎬<span class="grid-badge ${cls}">${m.genre}</span></div><div class="grid-body"><h3 class="grid-title">${m.title}</h3><div class="grid-meta">КиноЭзэн</div><div class="grid-stats"><button class="gstat" onclick="toggleLike(this)">❤️ <span>${m.likes}</span></button><span class="gstat">👁 <span>${m.views}</span></span></div></div></article>`;
-    }).join('');
+    renderMovieCards(movies,list);
+  }catch{
+    renderMovieCards([
+      {title:'Интерстеллар',genre:'Фантастик',likes:187,views:980,id:'demo1'},
+      {title:'Оппенхаймер',genre:'Драм',likes:143,views:870,id:'demo2'},
+      {title:'Жон Вик 4',genre:'Экшн',likes:201,views:760,id:'demo3'},
+      {title:'Аватар 2',genre:'Фантастик',likes:165,views:640,id:'demo4'},
+    ],list);
   }
+}
+function renderMovieCards(movies,list){
+  list.innerHTML=movies.map(m=>{
+    const title=sanitize(m.title);const g=sanitize(m.genre);const id=encodeURIComponent(sanitize(m.id));
+    const likes=parseInt(m.likes)||0;const views=parseInt(m.views)||0;
+    const cls=genreColors[m.genre]||'cp-sci';const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+    const thumb=m.thumbnail?`<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`:'🎬';
+    return`<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
+      <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g||'Кино'}</span></div>
+      <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">КиноЭзэн</div>
+      <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div>
+    </article>`;
+  }).join('');
 }
 
 // NEWS
 const NEWS_DATA={
   '':[
-    {id:'s1',emoji:'🌍',cat:'Түүх',title:'Монголын эзэнт гүрний хамгийн том дайлалт',date:'2026.06.08',views:'1.2к'},
-    {id:'s2',emoji:'🎬',cat:'Кино мэдээ',title:'2026 оны хамгийн их орлого олсон кинонууд',date:'2026.06.07',views:'890'},
-    {id:'s3',emoji:'🚀',cat:'Шинжлэх ухаан',title:'Сансрын судалгааны шинэ нээлт',date:'2026.06.06',views:'654'},
-    {id:'s4',emoji:'💡',cat:'Танин мэдэхүй',title:'Дэлхийн хамгийн гайхалтай 10 газар',date:'2026.06.05',views:'432'},
+    {id:'s1',emoji:'🌍',cat:'Түүх',title:'Монголын эзэнт гүрний хамгийн том дайлалт',date:'2026.06.08',views:'1.2к',img:''},
+    {id:'s2',emoji:'🎬',cat:'Кино мэдээ',title:'2026 оны хамгийн их орлого олсон кинонууд',date:'2026.06.07',views:'890',img:''},
+    {id:'s3',emoji:'🚀',cat:'Шинжлэх ухаан',title:'Сансрын судалгааны шинэ нээлт',date:'2026.06.06',views:'654',img:''},
+    {id:'s4',emoji:'💡',cat:'Танин мэдэхүй',title:'Дэлхийн хамгийн гайхалтай 10 газар',date:'2026.06.05',views:'432',img:''},
   ],
   'Танин мэдэхүй':[
-    {id:'t1',emoji:'🧠',cat:'Танин мэдэхүй',title:'Хүний тархины нууц — шинэ судалгаа',date:'2026.06.08',views:'543'},
-    {id:'t2',emoji:'🌿',cat:'Танин мэдэхүй',title:'Байгаль дахь хамгийн гайхамшигт амьдрал',date:'2026.06.07',views:'321'},
-    {id:'t3',emoji:'🔭',cat:'Танин мэдэхүй',title:'Одон орны шинэ нээлтүүд 2026',date:'2026.06.06',views:'276'},
-    {id:'t4',emoji:'💎',cat:'Танин мэдэхүй',title:'Эрдэс чулууны ертөнц',date:'2026.06.05',views:'198'},
+    {id:'t1',emoji:'🧠',cat:'Танин мэдэхүй',title:'Хүний тархины нууц — шинэ судалгаа',date:'2026.06.08',views:'543',img:''},
+    {id:'t2',emoji:'🌿',cat:'Танин мэдэхүй',title:'Байгаль дахь хамгийн гайхамшигт амьдрал',date:'2026.06.07',views:'321',img:''},
+    {id:'t3',emoji:'🔭',cat:'Танин мэдэхүй',title:'Одон орны шинэ нээлтүүд 2026',date:'2026.06.06',views:'276',img:''},
+    {id:'t4',emoji:'💎',cat:'Танин мэдэхүй',title:'Эрдэс чулууны ертөнц',date:'2026.06.05',views:'198',img:''},
   ],
   'Шинжлэх ухаан':[
-    {id:'sc1',emoji:'🔬',cat:'Шинжлэх ухаан',title:'Сансрын судалгааны шинэ нээлт 2026',date:'2026.06.08',views:'654'},
-    {id:'sc2',emoji:'⚗️',cat:'Шинжлэх ухаан',title:'Квант компьютерийн дараагийн алхам',date:'2026.06.07',views:'512'},
-    {id:'sc3',emoji:'🧬',cat:'Шинжлэх ухаан',title:'ДНХ засварлах шинэ арга',date:'2026.06.06',views:'443'},
-    {id:'sc4',emoji:'🌊',cat:'Шинжлэх ухаан',title:'Далайн гүнд шинэ амьтад нээгдэв',date:'2026.06.05',views:'387'},
+    {id:'sc1',emoji:'🔬',cat:'Шинжлэх ухаан',title:'Сансрын судалгааны шинэ нээлт 2026',date:'2026.06.08',views:'654',img:''},
+    {id:'sc2',emoji:'⚗️',cat:'Шинжлэх ухаан',title:'Квант компьютерийн дараагийн алхам',date:'2026.06.07',views:'512',img:''},
+    {id:'sc3',emoji:'🧬',cat:'Шинжлэх ухаан',title:'ДНХ засварлах шинэ арга',date:'2026.06.06',views:'443',img:''},
+    {id:'sc4',emoji:'🌊',cat:'Шинжлэх ухаан',title:'Далайн гүнд шинэ амьтад нээгдэв',date:'2026.06.05',views:'387',img:''},
   ],
   'AI':[
-    {id:'ai1',emoji:'🤖',cat:'AI',title:'ChatGPT-ийн шинэ хувилбар гарлаа',date:'2026.06.08',views:'1.5к'},
-    {id:'ai2',emoji:'🧠',cat:'AI',title:'AI киноны дүрслэл хийж байна',date:'2026.06.07',views:'876'},
-    {id:'ai3',emoji:'💻',cat:'AI',title:'Монгол хэлний AI хөгжил',date:'2026.06.06',views:'654'},
-    {id:'ai4',emoji:'🎨',cat:'AI',title:'AI урлагийн хамгийн сайн жишээнүүд',date:'2026.06.05',views:'432'},
+    {id:'ai1',emoji:'🤖',cat:'AI',title:'ChatGPT-ийн шинэ хувилбар гарлаа',date:'2026.06.08',views:'1.5к',img:''},
+    {id:'ai2',emoji:'🧠',cat:'AI',title:'AI киноны дүрслэл хийж байна',date:'2026.06.07',views:'876',img:''},
+    {id:'ai3',emoji:'💻',cat:'AI',title:'Монгол хэлний AI хөгжил',date:'2026.06.06',views:'654',img:''},
+    {id:'ai4',emoji:'🎨',cat:'AI',title:'AI урлагийн хамгийн сайн жишээнүүд',date:'2026.06.05',views:'432',img:''},
   ],
   'Кино түүх':[
-    {id:'kh1',emoji:'🎞️',cat:'Кино түүх',title:'Дэлхийн анхны кино хэрхэн бүтсэн бэ',date:'2026.06.08',views:'765'},
-    {id:'kh2',emoji:'🏆',cat:'Кино түүх',title:'Оскарын шилдэг киноны түүх',date:'2026.06.07',views:'543'},
-    {id:'kh3',emoji:'🎭',cat:'Кино түүх',title:'Монгол киноны 100 жилийн түүх',date:'2026.06.06',views:'432'},
-    {id:'kh4',emoji:'📽️',cat:'Кино түүх',title:'Хамгийн нөлөөтэй найруулагчид',date:'2026.06.05',views:'321'},
+    {id:'kh1',emoji:'🎞️',cat:'Кино түүх',title:'Дэлхийн анхны кино хэрхэн бүтсэн бэ',date:'2026.06.08',views:'765',img:''},
+    {id:'kh2',emoji:'🏆',cat:'Кино түүх',title:'Оскарын шилдэг киноны түүх',date:'2026.06.07',views:'543',img:''},
+    {id:'kh3',emoji:'🎭',cat:'Кино түүх',title:'Монгол киноны 100 жилийн түүх',date:'2026.06.06',views:'432',img:''},
+    {id:'kh4',emoji:'📽️',cat:'Кино түүх',title:'Хамгийн нөлөөтэй найруулагчид',date:'2026.06.05',views:'321',img:''},
   ],
 };
 const EMOJIS=['😮','😆','❤️','👍','😢','😡','🤗'];
 
 function makeEmojis(id){
-  return EMOJIS.map((em,i)=>`<button class="e-btn" data-news="${sanitize(id)}" data-idx="${i}" aria-label="${em} урвал"><span class="e-emoji">${em}</span><span class="e-count">0</span></button>`).join('');
+  return EMOJIS.map((em,i)=>`<button class="e-btn" data-news="${sanitize(id)}" data-idx="${i}" aria-label="${em}"><span class="e-emoji">${em}</span><span class="e-count">0</span></button>`).join('');
 }
 
+// Emoji reaction click — delegated
 document.addEventListener('click',function(e){
   const eBtn=e.target.closest('.e-btn');
-  if(!eBtn)return;
+  if(!eBtn||eBtn.closest('.comment-input-wrap'))return;
   e.stopPropagation();
   const reaction=eBtn.closest('.emoji-reaction');
   const wasActive=eBtn.classList.contains('active');
@@ -816,8 +960,11 @@ function selNewsCat(el,cat){
 function renderNews(cat=''){
   const list=document.getElementById('news-list');
   const items=NEWS_DATA[cat]||NEWS_DATA[''];
-  list.innerHTML=items.map(item=>`<article class="news-card" role="listitem" tabindex="0" aria-label="${item.title}">
-    <div class="news-img"><span class="n-emoji">${item.emoji}</span></div>
+  list.innerHTML=items.map(item=>`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${item.id}'" aria-label="${item.title}">
+    <div class="news-img">
+      ${item.img?`<img src="${item.img}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`:''}
+      <span class="n-emoji" style="${item.img?'display:none':''}">${item.emoji}</span>
+    </div>
     <div class="news-body">
       <span class="news-cat">${item.cat}</span>
       <h3 class="news-title">${item.title}</h3>
@@ -838,15 +985,15 @@ async function loadNews(){
     list.innerHTML=news.map((item,i)=>{
       const title=sanitize(item.title);const cat=sanitize(item.category||'Мэдээ');const id=sanitize(item.id);
       const views=parseInt(item.views)||0;const date=new Date(item.created_at).toLocaleDateString('mn-MN');
-      const thumb=item.thumbnail?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`:`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
-      return`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news.html?id=${id}'" aria-label="${title}">
+      const thumb=item.thumbnail?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`:`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
+      return`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}">
         <div class="news-img">${thumb}</div>
         <div class="news-body"><span class="news-cat">${cat}</span><h3 class="news-title">${title}</h3>
         <div class="news-foot"><time class="news-date">${date}</time><span class="news-views">👁 ${views}</span></div>
         <div class="emoji-reaction">${makeEmojis(id)}</div></div>
       </article>`;
     }).join('');
-  }catch(err){console.error('Мэдээ ачаалах алдаа:',err);renderNews('');}
+  }catch{renderNews('');}
 }
 
 async function loadAd(){
@@ -854,11 +1001,12 @@ async function loadAd(){
     const ads=await supaFetch('ads','active=eq.true&limit=1');
     if(ads&&ads.length>0){
       const ad=ads[0];
-      document.getElementById('ad-inner').innerHTML=`<div class="ad-banner"><div class="ad-text"><strong>${sanitize(ad.title)}</strong>${sanitize(ad.description||'')}</div><button class="ad-btn" onclick="location.href='#contact'">${sanitize(ad.button_text||'Холбоо барих')}</button></div><div class="ad-label">Реклам</div>`;
+      document.getElementById('ad-inner').innerHTML=`<div class="ad-banner"><div class="ad-text"><strong>${sanitize(ad.title)}</strong>${sanitize(ad.description||'')}</div><button class="ad-btn">${sanitize(ad.button_text||'Холбоо барих')}</button></div><div class="ad-label">Реклам</div>`;
     }
   }catch{}
 }
 
+// SEARCH
 let searchTimeout;
 function searchMovies(){
   clearTimeout(searchTimeout);
@@ -870,15 +1018,7 @@ function searchMovies(){
     try{
       const movies=await supaFetch('movies',`title=ilike.*${encodeURIComponent(query)}*&limit=8`);
       if(!movies||movies.length===0){list.innerHTML=`<div class="empty-state"><div class="icon">🔍</div><p>"${sanitize(query)}" олдсонгүй</p></div>`;return;}
-      list.innerHTML=movies.map(m=>{
-        const title=sanitize(m.title);const g=sanitize(m.genre);const id=encodeURIComponent(sanitize(m.id));
-        const cls=genreColors[m.genre]||'cp-sci';const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-        return`<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
-          <div class="grid-img" style="background:${bg}">🎬<span class="grid-badge ${cls}">${g}</span></div>
-          <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">КиноЭзэн</div>
-          <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${m.likes||0}</span></button><span class="gstat">👁 <span>${m.views||0}</span></span></div></div>
-        </article>`;
-      }).join('');
+      renderMovieCards(movies,list);
     }catch{document.querySelectorAll('.grid-card').forEach(c=>{const t=c.querySelector('.grid-title');if(t)c.style.display=t.textContent.toLowerCase().includes(query.toLowerCase())?'':'none';});}
   },300);
 }
@@ -897,30 +1037,131 @@ function showToast(msg){
   document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
 }
 
-// CATEGORY NAVIGATION helpers
-function goSection(id){
-  const el=document.getElementById(id);
-  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
-}
+// CATEGORY NAV
+function goSection(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
+
 function selCatById(genre){
   goSection('movies');
-  const btns=document.querySelectorAll('.cat-btn');
-  btns.forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
-  const target=[...btns].find(b=>b.textContent.trim()===genre);
+  document.querySelectorAll('.cat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
+  const target=[...document.querySelectorAll('.cat-btn')].find(b=>b.textContent.trim()===genre);
   if(target){target.classList.add('on');target.setAttribute('aria-selected','true');}
   currentGenre=genre;loadMovies(genre);
 }
 function selNewsCatById(cat){
   goSection('news');
-  const btns=document.querySelectorAll('.ncat-btn');
-  btns.forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
-  const target=[...btns].find(b=>b.textContent.includes(cat));
+  document.querySelectorAll('.ncat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
+  const target=[...document.querySelectorAll('.ncat-btn')].find(b=>b.textContent.includes(cat));
   if(target){target.classList.add('on');target.setAttribute('aria-selected','true');}
   currentNewsCat=cat;renderNews(cat);
 }
 
+// ===== БҮГД товч — кино+мэдээ хоёуланг харуулна =====
+function showAll(el){
+  // Цэсүүдийн selected арилга
+  document.querySelectorAll('.mcat-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  // Кинонуудыг ангиллалгүй харуул
+  currentGenre='';
+  document.querySelectorAll('.cat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
+  const allBtn=document.querySelector('.cat-btn');if(allBtn){allBtn.classList.add('on');allBtn.setAttribute('aria-selected','true');}
+  loadMovies('');
+  // Мэдээг бүгд харуул
+  currentNewsCat='';
+  document.querySelectorAll('.ncat-btn').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-selected','false');});
+  const allNcat=document.querySelector('.ncat-btn');if(allNcat){allNcat.classList.add('on');allNcat.setAttribute('aria-selected','true');}
+  renderNews('');
+  // Хоёуланд scroll
+  setTimeout(()=>goSection('movies'),100);
+}
+
+// ===== COMMENT SYSTEM =====
+let comments=[];
+const COMMENT_NAMES=['Батболд','Солонго','Мөнх-Эрдэнэ','Анхмаа','Тэмүүжин','Номин','Ганбаяр','Сарнай','Эрдэнэбат','Цэцэгмаа'];
+const COMMENT_AVABGS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(135deg,#4ade80,#22c55e)','linear-gradient(135deg,#06b6d4,#3b82f6)','linear-gradient(135deg,#a855f7,#7c3aed)','linear-gradient(135deg,#f59e0b,#ef4444)','linear-gradient(135deg,#ec4899,#8b5cf6)','linear-gradient(135deg,#10b981,#0891b2)'];
+
+// Demo comments
+const DEMO_COMMENTS=[
+  {name:'Батболд',text:'Маш гоё платформ байна! 🔥',time:'2026.06.09 · 10:32',bg:COMMENT_AVABGS[0],likes:5},
+  {name:'Солонго',text:'Мэдээнүүд маш сонирхолтой байна 😍',time:'2026.06.09 · 09:15',bg:COMMENT_AVABGS[1],likes:3},
+  {name:'Мөнх-Эрдэнэ',text:'Кино хайх функц гайхалтай ажиллаж байна 👍',time:'2026.06.08 · 21:44',bg:COMMENT_AVABGS[2],likes:7},
+];
+
+function renderComments(){
+  const list=document.getElementById('comment-list');
+  const empty=document.getElementById('comment-empty');
+  const count=document.getElementById('comment-count');
+  const all=[...DEMO_COMMENTS,...comments];
+  count.textContent=`${all.length} сэтгэгдэл`;
+  if(all.length===0){if(empty)empty.style.display='block';list.innerHTML='<div class="comment-empty" id="comment-empty">Одоогоор сэтгэгдэл байхгүй байна. Эхлэгч болоорой! 💬</div>';return;}
+  if(empty)empty.style.display='none';
+  list.innerHTML=all.map((c,i)=>{
+    const initials=(c.name||'?').charAt(0);
+    return`<div class="comment-item">
+      <div class="ci-ava" style="background:${c.bg||COMMENT_AVABGS[i%COMMENT_AVABGS.length]}">${initials}</div>
+      <div class="ci-body">
+        <div class="ci-top">
+          <span class="ci-name">${sanitize(c.name)}</span>
+          <span class="ci-date">${c.time}</span>
+        </div>
+        <div class="ci-text">${sanitize(c.text)}</div>
+        <div class="ci-foot">
+          <button class="ci-like-btn" onclick="likeComment(this,${DEMO_COMMENTS.length+i})">❤️ <span>${c.likes||0}</span></button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function likeComment(btn){
+  const isLiked=btn.classList.toggle('liked');
+  const c=btn.querySelector('span');
+  c.textContent=isLiked?parseInt(c.textContent)+1:Math.max(0,parseInt(c.textContent)-1);
+}
+
+function insertEmoji(em){
+  const ta=document.getElementById('comment-textarea');
+  const pos=ta.selectionStart;
+  const val=ta.value;
+  ta.value=val.slice(0,pos)+em+val.slice(pos);
+  ta.selectionStart=ta.selectionEnd=pos+em.length;
+  ta.focus();
+  updateCharCount();
+}
+
+function updateCharCount(){
+  const ta=document.getElementById('comment-textarea');
+  const len=ta.value.length;
+  document.getElementById('char-count').textContent=`${len} / 300`;
+}
+
+function submitComment(){
+  const ta=document.getElementById('comment-textarea');
+  const text=ta.value.trim();
+  if(!text){ta.focus();showToast('Сэтгэгдэл бичнэ үү 💬');return;}
+  if(text.length>300){showToast('Хэт урт байна, 300 тэмдэгтээс бага байх ёстой');return;}
+  const now2=new Date();
+  const time=now2.getFullYear()+'.'+String(now2.getMonth()+1).padStart(2,'0')+'.'+String(now2.getDate()).padStart(2,'0')+' · '+String(now2.getHours()).padStart(2,'0')+':'+String(now2.getMinutes()).padStart(2,'0');
+  const rndName=COMMENT_NAMES[Math.floor(Math.random()*COMMENT_NAMES.length)];
+  const rndBg=COMMENT_AVABGS[Math.floor(Math.random()*COMMENT_AVABGS.length)];
+  comments.unshift({name:rndName,text,time,bg:rndBg,likes:0});
+  ta.value='';updateCharCount();
+  renderComments();
+  showToast('✅ Сэтгэгдэл нийтлэгдлээ!');
+  // Scroll to new comment
+  setTimeout(()=>{const first=document.querySelector('.comment-item');if(first)first.scrollIntoView({behavior:'smooth',block:'nearest'});},200);
+}
+
+// Textarea keyboard shortcut: Ctrl+Enter submit
+document.getElementById('comment-textarea').addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){submitComment();}
+});
+
 document.addEventListener('DOMContentLoaded',()=>{
-  initCarousel();loadMovies();loadNews();loadAd();
+  initCarousel();
+  loadMovies();
+  loadNews();
+  loadAd();
+  renderComments();
 });
 </script>
 </body>
