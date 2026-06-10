@@ -152,14 +152,31 @@ textarea:focus{outline:none;border-color:#4ade80;}
     </div>
     <button class="svc-btn" onclick="toggleTTS()">▶ Туршиж үзэх</button>
     <div class="tts-box" id="tts-box">
-      <label class="form-label">Монгол текст оруулах</label>
-      <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..."></textarea>
+      <label class="form-label">Монгол текст оруулах <span id="char-count" style="color:#4ade80;float:right">0/1500</span></label>
+      <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateCount()"></textarea>
+      <div id="email-row" style="display:none;margin-top:8px">
+        <label class="form-label">📧 Email (нэг хаягаар 1500 тэмдэгт үнэгүй)</label>
+        <input id="tts-email" type="email" placeholder="tanii@email.com" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;">
+      </div>
       <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
       <div class="voice-row">
         <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа (эрэгтэй)</div>
         <div class="vbtn" onclick="selVoice(this)">🎤 Есүй (эмэгтэй)</div>
       </div>
+      <div style="margin:10px 0">
+        <label class="form-label">⚡ Хурд <span id="rate-val">+15%</span></label>
+        <input type="range" id="rate" min="-50" max="50" value="15" step="5" oninput="document.getElementById('rate-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
+        <label class="form-label" style="margin-top:8px">🎵 Бүдүүн/Нарийн <span id="pitch-val">-8Hz</span></label>
+        <input type="range" id="pitch" min="-50" max="50" value="-8" step="1" oninput="document.getElementById('pitch-val').textContent=(this.value>0?'+':'')+this.value+'Hz'" style="width:100%;accent-color:#4ade80">
+        <label class="form-label" style="margin-top:8px">🔊 Дуу чанга/Сула <span id="vol-val">0%</span></label>
+        <input type="range" id="volume" min="-50" max="50" value="0" step="5" oninput="document.getElementById('vol-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
+      </div>
+      <div id="limit-info" style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px;text-align:center"></div>
       <button class="run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
+      <div id="upgrade-notice" style="display:none;margin-top:10px;padding:12px;background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;text-align:center;font-size:12px;color:#f4a261">
+        💎 2000+ тэмдэгт — <strong>Премиум</strong> хэрэгтэй<br>
+        <a href="login.html" style="color:#f4a261;font-weight:700;margin-top:4px;display:inline-block">→ Бүртгүүлж Premium авах</a>
+      </div>
       <div class="result" id="tts-result"></div>
     </div>
   </div>
@@ -251,10 +268,22 @@ textarea:focus{outline:none;border-color:#4ade80;}
 
 <script>
 function getToday(){ return new Date().toISOString().slice(0,10); }
-function getUsed(key){ const d = JSON.parse(localStorage.getItem(key+'_'+getToday())||'{"n":0}'); return d.n; }
-function addUsed(key,n){ const k=key+'_'+getToday(); const d=JSON.parse(localStorage.getItem(k)||'{"n":0}'); d.n+=n; localStorage.setItem(k,JSON.stringify(d)); }
+function getEmailKey(email){ return 'tts_email_'+btoa(email)+'_'+getToday(); }
+function getEmailUsed(email){ return Number(localStorage.getItem(getEmailKey(email))||0); }
+function addEmailUsed(email,n){ const k=getEmailKey(email); localStorage.setItem(k, Number(localStorage.getItem(k)||0)+n); }
 function isLoggedIn(){ return !!localStorage.getItem('kino_user'); }
-function getLimit(){ return isLoggedIn() ? 3000 : 1000; }
+
+function updateCount(){
+  const len = document.getElementById('tts-text').value.length;
+  document.getElementById('char-count').textContent = len+'/1500';
+  document.getElementById('char-count').style.color = len>1500?'#e63946':'#4ade80';
+  document.getElementById('email-row').style.display = len>0?'block':'none';
+  document.getElementById('upgrade-notice').style.display = len>2000?'block':'none';
+  const email = document.getElementById('tts-email').value.trim();
+  const used = email ? getEmailUsed(email) : 0;
+  const rem = Math.max(0, 1500-used);
+  document.getElementById('limit-info').textContent = email ? '📊 '+email+' — өнөөдөр үлдсэн: '+rem+'/1500 тэмдэгт' : '';
+}
 
 let drawerOpen=false;
 function toggleDrawer(){
@@ -275,11 +304,11 @@ function toggleHum(){ document.getElementById('hum-box').classList.toggle('show'
 function selVoice(el){ document.querySelectorAll('.vbtn').forEach(v=>v.classList.remove('on')); el.classList.add('on'); }
 
 // ── Netlify Function дамжуулан дуудах ──
-async function callTTS(text, voice){
+async function callTTS(text, voice, rate, pitch, volume){
   const r = await fetch('/.netlify/functions/tts', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({text, voice})
+    body: JSON.stringify({text, voice, rate, pitch, volume})
   });
   if(!r.ok){ const t=await r.text(); throw new Error('TTS алдаа '+r.status+': '+t.slice(0,150)); }
   const j = await r.json();
@@ -302,22 +331,31 @@ async function callHumanize(text){
 async function runTTS(){
   const text = document.getElementById('tts-text').value.trim();
   if(!text){ alert('Текст оруулна уу!'); return; }
-  const limit = getLimit();
-  const used = getUsed('tts');
-  if(used + text.length > limit){
-    alert('Өдрийн лимит дүүрлээ! ('+used+'/'+limit+' тэмдэгт)\n'+(isLoggedIn()?'':'Бүртгэлтэй болвол 3000 тэмдэгт болно.'));
+  const email = document.getElementById('tts-email').value.trim();
+  if(!email){ alert('Email хаягаа оруулна уу!'); return; }
+  // Email тоолуур шалгах
+  const emailUsed = getEmailUsed(email);
+  if(emailUsed + text.length > 1500){
+    alert('⚠️ '+email+' хаягаар өнөөдрийн 1500 тэмдэгтийн лимит дүүрлээ!\n(Ашигласан: '+emailUsed+'/1500)\n2000+ тэмдэгт бол Премиум шаардлагатай.');
+    return;
+  }
+  if(text.length > 2000){
+    alert('2000+ тэмдэгт бол Премиум хэрэгтэй!');
     return;
   }
   const voiceEl = document.querySelector('.vbtn.on');
   const voiceName = voiceEl&&voiceEl.textContent.includes('Есүй') ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)';
+  const rate = parseInt(document.getElementById('rate').value);
+  const pitch = parseInt(document.getElementById('pitch').value);
+  const volume = parseInt(document.getElementById('volume').value);
   const btn = document.querySelector('#tts-box .run-btn');
   btn.textContent='⏳ Үүсгэж байна...'; btn.disabled=true;
   try {
-    const resp2 = await callTTS(text, voiceName);
-    // audioUrl шууд буцаана
+    const resp2 = await callTTS(text, voiceName, rate, pitch, volume);
     const audioUrl = resp2.audioUrl;
     if(!audioUrl) throw new Error('Audio URL олдсонгүй. Debug: ' + (resp2.debug||'').slice(0,100));
-    addUsed('tts', text.length);
+    addEmailUsed(email, text.length);
+    updateCount();
     const rd = document.getElementById('tts-result');
     rd.innerHTML=`
       <div class="result-label">✓ Бэлэн! (өнөөдөр: ${getUsed('tts')}/${limit} тэмдэгт)</div>
