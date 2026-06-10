@@ -313,13 +313,10 @@ async function runTTS(){
   const btn = document.querySelector('#tts-box .run-btn');
   btn.textContent='⏳ Үүсгэж байна...'; btn.disabled=true;
   try {
-    const data = await callTTS(text, voiceName);
-    const audioData = data[0];
-    let audioUrl='';
-    if(typeof audioData==='string'&&audioData.startsWith('data:')) audioUrl=audioData;
-    else if(audioData&&audioData.url) audioUrl=audioData.url.startsWith('http')?audioData.url:'https://kinosait-mongol.hf.space'+audioData.url;
-    else if(audioData&&audioData.path) audioUrl='https://kinosait-mongol.hf.space/file='+audioData.path;
-    if(!audioUrl) throw new Error('Audio URL олдсонгүй');
+    const resp2 = await callTTS(text, voiceName);
+    // audioUrl шууд буцаана
+    const audioUrl = resp2.audioUrl;
+    if(!audioUrl) throw new Error('Audio URL олдсонгүй. Debug: ' + (resp2.debug||'').slice(0,100));
     addUsed('tts', text.length);
     const rd = document.getElementById('tts-result');
     rd.innerHTML=`
