@@ -197,25 +197,144 @@ textarea:focus{outline:none;border-color:#4ade80;}
 <div class="footer">© 2025 КиноЭзэн — Монгол хэлний кино платформ</div>
 
 <script>
+// ─── HuggingFace Space URL ───
+const HF_URL = "https://kinoezen-kino.hf.space";
+
+// ─── Лимит шалгах (localStorage) ───
+function getToday(){ return new Date().toISOString().slice(0,10); }
+function getUsed(key){ 
+  const d = JSON.parse(localStorage.getItem(key+'_'+getToday())||'{"n":0}');
+  return d.n;
+}
+function addUsed(key, n){
+  const k = key+'_'+getToday();
+  const d = JSON.parse(localStorage.getItem(k)||'{"n":0}');
+  d.n += n;
+  localStorage.setItem(k, JSON.stringify(d));
+}
+function isLoggedIn(){
+  return !!localStorage.getItem('kino_user');
+}
+function getLimit(key){
+  return isLoggedIn() ? 3000 : 1000;
+}
+
+// ─── Toggle ───
 function toggleTTS(){
-  const b=document.getElementById('tts-box');
-  b.classList.toggle('show');
+  document.getElementById('tts-box').classList.toggle('show');
 }
 function toggleHum(){
-  const b=document.getElementById('hum-box');
-  b.classList.toggle('show');
+  document.getElementById('hum-box').classList.toggle('show');
 }
 function selVoice(el){
   document.querySelectorAll('.vbtn').forEach(v=>v.classList.remove('on'));
   el.classList.add('on');
 }
-function runTTS(){
-  document.getElementById('tts-result').classList.add('show');
+
+// ─── TTS ───
+async function runTTS(){
+  const text = document.getElementById('tts-text').value.trim();
+  if(!text){ alert('Текст оруулна уу!'); return; }
+
+  const used = getUsed('tts');
+  const limit = getLimit('tts');
+  if(used + text.length > limit){
+    alert(`Өдрийн лимит дүүрлээ! (${used}/${limit} тэмдэгт)\n${isLoggedIn()?'':'Бүртгэлтэй болвол 3000 тэмдэгт болно.'}`);
+    return;
+  }
+
+  const voiceEl = document.querySelector('.vbtn.on');
+  const voice = voiceEl && voiceEl.textContent.includes('Есүй') ? 'mn-MN-YesuiNeural' : 'mn-MN-BataaNeural';
+  const btn = document.querySelector('.run-btn');
+  btn.textContent = '⏳ Үүсгэж байна...';
+  btn.disabled = true;
+
+  try {
+    // HuggingFace Gradio API дуудах
+    const resp = await fetch(`${HF_URL}/run/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fn_index: 0,
+        data: [text, voice === 'mn-MN-BataaNeural' ? 'Батаа (эрэгтэй)' : 'Есүй (эмэгтэй)', 'Edge TTS (Батаа / Есүй)', 15, -8, 0]
+      })
+    });
+    const result = await resp.json();
+
+    if(result.error){ throw new Error(result.error); }
+
+    // Audio URL авах
+    const audioData = result.data[0];
+    let audioUrl = '';
+    if(typeof audioData === 'string' && audioData.startsWith('data:')){ 
+      audioUrl = audioData;
+    } else if(audioData && audioData.url){
+      audioUrl = HF_URL + audioData.url;
+    } else if(audioData && audioData.path){
+      audioUrl = `${HF_URL}/file=${audioData.path}`;
+    }
+
+    if(!audioUrl) throw new Error('Audio URL олдсонгүй');
+
+    // Лимит тэмдэглэх
+    addUsed('tts', text.length);
+
+    // UI шинэчлэх
+    const resultDiv = document.getElementById('tts-result');
+    resultDiv.innerHTML = `
+      <div class="result-label">✓ Бэлэн боллоо! (${text.length} тэмдэгт ашигласан, өнөөдөр нийт: ${getUsed('tts')}/${limit})</div>
+      <audio controls style="width:100%;margin-bottom:10px;border-radius:30px;">
+        <source src="${audioUrl}" type="audio/mpeg">
+      </audio>
+      <a href="${audioUrl}" download="mongol_duu.mp3" class="dl-btn" style="display:block;text-align:center;text-decoration:none;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;">⬇ MP3 татах</a>
+    `;
+    resultDiv.classList.add('show');
+  } catch(e) {
+    alert('Алдаа гарлаа: ' + e.message + '\nHuggingFace Space ажиллаж байгаа эсэхийг шалгана уу.');
+  } finally {
+    btn.textContent = '▶ Дуу үүсгэх';
+    btn.disabled = false;
+  }
 }
-function runHum(){
-  const inp=document.getElementById('hum-input').value||'Энэ бол машинаар орчуулсан хатуу текст байна.';
-  document.getElementById('hum-before').textContent=inp;
-  document.getElementById('hum-result').style.display='grid';
+
+// ─── Humanizer ───
+async function runHum(){
+  const text = document.getElementById('hum-input').value.trim();
+  if(!text){ alert('Текст оруулна уу!'); return; }
+
+  const used = getUsed('hum');
+  const limit = getLimit('hum');
+  if(used + text.length > limit){
+    alert(`Өдрийн лимит дүүрлээ! (${used}/${limit} тэмдэгт)\n${isLoggedIn()?'':'Бүртгэлтэй болвол 3000 тэмдэгт болно.'}`);
+    return;
+  }
+
+  document.getElementById('hum-before').textContent = text;
+  document.getElementById('hum-result').style.display = 'grid';
+  document.getElementById('hum-after').textContent = '⏳ Боловсруулж байна...';
+
+  const humBtn = document.querySelectorAll('.run-btn')[1];
+  humBtn.textContent = '⏳ Боловсруулж байна...';
+  humBtn.disabled = true;
+
+  try {
+    const resp = await fetch(`${HF_URL}/run/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fn_index: 2, data: [text] })
+    });
+    const result = await resp.json();
+    if(result.error) throw new Error(result.error);
+
+    const output = result.data[0];
+    addUsed('hum', text.length);
+    document.getElementById('hum-after').textContent = output;
+  } catch(e) {
+    document.getElementById('hum-after').textContent = 'Алдаа: ' + e.message;
+  } finally {
+    humBtn.textContent = '✨ Хүмүүнжүүлэх';
+    humBtn.disabled = false;
+  }
 }
 </script>
 </body>
