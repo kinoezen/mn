@@ -231,35 +231,26 @@ function selVoice(el){
   el.classList.add('on');
 }
 
-// ─── Gradio API дуудах (шинэ болон хуучин хувилбар хоёуланг дэмжих) ───
-async function gradioCall(fn_index, data){
-  // Эхлээд шинэ /call/ API туршина
-  try {
-    const r1 = await fetch(`${HF_URL}/call/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fn_index, data })
-    });
-    if(r1.ok){
-      const j = await r1.json();
-      if(j.event_id){
-        // SSE stream уншина
-        const r2 = await fetch(`${HF_URL}/call/predict/${j.event_id}`);
-        const txt = await r2.text();
-        const match = txt.match(/data:\s*(\[.*\])/s);
-        if(match) return JSON.parse(match[1]);
-      }
-    }
-  } catch(e){}
-  // Хуучин /run/predict API туршина
-  const r3 = await fetch(`${HF_URL}/run/predict`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fn_index, data })
+// ─── Gradio API дуудах ───
+async function gradioCall(api_name, data){
+  // 1. Event ID авах
+  const r1 = await fetch(`${HF_URL}/call/${api_name}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data })
   });
-  const j3 = await r3.json();
-  if(j3.error) throw new Error(j3.error);
-  return j3.data;
+  if(!r1.ok){
+    const txt = await r1.text();
+    throw new Error("API алдаа " + r1.status + ": " + txt.slice(0,200));
+  }
+  const j1 = await r1.json();
+  if(!j1.event_id) throw new Error("event_id олдсонгүй: " + JSON.stringify(j1).slice(0,100));
+  // 2. SSE stream уншина
+  const r2 = await fetch(`${HF_URL}/call/${api_name}/${j1.event_id}`);
+  const txt = await r2.text();
+  const match = txt.match(/^data:\s*(\[.*\])/m);
+  if(!match) throw new Error("Хариу буруу: " + txt.slice(0,200));
+  return JSON.parse(match[1]);
 }
 
 // ─── TTS ───
@@ -281,7 +272,7 @@ async function runTTS(){
   btn.disabled = true;
 
   try {
-    const data = await gradioCall(0, [text, voiceName, 'Edge TTS (Батаа / Есүй)', 15, -8, 0]);
+    const data = await gradioCall("generate_audio", [text, "Edge TTS (Батаа / Есүй)", voiceName, "Charon", 15, -8, 0]);
 
     // Audio URL авах
     const audioData = data[0];
@@ -334,7 +325,7 @@ async function runHum(){
   humBtn.disabled = true;
 
   try {
-    const data = await gradioCall(2, [text]);
+    const data = await gradioCall("humanize_text", [text]);
     addUsed('hum', text.length);
     document.getElementById('hum-after').textContent = data[0];
   } catch(e) {
