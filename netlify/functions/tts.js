@@ -16,10 +16,28 @@ exports.handler = async function(event) {
       pitch: -8,
       volume: 0
     });
+
+    // result.data[0] нь HTML string байна — audio src олно
+    const htmlStr = result.data[0];
+    let audioUrl = null;
+
+    if(typeof htmlStr === 'string') {
+      // <source src="..." байгаа эсэхийг шалгана
+      const srcMatch = htmlStr.match(/src="([^"]+)"/);
+      if(srcMatch) audioUrl = srcMatch[1];
+      // data:audio/mpeg;base64 байгаа эсэхийг шалгана
+      const b64Match = htmlStr.match(/(data:audio\/mpeg;base64,[^"]+)/);
+      if(b64Match) audioUrl = b64Match[1];
+    } else if(result.data[0] && result.data[0].url) {
+      audioUrl = result.data[0].url;
+    } else if(result.data[0] && result.data[0].path) {
+      audioUrl = "https://kinosait-mongol.hf.space/file=" + result.data[0].path;
+    }
+
     return {
       statusCode: 200,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: result.data })
+      body: JSON.stringify({ audioUrl, debug: typeof htmlStr === 'string' ? htmlStr.slice(0, 300) : JSON.stringify(result.data[0]) })
     };
   } catch(e) {
     return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
