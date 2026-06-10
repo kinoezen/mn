@@ -4,15 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>КиноЭзэн — Кино</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#12121e;--bg2:#1e1e2e;--bg3:#252535;
+  --accent:#4ade80;--accent2:#f4a261;--red:#e63946;
+  --border:rgba(255,255,255,0.08);--border2:rgba(74,222,128,0.2);
+  --text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
+  --radius:14px;--radius-sm:8px;
+}
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:#12121e;z-index:100;}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo img{width:36px;height:36px;border-radius:50%;object-fit:cover;}
-.logo-text{font-size:22px;font-weight:700;color:#fff;}
-.nav-back{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;cursor:pointer;}
-.nav-back:hover{color:#4ade80;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
+
+/* ===== NAVBAR ===== */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:12px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(18,18,30,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:100;}
+
+/* ===== ЛОГО ===== */
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.logo-icon{width:42px;height:42px;border-radius:12px;border:2px solid rgba(74,222,128,0.5);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);box-shadow:0 0 14px rgba(74,222,128,0.25);}
+.logo-icon svg{width:32px;height:32px;}
+.logo-text{font-family:var(--font-display);font-size:30px;letter-spacing:2px;background:linear-gradient(90deg,#4ade80,#a3f0c0,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));}
+
+.nav-back{display:flex;align-items:center;gap:6px;color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;cursor:pointer;padding:7px 12px;border-radius:var(--radius-sm);border:1px solid var(--border);transition:all 0.2s;}
+.nav-back:hover{color:var(--accent);border-color:var(--border2);}
 
 /* VIDEO PLAYER */
 .player-wrap{width:100%;background:#000;position:relative;}
@@ -40,7 +57,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 
 /* ACTION BUTTONS */
 .action-row{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;}
-.act-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.act-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
 .act-play{background:linear-gradient(90deg,#4ade80,#f4a261);color:#0a2a0a;flex:1;justify-content:center;}
 .act-like{background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;}
 .act-like.liked{background:#e63946;color:#fff;}
@@ -51,11 +68,11 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .divider{height:1px;background:rgba(255,255,255,0.06);margin:20px 0;}
 
 /* RELATED */
-.section-title{font-size:14px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:12px;}
-.section-title span{color:#4ade80;}
+.section-label{font-size:16px;font-weight:700;color:var(--text2);margin-bottom:12px;font-family:var(--font-display);letter-spacing:1px;}
+.section-label span{color:var(--accent);}
 .related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.grid-card{background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);}
-.grid-card:hover{border-color:rgba(74,222,128,0.25);}
+.grid-card{background:#1e1e2e;border-radius:12px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:border-color 0.2s,transform 0.2s;}
+.grid-card:hover{border-color:rgba(74,222,128,0.25);transform:translateY(-2px);}
 .grid-img{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;overflow:hidden;}
 .grid-img img{width:100%;height:100%;object-fit:cover;}
 .grid-badge{position:absolute;top:6px;left:6px;font-size:9px;padding:2px 7px;border-radius:20px;font-weight:600;}
@@ -63,21 +80,70 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 .grid-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3;}
 .grid-meta{font-size:10px;color:rgba(255,255,255,0.4);}
 
+/* ===== СЭТГЭГДЭЛ ХЭСЭГ ===== */
+.comments-section{margin-top:8px;}
+.comments-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--text2);margin-bottom:16px;}
+.comments-title span{color:var(--accent);}
+
+/* Сэтгэгдэл бичих хэсэг */
+.comment-form{background:var(--bg2);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);}
+.comment-form-top{display:flex;gap:12px;align-items:flex-start;}
+.comment-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#0a2a0a;flex-shrink:0;}
+.comment-input-wrap{flex:1;}
+.comment-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;font-family:var(--font-body);resize:none;height:44px;line-height:1.5;transition:border-color 0.2s,height 0.2s;}
+.comment-input:focus{outline:none;border-color:var(--accent);height:80px;}
+.comment-input::placeholder{color:var(--text4);}
+.comment-form-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
+.btn-cancel{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid var(--border);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-cancel:hover{border-color:var(--border2);color:var(--text2);}
+.btn-submit{padding:7px 18px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s;}
+.btn-submit:hover{opacity:0.9;}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* Сэтгэгдэл жагсаалт */
+.comments-list{display:flex;flex-direction:column;gap:14px;}
+.comment-item{display:flex;gap:12px;animation:fadeUp 0.3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.c-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
+.c-body{flex:1;}
+.c-header{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap;}
+.c-name{font-size:13px;font-weight:700;color:var(--text);}
+.c-time{font-size:11px;color:var(--text4);}
+.c-text{font-size:13px;color:var(--text2);line-height:1.6;}
+.c-actions{display:flex;gap:12px;margin-top:8px;}
+.c-act{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text4);cursor:pointer;background:none;border:none;font-family:var(--font-body);transition:color 0.2s;padding:0;}
+.c-act:hover{color:var(--accent);}
+.c-act.liked{color:var(--red);}
+
+/* Реакц товчнууд */
+.reactions-bar{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap;}
+.reaction-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);font-weight:600;}
+.reaction-btn:hover{border-color:var(--border2);background:rgba(74,222,128,0.06);transform:scale(1.05);}
+.reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.12);color:var(--accent);}
+.reaction-btn .r-count{font-size:12px;font-weight:700;}
+
+/* Хоосон сэтгэгдэл */
+.comments-empty{text-align:center;padding:32px 20px;color:var(--text4);}
+.comments-empty .icon{font-size:32px;margin-bottom:8px;}
+.comments-empty p{font-size:13px;}
+
 /* LOADING */
 .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;}
 .loading-wrap p{color:rgba(255,255,255,0.4);font-size:14px;}
 .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#4ade80;border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* SKELETON */
 .skeleton{background:linear-gradient(90deg,#1e1e2e 25%,#2a2a3e 50%,#1e1e2e 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* FOOTER */
-.footer{background:#0d0d1a;padding:20px 18px;border-top:1px solid rgba(255,255,255,0.08);margin-top:30px;}
+.footer{background:#0d0d1a;padding:20px 18px;border-top:1px solid var(--border);margin-top:30px;}
 .footer-copy{font-size:11px;color:rgba(255,255,255,0.3);text-align:center;}
 
 @media(max-width:768px){
+  .nav{padding:10px 16px;}
+  .logo-text{font-size:24px;}
+  .logo-icon{width:36px;height:36px;}
+  .logo-icon svg{width:28px;height:28px;}
   .movie-header{flex-direction:column;}
   .movie-poster{width:100%;height:200px;}
   .movie-title{font-size:18px;}
@@ -85,14 +151,29 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
   .act-play{flex:none;width:100%;}
   .action-row{flex-wrap:wrap;}
   .movie-wrap{padding:14px;}
+  .reactions-bar{gap:6px;}
+  .reaction-btn{padding:6px 10px;font-size:12px;}
 }
 </style>
 </head>
 <body>
 
 <nav class="nav">
+  <!-- ===== ЗАСАГДСАН ЛОГО ===== -->
   <a href="index.html" class="logo">
-    <img src="logo.png" alt="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/>
+        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+      </svg>
+    </div>
     <div class="logo-text">КиноЭзэн</div>
   </a>
   <a href="index.html" class="nav-back">← Буцах</a>
@@ -114,6 +195,44 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
       <p>Кино мэдээлэл ачааллаж байна...</p>
     </div>
   </div>
+
+  <!-- ===== СЭТГЭГДЭЛ ХЭСЭГ ===== -->
+  <div class="divider"></div>
+  <div class="comments-section" id="comments-section">
+    <div class="comments-title"><span>Сэтгэгдэл</span> бичих</div>
+
+    <!-- Реакц товчнууд -->
+    <div class="reactions-bar" id="reactions-bar">
+      <button class="reaction-btn" onclick="react(this,'❤️')" data-type="heart">❤️ <span class="r-count">0</span></button>
+      <button class="reaction-btn" onclick="react(this,'😂')" data-type="haha">😂 <span class="r-count">0</span></button>
+      <button class="reaction-btn" onclick="react(this,'😮')" data-type="wow">😮 <span class="r-count">0</span></button>
+      <button class="reaction-btn" onclick="react(this,'😢')" data-type="sad">😢 <span class="r-count">0</span></button>
+      <button class="reaction-btn" onclick="react(this,'😡')" data-type="angry">😡 <span class="r-count">0</span></button>
+      <button class="reaction-btn" onclick="react(this,'👍')" data-type="like">👍 <span class="r-count">0</span></button>
+    </div>
+
+    <!-- Сэтгэгдэл бичих форм -->
+    <div class="comment-form">
+      <div class="comment-form-top">
+        <div class="comment-avatar" id="my-avatar">Та</div>
+        <div class="comment-input-wrap">
+          <textarea class="comment-input" id="comment-input" placeholder="Сэтгэгдэлээ бичнэ үү..." rows="1"></textarea>
+        </div>
+      </div>
+      <div class="comment-form-actions" id="comment-actions" style="display:none;">
+        <button class="btn-cancel" onclick="cancelComment()">Болих</button>
+        <button class="btn-submit" id="submit-btn" onclick="submitComment()">Нийтлэх</button>
+      </div>
+    </div>
+
+    <!-- Сэтгэгдлийн жагсаалт -->
+    <div class="comments-list" id="comments-list">
+      <div class="comments-empty">
+        <div class="icon">💬</div>
+        <p>Одоохондоо сэтгэгдэл байхгүй байна.<br>Анхны сэтгэгдэл үлдээгээрэй!</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="footer">
@@ -123,43 +242,33 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;}
 <script>
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-
 const genreColors={'Фантастик':'gp-sci','Экшн':'gp-act','Драм':'gp-drm','Аймаар':'gp-act','Романтик':'gp-drm','Аниме':'gp-sci'};
 const genreGradients={'Фантастик':'linear-gradient(135deg,#1a0a2e,#3b1f6b)','Экшн':'linear-gradient(135deg,#2a0a0a,#6b1f1f)','Драм':'linear-gradient(135deg,#0a1a0a,#1a3a20)','Аймаар':'linear-gradient(135deg,#1a0a1a,#3b1f3b)','Романтик':'linear-gradient(135deg,#1a0a0a,#3b1010)','Аниме':'linear-gradient(135deg,#0a0a2a,#1f1f6b)'};
+const AVATAR_COLORS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(135deg,#4ade80,#06b6d4)','linear-gradient(135deg,#a855f7,#ec4899)','linear-gradient(135deg,#f59e0b,#ef4444)','linear-gradient(135deg,#06b6d4,#3b82f6)','linear-gradient(135deg,#10b981,#0891b2)'];
 
-// URL-аас id авах
 const params=new URLSearchParams(window.location.search);
 const movieId=params.get('id');
 
+// Нэрний эхний үсэгнээс avatar өнгө
+function getAvatarColor(name){const idx=name.charCodeAt(0)%AVATAR_COLORS.length;return AVATAR_COLORS[idx];}
+function getInitials(name){return name.slice(0,2).toUpperCase();}
+
 async function supaFetch(table,query=''){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{
-    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}
-  });
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${query}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
   return r.json();
 }
 
 async function loadMovie(){
-  if(!movieId){
-    document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';
-    return;
-  }
+  if(!movieId){document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';return;}
   try{
     const movies=await supaFetch('movies',`id=eq.${movieId}`);
-    if(!movies||movies.length===0){
-      document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';
-      return;
-    }
+    if(!movies||movies.length===0){document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Кино олдсонгүй!</p></div>';return;}
     const m=movies[0];
     document.title=`${m.title} — КиноЭзэн`;
-
-    // ВИДЕО PLAYER
-    renderPlayer(m.video_url, m.thumbnail);
-
-    // КИНО МЭДЭЭЛЭЛ
+    renderPlayer(m.video_url,m.thumbnail);
     const cls=genreColors[m.genre]||'gp-sci';
     const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
     const poster=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
-
     document.getElementById('movie-content').innerHTML=`
       <div class="movie-header">
         <div class="movie-poster" style="background:${bg}">${poster}</div>
@@ -180,88 +289,55 @@ async function loadMovie(){
         <button class="act-btn act-share" onclick="shareMovie('${m.title}')">🔗 Хуваалцах</button>
       </div>
       <div class="divider"></div>
-      <div class="section-title"><span>Холбоотой</span> кинонууд</div>
+      <div class="section-label"><span>Холбоотой</span> кинонууд</div>
       <div class="related-grid" id="related-list">
         <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
         <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
         <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
         <div class="skeleton" style="border-radius:12px;aspect-ratio:16/9"></div>
       </div>`;
-
-    // Үзэлт нэмэх
-    updateViews(m.id, m.views||0);
-    // Холбоотой кино
-    loadRelated(m.genre, m.id);
-
+    updateViews(m.id,m.views||0);
+    loadRelated(m.genre,m.id);
+    loadComments();
+    loadReactions();
   }catch(e){
     document.getElementById('movie-content').innerHTML='<div class="loading-wrap"><p>Алдаа гарлаа. Дахин оролдоно уу.</p></div>';
   }
 }
 
-function renderPlayer(videoUrl, thumbnail){
+function renderPlayer(videoUrl,thumbnail){
   const wrap=document.getElementById('player-wrap');
   if(!videoUrl){
-    // Видео байхгүй — зураг харуулна
     const bg=thumbnail?`background:url('${thumbnail}') center/cover`:'background:linear-gradient(160deg,#0d0d25,#1a1050)';
-    wrap.innerHTML=`<div class="player-placeholder" style="${bg}">
-      <div class="play-icon">🎬</div>
-      <p>Видео тавигдаагүй байна</p>
-    </div>`;
+    wrap.innerHTML=`<div class="player-placeholder" style="${bg}"><div class="play-icon">🎬</div><p>Видео тавигдаагүй байна</p></div>`;
     return;
   }
-  // YouTube линк шалгах
   if(videoUrl.includes('youtube.com')||videoUrl.includes('youtu.be')){
     let vid='';
     if(videoUrl.includes('v='))vid=videoUrl.split('v=')[1].split('&')[0];
     else if(videoUrl.includes('youtu.be/'))vid=videoUrl.split('youtu.be/')[1].split('?')[0];
-    if(vid){
-      wrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&rel=0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
-      return;
-    }
+    if(vid){wrap.innerHTML=`<iframe src="https://www.youtube.com/embed/${vid}?autoplay=0&rel=0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;return;}
   }
-  // Supabase storage видео
   if(videoUrl.includes('supabase')||videoUrl.endsWith('.mp4')||videoUrl.endsWith('.webm')){
-    wrap.innerHTML=`<video controls poster="${thumbnail||''}" preload="metadata">
-      <source src="${videoUrl}" type="video/mp4">
-      Таны браузер видео тоглуулахыг дэмжихгүй байна.
-    </video>`;
-    return;
+    wrap.innerHTML=`<video controls poster="${thumbnail||''}" preload="metadata"><source src="${videoUrl}" type="video/mp4">Таны браузер видео тоглуулахыг дэмжихгүй байна.</video>`;return;
   }
-  // Бусад embed линк (Streamtape, Doodstream гэх мэт)
   wrap.innerHTML=`<iframe src="${videoUrl}" allowfullscreen scrolling="no" frameborder="0"></iframe>`;
 }
 
-async function updateViews(id, currentViews){
-  try{
-    await fetch(`${SUPABASE_URL}/rest/v1/movies?id=eq.${id}`,{
-      method:'PATCH',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},
-      body:JSON.stringify({views: currentViews+1})
-    });
-  }catch(e){}
+async function updateViews(id,currentViews){
+  try{await fetch(`${SUPABASE_URL}/rest/v1/movies?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({views:currentViews+1})});}catch(e){}
 }
 
-async function loadRelated(genre, currentId){
+async function loadRelated(genre,currentId){
   try{
     const movies=await supaFetch('movies',`genre=eq.${encodeURIComponent(genre)}&id=neq.${currentId}&limit=4&order=created_at.desc`);
-    const el=document.getElementById('related-list');
-    if(!el)return;
-    if(!movies||movies.length===0){
-      el.innerHTML='<div style="grid-column:1/-1;color:rgba(255,255,255,0.3);font-size:13px;">Холбоотой кино байхгүй байна</div>';
-      return;
-    }
-    const cls_map={'Фантастик':'gp-sci','Экшн':'gp-act','Драм':'gp-drm'};
+    const el=document.getElementById('related-list');if(!el)return;
+    if(!movies||movies.length===0){el.innerHTML='<div style="grid-column:1/-1;color:rgba(255,255,255,0.3);font-size:13px;">Холбоотой кино байхгүй байна</div>';return;}
     el.innerHTML=movies.map(m=>{
       const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
       const thumb=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
       const cls=genreColors[m.genre]||'gp-sci';
-      return `<div class="grid-card" onclick="location.href='movie.html?id=${m.id}'">
-        <div class="grid-img" style="background:${bg}">${thumb}<div class="grid-badge ${cls}">${m.genre||'Кино'}</div></div>
-        <div class="grid-body">
-          <div class="grid-title">${m.title}</div>
-          <div class="grid-meta">👁 ${m.views||0}</div>
-        </div>
-      </div>`;
+      return`<div class="grid-card" onclick="location.href='movie.html?id=${m.id}'"><div class="grid-img" style="background:${bg}">${thumb}<div class="grid-badge ${cls}">${m.genre||'Кино'}</div></div><div class="grid-body"><div class="grid-title">${m.title}</div><div class="grid-meta">👁 ${m.views||0}</div></div></div>`;
     }).join('');
   }catch(e){}
 }
@@ -272,17 +348,176 @@ function toggleLike(id){
   btn.textContent=btn.classList.contains('liked')?'❤️ Liked':'❤️ Like';
 }
 
-function scrollToPlayer(){
-  document.getElementById('player-wrap').scrollIntoView({behavior:'smooth'});
-}
+function scrollToPlayer(){document.getElementById('player-wrap').scrollIntoView({behavior:'smooth'});}
 
 function shareMovie(title){
-  if(navigator.share){
-    navigator.share({title,url:window.location.href});
-  } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Линк хуулагдлаа!');
+  if(navigator.share){navigator.share({title,url:window.location.href});}
+  else{navigator.clipboard.writeText(window.location.href);showToast('🔗 Линк хуулагдлаа!');}
+}
+
+// ===== РЕАКЦ =====
+const reactionsData={heart:0,haha:0,wow:0,sad:0,angry:0,like:0};
+const myReactions={};
+
+function loadReactions(){
+  const saved=localStorage.getItem('reactions_'+movieId);
+  if(saved){
+    try{
+      const d=JSON.parse(saved);
+      Object.assign(reactionsData,d.counts||{});
+      Object.assign(myReactions,d.mine||{});
+      renderReactions();
+    }catch(e){}
   }
+}
+
+function saveReactions(){
+  localStorage.setItem('reactions_'+movieId,JSON.stringify({counts:reactionsData,mine:myReactions}));
+}
+
+function react(btn,emoji){
+  const type=btn.dataset.type;
+  if(myReactions[type]){
+    reactionsData[type]=Math.max(0,(reactionsData[type]||0)-1);
+    myReactions[type]=false;
+    btn.classList.remove('active');
+  } else {
+    reactionsData[type]=(reactionsData[type]||0)+1;
+    myReactions[type]=true;
+    btn.classList.add('active');
+    // Жижиг animation
+    btn.style.transform='scale(1.2)';
+    setTimeout(()=>btn.style.transform='',200);
+  }
+  const countEl=btn.querySelector('.r-count');
+  if(countEl)countEl.textContent=reactionsData[type]||0;
+  saveReactions();
+}
+
+function renderReactions(){
+  document.querySelectorAll('.reaction-btn').forEach(btn=>{
+    const type=btn.dataset.type;
+    const countEl=btn.querySelector('.r-count');
+    if(countEl)countEl.textContent=reactionsData[type]||0;
+    if(myReactions[type])btn.classList.add('active');
+  });
+}
+
+// ===== СЭТГЭГДЭЛ =====
+let comments=[];
+const DEMO_COMMENTS=[
+  {id:1,name:'Батболд',text:'Маш сайхан кино байна! Монгол дуу нь ч гайгүй тавигдсан.',time:'2 цагийн өмнө',likes:5,bg:'linear-gradient(135deg,#e63946,#f4a261)'},
+  {id:2,name:'Сарнай',text:'Энэ киног удаан хүлээж байсан. Маш их баярлалаа КиноЭзэн!',time:'5 цагийн өмнө',likes:3,bg:'linear-gradient(135deg,#a855f7,#ec4899)'},
+];
+
+function loadComments(){
+  const saved=localStorage.getItem('comments_'+movieId);
+  if(saved){
+    try{comments=JSON.parse(saved);}
+    catch(e){comments=[...DEMO_COMMENTS];}
+  } else {
+    comments=[...DEMO_COMMENTS];
+  }
+  renderComments();
+}
+
+function saveComments(){
+  localStorage.setItem('comments_'+movieId,JSON.stringify(comments));
+}
+
+function renderComments(){
+  const list=document.getElementById('comments-list');
+  if(!list)return;
+  if(comments.length===0){
+    list.innerHTML='<div class="comments-empty"><div class="icon">💬</div><p>Одоохондоо сэтгэгдэл байхгүй байна.<br>Анхны сэтгэгдэл үлдээгээрэй!</p></div>';
+    return;
+  }
+  list.innerHTML=comments.map((c,i)=>`
+    <div class="comment-item" style="animation-delay:${i*0.05}s">
+      <div class="c-avatar" style="background:${c.bg||'linear-gradient(135deg,#4ade80,#06b6d4)'}">${getInitials(c.name)}</div>
+      <div class="c-body">
+        <div class="c-header">
+          <span class="c-name">${c.name}</span>
+          <span class="c-time">${c.time}</span>
+        </div>
+        <div class="c-text">${c.text}</div>
+        <div class="c-actions">
+          <button class="c-act ${c.myLike?'liked':''}" onclick="likeComment(${c.id})">
+            ${c.myLike?'❤️':'🤍'} ${c.likes||0}
+          </button>
+          <button class="c-act" onclick="replyComment('${c.name}')">↩ Хариулах</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// Comment input focus
+document.addEventListener('DOMContentLoaded',()=>{
+  const input=document.getElementById('comment-input');
+  const actions=document.getElementById('comment-actions');
+  if(input){
+    input.addEventListener('focus',()=>{if(actions)actions.style.display='flex';});
+    input.addEventListener('input',()=>{
+      const btn=document.getElementById('submit-btn');
+      if(btn)btn.disabled=input.value.trim().length===0;
+    });
+  }
+});
+
+function cancelComment(){
+  const input=document.getElementById('comment-input');
+  const actions=document.getElementById('comment-actions');
+  if(input)input.value='';
+  if(actions)actions.style.display='none';
+}
+
+function submitComment(){
+  const input=document.getElementById('comment-input');
+  const text=input?input.value.trim():'';
+  if(!text)return;
+  const names=['Зочин','Үзэгч','Кинофан','Гэрийн үзэгч'];
+  const randomName=names[Math.floor(Math.random()*names.length)];
+  const newComment={
+    id:Date.now(),
+    name:randomName,
+    text:text,
+    time:'Дөнгөж сая',
+    likes:0,
+    myLike:false,
+    bg:AVATAR_COLORS[Math.floor(Math.random()*AVATAR_COLORS.length)]
+  };
+  comments.unshift(newComment);
+  saveComments();
+  renderComments();
+  cancelComment();
+  showToast('✅ Сэтгэгдэл нийтлэгдлээ!');
+}
+
+function likeComment(id){
+  const c=comments.find(x=>x.id===id);
+  if(!c)return;
+  if(c.myLike){c.likes=Math.max(0,(c.likes||0)-1);c.myLike=false;}
+  else{c.likes=(c.likes||0)+1;c.myLike=true;}
+  saveComments();
+  renderComments();
+}
+
+function replyComment(name){
+  const input=document.getElementById('comment-input');
+  const actions=document.getElementById('comment-actions');
+  if(input){
+    input.value=`@${name} `;
+    input.focus();
+    if(actions)actions.style.display='flex';
+  }
+}
+
+function showToast(msg){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');
+  t.className='toast';t.textContent=msg;
+  Object.assign(t.style,{position:'fixed',bottom:'20px',right:'20px',background:'#1e1e32',border:'1px solid rgba(74,222,128,0.3)',color:'#fff',padding:'9px 14px',borderRadius:'10px',fontSize:'13px',fontWeight:'600',zIndex:'9999',fontFamily:'Nunito,sans-serif',boxShadow:'0 4px 20px rgba(0,0,0,0.4)',animation:'fadeUp 0.3s ease'});
+  document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
 }
 
 loadMovie();
