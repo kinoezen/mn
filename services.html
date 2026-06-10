@@ -284,7 +284,7 @@ async function callTTS(text, voice){
   if(!r.ok){ const t=await r.text(); throw new Error('TTS алдаа '+r.status+': '+t.slice(0,150)); }
   const j = await r.json();
   if(j.error) throw new Error(j.error);
-  return j.data;
+  return j;
 }
 
 async function callHumanize(text){
