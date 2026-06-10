@@ -28,6 +28,8 @@
   --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
   --radius:14px;--radius-sm:8px;
   --shadow:0 8px 32px rgba(0,0,0,0.4);--shadow-accent:0 4px 24px rgba(74,222,128,0.2);
+  /* ===== АЖИЛ 5: Bottom nav өндөр ===== */
+  --bottom-nav-h:60px;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
@@ -42,7 +44,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 /* NAVBAR */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;gap:12px;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
-.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
+/* ===== АЖИЛ 4: Шинэ кино лого SVG ===== */
+.logo-icon{width:34px;height:34px;border-radius:9px;border:2px solid rgba(74,222,128,0.35);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);}
+.logo-icon svg{width:26px;height:26px;}
 .logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .nav-links{display:flex;gap:4px;align-items:center;}
 .nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--radius-sm);transition:all 0.2s;}
@@ -79,7 +83,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .hero-label-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--red),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;animation:float 3s ease-in-out infinite;}
 .hero-label-text{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--accent);}
 
-/* CAROUSEL */
+/* ===== АЖИЛ 1: CAROUSEL — dot indicator, удаан гүйлгэлт ===== */
 .featured-carousel-wrapper{position:relative;overflow:hidden;}
 .featured-track{display:flex;gap:12px;transition:transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform;}
 .featured-card{border-radius:var(--radius);overflow:hidden;background:var(--bg3);cursor:pointer;position:relative;border:1px solid var(--border);transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s;flex:0 0 calc(25% - 9px);min-width:calc(25% - 9px);}
@@ -106,14 +110,27 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .stat-item{display:flex;align-items:center;gap:3px;font-size:10px;color:var(--text3);}
 .watch-btn{width:100%;padding:9px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;transition:opacity 0.2s;}
 .watch-btn:hover{opacity:0.9;}
-.carousel-controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px;}
+.carousel-controls{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;}
 .carousel-btn{width:34px;height:34px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
 .carousel-btn:hover{background:var(--accent);color:#0a2a0a;border-color:var(--accent);}
-.carousel-dots{display:flex;gap:5px;align-items:center;}
-.dot{width:5px;height:5px;border-radius:50%;background:var(--border);cursor:pointer;transition:all 0.3s;}
-.dot.active{width:18px;border-radius:3px;background:var(--accent);}
+/* ===== Dot indicators — дөрвөлжин хэлбэр ===== */
+.carousel-dots{display:flex;gap:6px;align-items:center;}
+.dot{
+  width:8px;height:8px;
+  border-radius:3px;
+  background:rgba(255,255,255,0.2);
+  cursor:pointer;
+  transition:all 0.35s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink:0;
+}
+.dot.active{
+  width:24px;
+  border-radius:4px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  box-shadow:0 0 8px rgba(74,222,128,0.5);
+}
 .carousel-auto-bar{position:absolute;bottom:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:1px;}
-.carousel-auto-bar.running{animation:autoProgress 4s linear forwards;}
+.carousel-auto-bar.running{animation:autoProgress 5s linear forwards;}
 
 /* SECTIONS */
 .section{padding:16px 24px 8px;}
@@ -123,7 +140,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .see-all{font-size:12px;color:var(--accent);font-weight:700;text-decoration:none;padding:5px 10px;border-radius:6px;transition:background 0.2s;}
 .see-all:hover{background:rgba(74,222,128,0.1);}
 
-/* ===== MAIN CATEGORY GRID — 10 цэс: 5+5 ===== */
+/* MAIN CATEGORY GRID */
 .main-cats-section{padding:0 0 8px;}
 .main-cats-grid{
   display:grid;
@@ -131,32 +148,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   gap:10px;
   padding:0 24px 8px;
 }
-.mcat-card{
-  background:var(--bg3);
-  border-radius:12px;
-  padding:12px 10px 10px;
-  cursor:pointer;
-  border:1px solid var(--border);
-  transition:transform 0.22s,box-shadow 0.22s,border-color 0.22s;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  gap:0;
-  user-select:none;
-  animation:fadeUp 0.4s ease both;
-}
+.mcat-card{background:var(--bg3);border-radius:12px;padding:12px 10px 10px;cursor:pointer;border:1px solid var(--border);transition:transform 0.22s,box-shadow 0.22s,border-color 0.22s;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;user-select:none;animation:fadeUp 0.4s ease both;}
 .mcat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.22s;border-radius:12px;}
 .mcat-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.14);}
 .mcat-card:hover::before{opacity:1;}
 .mcat-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-
 .mcat-all{border-color:rgba(74,222,128,0.25);background:linear-gradient(135deg,rgba(74,222,128,0.08),rgba(74,222,128,0.03));}
 .mcat-all::before{background:linear-gradient(135deg,rgba(74,222,128,0.14),rgba(244,162,97,0.08));}
 .mcat-all.selected{border-color:var(--accent);background:rgba(74,222,128,0.12);}
-
 .mcat-movie::before{background:linear-gradient(135deg,rgba(230,57,70,0.1),rgba(244,162,97,0.07));}
 .mcat-news::before{background:linear-gradient(135deg,rgba(74,222,128,0.1),rgba(34,197,94,0.07));}
 .mcat-travel::before{background:linear-gradient(135deg,rgba(6,182,212,0.1),rgba(59,130,246,0.07));}
@@ -166,27 +165,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .mcat-knowledge::before{background:linear-gradient(135deg,rgba(16,185,129,0.1),rgba(8,145,178,0.07));}
 .mcat-product::before{background:linear-gradient(135deg,rgba(236,72,153,0.1),rgba(139,92,246,0.07));}
 .mcat-stars::before{background:linear-gradient(135deg,rgba(250,204,21,0.12),rgba(251,146,60,0.08));}
-
-.mcat-icon{
-  width:42px;height:42px;
-  margin-bottom:7px;
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 3px 12px rgba(0,0,0,0.3);
-  transition:transform 0.25s;
-  flex-shrink:0;
-}
+.mcat-icon{width:42px;height:42px;margin-bottom:7px;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,0.3);transition:transform 0.25s;flex-shrink:0;}
 .mcat-all .mcat-icon{border-radius:50%;}
 .mcat-card:hover .mcat-icon{transform:scale(1.1) rotate(-3deg);}
 .mcat-icon svg{width:42px;height:42px;display:block;}
 .mcat-label{font-family:var(--font-display);font-size:13px;letter-spacing:0.4px;color:var(--text);margin-bottom:2px;line-height:1.1;}
 .mcat-sub{font-size:9px;color:var(--text4);font-weight:500;margin-bottom:5px;line-height:1.2;}
-.mcat-badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:18px;height:18px;padding:0 5px;
-  background:rgba(255,255,255,0.08);border-radius:9px;
-  font-size:10px;font-weight:700;color:var(--text3);
-}
+.mcat-badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;background:rgba(255,255,255,0.08);border-radius:9px;font-size:10px;font-weight:700;color:var(--text3);}
 .mcat-all .mcat-badge{background:rgba(74,222,128,0.2);color:var(--accent);}
 .mcat-movie .mcat-badge{background:rgba(230,57,70,0.18);color:#ff6b7a;}
 .mcat-news .mcat-badge{background:rgba(74,222,128,0.18);color:var(--accent);}
@@ -259,41 +244,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .skel-line{height:11px;border-radius:4px;margin-bottom:7px;}
 .skel-line.short{width:55%;}
 
-/* ===== NEWS GRID — ЗУРАГ ГОЛЛУУЛСАН, ХАЙРЦАГТ БАГТААСАН ===== */
+/* ===== АЖИЛ 2: NEWS GRID — утсан дээр 2 эгнээ ===== */
 .news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:0 24px 20px;}
-.news-card{
-  background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;
-  border:1px solid var(--border);display:flex;flex-direction:column;
-  transition:border-color 0.25s,transform 0.25s;animation:fadeUp 0.5s ease both;
-}
+.news-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);display:flex;flex-direction:column;transition:border-color 0.25s,transform 0.25s;animation:fadeUp 0.5s ease both;}
 .news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
-
-/* ===== ЗУРГИЙН ХАЙРЦАГ — object-fit:cover, тогтмол өндөр ===== */
-.news-img{
-  width:100%;
-  height:160px;
-  background:linear-gradient(135deg,#1a1a0a,#2a2a10);
-  overflow:hidden;
-  flex-shrink:0;
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.news-img img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  display:block;
-  position:absolute;
-  top:0;left:0;
-  transition:transform 0.4s;
-}
+.news-img{width:100%;height:160px;background:linear-gradient(135deg,#1a1a0a,#2a2a10);overflow:hidden;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;}
+.news-img img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;position:absolute;top:0;left:0;transition:transform 0.4s;}
 .news-card:hover .news-img img{transform:scale(1.04);}
 .news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));transition:transform 0.3s;position:relative;z-index:1;}
 .news-card:hover .n-emoji{transform:scale(1.12) rotate(-4deg);}
-
 .news-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between;}
 .news-cat{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.12);color:var(--accent);display:inline-block;margin-bottom:5px;}
 .news-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -302,42 +261,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .news-views{font-size:10px;color:var(--text4);}
 
 /* MESSENGER FAB */
-.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s,box-shadow 0.2s;}
+.messenger-fab{position:fixed;bottom:calc(var(--bottom-nav-h) + 14px);right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:998;text-decoration:none;font-size:22px;transition:transform 0.2s,box-shadow 0.2s;}
 .messenger-fab:hover{transform:scale(1.1);}
-
-/* ===== СЭТГЭГДЭЛ — ХЯЛБАРШУУЛСАН ===== */
-.comment-section{padding:0 24px 24px;}
-.comment-box{background:var(--bg2);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;}
-.comment-header{padding:14px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.comment-header-title{font-family:var(--font-display);font-size:16px;letter-spacing:0.5px;color:var(--text2);}
-.comment-count{font-size:12px;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:10px;font-weight:700;}
-.comment-write{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;}
-.comment-ava{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
-.comment-input-wrap{flex:1;background:var(--bg3);border-radius:10px;border:1px solid var(--border);overflow:hidden;transition:border-color 0.2s;}
-.comment-input-wrap:focus-within{border-color:var(--accent);}
-.comment-textarea{width:100%;background:transparent;border:none;padding:10px 12px;color:var(--text);font-size:13px;font-family:var(--font-body);resize:none;outline:none;min-height:60px;line-height:1.5;}
-.comment-textarea::placeholder{color:var(--text4);}
-.emoji-bar{display:flex;align-items:center;gap:4px;padding:8px 12px;border-top:1px solid var(--border);flex-wrap:wrap;}
-.emoji-bar span{font-size:18px;cursor:pointer;transition:transform 0.15s;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3));}
-.emoji-bar span:hover{transform:scale(1.35);}
-.comment-actions{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-top:1px solid var(--border);}
-.char-count{font-size:11px;color:var(--text4);}
-.btn-comment-submit{padding:7px 18px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
-.btn-comment-submit:hover{opacity:0.9;transform:translateY(-1px);}
-.comment-list{padding:0 16px;}
-.comment-item{padding:12px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;animation:slideIn 0.3s ease;}
-.comment-item:last-child{border-bottom:none;}
-.ci-ava{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
-.ci-body{flex:1;min-width:0;}
-.ci-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
-.ci-name{font-size:12px;font-weight:700;color:var(--text2);}
-.ci-date{font-size:10px;color:var(--text4);}
-.ci-text{font-size:13px;color:var(--text);line-height:1.5;word-break:break-word;}
-.ci-foot{display:flex;gap:12px;margin-top:6px;}
-.ci-like-btn{background:none;border:none;color:var(--text4);font-size:11px;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;gap:3px;transition:color 0.2s;padding:0;}
-.ci-like-btn:hover{color:var(--red);}
-.ci-like-btn.liked{color:var(--red);}
-.comment-empty{text-align:center;padding:20px;color:var(--text4);font-size:13px;}
 
 /* FOOTER */
 .footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);margin-top:8px;}
@@ -365,7 +290,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .empty-state{grid-column:1/-1;text-align:center;padding:36px 20px;color:var(--text3);}
 .empty-state .icon{font-size:36px;margin-bottom:10px;}
 .empty-state p{font-size:14px;font-weight:600;}
-.toast{position:fixed;bottom:86px;right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;animation:fadeUp 0.3s ease;box-shadow:var(--shadow);}
+.toast{position:fixed;bottom:calc(var(--bottom-nav-h) + 12px);right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:10px;font-size:13px;font-weight:600;z-index:2000;animation:fadeUp 0.3s ease;box-shadow:var(--shadow);}
 
 /* STAGGER */
 .grid-card:nth-child(1){animation-delay:.04s}.grid-card:nth-child(2){animation-delay:.08s}
@@ -374,6 +299,59 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .grid-card:nth-child(7){animation-delay:.28s}.grid-card:nth-child(8){animation-delay:.32s}
 .news-card:nth-child(1){animation-delay:.04s}.news-card:nth-child(2){animation-delay:.08s}
 .news-card:nth-child(3){animation-delay:.12s}.news-card:nth-child(4){animation-delay:.16s}
+
+/* ===== АЖИЛ 5: MOBILE BOTTOM NAVIGATION ===== */
+.mobile-bottom-nav{
+  display:none;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  height:var(--bottom-nav-h);
+  background:rgba(14,14,24,0.97);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  z-index:1000;
+  padding:0 8px;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.mobile-bottom-nav .mbn-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  height:100%;
+}
+.mbn-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:6px 12px;
+  border-radius:12px;
+  text-decoration:none;
+  color:var(--text3);
+  font-size:10px;
+  font-family:var(--font-body);
+  font-weight:600;
+  transition:color 0.2s,background 0.2s;
+  cursor:pointer;
+  border:none;
+  background:none;
+  flex:1;
+  min-width:0;
+}
+.mbn-item.active{color:var(--accent);}
+.mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s;}
+.mbn-item.active svg{stroke:var(--accent);}
+.mbn-item span{font-size:10px;line-height:1;}
+
+/* mobile дээр body доор padding нэм */
+@media(max-width:768px){
+  .mobile-bottom-nav{display:flex;}
+  body{padding-bottom:var(--bottom-nav-h);}
+  .messenger-fab{bottom:calc(var(--bottom-nav-h) + 14px);}
+  .toast{bottom:calc(var(--bottom-nav-h) + 12px);}
+}
 
 /* RESPONSIVE */
 @media(max-width:1024px){
@@ -397,19 +375,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .featured-img{height:140px;}
   .section{padding:12px 16px 6px;}
   .grid-4{grid-template-columns:repeat(2,1fr);gap:9px;padding:0 16px 14px;}
-  .news-grid{grid-template-columns:repeat(2,1fr);padding:0 16px 14px;}
+  /* ===== АЖИЛ 2: мэдээ 2 эгнээ ===== */
+  .news-grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:0 16px 14px;}
+  .news-img{height:120px;}
   .news-cats{padding:0 16px 10px;}
   .footer-grid{grid-template-columns:1fr;gap:16px;}
   .footer{padding:20px 16px 14px;}
-  .comment-section{padding:0 16px 20px;}
 }
 @media(max-width:480px){
-  .news-grid{grid-template-columns:1fr;}
+  /* ===== АЖИЛ 2: жижиг утас дээр ч 2 эгнээ хэвээр ===== */
+  .news-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .news-img{height:100px;}
+  .news-title{font-size:11px;}
   .featured-card{flex:0 0 100%;min-width:100%;}
   .grid-4{grid-template-columns:repeat(2,1fr);}
   .logo-text{font-size:21px;}
   .featured-img{height:160px;}
-  .news-img{height:140px;}
 }
 </style>
 </head>
@@ -418,7 +399,20 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <!-- NAVBAR -->
 <nav class="nav" role="navigation" aria-label="Үндсэн цэс">
   <a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
-    <img src="logo.png" alt="КиноЭзэн лого" width="34" height="34" onerror="this.style.display='none'">
+    <!-- ===== АЖИЛ 4: Шинэ кино лого SVG ===== -->
+    <div class="logo-icon">
+      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/>
+        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+      </svg>
+    </div>
     <div class="logo-text">КиноЭзэн</div>
   </a>
   <div class="nav-links" id="nav-links">
@@ -473,6 +467,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <div class="featured-track" id="featured-track"></div>
     <div class="carousel-auto-bar" id="carousel-bar"></div>
   </div>
+  <!-- ===== АЖИЛ 1: Dot indicator дунд нь, товч 2 талд ===== -->
   <div class="carousel-controls">
     <button class="carousel-btn" id="carousel-prev" aria-label="Өмнөх">‹</button>
     <div class="carousel-dots" id="carousel-dots"></div>
@@ -480,7 +475,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </section>
 
-<!-- ===== АНГИЛАЛ СОНГОХ — 10 цэс: Бүгд, Бүтээгдэхүүн, Одод ёртөнц, + 7 ===== -->
+<!-- АНГИЛАЛ СОНГОХ -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -488,107 +483,66 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     </div>
   </div>
   <div class="main-cats-grid" id="main-cats-grid">
-
-    <!-- 1. БҮГД -->
     <div class="mcat-card mcat-all selected" id="mcat-all" onclick="showAll(this)" tabindex="0" role="button" aria-label="Бүгд">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg></div>
       <div class="mcat-label">Бүгд</div>
       <div class="mcat-sub">Бүх агуулга</div>
       <div class="mcat-badge" id="badge-all">—</div>
     </div>
-
-    <!-- 2. БҮТЭЭГДЭХҮҮН ҮЙЛЧИЛГЭЭ — Бүгдийн дараа -->
     <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн үйлчилгээ">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg></div>
       <div class="mcat-label">Бүтээгдэхүүн</div>
       <div class="mcat-sub">Манай үйлчилгээ</div>
       <div class="mcat-badge">→</div>
     </div>
-
-    <!-- 3. ОДОД ЁРТӨНЦ — шинэ цэс -->
     <div class="mcat-card mcat-stars" onclick="location.href='stars.html'" tabindex="0" role="button" aria-label="Одод ёртөнц">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg></div>
       <div class="mcat-label">Одод ёртөнц</div>
       <div class="mcat-sub">Алдартнууд</div>
       <div class="mcat-badge">✦</div>
     </div>
-
-    <!-- 4. КИНО -->
     <div class="mcat-card mcat-movie" onclick="goSection('movies')" tabindex="0" role="button" aria-label="Кино">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg></div>
       <div class="mcat-label">Кино</div>
       <div class="mcat-sub">Монгол дуутай</div>
       <div class="mcat-badge" id="badge-movie">8</div>
     </div>
-
-    <!-- 5. МЭДЭЭ -->
     <div class="mcat-card mcat-news" onclick="goSection('news')" tabindex="0" role="button" aria-label="Мэдээ">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="mcat-label">Мэдээ</div>
       <div class="mcat-sub">Шинэ мэдээлэл</div>
       <div class="mcat-badge" id="badge-news">4</div>
     </div>
-
-    <!-- 6. АЯЛАЛ -->
     <div class="mcat-card mcat-travel" onclick="location.href='news.html?cat=Аялал'" tabindex="0" role="button" aria-label="Аялал">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg></div>
       <div class="mcat-label">Аялал</div>
       <div class="mcat-sub">Дэлхийн газрууд</div>
       <div class="mcat-badge">3</div>
     </div>
-
-    <!-- 7. ШИНЖЛЭХ УХААН -->
     <div class="mcat-card mcat-science" onclick="selNewsCatById('Шинжлэх ухаан')" tabindex="0" role="button" aria-label="Шинжлэх ухаан">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg></div>
       <div class="mcat-label">Шинжлэх ухаан</div>
       <div class="mcat-sub">Нээлт судалгаа</div>
       <div class="mcat-badge">4</div>
     </div>
-
-    <!-- 8. AI -->
     <div class="mcat-card mcat-ai" onclick="selNewsCatById('AI')" tabindex="0" role="button" aria-label="AI">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg></div>
       <div class="mcat-label">AI</div>
       <div class="mcat-sub">Хиймэл оюун</div>
       <div class="mcat-badge">4</div>
     </div>
-
-    <!-- 9. КИНО ТҮҮХ -->
     <div class="mcat-card mcat-history" onclick="selNewsCatById('Кино түүх')" tabindex="0" role="button" aria-label="Кино түүх">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="mcat-label">Кино түүх</div>
       <div class="mcat-sub">Классик кинонууд</div>
       <div class="mcat-badge">4</div>
     </div>
-
-    <!-- 10. ТАНИН МЭДЭХҮЙ -->
     <div class="mcat-card mcat-knowledge" onclick="selNewsCatById('Танин мэдэхүй')" tabindex="0" role="button" aria-label="Танин мэдэхүй">
-      <div class="mcat-icon">
-        <svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg>
-      </div>
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg></div>
       <div class="mcat-label">Танин мэдэхүй</div>
       <div class="mcat-sub">Мэдлэг боловсрол</div>
       <div class="mcat-badge">4</div>
     </div>
-
   </div>
 </section>
 
@@ -637,56 +591,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <button class="ncat-btn" role="tab" aria-selected="false" onclick="selNewsCat(this,'Кино түүх')">🎬 Кино түүх</button>
   </div>
   <div class="news-grid" id="news-list" role="list">
-    <div class="skel-card skeleton" style="height:240px"></div>
-    <div class="skel-card skeleton" style="height:240px"></div>
-    <div class="skel-card skeleton" style="height:240px"></div>
-    <div class="skel-card skeleton" style="height:240px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
   </div>
 </section>
 
-<!-- ===== СЭТГЭГДЭЛ — ЦЭВЭР, ХЯЛБАР ===== -->
-<section class="comment-section" id="comments" aria-label="Сэтгэгдлүүд">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-    <h2 class="section-title" style="padding:0;"><span>Сэтгэгдэл</span> бичих</h2>
-  </div>
-  <div class="comment-box">
-    <div class="comment-header">
-      <span class="comment-header-title">💬 Сэтгэгдлүүд</span>
-      <span class="comment-count" id="comment-count">0 сэтгэгдэл</span>
-    </div>
-    <div class="comment-write">
-      <div class="comment-ava" id="user-ava">Т</div>
-      <div class="comment-input-wrap">
-        <textarea class="comment-textarea" id="comment-textarea" placeholder="Сэтгэгдлээ бичнэ үү..." maxlength="300" oninput="updateCharCount()"></textarea>
-        <div class="emoji-bar" id="emoji-bar">
-          <span onclick="insertEmoji('😂')">😂</span>
-          <span onclick="insertEmoji('❤️')">❤️</span>
-          <span onclick="insertEmoji('😮')">😮</span>
-          <span onclick="insertEmoji('👍')">👍</span>
-          <span onclick="insertEmoji('🔥')">🔥</span>
-          <span onclick="insertEmoji('😢')">😢</span>
-          <span onclick="insertEmoji('😡')">😡</span>
-          <span onclick="insertEmoji('🎬')">🎬</span>
-          <span onclick="insertEmoji('⭐')">⭐</span>
-          <span onclick="insertEmoji('🙏')">🙏</span>
-          <span onclick="insertEmoji('😍')">😍</span>
-          <span onclick="insertEmoji('🤔')">🤔</span>
-          <span onclick="insertEmoji('💪')">💪</span>
-          <span onclick="insertEmoji('🥳')">🥳</span>
-          <span onclick="insertEmoji('👀')">👀</span>
-          <span onclick="insertEmoji('💯')">💯</span>
-        </div>
-        <div class="comment-actions">
-          <span class="char-count" id="char-count">0 / 300</span>
-          <button class="btn-comment-submit" onclick="submitComment()">Нийтлэх →</button>
-        </div>
-      </div>
-    </div>
-    <div class="comment-list" id="comment-list">
-      <div class="comment-empty" id="comment-empty">Одоогоор сэтгэгдэл байхгүй байна. Эхлэгч болоорой! 💬</div>
-    </div>
-  </div>
-</section>
+<!-- ===== АЖИЛ 3: СЭТГЭГДЭЛ ХЭСГИЙГ БҮТНЭЭР УСТГАСАН ===== -->
 
 <a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
 
@@ -735,6 +647,32 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </footer>
 
+<!-- ===== АЖИЛ 5: MOBILE BOTTOM NAVIGATION BAR ===== -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+  <div class="mbn-inner">
+    <a class="mbn-item active" href="index.html" aria-label="Нүүр">
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      <span>Нүүр</span>
+    </a>
+    <a class="mbn-item" href="movies.html" aria-label="Кинонууд">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/><circle cx="12" cy="14" r="3"/><path d="M10.5 13l3 1.5-3 1.5V13z" fill="currentColor" stroke="none"/></svg>
+      <span>Кино</span>
+    </a>
+    <a class="mbn-item" href="news.html" aria-label="Мэдээ">
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>
+      <span>Мэдээ</span>
+    </a>
+    <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
+      <span>Үйлчилгээ</span>
+    </a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
+
 <script>
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
@@ -781,6 +719,16 @@ document.addEventListener('click',e=>{
   if(navOpen&&!e.target.closest('.nav')){navOpen=false;document.getElementById('nav-links').classList.remove('open');document.getElementById('nav-right').classList.remove('open');document.getElementById('nav-toggle').textContent='☰';}
 });
 
+// BOTTOM NAV active state
+(function(){
+  const path=location.pathname.split('/').pop()||'index.html';
+  document.querySelectorAll('.mbn-item').forEach(a=>{
+    a.classList.remove('active');
+    const href=a.getAttribute('href');
+    if(href===path||(path===''&&href==='index.html'))a.classList.add('active');
+  });
+})();
+
 // GENRE
 const genreColors={'Фантастик':'cp-sci','Экшн':'cp-act','Драм':'cp-drm','Аймаар':'cp-act','Романтик':'cp-drm','Аниме':'cp-sci'};
 const genreGradients={'Фантастик':'linear-gradient(135deg,#1a0a2e,#3b1f6b)','Экшн':'linear-gradient(135deg,#2a0a0a,#6b1f1f)','Драм':'linear-gradient(135deg,#0a1a0a,#1a3a20)','Аймаар':'linear-gradient(135deg,#1a0a1a,#3b1f3b)','Романтик':'linear-gradient(135deg,#1a0a0a,#3b1010)','Аниме':'linear-gradient(135deg,#0a0a2a,#1f1f6b)'};
@@ -797,7 +745,10 @@ const FEATURED_MOVIES=[
   {id:'f8',title:'Аянга хүн',genre:'Экшн',genre2:'Фантастик',desc:'Цахилгааны хүчтэй баатар нийслэлийг аварах тулаанд оров...',views:'530',likes:'96',mins:'14',tags:['Шинэ'],emoji:'⚡'},
 ];
 let carouselIndex=0,carouselAuto;
-const CARDS_VISIBLE=4,AUTO_INTERVAL=4000;
+// ===== АЖИЛ 1: 5 секунд болгосон, удаан гүйлгэлт =====
+const AUTO_INTERVAL=5000;
+
+function getCardsVisible(){return window.innerWidth<=480?1:window.innerWidth<=768?2:4;}
 
 function buildFeaturedCard(m){
   const g1=genreColors[m.genre]||'cp-sci';
@@ -834,10 +785,8 @@ function buildFeaturedCard(m){
 
 function initCarousel(){
   const track=document.getElementById('featured-track');
-  const dotsEl=document.getElementById('carousel-dots');
   track.innerHTML=FEATURED_MOVIES.map(buildFeaturedCard).join('');
-  const totalPages=Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);
-  dotsEl.innerHTML=Array.from({length:totalPages},(_,i)=>`<div class="dot${i===0?' active':''}" onclick="goToPage(${i})"></div>`).join('');
+  buildDots();
   document.getElementById('carousel-prev').onclick=()=>{prevPage();resetAuto();};
   document.getElementById('carousel-next').onclick=()=>{nextPage();resetAuto();};
   startAuto();
@@ -846,18 +795,47 @@ function initCarousel(){
   w.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
   w.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>50){d>0?nextPage():prevPage();resetAuto();}},{passive:true});
 }
+
+function buildDots(){
+  const cv=getCardsVisible();
+  const totalPages=Math.ceil(FEATURED_MOVIES.length/cv);
+  const dotsEl=document.getElementById('carousel-dots');
+  dotsEl.innerHTML=Array.from({length:totalPages},(_,i)=>`<div class="dot${i===0?' active':''}" onclick="goToPage(${i})"></div>`).join('');
+}
+
 function getCardWidth(){const c=document.querySelector('.featured-card');return c?c.offsetWidth+12:0;}
-function goToPage(p){carouselIndex=Math.max(0,Math.min(p,Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE)-1));updateCarousel();}
-function nextPage(){carouselIndex=(carouselIndex+1)%Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);updateCarousel();}
-function prevPage(){const t=Math.ceil(FEATURED_MOVIES.length/CARDS_VISIBLE);carouselIndex=(carouselIndex-1+t)%t;updateCarousel();}
+function goToPage(p){
+  const cv=getCardsVisible();
+  const total=Math.ceil(FEATURED_MOVIES.length/cv);
+  carouselIndex=Math.max(0,Math.min(p,total-1));
+  updateCarousel();
+}
+function nextPage(){
+  const cv=getCardsVisible();
+  const total=Math.ceil(FEATURED_MOVIES.length/cv);
+  carouselIndex=(carouselIndex+1)%total;
+  updateCarousel();
+}
+function prevPage(){
+  const cv=getCardsVisible();
+  const total=Math.ceil(FEATURED_MOVIES.length/cv);
+  carouselIndex=(carouselIndex-1+total)%total;
+  updateCarousel();
+}
 function updateCarousel(){
-  document.getElementById('featured-track').style.transform=`translateX(-${carouselIndex*CARDS_VISIBLE*getCardWidth()}px)`;
+  const cv=getCardsVisible();
+  document.getElementById('featured-track').style.transform=`translateX(-${carouselIndex*cv*getCardWidth()}px)`;
+  const total=Math.ceil(FEATURED_MOVIES.length/cv);
   document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===carouselIndex));
+  if(carouselIndex>=total){carouselIndex=0;document.getElementById('featured-track').style.transform='translateX(0)';}
   restartBar();
 }
 function restartBar(){const b=document.getElementById('carousel-bar');b.classList.remove('running');void b.offsetWidth;b.classList.add('running');}
 function startAuto(){restartBar();carouselAuto=setInterval(nextPage,AUTO_INTERVAL);}
 function resetAuto(){clearInterval(carouselAuto);startAuto();}
+
+// Дэлгэцийн хэмжээ өөрчлөгдөхөд dot дахин байгуул
+window.addEventListener('resize',()=>{buildDots();});
 
 // MOVIES
 function buildSkeletons(n=4){return Array(n).fill(0).map(()=>`<div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`).join('');}
@@ -901,7 +879,7 @@ function renderMovieCards(movies,list){
   }).join('');
 }
 
-// NEWS — emoji reaction хасагдсан, цэвэр карт
+// NEWS
 const NEWS_DATA={
   '':[
     {id:'s1',emoji:'🌍',cat:'Түүх',title:'Монголын эзэнт гүрний хамгийн том дайлалт',date:'2026.06.08',views:'1.2к',img:''},
@@ -947,9 +925,7 @@ function renderNews(cat=''){
   const items=NEWS_DATA[cat]||NEWS_DATA[''];
   list.innerHTML=items.map(item=>`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${item.id}'" aria-label="${item.title}">
     <div class="news-img">
-      ${item.img
-        ?`<img src="${item.img}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.n-emoji').style.display='flex'">`
-        :''}
+      ${item.img?`<img src="${item.img}" alt="${item.title}" loading="lazy" onerror="this.style.display='none';this.parentNode.querySelector('.n-emoji').style.display='flex'">`:'' }
       <span class="n-emoji" style="${item.img?'display:none':''}">${item.emoji}</span>
     </div>
     <div class="news-body">
@@ -971,9 +947,7 @@ async function loadNews(){
     list.innerHTML=news.map((item,i)=>{
       const title=sanitize(item.title);const cat=sanitize(item.category||'Мэдээ');const id=sanitize(item.id);
       const views=parseInt(item.views)||0;const date=new Date(item.created_at).toLocaleDateString('mn-MN');
-      const thumb=item.thumbnail
-        ?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
-        :`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
+      const thumb=item.thumbnail?`<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`:`<span class="n-emoji">${['🌍','🎭','🚀','💡'][i%4]}</span>`;
       return`<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}">
         <div class="news-img">${thumb}</div>
         <div class="news-body">
@@ -1030,7 +1004,6 @@ function showToast(msg){
   document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
 }
 
-// CATEGORY NAV
 function goSection(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}
 
 function selCatById(genre){
@@ -1062,90 +1035,11 @@ function showAll(el){
   setTimeout(()=>goSection('movies'),100);
 }
 
-// COMMENT SYSTEM
-let comments=[];
-const COMMENT_NAMES=['Батболд','Солонго','Мөнх-Эрдэнэ','Анхмаа','Тэмүүжин','Номин','Ганбаяр','Сарнай','Эрдэнэбат','Цэцэгмаа'];
-const COMMENT_AVABGS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(135deg,#4ade80,#22c55e)','linear-gradient(135deg,#06b6d4,#3b82f6)','linear-gradient(135deg,#a855f7,#7c3aed)','linear-gradient(135deg,#f59e0b,#ef4444)','linear-gradient(135deg,#ec4899,#8b5cf6)','linear-gradient(135deg,#10b981,#0891b2)'];
-const DEMO_COMMENTS=[
-  {name:'Батболд',text:'Маш гоё платформ байна! 🔥',time:'2026.06.09 · 10:32',bg:COMMENT_AVABGS[0],likes:5},
-  {name:'Солонго',text:'Мэдээнүүд маш сонирхолтой байна 😍',time:'2026.06.09 · 09:15',bg:COMMENT_AVABGS[1],likes:3},
-  {name:'Мөнх-Эрдэнэ',text:'Кино хайх функц гайхалтай ажиллаж байна 👍',time:'2026.06.08 · 21:44',bg:COMMENT_AVABGS[2],likes:7},
-];
-
-function renderComments(){
-  const list=document.getElementById('comment-list');
-  const empty=document.getElementById('comment-empty');
-  const count=document.getElementById('comment-count');
-  const all=[...DEMO_COMMENTS,...comments];
-  count.textContent=`${all.length} сэтгэгдэл`;
-  if(all.length===0){if(empty)empty.style.display='block';list.innerHTML='<div class="comment-empty" id="comment-empty">Одоогоор сэтгэгдэл байхгүй байна. Эхлэгч болоорой! 💬</div>';return;}
-  if(empty)empty.style.display='none';
-  list.innerHTML=all.map((c,i)=>{
-    const initials=(c.name||'?').charAt(0);
-    return`<div class="comment-item">
-      <div class="ci-ava" style="background:${c.bg||COMMENT_AVABGS[i%COMMENT_AVABGS.length]}">${initials}</div>
-      <div class="ci-body">
-        <div class="ci-top">
-          <span class="ci-name">${sanitize(c.name)}</span>
-          <span class="ci-date">${c.time}</span>
-        </div>
-        <div class="ci-text">${sanitize(c.text)}</div>
-        <div class="ci-foot">
-          <button class="ci-like-btn" onclick="likeComment(this)">❤️ <span>${c.likes||0}</span></button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function likeComment(btn){
-  const isLiked=btn.classList.toggle('liked');
-  const c=btn.querySelector('span');
-  c.textContent=isLiked?parseInt(c.textContent)+1:Math.max(0,parseInt(c.textContent)-1);
-}
-
-function insertEmoji(em){
-  const ta=document.getElementById('comment-textarea');
-  const pos=ta.selectionStart;
-  const val=ta.value;
-  ta.value=val.slice(0,pos)+em+val.slice(pos);
-  ta.selectionStart=ta.selectionEnd=pos+em.length;
-  ta.focus();
-  updateCharCount();
-}
-
-function updateCharCount(){
-  const ta=document.getElementById('comment-textarea');
-  const len=ta.value.length;
-  document.getElementById('char-count').textContent=`${len} / 300`;
-}
-
-function submitComment(){
-  const ta=document.getElementById('comment-textarea');
-  const text=ta.value.trim();
-  if(!text){ta.focus();showToast('Сэтгэгдэл бичнэ үү 💬');return;}
-  if(text.length>300){showToast('Хэт урт байна, 300 тэмдэгтээс бага байх ёстой');return;}
-  const now2=new Date();
-  const time=now2.getFullYear()+'.'+String(now2.getMonth()+1).padStart(2,'0')+'.'+String(now2.getDate()).padStart(2,'0')+' · '+String(now2.getHours()).padStart(2,'0')+':'+String(now2.getMinutes()).padStart(2,'0');
-  const rndName=COMMENT_NAMES[Math.floor(Math.random()*COMMENT_NAMES.length)];
-  const rndBg=COMMENT_AVABGS[Math.floor(Math.random()*COMMENT_AVABGS.length)];
-  comments.unshift({name:rndName,text,time,bg:rndBg,likes:0});
-  ta.value='';updateCharCount();
-  renderComments();
-  showToast('✅ Сэтгэгдэл нийтлэгдлээ!');
-  setTimeout(()=>{const first=document.querySelector('.comment-item');if(first)first.scrollIntoView({behavior:'smooth',block:'nearest'});},200);
-}
-
-document.getElementById('comment-textarea').addEventListener('keydown',function(e){
-  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){submitComment();}
-});
-
 document.addEventListener('DOMContentLoaded',()=>{
   initCarousel();
   loadMovies();
   loadNews();
   loadAd();
-  renderComments();
 });
 </script>
 </body>
