@@ -198,7 +198,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
 
 <script>
 // ─── HuggingFace Space URL ───
-const HF_URL = "https://kinoezen-kino.hf.space";
+const HF_URL = "https://kinosait-mongol.hf.space";
 
 // ─── Лимит шалгах (localStorage) ───
 function getToday(){ return new Date().toISOString().slice(0,10); }
@@ -231,6 +231,37 @@ function selVoice(el){
   el.classList.add('on');
 }
 
+// ─── Gradio API дуудах (шинэ болон хуучин хувилбар хоёуланг дэмжих) ───
+async function gradioCall(fn_index, data){
+  // Эхлээд шинэ /call/ API туршина
+  try {
+    const r1 = await fetch(`${HF_URL}/call/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fn_index, data })
+    });
+    if(r1.ok){
+      const j = await r1.json();
+      if(j.event_id){
+        // SSE stream уншина
+        const r2 = await fetch(`${HF_URL}/call/predict/${j.event_id}`);
+        const txt = await r2.text();
+        const match = txt.match(/data:\s*(\[.*\])/s);
+        if(match) return JSON.parse(match[1]);
+      }
+    }
+  } catch(e){}
+  // Хуучин /run/predict API туршина
+  const r3 = await fetch(`${HF_URL}/run/predict`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fn_index, data })
+  });
+  const j3 = await r3.json();
+  if(j3.error) throw new Error(j3.error);
+  return j3.data;
+}
+
 // ─── TTS ───
 async function runTTS(){
   const text = document.getElementById('tts-text').value.trim();
@@ -244,45 +275,30 @@ async function runTTS(){
   }
 
   const voiceEl = document.querySelector('.vbtn.on');
-  const voice = voiceEl && voiceEl.textContent.includes('Есүй') ? 'mn-MN-YesuiNeural' : 'mn-MN-BataaNeural';
+  const voiceName = voiceEl && voiceEl.textContent.includes('Есүй') ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)';
   const btn = document.querySelector('.run-btn');
   btn.textContent = '⏳ Үүсгэж байна...';
   btn.disabled = true;
 
   try {
-    // HuggingFace Gradio API дуудах
-    const resp = await fetch(`${HF_URL}/run/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        fn_index: 0,
-        data: [text, voice === 'mn-MN-BataaNeural' ? 'Батаа (эрэгтэй)' : 'Есүй (эмэгтэй)', 'Edge TTS (Батаа / Есүй)', 15, -8, 0]
-      })
-    });
-    const result = await resp.json();
-
-    if(result.error){ throw new Error(result.error); }
+    const data = await gradioCall(0, [text, voiceName, 'Edge TTS (Батаа / Есүй)', 15, -8, 0]);
 
     // Audio URL авах
-    const audioData = result.data[0];
+    const audioData = data[0];
     let audioUrl = '';
-    if(typeof audioData === 'string' && audioData.startsWith('data:')){ 
+    if(typeof audioData === 'string' && audioData.startsWith('data:')){
       audioUrl = audioData;
     } else if(audioData && audioData.url){
-      audioUrl = HF_URL + audioData.url;
+      audioUrl = audioData.url.startsWith('http') ? audioData.url : HF_URL + audioData.url;
     } else if(audioData && audioData.path){
       audioUrl = `${HF_URL}/file=${audioData.path}`;
     }
+    if(!audioUrl) throw new Error('Audio URL олдсонгүй. Space-ийн fn_index буруу байж магадгүй.');
 
-    if(!audioUrl) throw new Error('Audio URL олдсонгүй');
-
-    // Лимит тэмдэглэх
     addUsed('tts', text.length);
-
-    // UI шинэчлэх
     const resultDiv = document.getElementById('tts-result');
     resultDiv.innerHTML = `
-      <div class="result-label">✓ Бэлэн боллоо! (${text.length} тэмдэгт ашигласан, өнөөдөр нийт: ${getUsed('tts')}/${limit})</div>
+      <div class="result-label">✓ Бэлэн боллоо! (өнөөдөр: ${getUsed('tts')}/${limit} тэмдэгт)</div>
       <audio controls style="width:100%;margin-bottom:10px;border-radius:30px;">
         <source src="${audioUrl}" type="audio/mpeg">
       </audio>
@@ -290,7 +306,7 @@ async function runTTS(){
     `;
     resultDiv.classList.add('show');
   } catch(e) {
-    alert('Алдаа гарлаа: ' + e.message + '\nHuggingFace Space ажиллаж байгаа эсэхийг шалгана уу.');
+    alert('Алдаа: ' + e.message);
   } finally {
     btn.textContent = '▶ Дуу үүсгэх';
     btn.disabled = false;
@@ -318,17 +334,9 @@ async function runHum(){
   humBtn.disabled = true;
 
   try {
-    const resp = await fetch(`${HF_URL}/run/predict`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ fn_index: 2, data: [text] })
-    });
-    const result = await resp.json();
-    if(result.error) throw new Error(result.error);
-
-    const output = result.data[0];
+    const data = await gradioCall(2, [text]);
     addUsed('hum', text.length);
-    document.getElementById('hum-after').textContent = output;
+    document.getElementById('hum-after').textContent = data[0];
   } catch(e) {
     document.getElementById('hum-after').textContent = 'Алдаа: ' + e.message;
   } finally {
