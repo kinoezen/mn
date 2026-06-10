@@ -233,36 +233,18 @@ function selVoice(el){
 
 // ─── Gradio API дуудах ───
 async function gradioCall(api_name, data){
-  return new Promise((resolve, reject) => {
-    const hash = Math.random().toString(36).slice(2);
-    // Queue-д оруулах
-    fetch(`${HF_URL}/queue/join`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data, event_data: null, fn_index: 0, trigger_id: null, session_hash: hash, api_name: "/" + api_name })
-    }).then(r => {
-      if(!r.ok) return r.text().then(t => { throw new Error("queue/join " + r.status + ": " + t.slice(0,150)); });
-      return r.json();
-    }).then(() => {
-      // SSE дамжуулалт уншина
-      const es = new EventSource(`${HF_URL}/queue/data?session_hash=${hash}`);
-      const timer = setTimeout(() => { es.close(); reject(new Error("Хугацаа дуусав (60с)")); }, 60000);
-      es.onmessage = (e) => {
-        try {
-          const msg = JSON.parse(e.data);
-          if(msg.msg === "process_completed"){
-            clearTimeout(timer); es.close();
-            if(msg.output && msg.output.error) reject(new Error(msg.output.error));
-            else resolve(msg.output.data);
-          } else if(msg.msg === "queue_full"){
-            clearTimeout(timer); es.close();
-            reject(new Error("Queue дүүрсэн, түр хүлээгээд дахин оролдоно уу"));
-          }
-        } catch(err){ clearTimeout(timer); es.close(); reject(err); }
-      };
-      es.onerror = () => { clearTimeout(timer); es.close(); reject(new Error("Холболт тасарлаа")); };
-    }).catch(reject);
+  const resp = await fetch(`${HF_URL}/run/predict`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data, api_name: "/" + api_name })
   });
+  if(!resp.ok){
+    const txt = await resp.text();
+    throw new Error("API " + resp.status + ": " + txt.slice(0,200));
+  }
+  const j = await resp.json();
+  if(j.error) throw new Error(j.error);
+  return j.data;
 }
 
 // ─── TTS ───
