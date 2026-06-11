@@ -63,6 +63,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .act-like.liked{background:#e63946;color:#fff;}
 .act-share{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);}
 .act-share:hover{background:rgba(255,255,255,0.12);}
+/* 🔖 Хадгалах товч */
+.act-save{background:rgba(244,162,97,0.12);border:1px solid rgba(244,162,97,0.3);color:var(--accent2);}
+.act-save.saved{background:var(--accent2);color:#0a1a00;}
+.act-save:hover{background:rgba(244,162,97,0.2);}
 
 /* DIVIDER */
 .divider{height:1px;background:rgba(255,255,255,0.06);margin:20px 0;}
@@ -119,7 +123,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .reactions-bar{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap;}
 .reaction-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:13px;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);font-weight:600;}
 .reaction-btn:hover{border-color:var(--border2);background:rgba(74,222,128,0.06);transform:scale(1.05);}
-.reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.12);color:var(--accent);}
+.reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.15);color:var(--accent);}
 .reaction-btn .r-count{font-size:12px;font-weight:700;}
 
 /* Хоосон сэтгэгдэл */
@@ -159,7 +163,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 <body>
 
 <nav class="nav">
-  <!-- ===== ЗАСАГДСАН ЛОГО ===== -->
   <a href="index.html" class="logo">
     <div class="logo-icon">
       <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -203,12 +206,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 
     <!-- Реакц товчнууд -->
     <div class="reactions-bar" id="reactions-bar">
-      <button class="reaction-btn" onclick="react(this,'❤️')" data-type="heart">❤️ <span class="r-count">0</span></button>
-      <button class="reaction-btn" onclick="react(this,'😂')" data-type="haha">😂 <span class="r-count">0</span></button>
-      <button class="reaction-btn" onclick="react(this,'😮')" data-type="wow">😮 <span class="r-count">0</span></button>
-      <button class="reaction-btn" onclick="react(this,'😢')" data-type="sad">😢 <span class="r-count">0</span></button>
-      <button class="reaction-btn" onclick="react(this,'😡')" data-type="angry">😡 <span class="r-count">0</span></button>
-      <button class="reaction-btn" onclick="react(this,'👍')" data-type="like">👍 <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="heart">❤️ <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="haha">😂 <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="wow">😮 <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="sad">😢 <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="angry">😡 <span class="r-count">0</span></button>
+      <button class="reaction-btn" data-type="like">👍 <span class="r-count">0</span></button>
     </div>
 
     <!-- Сэтгэгдэл бичих форм -->
@@ -249,7 +252,6 @@ const AVATAR_COLORS=['linear-gradient(135deg,#e63946,#f4a261)','linear-gradient(
 const params=new URLSearchParams(window.location.search);
 const movieId=params.get('id');
 
-// Нэрний эхний үсэгнээс avatar өнгө
 function getAvatarColor(name){const idx=name.charCodeAt(0)%AVATAR_COLORS.length;return AVATAR_COLORS[idx];}
 function getInitials(name){return name.slice(0,2).toUpperCase();}
 
@@ -269,6 +271,11 @@ async function loadMovie(){
     const cls=genreColors[m.genre]||'gp-sci';
     const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
     const poster=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
+
+    // Хадгалсан эсэхийг шалгах
+    const savedMovies=JSON.parse(localStorage.getItem('saved_movies')||'[]');
+    const isSaved=savedMovies.includes(m.id);
+
     document.getElementById('movie-content').innerHTML=`
       <div class="movie-header">
         <div class="movie-poster" style="background:${bg}">${poster}</div>
@@ -285,8 +292,13 @@ async function loadMovie(){
       </div>
       <div class="action-row">
         <button class="act-btn act-play" onclick="scrollToPlayer()">▶ Үзэх</button>
-        <button class="act-btn act-like" id="like-btn" onclick="toggleLike('${m.id}')">❤️ Like</button>
+        <button class="act-btn act-like${isLiked(m.id)?' liked':''}" id="like-btn" onclick="toggleLike('${m.id}')">
+          ${isLiked(m.id)?'❤️ Liked':'❤️ Like'}
+        </button>
         <button class="act-btn act-share" onclick="shareMovie('${m.title}')">🔗 Хуваалцах</button>
+        <button class="act-btn act-save${isSaved?' saved':''}" id="save-btn" onclick="toggleSave('${m.id}','${m.title.replace(/'/g,"\\'")}')">
+          ${isSaved?'🔖 Хадгалсан':'🔖 Хадгалах'}
+        </button>
       </div>
       <div class="divider"></div>
       <div class="section-label"><span>Холбоотой</span> кинонууд</div>
@@ -342,10 +354,47 @@ async function loadRelated(genre,currentId){
   }catch(e){}
 }
 
+// ===== LIKE (localStorage) =====
+function isLiked(id){
+  const likes=JSON.parse(localStorage.getItem('liked_movies')||'[]');
+  return likes.includes(String(id));
+}
+
 function toggleLike(id){
   const btn=document.getElementById('like-btn');
-  btn.classList.toggle('liked');
-  btn.textContent=btn.classList.contains('liked')?'❤️ Liked':'❤️ Like';
+  const likes=JSON.parse(localStorage.getItem('liked_movies')||'[]');
+  const sid=String(id);
+  if(likes.includes(sid)){
+    const updated=likes.filter(x=>x!==sid);
+    localStorage.setItem('liked_movies',JSON.stringify(updated));
+    btn.classList.remove('liked');
+    btn.textContent='❤️ Like';
+  } else {
+    likes.push(sid);
+    localStorage.setItem('liked_movies',JSON.stringify(likes));
+    btn.classList.add('liked');
+    btn.textContent='❤️ Liked';
+  }
+}
+
+// ===== 🔖 ХАДГАЛАХ =====
+function toggleSave(id,title){
+  const btn=document.getElementById('save-btn');
+  const saved=JSON.parse(localStorage.getItem('saved_movies')||'[]');
+  const sid=String(id);
+  if(saved.includes(sid)){
+    const updated=saved.filter(x=>x!==sid);
+    localStorage.setItem('saved_movies',JSON.stringify(updated));
+    btn.classList.remove('saved');
+    btn.innerHTML='🔖 Хадгалах';
+    showToast('🔖 Хадгалснаас хасагдлаа');
+  } else {
+    saved.push(sid);
+    localStorage.setItem('saved_movies',JSON.stringify(saved));
+    btn.classList.add('saved');
+    btn.innerHTML='🔖 Хадгалсан';
+    showToast('🔖 Хадгалагдлаа!');
+  }
 }
 
 function scrollToPlayer(){document.getElementById('player-wrap').scrollIntoView({behavior:'smooth'});}
@@ -355,9 +404,9 @@ function shareMovie(title){
   else{navigator.clipboard.writeText(window.location.href);showToast('🔗 Линк хуулагдлаа!');}
 }
 
-// ===== РЕАКЦ =====
+// ===== РЕАКЦ — зөвхөн НЭГ нь дарагдана =====
 const reactionsData={heart:0,haha:0,wow:0,sad:0,angry:0,like:0};
-const myReactions={};
+let myActiveReaction=null; // Одоо сонгосон реакцын type
 
 function loadReactions(){
   const saved=localStorage.getItem('reactions_'+movieId);
@@ -365,32 +414,50 @@ function loadReactions(){
     try{
       const d=JSON.parse(saved);
       Object.assign(reactionsData,d.counts||{});
-      Object.assign(myReactions,d.mine||{});
+      myActiveReaction=d.mine||null;
       renderReactions();
     }catch(e){}
   }
+  // Товч бүр дээр click listener нэмэх
+  document.querySelectorAll('.reaction-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>react(btn));
+  });
 }
 
 function saveReactions(){
-  localStorage.setItem('reactions_'+movieId,JSON.stringify({counts:reactionsData,mine:myReactions}));
+  localStorage.setItem('reactions_'+movieId,JSON.stringify({counts:reactionsData,mine:myActiveReaction}));
 }
 
-function react(btn,emoji){
+function react(btn){
   const type=btn.dataset.type;
-  if(myReactions[type]){
+
+  if(myActiveReaction===type){
+    // Дахин дарвал — болих (toggle off)
     reactionsData[type]=Math.max(0,(reactionsData[type]||0)-1);
-    myReactions[type]=false;
+    myActiveReaction=null;
     btn.classList.remove('active');
   } else {
+    // Өмнөх реакцыг хасах
+    if(myActiveReaction){
+      reactionsData[myActiveReaction]=Math.max(0,(reactionsData[myActiveReaction]||0)-1);
+      const prevBtn=document.querySelector(`.reaction-btn[data-type="${myActiveReaction}"]`);
+      if(prevBtn){
+        prevBtn.classList.remove('active');
+        const prevCount=prevBtn.querySelector('.r-count');
+        if(prevCount)prevCount.textContent=reactionsData[myActiveReaction];
+      }
+    }
+    // Шинэ реакц нэмэх
     reactionsData[type]=(reactionsData[type]||0)+1;
-    myReactions[type]=true;
+    myActiveReaction=type;
     btn.classList.add('active');
     // Жижиг animation
-    btn.style.transform='scale(1.2)';
+    btn.style.transform='scale(1.25)';
     setTimeout(()=>btn.style.transform='',200);
   }
+
   const countEl=btn.querySelector('.r-count');
-  if(countEl)countEl.textContent=reactionsData[type]||0;
+  if(countEl)countEl.textContent=reactionsData[type];
   saveReactions();
 }
 
@@ -399,7 +466,11 @@ function renderReactions(){
     const type=btn.dataset.type;
     const countEl=btn.querySelector('.r-count');
     if(countEl)countEl.textContent=reactionsData[type]||0;
-    if(myReactions[type])btn.classList.add('active');
+    if(myActiveReaction===type){
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
   });
 }
 
@@ -451,7 +522,6 @@ function renderComments(){
     </div>`).join('');
 }
 
-// Comment input focus
 document.addEventListener('DOMContentLoaded',()=>{
   const input=document.getElementById('comment-input');
   const actions=document.getElementById('comment-actions');
