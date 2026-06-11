@@ -1,14 +1,6 @@
 const { Client } = require("@gradio/client");
 
-// Монгол нэр → Gemini voice нэр
-const VOICE_MAP = {
-  'Дорж': 'Charon',
-  'Батаа': 'Fenrir',
-  'Баяраа': 'Puck',
-  'Лхагваа': 'Orbit',
-  'Дулмаа': 'Aoede',
-  'Номин': 'Schedar'
-};
+const VALID_VOICES = ['Charon','Fenrir','Puck','Orbit','Zephyr','Schedar','Aoede'];
 
 exports.handler = async function(event) {
   if(event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
@@ -16,17 +8,17 @@ exports.handler = async function(event) {
   const { text, engine, voice, geminiVoice, rate, pitch, volume } = JSON.parse(event.body);
   const isGemini = engine === 'gemini';
 
-  // Монгол нэрийг HF нэр рүү хөрвүүлэх
-  const hfGeminiVoice = VOICE_MAP[geminiVoice] || geminiVoice || 'Charon';
+  // geminiVoice-г цэвэрлэж HF-ийн зөв нэр болгох
+  const cleanVoice = (geminiVoice || 'Charon').trim();
+  const hfVoice = VALID_VOICES.includes(cleanVoice) ? cleanVoice : 'Charon';
 
   try {
     const client = await Client.connect("kinosait/mongol");
-
     const result = await client.predict("/generate_audio", {
       text: text,
       engine: isGemini ? "Gemini TTS (хамгийн байгалийн)" : "Edge TTS (Батаа / Есүй)",
       voice_edge: voice || "Батаа (эрэгтэй)",
-      voice_gemini: hfGeminiVoice,
+      voice_gemini: hfVoice,
       rate: rate ?? 15,
       pitch: pitch ?? -8,
       volume: volume ?? 0
