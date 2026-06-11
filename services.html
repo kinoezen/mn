@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Үйлчилгээ — КиноЭзэн</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;overflow-x:hidden;}
@@ -23,13 +24,33 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .nav-drawer a:hover,.nav-drawer a.active{background:rgba(74,222,128,0.08);color:#4ade80;}
 .drawer-divider{height:1px;background:rgba(255,255,255,0.07);margin:6px 0;}
 .drawer-btns{display:flex;gap:8px;margin-top:4px;}
-.drawer-btns .btn-login{flex:1;text-align:center;}
-.drawer-btns .btn-join{flex:1;text-align:center;}
+.drawer-btns .btn-login,.drawer-btns .btn-join{flex:1;text-align:center;}
 .nav-links-desktop{display:flex;gap:4px;align-items:center;}
 .nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
 .nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 @media(max-width:768px){.nav-links-desktop{display:none;}.nav-desktop-right{display:none;}.nav-toggle{display:block;}}
-.hero{text-align:center;padding:32px 16px 24px;}
+
+/* ── Credit bar ── */
+.credit-bar{background:linear-gradient(135deg,rgba(74,222,128,0.07),rgba(244,162,97,0.07));border:1px solid rgba(74,222,128,0.18);border-radius:14px;padding:14px 18px;max-width:800px;margin:14px auto 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.credit-bar.hidden{display:none;}
+.cred-left{display:flex;align-items:center;gap:10px;}
+.cred-icon{font-size:22px;}
+.cred-info{}
+.cred-label{font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:2px;}
+.cred-nums{font-size:15px;font-weight:700;color:#4ade80;}
+.cred-plan{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700;margin-left:8px;vertical-align:middle;}
+.plan-free{background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);}
+.plan-standard{background:rgba(99,179,255,0.15);color:#63b3ff;border:1px solid rgba(99,179,255,0.3);}
+.plan-pro{background:rgba(244,162,97,0.15);color:#f4a261;border:1px solid rgba(244,162,97,0.3);}
+.cred-bar-wrap{flex:1;min-width:120px;max-width:220px;}
+.cred-track{height:6px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;}
+.cred-fill{height:100%;background:linear-gradient(90deg,#4ade80,#f4a261);border-radius:99px;transition:width 0.5s;}
+.cred-pct{font-size:10px;color:rgba(255,255,255,0.35);margin-top:4px;}
+.cred-upgrade{padding:7px 14px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.credit-bar-guest{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px 18px;max-width:800px;margin:14px auto 0;text-align:center;font-size:12px;color:rgba(255,255,255,0.4);}
+.credit-bar-guest a{color:#4ade80;font-weight:700;}
+
+.hero{text-align:center;padding:24px 16px 20px;}
 .hero h1{font-size:24px;font-weight:700;margin-bottom:10px;line-height:1.3;}
 .hero h1 span{color:#4ade80;}
 .hero p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:500px;margin:0 auto;}
@@ -43,6 +64,9 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .svc-ico.blue{background:linear-gradient(135deg,#2563eb,#6b7ff7);}
 .svc-ico.purple{background:linear-gradient(135deg,#7c3aed,#c084fc);}
 .svc-ico.red{background:linear-gradient(135deg,#dc2626,#e63946);}
+.svc-ico.teal{background:linear-gradient(135deg,#0891b2,#22d3ee);}
+.svc-ico.pink{background:linear-gradient(135deg,#db2777,#f472b6);}
+.svc-ico.indigo{background:linear-gradient(135deg,#4338ca,#818cf8);}
 .svc-info{flex:1;min-width:0;}
 .svc-name{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;}
 .svc-desc{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
@@ -51,23 +75,30 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .badge-free{background:rgba(74,222,128,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);}
 .badge-pro{background:rgba(244,162,97,0.15);color:#f4a261;border:1px solid rgba(244,162,97,0.3);}
 .badge-hot{background:rgba(230,57,70,0.15);color:#e63946;border:1px solid rgba(230,57,70,0.3);}
+.badge-credit{background:rgba(99,179,255,0.12);color:#63b3ff;border:1px solid rgba(99,179,255,0.25);}
 .svc-btn{width:100%;padding:11px;border-radius:10px;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:13px;font-weight:500;cursor:pointer;}
 .svc-btn:hover{background:rgba(74,222,128,0.15);}
-.tts-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
-.tts-box.show{display:block;}
+.svc-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* ── Expand boxes ── */
+.tts-box,.hum-box,.trans-box,.stt-box,.textedit-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
+.tts-box.show,.hum-box.show,.trans-box.show,.stt-box.show,.textedit-box.show{display:block;}
 .form-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;display:block;}
-textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:13px;height:90px;resize:none;font-family:Arial,sans-serif;}
-textarea:focus{outline:none;border-color:#4ade80;}
+textarea,input[type=text],input[type=email]{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:13px;font-family:Arial,sans-serif;}
+textarea{height:90px;resize:none;}
+textarea:focus,input[type=text]:focus,input[type=email]:focus{outline:none;border-color:#4ade80;}
 .voice-row{display:flex;gap:8px;margin:10px 0;}
 .vbtn{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
 .vbtn.on{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.08);}
-.run-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
+.run-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;margin-top:10px;}
+.run-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* Credit cost pill */
+.cost-pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:4px 10px;border-radius:20px;background:rgba(99,179,255,0.1);border:1px solid rgba(99,179,255,0.25);color:#63b3ff;margin-bottom:10px;}
+
 .result{background:#1e1e2e;border-radius:10px;padding:14px;margin-top:12px;border:1px solid rgba(74,222,128,0.2);display:none;}
 .result.show{display:block;}
 .result-label{font-size:11px;color:#4ade80;font-weight:600;margin-bottom:10px;}
-.dl-btn{width:100%;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
-.hum-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
-.hum-box.show{display:block;}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
 .split-card{background:#1e1e2e;border-radius:10px;padding:12px;}
 .split-label{font-size:11px;font-weight:600;margin-bottom:8px;}
@@ -75,6 +106,26 @@ textarea:focus{outline:none;border-color:#4ade80;}
 .split-label.grn{color:#4ade80;}
 .split-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
 @media(max-width:480px){.split{grid-template-columns:1fr;}}
+
+/* Upload area */
+.upload-area{border:2px dashed rgba(255,255,255,0.12);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:10px;}
+.upload-area:hover,.upload-area.drag{border-color:#4ade80;}
+.upload-area input{display:none;}
+.upload-icon{font-size:30px;margin-bottom:8px;}
+.upload-name{font-size:12px;color:#4ade80;margin-top:6px;word-break:break-all;}
+
+/* Lang selects */
+.lang-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:12px;}
+.lang-select{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:9px;padding:8px 10px;color:#fff;font-size:13px;cursor:pointer;}
+.lang-swap{background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:8px 12px;color:#4ade80;font-size:16px;cursor:pointer;}
+.lang-swap:hover{background:rgba(74,222,128,0.2);}
+
+/* Notice */
+.notice-box{padding:12px;background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;text-align:center;font-size:12px;color:#f4a261;margin-top:10px;display:none;}
+.notice-box a{color:#f4a261;font-weight:700;}
+
+.section-title{font-size:11px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:1.5px;text-transform:uppercase;margin:20px 0 12px;padding-left:2px;}
+
 .footer{margin-top:30px;padding:16px 18px 80px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:12px;color:rgba(255,255,255,0.3);}
 .mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(18,18,30,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);z-index:1000;padding-bottom:env(safe-area-inset-bottom);}
 .mbn-inner{display:flex;align-items:center;justify-content:space-around;height:100%;}
@@ -110,7 +161,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
     <a href="news.html">Мэдээ</a>
     <a href="services.html" class="active">Үйлчилгээ</a>
   </div>
-  <div class="nav-desktop-right">
+  <div class="nav-desktop-right" id="nav-right">
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
@@ -124,10 +175,34 @@ textarea:focus{outline:none;border-color:#4ade80;}
   <a href="services.html" class="active">⚡ Үйлчилгээ</a>
   <a href="profile.html">👤 Профайл</a>
   <div class="drawer-divider"></div>
-  <div class="drawer-btns">
+  <div class="drawer-btns" id="drawer-btns">
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
+</div>
+
+<!-- ── Credit Bar (logged in) ── -->
+<div class="credit-bar hidden" id="credit-bar" style="padding-left:16px;padding-right:16px;">
+  <div class="cred-left">
+    <div class="cred-icon">⚡</div>
+    <div class="cred-info">
+      <div class="cred-label">Үлдсэн кредит</div>
+      <div class="cred-nums">
+        <span id="cred-remaining">—</span>/<span id="cred-total">—</span>
+        <span class="cred-plan plan-free" id="cred-plan-badge">Үнэгүй</span>
+      </div>
+    </div>
+  </div>
+  <div class="cred-bar-wrap">
+    <div class="cred-track"><div class="cred-fill" id="cred-fill" style="width:100%"></div></div>
+    <div class="cred-pct" id="cred-pct">100% үлдсэн</div>
+  </div>
+  <button class="cred-upgrade" onclick="location.href='pricing.html'">⬆ Апгрейд</button>
+</div>
+
+<!-- ── Guest notice ── -->
+<div class="credit-bar-guest" id="credit-bar-guest">
+  💡 <a href="login.html">Нэвтэрч</a> кредит системийг ашиглана уу — Үнэгүй тарифт 100 кредит/сар
 </div>
 
 <div class="hero">
@@ -137,7 +212,9 @@ textarea:focus{outline:none;border-color:#4ade80;}
 
 <div class="services">
 
-  <!-- TTS -->
+  <div class="section-title">Байнгын үйлчилгээ</div>
+
+  <!-- ── 1. TTS ── -->
   <div class="svc-card">
     <div class="svc-head">
       <div class="svc-ico green">🎤</div>
@@ -147,17 +224,15 @@ textarea:focus{outline:none;border-color:#4ade80;}
         <div class="badges">
           <span class="badge badge-free">Үнэгүй</span>
           <span class="badge badge-hot">Хамгийн алдартай</span>
+          <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
         </div>
       </div>
     </div>
-    <button class="svc-btn" onclick="toggleTTS()">▶ Туршиж үзэх</button>
+    <button class="svc-btn" onclick="toggleBox('tts-box',this)">▶ Туршиж үзэх</button>
     <div class="tts-box" id="tts-box">
-      <label class="form-label">Монгол текст оруулах <span id="char-count" style="color:#4ade80;float:right">0/1500</span></label>
-      <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateCount()"></textarea>
-      <div id="email-row" style="display:none;margin-top:8px">
-        <label class="form-label">📧 Email (нэг хаягаар 1500 тэмдэгт үнэгүй)</label>
-        <input id="tts-email" type="email" placeholder="tanii@email.com" style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:13px;">
-      </div>
+      <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+      <label class="form-label">Монгол текст оруулах <span id="char-count" style="color:#4ade80;float:right">0/500</span></label>
+      <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateTTSCount()"></textarea>
       <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
       <div class="voice-row">
         <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа (эрэгтэй)</div>
@@ -171,17 +246,16 @@ textarea:focus{outline:none;border-color:#4ade80;}
         <label class="form-label" style="margin-top:8px">🔊 Дуу чанга/Сула <span id="vol-val">0%</span></label>
         <input type="range" id="volume" min="-50" max="50" value="0" step="5" oninput="document.getElementById('vol-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
       </div>
-      <div id="limit-info" style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px;text-align:center"></div>
-      <button class="run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
-      <div id="upgrade-notice" style="display:none;margin-top:10px;padding:12px;background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;text-align:center;font-size:12px;color:#f4a261">
-        💎 2000+ тэмдэгт — <strong>Премиум</strong> хэрэгтэй<br>
-        <a href="login.html" style="color:#f4a261;font-weight:700;margin-top:4px;display:inline-block">→ Бүртгүүлж Premium авах</a>
+      <div id="tts-limit-info" style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px;text-align:center"></div>
+      <button class="run-btn" id="tts-run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
+      <div class="notice-box" id="tts-notice">
+        💎 Кредит хүрэлцэхгүй байна — <a href="pricing.html">тариф сонгох →</a>
       </div>
       <div class="result" id="tts-result"></div>
     </div>
   </div>
 
-  <!-- Humanizer -->
+  <!-- ── 2. Humanizer ── -->
   <div class="svc-card">
     <div class="svc-head">
       <div class="svc-ico orange">✨</div>
@@ -190,14 +264,19 @@ textarea:focus{outline:none;border-color:#4ade80;}
         <div class="svc-desc">AI орчуулгыг байгалийн, жинхэнэ монгол хэлрүү хөрвүүлнэ. Яаж ч мэдэгдэхгүй.</div>
         <div class="badges">
           <span class="badge badge-free">Үнэгүй</span>
+          <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
         </div>
       </div>
     </div>
-    <button class="svc-btn" onclick="toggleHum()">✨ Туршиж үзэх</button>
+    <button class="svc-btn" onclick="toggleBox('hum-box',this)">✨ Туршиж үзэх</button>
     <div class="hum-box" id="hum-box">
+      <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
       <label class="form-label">AI орчуулга / хатуу текст</label>
       <textarea id="hum-input" placeholder="Машинаар орчуулсан монгол текстийг энд оруулна уу..."></textarea>
-      <button class="run-btn" style="margin-top:10px" onclick="runHum()">✨ Хүмүүнжүүлэх</button>
+      <button class="run-btn" onclick="runHum()">✨ Хүмүүнжүүлэх</button>
+      <div class="notice-box" id="hum-notice">
+        💎 Кредит хүрэлцэхгүй байна — <a href="pricing.html">тариф сонгох →</a>
+      </div>
       <div class="split" id="hum-result" style="display:none">
         <div class="split-card">
           <div class="split-label red">Анхны текст</div>
@@ -211,7 +290,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
     </div>
   </div>
 
-  <!-- SRT -->
+  <!-- ── 3. SRT ── -->
   <div class="svc-card">
     <div class="svc-head">
       <div class="svc-ico blue">📄</div>
@@ -224,7 +303,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
     <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
   </div>
 
-  <!-- Script -->
+  <!-- ── 4. Script ── -->
   <div class="svc-card">
     <div class="svc-head">
       <div class="svc-ico purple">✍️</div>
@@ -237,7 +316,139 @@ textarea:focus{outline:none;border-color:#4ade80;}
     <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
   </div>
 
-</div>
+  <div class="section-title">Шинэ үйлчилгээ</div>
+
+  <!-- ── 5. Орчуулагч ── -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico teal">🌐</div>
+      <div class="svc-info">
+        <div class="svc-name">Орчуулагч</div>
+        <div class="svc-desc">20+ хэлнээс монголруу болон монголоос бусад хэлрүү хурдан, нарийвчлалтай орчуулна.</div>
+        <div class="badges">
+          <span class="badge badge-free">Үнэгүй</span>
+          <span class="badge badge-credit">⚡ 1 тэмдэгт = 2 кредит</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="toggleBox('trans-box',this)">🌐 Туршиж үзэх</button>
+    <div class="trans-box" id="trans-box">
+      <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 2 кредит</div>
+      <div class="lang-row">
+        <select class="lang-select" id="trans-from">
+          <option value="en">🇺🇸 Англи</option>
+          <option value="mn" selected>🇲🇳 Монгол</option>
+          <option value="ru">🇷🇺 Орос</option>
+          <option value="zh">🇨🇳 Хятад</option>
+          <option value="ja">🇯🇵 Япон</option>
+          <option value="ko">🇰🇷 Солонгос</option>
+          <option value="de">🇩🇪 Герман</option>
+          <option value="fr">🇫🇷 Франц</option>
+        </select>
+        <button class="lang-swap" onclick="swapLangs()" title="Солих">⇄</button>
+        <select class="lang-select" id="trans-to">
+          <option value="mn" selected>🇲🇳 Монгол</option>
+          <option value="en">🇺🇸 Англи</option>
+          <option value="ru">🇷🇺 Орос</option>
+          <option value="zh">🇨🇳 Хятад</option>
+          <option value="ja">🇯🇵 Япон</option>
+          <option value="ko">🇰🇷 Солонгос</option>
+          <option value="de">🇩🇪 Герман</option>
+          <option value="fr">🇫🇷 Франц</option>
+        </select>
+      </div>
+      <label class="form-label">Орчуулах текст</label>
+      <textarea id="trans-input" placeholder="Орчуулах текстийг энд бичнэ үү..."></textarea>
+      <button class="run-btn" onclick="runTranslate()">🌐 Орчуулах</button>
+      <div class="notice-box" id="trans-notice">
+        💎 Кредит хүрэлцэхгүй байна — <a href="pricing.html">тариф сонгох →</a>
+      </div>
+      <div class="result" id="trans-result"></div>
+    </div>
+  </div>
+
+  <!-- ── 6. Дуу→Текст (STT) ── -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico pink">🎙️</div>
+      <div class="svc-info">
+        <div class="svc-name">Дуу → Текст (Speech-to-Text)</div>
+        <div class="svc-desc">Монгол ярианы аудио файл (MP3/WAV/M4A) оруулахад автоматаар текст болгож өгнө.</div>
+        <div class="badges">
+          <span class="badge badge-free">Үнэгүй</span>
+          <span class="badge badge-credit">⚡ 1 мин = 10 кредит</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="toggleBox('stt-box',this)">🎙️ Туршиж үзэх</button>
+    <div class="stt-box" id="stt-box">
+      <div class="cost-pill">⚡ Үнэ: 1 минут = 10 кредит</div>
+      <div class="upload-area" id="stt-upload-area" onclick="document.getElementById('stt-file').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')"
+        ondragleave="this.classList.remove('drag')"
+        ondrop="handleSTTDrop(event)">
+        <input type="file" id="stt-file" accept=".mp3,.wav,.m4a,.ogg" onchange="handleSTTFile(event)">
+        <div class="upload-icon">🎵</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5)">MP3, WAV, M4A файл оруулах</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:4px">эсвэл энд чирж тавих</div>
+        <div class="upload-name" id="stt-file-name"></div>
+      </div>
+      <div id="stt-duration" style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:8px;display:none"></div>
+      <button class="run-btn" onclick="runSTT()">🎙️ Текст болгох</button>
+      <div class="notice-box" id="stt-notice">
+        💎 Кредит хүрэлцэхгүй байна — <a href="pricing.html">тариф сонгох →</a>
+      </div>
+      <div class="result" id="stt-result"></div>
+    </div>
+  </div>
+
+  <!-- ── 7. Текст засагч ── -->
+  <div class="svc-card">
+    <div class="svc-head">
+      <div class="svc-ico indigo">📝</div>
+      <div class="svc-info">
+        <div class="svc-name">Текст засагч</div>
+        <div class="svc-desc">Монгол текстийн дүрэм, найруулга, цэг таслалын алдааг автоматаар илрүүлж засна.</div>
+        <div class="badges">
+          <span class="badge badge-free">Үнэгүй</span>
+          <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
+        </div>
+      </div>
+    </div>
+    <button class="svc-btn" onclick="toggleBox('textedit-box',this)">📝 Туршиж үзэх</button>
+    <div class="textedit-box" id="textedit-box">
+      <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+      <label class="form-label">Засах текст</label>
+      <textarea id="textedit-input" placeholder="Засах монгол текстийг энд оруулна уу..." style="height:110px;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;">
+          <input type="checkbox" id="fix-grammar" checked style="accent-color:#4ade80;"> Дүрэм
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;">
+          <input type="checkbox" id="fix-punctuation" checked style="accent-color:#4ade80;"> Цэг таслал
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;">
+          <input type="checkbox" id="fix-style" style="accent-color:#4ade80;"> Найруулга сайжруулах
+        </label>
+      </div>
+      <button class="run-btn" onclick="runTextEdit()">📝 Засах</button>
+      <div class="notice-box" id="textedit-notice">
+        💎 Кредит хүрэлцэхгүй байна — <a href="pricing.html">тариф сонгох →</a>
+      </div>
+      <div class="split" id="textedit-result" style="display:none">
+        <div class="split-card">
+          <div class="split-label red">Анхны текст</div>
+          <div class="split-text" id="textedit-before"></div>
+        </div>
+        <div class="split-card">
+          <div class="split-label grn">Засагдсан текст</div>
+          <div class="split-text" id="textedit-after"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /services -->
 
 <div class="footer">© 2025 КиноЭзэн — Монгол хэлний кино платформ</div>
 
@@ -267,127 +478,456 @@ textarea:focus{outline:none;border-color:#4ade80;}
 </nav>
 
 <script>
-function getToday(){ return new Date().toISOString().slice(0,10); }
-function getEmailKey(email){ return 'tts_email_'+btoa(email)+'_'+getToday(); }
-function getEmailUsed(email){ return Number(localStorage.getItem(getEmailKey(email))||0); }
-function addEmailUsed(email,n){ const k=getEmailKey(email); localStorage.setItem(k, Number(localStorage.getItem(k)||0)+n); }
-function isLoggedIn(){ return !!localStorage.getItem('kino_user'); }
+// ══════════════════════════════════════════
+// SUPABASE SETUP
+// ══════════════════════════════════════════
+const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY_HERE'; // ← энд anon key оруулна уу
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function updateCount(){
-  const len = document.getElementById('tts-text').value.length;
-  document.getElementById('char-count').textContent = len+'/1500';
-  document.getElementById('char-count').style.color = len>1500?'#e63946':'#4ade80';
-  document.getElementById('email-row').style.display = len>0?'block':'none';
-  document.getElementById('upgrade-notice').style.display = len>2000?'block':'none';
-  const email = document.getElementById('tts-email').value.trim();
-  const used = email ? getEmailUsed(email) : 0;
-  const rem = Math.max(0, 1500-used);
-  document.getElementById('limit-info').textContent = email ? '📊 '+email+' — өнөөдөр үлдсэн: '+rem+'/1500 тэмдэгт' : '';
+// Тарифын кредит тоо
+const PLAN_CREDITS = { free: 100, standard: 1000, pro: 5000 };
+
+// Кредит зарцуулалт (нэгж тутамд)
+const CREDIT_COSTS = {
+  tts: 1,       // 1 тэмдэгт = 1 кредит
+  humanize: 1,  // 1 тэмдэгт = 1 кредит
+  translate: 2, // 1 тэмдэгт = 2 кредит
+  stt: 10,      // 1 минут = 10 кредит
+  textedit: 1   // 1 тэмдэгт = 1 кредит
+};
+
+// ── Хэрэглэгчийн state ──
+let currentUser = null;
+let userProfile = null; // { plan, credits, credits_used }
+
+// ══════════════════════════════════════════
+// INIT — хуудас ачаалахад
+// ══════════════════════════════════════════
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadProfile();
+    renderAuthUI();
+  } else {
+    renderGuestUI();
+  }
+
+  sb.auth.onAuthStateChange(async (event, session) => {
+    if (session) {
+      currentUser = session.user;
+      await loadProfile();
+      renderAuthUI();
+    } else {
+      currentUser = null;
+      userProfile = null;
+      renderGuestUI();
+    }
+  });
+})();
+
+async function loadProfile() {
+  const { data, error } = await sb
+    .from('profiles')
+    .select('plan, credits, credits_used')
+    .eq('id', currentUser.id)
+    .single();
+
+  if (error) {
+    // profiles мөр байхгүй бол үүсгэнэ
+    if (error.code === 'PGRST116') {
+      const { data: created } = await sb.from('profiles').insert({
+        id: currentUser.id,
+        plan: 'free',
+        credits: PLAN_CREDITS.free,
+        credits_used: 0
+      }).select().single();
+      userProfile = created || { plan: 'free', credits: PLAN_CREDITS.free, credits_used: 0 };
+    }
+  } else {
+    userProfile = data;
+  }
+  updateCreditBar();
 }
 
-let drawerOpen=false;
-function toggleDrawer(){
-  drawerOpen=!drawerOpen;
-  document.getElementById('nav-drawer').classList.toggle('open',drawerOpen);
-  document.getElementById('nav-toggle').textContent=drawerOpen?'✕':'☰';
+// ══════════════════════════════════════════
+// UI — CREDIT BAR
+// ══════════════════════════════════════════
+function updateCreditBar() {
+  if (!userProfile) return;
+  const total = PLAN_CREDITS[userProfile.plan] || 100;
+  const used = userProfile.credits_used || 0;
+  const remaining = Math.max(0, total - used);
+  const pct = Math.round((remaining / total) * 100);
+
+  document.getElementById('cred-remaining').textContent = remaining.toLocaleString();
+  document.getElementById('cred-total').textContent = total.toLocaleString();
+  document.getElementById('cred-fill').style.width = pct + '%';
+  document.getElementById('cred-pct').textContent = pct + '% үлдсэн';
+
+  const badge = document.getElementById('cred-plan-badge');
+  const planNames = { free: 'Үнэгүй', standard: 'Стандарт', pro: 'Про' };
+  const planClasses = { free: 'plan-free', standard: 'plan-standard', pro: 'plan-pro' };
+  badge.textContent = planNames[userProfile.plan] || 'Үнэгүй';
+  badge.className = 'cred-plan ' + (planClasses[userProfile.plan] || 'plan-free');
+
+  document.getElementById('credit-bar').classList.remove('hidden');
+  document.getElementById('credit-bar-guest').style.display = 'none';
 }
-document.addEventListener('click',e=>{
-  if(drawerOpen&&!e.target.closest('.nav')&&!e.target.closest('.nav-drawer')){
-    drawerOpen=false;
+
+function renderAuthUI() {
+  // Nav дээр нэр харуулах
+  const navRight = document.getElementById('nav-right');
+  const email = currentUser.email || '';
+  const short = email.split('@')[0].slice(0,12);
+  navRight.innerHTML = `
+    <span style="font-size:12px;color:rgba(255,255,255,0.5)">👤 ${short}</span>
+    <button class="btn-login" onclick="handleLogout()">Гарах</button>
+  `;
+  const drawerBtns = document.getElementById('drawer-btns');
+  drawerBtns.innerHTML = `<button class="btn-login" style="flex:1" onclick="handleLogout()">Гарах</button>`;
+}
+
+function renderGuestUI() {
+  document.getElementById('credit-bar').classList.add('hidden');
+  document.getElementById('credit-bar-guest').style.display = 'block';
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+}
+
+// ══════════════════════════════════════════
+// CREDIT CHECK & DEDUCT
+// ══════════════════════════════════════════
+function getRemaining() {
+  if (!userProfile) return 0;
+  const total = PLAN_CREDITS[userProfile.plan] || 100;
+  return Math.max(0, total - (userProfile.credits_used || 0));
+}
+
+function checkCredits(service, units) {
+  // Нэвтрээгүй бол хэрэглэгчийг login руу чиглүүлнэ
+  if (!currentUser) {
+    if (confirm('Үйлчилгээ ашиглахад нэвтэрч орно уу?')) location.href = 'login.html';
+    return false;
+  }
+  const cost = (CREDIT_COSTS[service] || 1) * units;
+  if (getRemaining() < cost) return false;
+  return true;
+}
+
+async function deductCredits(service, units, noticeId) {
+  const cost = (CREDIT_COSTS[service] || 1) * units;
+  if (!checkCredits(service, units)) {
+    if (noticeId) document.getElementById(noticeId).style.display = 'block';
+    return false;
+  }
+  // Суурь хасалт
+  const newUsed = (userProfile.credits_used || 0) + cost;
+  const { error } = await sb.from('profiles')
+    .update({ credits_used: newUsed })
+    .eq('id', currentUser.id);
+  if (error) { console.error('Credit update error:', error); return false; }
+
+  // Log бичих
+  await sb.from('credit_logs').insert({
+    user_id: currentUser.id,
+    service,
+    amount: cost,
+    created_at: new Date().toISOString()
+  });
+
+  userProfile.credits_used = newUsed;
+  updateCreditBar();
+  return true;
+}
+
+// ══════════════════════════════════════════
+// NAV helpers
+// ══════════════════════════════════════════
+let drawerOpen = false;
+function toggleDrawer() {
+  drawerOpen = !drawerOpen;
+  document.getElementById('nav-drawer').classList.toggle('open', drawerOpen);
+  document.getElementById('nav-toggle').textContent = drawerOpen ? '✕' : '☰';
+}
+document.addEventListener('click', e => {
+  if (drawerOpen && !e.target.closest('.nav') && !e.target.closest('.nav-drawer')) {
+    drawerOpen = false;
     document.getElementById('nav-drawer').classList.remove('open');
-    document.getElementById('nav-toggle').textContent='☰';
+    document.getElementById('nav-toggle').textContent = '☰';
   }
 });
 
-function toggleTTS(){ document.getElementById('tts-box').classList.toggle('show'); }
-function toggleHum(){ document.getElementById('hum-box').classList.toggle('show'); }
-function selVoice(el){ document.querySelectorAll('.vbtn').forEach(v=>v.classList.remove('on')); el.classList.add('on'); }
-
-// ── Netlify Function дамжуулан дуудах ──
-async function callTTS(text, voice, rate, pitch, volume){
-  const r = await fetch('/.netlify/functions/tts', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({text, voice, rate, pitch, volume})
-  });
-  if(!r.ok){ const t=await r.text(); throw new Error('TTS алдаа '+r.status+': '+t.slice(0,150)); }
-  const j = await r.json();
-  if(j.error) throw new Error(j.error);
-  return j;
+function toggleBox(id, btn) {
+  const box = document.getElementById(id);
+  box.classList.toggle('show');
+  if (box.classList.contains('show')) {
+    btn.textContent = btn.textContent.replace('Туршиж үзэх','Хаах').replace('▶','✕').replace('✨','✕').replace('🌐','✕').replace('🎙️','✕').replace('📝','✕');
+  } else {
+    // btn текстийг анхны байдалд буцаана
+    const origMap = {
+      'tts-box':'▶ Туршиж үзэх','hum-box':'✨ Туршиж үзэх',
+      'trans-box':'🌐 Туршиж үзэх','stt-box':'🎙️ Туршиж үзэх','textedit-box':'📝 Туршиж үзэх'
+    };
+    btn.textContent = origMap[id] || 'Туршиж үзэх';
+  }
 }
 
-async function callHumanize(text){
-  const r = await fetch('/.netlify/functions/humanize', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({text})
-  });
-  if(!r.ok){ const t=await r.text(); throw new Error('Humanize алдаа '+r.status+': '+t.slice(0,150)); }
-  const j = await r.json();
-  if(j.error) throw new Error(j.error);
-  return j.data;
+function selVoice(el) {
+  document.querySelectorAll('.vbtn').forEach(v => v.classList.remove('on'));
+  el.classList.add('on');
 }
 
-async function runTTS(){
+function swapLangs() {
+  const f = document.getElementById('trans-from');
+  const t = document.getElementById('trans-to');
+  const tmp = f.value; f.value = t.value; t.value = tmp;
+}
+
+// ══════════════════════════════════════════
+// TTS
+// ══════════════════════════════════════════
+function updateTTSCount() {
+  const len = document.getElementById('tts-text').value.length;
+  const cc = document.getElementById('char-count');
+  const limit = currentUser ? (userProfile ? getRemaining() : 500) : 500;
+  cc.textContent = len + '/500';
+  cc.style.color = len > 500 ? '#e63946' : '#4ade80';
+  document.getElementById('tts-limit-info').textContent =
+    currentUser && userProfile
+      ? `⚡ ${len} тэмдэгт = ${len} кредит зарцуулна (үлдсэн: ${getRemaining()})`
+      : `⚡ Нэвтэрсний дараа кредитээр ашиглана`;
+}
+
+async function runTTS() {
   const text = document.getElementById('tts-text').value.trim();
-  if(!text){ alert('Текст оруулна уу!'); return; }
-  const email = document.getElementById('tts-email').value.trim();
-  if(!email){ alert('Email хаягаа оруулна уу!'); return; }
-  // Email тоолуур шалгах
-  const emailUsed = getEmailUsed(email);
-  if(emailUsed + text.length > 1500){
-    alert('⚠️ '+email+' хаягаар өнөөдрийн 1500 тэмдэгтийн лимит дүүрлээ!\n(Ашигласан: '+emailUsed+'/1500)\n2000+ тэмдэгт бол Премиум шаардлагатай.');
-    return;
-  }
-  if(text.length > 2000){
-    alert('2000+ тэмдэгт бол Премиум хэрэгтэй!');
-    return;
-  }
+  if (!text) { alert('Текст оруулна уу!'); return; }
+  if (text.length > 500) { alert('500 тэмдэгтээс хэтэрч болохгүй'); return; }
+
+  document.getElementById('tts-notice').style.display = 'none';
+  const ok = await deductCredits('tts', text.length, 'tts-notice');
+  if (!ok) return;
+
   const voiceEl = document.querySelector('.vbtn.on');
-  const voiceName = voiceEl&&voiceEl.textContent.includes('Есүй') ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)';
+  const voiceName = voiceEl && voiceEl.textContent.includes('Есүй') ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)';
   const rate = parseInt(document.getElementById('rate').value);
   const pitch = parseInt(document.getElementById('pitch').value);
   const volume = parseInt(document.getElementById('volume').value);
-  const btn = document.querySelector('#tts-box .run-btn');
-  btn.textContent='⏳ Үүсгэж байна...'; btn.disabled=true;
+
+  const btn = document.getElementById('tts-run-btn');
+  btn.textContent = '⏳ Үүсгэж байна...'; btn.disabled = true;
   try {
-    const resp2 = await callTTS(text, voiceName, rate, pitch, volume);
-    const audioUrl = resp2.audioUrl;
-    if(!audioUrl) throw new Error('Audio URL олдсонгүй. Debug: ' + (resp2.debug||'').slice(0,100));
-    addEmailUsed(email, text.length);
-    updateCount();
+    const resp = await fetch('/.netlify/functions/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice: voiceName, rate, pitch, volume })
+    });
+    if (!resp.ok) throw new Error('TTS алдаа ' + resp.status);
+    const j = await resp.json();
+    if (j.error) throw new Error(j.error);
+    const audioUrl = j.audioUrl;
+    if (!audioUrl) throw new Error('Audio URL олдсонгүй');
+
     const rd = document.getElementById('tts-result');
-    rd.innerHTML=`
-      <div class="result-label">✓ Бэлэн! (өнөөдөр: ${getUsed('tts')}/${limit} тэмдэгт)</div>
+    rd.innerHTML = `
+      <div class="result-label">✓ Бэлэн! (⚡ ${text.length} кредит зарцуулсан)</div>
       <audio controls style="width:100%;margin-bottom:10px;border-radius:30px;">
         <source src="${audioUrl}" type="audio/mpeg">
       </audio>
       <a href="${audioUrl}" download="mongol_duu.mp3" style="display:block;text-align:center;text-decoration:none;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;">⬇ MP3 татах</a>`;
     rd.classList.add('show');
-  } catch(e){ alert('Алдаа: '+e.message); }
-  finally { btn.textContent='▶ Дуу үүсгэх'; btn.disabled=false; }
+  } catch (e) { alert('Алдаа: ' + e.message); }
+  finally { btn.textContent = '▶ Дуу үүсгэх'; btn.disabled = false; }
 }
 
-async function runHum(){
+// ══════════════════════════════════════════
+// HUMANIZER
+// ══════════════════════════════════════════
+async function runHum() {
   const text = document.getElementById('hum-input').value.trim();
-  if(!text){ alert('Текст оруулна уу!'); return; }
-  const limit = getLimit();
-  const used = getUsed('hum');
-  if(used + text.length > limit){
-    alert('Өдрийн лимит дүүрлээ! ('+used+'/'+limit+')\n'+(isLoggedIn()?'':'Бүртгэлтэй болвол 3000 тэмдэгт болно.'));
-    return;
-  }
-  document.getElementById('hum-before').textContent=text;
-  document.getElementById('hum-result').style.display='grid';
-  document.getElementById('hum-after').textContent='⏳ Боловсруулж байна...';
+  if (!text) { alert('Текст оруулна уу!'); return; }
+
+  document.getElementById('hum-notice').style.display = 'none';
+  const ok = await deductCredits('humanize', text.length, 'hum-notice');
+  if (!ok) return;
+
+  document.getElementById('hum-before').textContent = text;
+  document.getElementById('hum-result').style.display = 'grid';
+  document.getElementById('hum-after').textContent = '⏳ Боловсруулж байна...';
+
   const btn = document.querySelector('#hum-box .run-btn');
-  btn.textContent='⏳ Боловсруулж байна...'; btn.disabled=true;
+  btn.textContent = '⏳ Боловсруулж байна...'; btn.disabled = true;
   try {
-    const data = await callHumanize(text);
-    addUsed('hum', text.length);
-    document.getElementById('hum-after').textContent=data[0];
-  } catch(e){ document.getElementById('hum-after').textContent='Алдаа: '+e.message; }
-  finally { btn.textContent='✨ Хүмүүнжүүлэх'; btn.disabled=false; }
+    const resp = await fetch('/.netlify/functions/humanize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!resp.ok) throw new Error('Humanize алдаа ' + resp.status);
+    const j = await resp.json();
+    if (j.error) throw new Error(j.error);
+    document.getElementById('hum-after').textContent = j.data[0];
+  } catch (e) {
+    document.getElementById('hum-after').textContent = 'Алдаа: ' + e.message;
+  } finally { btn.textContent = '✨ Хүмүүнжүүлэх'; btn.disabled = false; }
+}
+
+// ══════════════════════════════════════════
+// ОРЧУУЛАГЧ
+// ══════════════════════════════════════════
+async function runTranslate() {
+  const text = document.getElementById('trans-input').value.trim();
+  if (!text) { alert('Текст оруулна уу!'); return; }
+
+  document.getElementById('trans-notice').style.display = 'none';
+  const ok = await deductCredits('translate', text.length, 'trans-notice');
+  if (!ok) return;
+
+  const fromLang = document.getElementById('trans-from').options[document.getElementById('trans-from').selectedIndex].text;
+  const toLang   = document.getElementById('trans-to').options[document.getElementById('trans-to').selectedIndex].text;
+
+  const btn = document.querySelector('#trans-box .run-btn');
+  btn.textContent = '⏳ Орчуулж байна...'; btn.disabled = true;
+
+  try {
+    const resp = await fetch('/.netlify/functions/translate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text,
+        from: document.getElementById('trans-from').value,
+        to: document.getElementById('trans-to').value
+      })
+    });
+    if (!resp.ok) throw new Error('Орчуулга алдаа ' + resp.status);
+    const j = await resp.json();
+    if (j.error) throw new Error(j.error);
+
+    const rd = document.getElementById('trans-result');
+    rd.innerHTML = `
+      <div class="result-label">✓ Орчуулга бэлэн! (⚡ ${text.length * 2} кредит)</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:8px;">${fromLang} → ${toLang}</div>
+      <div style="font-size:13px;color:#fff;line-height:1.7;background:rgba(255,255,255,0.04);padding:12px;border-radius:8px;">${j.translated}</div>
+      <button onclick="copyText('${encodeURIComponent(j.translated)}')" style="margin-top:8px;width:100%;padding:9px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;">📋 Хуулах</button>`;
+    rd.classList.add('show');
+  } catch (e) { alert('Алдаа: ' + e.message); }
+  finally { btn.textContent = '🌐 Орчуулах'; btn.disabled = false; }
+}
+
+// ══════════════════════════════════════════
+// ДУУ → ТЕКСТ (STT)
+// ══════════════════════════════════════════
+let sttFile = null;
+let sttDurationMin = 0;
+
+function handleSTTFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  sttFile = file;
+  document.getElementById('stt-file-name').textContent = '✓ ' + file.name;
+  getAudioDuration(file);
+}
+function handleSTTDrop(e) {
+  e.preventDefault();
+  document.getElementById('stt-upload-area').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  sttFile = file;
+  document.getElementById('stt-file-name').textContent = '✓ ' + file.name;
+  getAudioDuration(file);
+}
+function getAudioDuration(file) {
+  const audio = new Audio();
+  audio.src = URL.createObjectURL(file);
+  audio.onloadedmetadata = () => {
+    sttDurationMin = Math.ceil(audio.duration / 60);
+    const cost = sttDurationMin * CREDIT_COSTS.stt;
+    const durEl = document.getElementById('stt-duration');
+    durEl.textContent = `⏱ Урт: ~${sttDurationMin} мин → ⚡ ${cost} кредит зарцуулна`;
+    durEl.style.display = 'block';
+    URL.revokeObjectURL(audio.src);
+  };
+}
+
+async function runSTT() {
+  if (!sttFile) { alert('Аудио файл оруулна уу!'); return; }
+
+  document.getElementById('stt-notice').style.display = 'none';
+  const ok = await deductCredits('stt', sttDurationMin || 1, 'stt-notice');
+  if (!ok) return;
+
+  const btn = document.querySelector('#stt-box .run-btn');
+  btn.textContent = '⏳ Боловсруулж байна...'; btn.disabled = true;
+
+  try {
+    const formData = new FormData();
+    formData.append('audio', sttFile);
+    const resp = await fetch('/.netlify/functions/stt', {
+      method: 'POST',
+      body: formData
+    });
+    if (!resp.ok) throw new Error('STT алдаа ' + resp.status);
+    const j = await resp.json();
+    if (j.error) throw new Error(j.error);
+
+    const rd = document.getElementById('stt-result');
+    rd.innerHTML = `
+      <div class="result-label">✓ Текст бэлэн! (⚡ ${(sttDurationMin || 1) * 10} кредит)</div>
+      <div style="font-size:13px;color:#fff;line-height:1.7;background:rgba(255,255,255,0.04);padding:12px;border-radius:8px;">${j.text}</div>
+      <button onclick="copyText('${encodeURIComponent(j.text)}')" style="margin-top:8px;width:100%;padding:9px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;">📋 Хуулах</button>`;
+    rd.classList.add('show');
+  } catch (e) { alert('Алдаа: ' + e.message); }
+  finally { btn.textContent = '🎙️ Текст болгох'; btn.disabled = false; }
+}
+
+// ══════════════════════════════════════════
+// ТЕКСТ ЗАСАГЧ
+// ══════════════════════════════════════════
+async function runTextEdit() {
+  const text = document.getElementById('textedit-input').value.trim();
+  if (!text) { alert('Текст оруулна уу!'); return; }
+
+  document.getElementById('textedit-notice').style.display = 'none';
+  const ok = await deductCredits('textedit', text.length, 'textedit-notice');
+  if (!ok) return;
+
+  const fixGrammar     = document.getElementById('fix-grammar').checked;
+  const fixPunctuation = document.getElementById('fix-punctuation').checked;
+  const fixStyle       = document.getElementById('fix-style').checked;
+
+  document.getElementById('textedit-before').textContent = text;
+  document.getElementById('textedit-result').style.display = 'grid';
+  document.getElementById('textedit-after').textContent = '⏳ Засаж байна...';
+
+  const btn = document.querySelector('#textedit-box .run-btn');
+  btn.textContent = '⏳ Засаж байна...'; btn.disabled = true;
+
+  try {
+    const resp = await fetch('/.netlify/functions/textedit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, fixGrammar, fixPunctuation, fixStyle })
+    });
+    if (!resp.ok) throw new Error('TextEdit алдаа ' + resp.status);
+    const j = await resp.json();
+    if (j.error) throw new Error(j.error);
+    document.getElementById('textedit-after').textContent = j.corrected;
+  } catch (e) {
+    document.getElementById('textedit-after').textContent = 'Алдаа: ' + e.message;
+  } finally { btn.textContent = '📝 Засах'; btn.disabled = false; }
+}
+
+// ══════════════════════════════════════════
+// UTILITY
+// ══════════════════════════════════════════
+function copyText(encoded) {
+  navigator.clipboard.writeText(decodeURIComponent(encoded))
+    .then(() => alert('✓ Хуулагдлаа!'))
+    .catch(() => alert('Хуулж чадсангүй'));
 }
 </script>
 </body>
