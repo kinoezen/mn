@@ -23,8 +23,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .nav-drawer a:hover,.nav-drawer a.active{background:rgba(74,222,128,0.08);color:#4ade80;}
 .drawer-divider{height:1px;background:rgba(255,255,255,0.07);margin:6px 0;}
 .drawer-btns{display:flex;gap:8px;margin-top:4px;}
-.drawer-btns .btn-login{flex:1;text-align:center;}
-.drawer-btns .btn-join{flex:1;text-align:center;}
+.drawer-btns .btn-login,.drawer-btns .btn-join{flex:1;text-align:center;}
 .nav-links-desktop{display:flex;gap:4px;align-items:center;}
 .nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
 .nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
@@ -34,7 +33,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .hero h1 span{color:#4ade80;}
 .hero p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:500px;margin:0 auto;}
 .services{padding:16px 16px;max-width:800px;margin:0 auto;}
-.svc-card{background:#1e1e2e;border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.07);cursor:pointer;transition:border-color 0.2s;}
+.svc-card{background:#1e1e2e;border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.07);transition:border-color 0.2s;}
 .svc-card:hover{border-color:rgba(74,222,128,0.3);}
 .svc-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
 .svc-ico{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
@@ -42,7 +41,6 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .svc-ico.orange{background:linear-gradient(135deg,#d97706,#f4a261);}
 .svc-ico.blue{background:linear-gradient(135deg,#2563eb,#6b7ff7);}
 .svc-ico.purple{background:linear-gradient(135deg,#7c3aed,#c084fc);}
-.svc-ico.red{background:linear-gradient(135deg,#dc2626,#e63946);}
 .svc-info{flex:1;min-width:0;}
 .svc-name{font-size:15px;font-weight:600;color:#fff;margin-bottom:4px;}
 .svc-desc{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;}
@@ -58,14 +56,13 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .form-label{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;display:block;}
 textarea{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 14px;color:#fff;font-size:13px;height:90px;resize:none;font-family:Arial,sans-serif;}
 textarea:focus{outline:none;border-color:#4ade80;}
-.voice-row{display:flex;gap:8px;margin:10px 0;}
-.vbtn{flex:1;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
+.voice-row{display:flex;gap:8px;margin:6px 0;flex-wrap:wrap;}
+.vbtn{flex:1;min-width:80px;padding:9px;border-radius:9px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.55);font-size:12px;font-weight:500;cursor:pointer;text-align:center;}
 .vbtn.on{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.08);}
 .run-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
 .result{background:#1e1e2e;border-radius:10px;padding:14px;margin-top:12px;border:1px solid rgba(74,222,128,0.2);display:none;}
 .result.show{display:block;}
 .result-label{font-size:11px;color:#4ade80;font-weight:600;margin-bottom:10px;}
-.dl-btn{width:100%;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;cursor:pointer;}
 .hum-box{background:#12121e;border-radius:12px;padding:16px;margin-top:14px;border:1px solid rgba(255,255,255,0.06);display:none;}
 .hum-box.show{display:block;}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
@@ -76,9 +73,9 @@ textarea:focus{outline:none;border-color:#4ade80;}
 .split-text{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;}
 @media(max-width:480px){.split{grid-template-columns:1fr;}}
 .footer{margin-top:30px;padding:16px 18px 80px;border-top:1px solid rgba(255,255,255,0.08);text-align:center;font-size:12px;color:rgba(255,255,255,0.3);}
-.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(18,18,30,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);z-index:1000;padding-bottom:env(safe-area-inset-bottom);}
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(18,18,30,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);z-index:1000;}
 .mbn-inner{display:flex;align-items:center;justify-content:space-around;height:100%;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 10px;border-radius:10px;text-decoration:none;color:rgba(255,255,255,0.4);font-size:10px;font-family:Arial,sans-serif;font-weight:600;transition:color 0.2s;cursor:pointer;border:none;background:none;flex:1;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 10px;border-radius:10px;text-decoration:none;color:rgba(255,255,255,0.4);font-size:10px;font-weight:600;cursor:pointer;border:none;background:none;flex:1;}
 .mbn-item.active{color:#4ade80;}
 .mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .mbn-item.active svg{stroke:#4ade80;}
@@ -90,17 +87,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
 <nav class="nav">
   <a href="index.html" class="logo">
     <div class="logo-icon">
-      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
-        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
-        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
-        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
-        <circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/>
-        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
-      </svg>
+      <svg viewBox="0 0 26 26" fill="none"><rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/><line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/><line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/><line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/><circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/><circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/><circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/><circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/><path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/></svg>
     </div>
     <div class="logo-text">КиноЭзэн</div>
   </a>
@@ -114,7 +101,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
-  <button class="nav-toggle" id="nav-toggle" onclick="toggleDrawer()" aria-label="Цэс">☰</button>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleDrawer()">☰</button>
 </nav>
 
 <div class="nav-drawer" id="nav-drawer">
@@ -143,7 +130,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
       <div class="svc-ico green">🎤</div>
       <div class="svc-info">
         <div class="svc-name">Монгол TTS — Дуу үүсгэгч</div>
-        <div class="svc-desc">Текстийг байгалийн Монгол дуугаар уншуулна. Батаа (эрэгтэй) ба Есүй (эмэгтэй) хоёр дуу сонголттой.</div>
+        <div class="svc-desc">Текстийг байгалийн Монгол дуугаар уншуулна. Edge TTS болон Gemini TTS хоёр хөдөлгүүртэй.</div>
         <div class="badges">
           <span class="badge badge-free">Үнэгүй</span>
           <span class="badge badge-hot">Хамгийн алдартай</span>
@@ -152,27 +139,48 @@ textarea:focus{outline:none;border-color:#4ade80;}
     </div>
     <button class="svc-btn" onclick="toggleTTS()">▶ Туршиж үзэх</button>
     <div class="tts-box" id="tts-box">
-      <label class="form-label">Монгол текст оруулах <span id="char-count" style="color:#4ade80;float:right">0/1500</span></label>
+      <label class="form-label">Монгол текст оруулах <span id="char-count" style="color:#4ade80;float:right">0/2000</span></label>
       <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateCount()"></textarea>
 
-      <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
+      <!-- Хөдөлгүүр сонгох -->
+      <label class="form-label" style="margin-top:10px">🤖 Хөдөлгүүр</label>
       <div class="voice-row">
-        <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа (эрэгтэй)</div>
-        <div class="vbtn" onclick="selVoice(this)">🎤 Есүй (эмэгтэй)</div>
+        <div class="vbtn on" onclick="selEngine(this)" data-engine="edge">⚡ Edge TTS</div>
+        <div class="vbtn" onclick="selEngine(this)" data-engine="gemini">✨ Gemini TTS</div>
       </div>
-      <div style="margin:10px 0">
-        <label class="form-label">⚡ Хурд <span id="rate-val">+15%</span></label>
+
+      <!-- Edge хоолой -->
+      <div id="edge-section">
+        <label class="form-label">🎤 Хоолой</label>
+        <div class="voice-row">
+          <div class="vbtn on evbtn" onclick="selVoice(this)">🎤 Батаа (эрэгтэй)</div>
+          <div class="vbtn evbtn" onclick="selVoice(this)">🎤 Есүй (эмэгтэй)</div>
+        </div>
+        <label class="form-label" style="margin-top:8px">⚡ Хурд <span id="rate-val">+15%</span></label>
         <input type="range" id="rate" min="-50" max="50" value="15" step="5" oninput="document.getElementById('rate-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
         <label class="form-label" style="margin-top:8px">🎵 Бүдүүн/Нарийн <span id="pitch-val">-8Hz</span></label>
         <input type="range" id="pitch" min="-50" max="50" value="-8" step="1" oninput="document.getElementById('pitch-val').textContent=(this.value>0?'+':'')+this.value+'Hz'" style="width:100%;accent-color:#4ade80">
         <label class="form-label" style="margin-top:8px">🔊 Дуу чанга/Сула <span id="vol-val">0%</span></label>
         <input type="range" id="volume" min="-50" max="50" value="0" step="5" oninput="document.getElementById('vol-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
       </div>
-      <div id="limit-info" style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:8px;text-align:center"></div>
-      <button class="run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
+
+      <!-- Gemini хоолой -->
+      <div id="gemini-section" style="display:none">
+        <label class="form-label">🎙️ Gemini хоолой &nbsp;<span style="color:rgba(255,255,255,0.35)">👨 Charon Fenrir Puck Orbit &nbsp; 👩 Aoede Schedar</span></label>
+        <div class="voice-row">
+          <div class="vbtn on gvbtn" onclick="selGVoice(this)">Charon</div>
+          <div class="vbtn gvbtn" onclick="selGVoice(this)">Fenrir</div>
+          <div class="vbtn gvbtn" onclick="selGVoice(this)">Puck</div>
+          <div class="vbtn gvbtn" onclick="selGVoice(this)">Orbit</div>
+          <div class="vbtn gvbtn" onclick="selGVoice(this)">Aoede</div>
+          <div class="vbtn gvbtn" onclick="selGVoice(this)">Schedar</div>
+        </div>
+      </div>
+
+      <button class="run-btn" style="margin-top:12px" onclick="runTTS()">▶ Дуу үүсгэх</button>
       <div id="upgrade-notice" style="display:none;margin-top:10px;padding:12px;background:rgba(244,162,97,0.1);border:1px solid rgba(244,162,97,0.3);border-radius:10px;text-align:center;font-size:12px;color:#f4a261">
-        💎 2000+ тэмдэгт — <strong>Премиум</strong> хэрэгтэй<br>
-        <a href="login.html" style="color:#f4a261;font-weight:700;margin-top:4px;display:inline-block">→ Бүртгүүлж Premium авах</a>
+        💎 2000+ тэмдэгт — <strong>Премиум</strong> хэрэгтэй
+        <a href="login.html" style="color:#f4a261;font-weight:700;margin-left:8px">→ Авах</a>
       </div>
       <div class="result" id="tts-result"></div>
     </div>
@@ -184,10 +192,8 @@ textarea:focus{outline:none;border-color:#4ade80;}
       <div class="svc-ico orange">✨</div>
       <div class="svc-info">
         <div class="svc-name">Монгол Humanizer</div>
-        <div class="svc-desc">AI орчуулгыг байгалийн, жинхэнэ монгол хэлрүү хөрвүүлнэ. Яаж ч мэдэгдэхгүй.</div>
-        <div class="badges">
-          <span class="badge badge-free">Үнэгүй</span>
-        </div>
+        <div class="svc-desc">AI орчуулгыг байгалийн, жинхэнэ монгол хэлрүү хөрвүүлнэ.</div>
+        <div class="badges"><span class="badge badge-free">Үнэгүй</span></div>
       </div>
     </div>
     <button class="svc-btn" onclick="toggleHum()">✨ Туршиж үзэх</button>
@@ -214,7 +220,7 @@ textarea:focus{outline:none;border-color:#4ade80;}
       <div class="svc-ico blue">📄</div>
       <div class="svc-info">
         <div class="svc-name">SRT Субтитр орчуулагч</div>
-        <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно. Видео хийгчдэд зориулсан.</div>
+        <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
         <div class="badges"><span class="badge badge-pro">Премиум</span></div>
       </div>
     </div>
@@ -241,43 +247,41 @@ textarea:focus{outline:none;border-color:#4ade80;}
 <nav class="mobile-bottom-nav">
   <div class="mbn-inner">
     <a class="mbn-item" href="index.html">
-      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
-      <span>Нүүр</span>
+      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg><span>Нүүр</span>
     </a>
     <a class="mbn-item" href="movies.html">
-      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/></svg>
-      <span>Кино</span>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/></svg><span>Кино</span>
     </a>
     <a class="mbn-item" href="news.html">
-      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg>
-      <span>Мэдээ</span>
+      <svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg><span>Мэдээ</span>
     </a>
     <a class="mbn-item active" href="services.html">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
-      <span>Үйлчилгээ</span>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg><span>Үйлчилгээ</span>
     </a>
     <a class="mbn-item" href="profile.html">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      <span>Профайл</span>
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Профайл</span>
     </a>
   </div>
 </nav>
 
 <script>
+// ── Хэрэглэгч, лимит ──
 function getToday(){ return new Date().toISOString().slice(0,10); }
-function getEmailKey(email){ return 'tts_email_'+btoa(email)+'_'+getToday(); }
-function getEmailUsed(email){ return Number(localStorage.getItem(getEmailKey(email))||0); }
-function addEmailUsed(email,n){ const k=getEmailKey(email); localStorage.setItem(k, Number(localStorage.getItem(k)||0)+n); }
+function getUsed(key){ return JSON.parse(localStorage.getItem(key+'_'+getToday())||'{"n":0}').n; }
+function addUsed(key,n){ const k=key+'_'+getToday(); const d=JSON.parse(localStorage.getItem(k)||'{"n":0}'); d.n+=n; localStorage.setItem(k,JSON.stringify(d)); }
 function isLoggedIn(){ return !!localStorage.getItem('kino_user'); }
+function getLimit(){ return isLoggedIn() ? 3000 : 2000; }
 
+// ── Тэмдэгт тоолуур ──
 function updateCount(){
   const len = document.getElementById('tts-text').value.length;
-  document.getElementById('char-count').textContent = len+'/1500';
-  document.getElementById('char-count').style.color = len>1500?'#e63946':'#4ade80';
-  document.getElementById('upgrade-notice').style.display = len>2000?'block':'none';
-  document.getElementById('limit-info').textContent = '';
+  const limit = getLimit();
+  document.getElementById('char-count').textContent = len+'/'+limit;
+  document.getElementById('char-count').style.color = len>limit?'#e63946':'#4ade80';
+  document.getElementById('upgrade-notice').style.display = len>limit?'block':'none';
 }
 
+// ── Navbar ──
 let drawerOpen=false;
 function toggleDrawer(){
   drawerOpen=!drawerOpen;
@@ -292,75 +296,79 @@ document.addEventListener('click',e=>{
   }
 });
 
+// ── Toggle ──
 function toggleTTS(){ document.getElementById('tts-box').classList.toggle('show'); }
 function toggleHum(){ document.getElementById('hum-box').classList.toggle('show'); }
-function selVoice(el){ document.querySelectorAll('.vbtn').forEach(v=>v.classList.remove('on')); el.classList.add('on'); }
 
-// ── Netlify Function дамжуулан дуудах ──
-async function callTTS(text, voice, rate, pitch, volume){
-  const r = await fetch('/.netlify/functions/tts', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({text, voice, rate, pitch, volume})
-  });
+// ── Сонгох ──
+function selEngine(el){
+  document.querySelectorAll('[data-engine]').forEach(v=>v.classList.remove('on'));
+  el.classList.add('on');
+  const isGemini = el.dataset.engine==='gemini';
+  document.getElementById('edge-section').style.display = isGemini?'none':'block';
+  document.getElementById('gemini-section').style.display = isGemini?'block':'none';
+}
+function selVoice(el){ document.querySelectorAll('.evbtn').forEach(v=>v.classList.remove('on')); el.classList.add('on'); }
+function selGVoice(el){ document.querySelectorAll('.gvbtn').forEach(v=>v.classList.remove('on')); el.classList.add('on'); }
+
+// ── API дуудах ──
+async function callTTS(body){
+  const r = await fetch('/.netlify/functions/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
   if(!r.ok){ const t=await r.text(); throw new Error('TTS алдаа '+r.status+': '+t.slice(0,150)); }
-  const j = await r.json();
+  const j=await r.json();
   if(j.error) throw new Error(j.error);
   return j;
 }
-
 async function callHumanize(text){
-  const r = await fetch('/.netlify/functions/humanize', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({text})
-  });
+  const r = await fetch('/.netlify/functions/humanize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text})});
   if(!r.ok){ const t=await r.text(); throw new Error('Humanize алдаа '+r.status+': '+t.slice(0,150)); }
-  const j = await r.json();
+  const j=await r.json();
   if(j.error) throw new Error(j.error);
   return j.data;
 }
 
+// ── TTS ──
 async function runTTS(){
   const text = document.getElementById('tts-text').value.trim();
   if(!text){ alert('Текст оруулна уу!'); return; }
-  if(text.length > 2000){
-    alert('2000+ тэмдэгт бол Премиум хэрэгтэй!');
-    return;
-  }
-  const voiceEl = document.querySelector('.vbtn.on');
-  const voiceName = voiceEl&&voiceEl.textContent.includes('Есүй') ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)';
-  const rate = parseInt(document.getElementById('rate').value);
-  const pitch = parseInt(document.getElementById('pitch').value);
-  const volume = parseInt(document.getElementById('volume').value);
+  const limit = getLimit();
+  if(text.length > limit){ alert('Текст хэт урт! Дээд хязгаар: '+limit+' тэмдэгт'); return; }
+
+  const engineEl = document.querySelector('[data-engine].on');
+  const engine = engineEl ? engineEl.dataset.engine : 'edge';
+  const voiceEl = document.querySelector('.evbtn.on');
+  const voiceName = voiceEl&&voiceEl.textContent.includes('Есүй')?'Есүй (эмэгтэй)':'Батаа (эрэгтэй)';
+  const geminiEl = document.querySelector('.gvbtn.on');
+  const geminiVoice = geminiEl ? geminiEl.textContent.trim() : 'Charon';
+
   const btn = document.querySelector('#tts-box .run-btn');
   btn.textContent='⏳ Үүсгэж байна...'; btn.disabled=true;
-  try {
-    const resp2 = await callTTS(text, voiceName, rate, pitch, volume);
-    const audioUrl = resp2.audioUrl;
-    if(!audioUrl) throw new Error('Audio URL олдсонгүй. Debug: ' + (resp2.debug||'').slice(0,100));
 
+  try {
+    const resp = await callTTS({
+      text, engine, voice: voiceName, geminiVoice,
+      rate: parseInt(document.getElementById('rate').value),
+      pitch: parseInt(document.getElementById('pitch').value),
+      volume: parseInt(document.getElementById('volume').value)
+    });
+    const audioUrl = resp.audioUrl;
+    if(!audioUrl) throw new Error('Audio URL олдсонгүй. Debug: '+(resp.debug||'').slice(0,150));
     const rd = document.getElementById('tts-result');
     rd.innerHTML=`
-      <div class="result-label">✓ Бэлэн! (өнөөдөр: ${getUsed('tts')}/${limit} тэмдэгт)</div>
+      <div class="result-label">✓ Бэлэн боллоо!</div>
       <audio controls style="width:100%;margin-bottom:10px;border-radius:30px;">
         <source src="${audioUrl}" type="audio/mpeg">
       </audio>
       <a href="${audioUrl}" download="mongol_duu.mp3" style="display:block;text-align:center;text-decoration:none;padding:10px;border-radius:9px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);font-size:13px;">⬇ MP3 татах</a>`;
     rd.classList.add('show');
   } catch(e){ alert('Алдаа: '+e.message); }
-  finally { btn.textContent='▶ Дуу үүсгэх'; btn.disabled=false; }
+  finally{ btn.textContent='▶ Дуу үүсгэх'; btn.disabled=false; }
 }
 
+// ── Humanizer ──
 async function runHum(){
   const text = document.getElementById('hum-input').value.trim();
   if(!text){ alert('Текст оруулна уу!'); return; }
-  const limit = getLimit();
-  const used = getUsed('hum');
-  if(used + text.length > limit){
-    alert('Өдрийн лимит дүүрлээ! ('+used+'/'+limit+')\n'+(isLoggedIn()?'':'Бүртгэлтэй болвол 3000 тэмдэгт болно.'));
-    return;
-  }
   document.getElementById('hum-before').textContent=text;
   document.getElementById('hum-result').style.display='grid';
   document.getElementById('hum-after').textContent='⏳ Боловсруулж байна...';
@@ -368,10 +376,9 @@ async function runHum(){
   btn.textContent='⏳ Боловсруулж байна...'; btn.disabled=true;
   try {
     const data = await callHumanize(text);
-    addUsed('hum', text.length);
     document.getElementById('hum-after').textContent=data[0];
   } catch(e){ document.getElementById('hum-after').textContent='Алдаа: '+e.message; }
-  finally { btn.textContent='✨ Хүмүүнжүүлэх'; btn.disabled=false; }
+  finally{ btn.textContent='✨ Хүмүүнжүүлэх'; btn.disabled=false; }
 }
 </script>
 </body>
