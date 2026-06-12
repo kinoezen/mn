@@ -1,0 +1,191 @@
+/* ===== NAVBAR.CSS — Dropdown цэсийн дизайн ===== */
+
+/* DESKTOP DROPDOWN — navbar дээрх */
+.nav-dropdown-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.has-dropdown::after {
+  content: ' ▾';
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.nav-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 36, 0.98);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 180px;
+  z-index: 2000;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.18s ease;
+}
+
+.nav-dropdown.show {
+  display: block;
+}
+
+.nav-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: rgba(20, 20, 36, 0.98);
+  border-left: 1px solid rgba(74, 222, 128, 0.15);
+  border-top: 1px solid rgba(74, 222, 128, 0.15);
+  rotate: 45deg;
+}
+
+.nav-dropdown-item {
+  display: block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.nav-dropdown-item:hover {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+}
+
+.nav-dropdown-item:first-child {
+  color: #4ade80;
+  font-weight: 700;
+}
+
+/* MCAT DROPDOWN PANEL — ангилал grid-ийн доор */
+.mcat-dropdown-panel {
+  margin: 0 24px 12px;
+  background: rgba(22, 22, 36, 0.98);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  border-radius: 14px;
+  overflow: hidden;
+  display: none;
+  animation: slideIn 0.2s ease;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.mcat-dropdown-panel.open {
+  display: block;
+}
+
+.mcat-dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(74, 222, 128, 0.06);
+  border-bottom: 1px solid rgba(74, 222, 128, 0.12);
+}
+
+.mcat-dp-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #4ade80;
+}
+
+.mcat-dp-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  transition: all 0.15s;
+}
+
+.mcat-dp-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.mcat-dp-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.mcat-dp-item {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.mcat-dp-item:hover {
+  border-color: rgba(74, 222, 128, 0.4);
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.08);
+}
+
+.mcat-dp-item.active,
+.mcat-dp-item:first-child {
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+/* MOBILE DROPDOWN — nav links доторх */
+@media (max-width: 768px) {
+  .nav-dropdown {
+    position: static;
+    transform: none;
+    left: auto;
+    background: rgba(30, 30, 50, 0.95);
+    border-radius: 10px;
+    margin: 4px 0 6px 12px;
+    min-width: unset;
+    box-shadow: none;
+    border-color: rgba(74, 222, 128, 0.1);
+  }
+
+  .nav-dropdown::before {
+    display: none;
+  }
+
+  .nav-dropdown-item {
+    font-size: 12px;
+    padding: 7px 12px;
+  }
+
+  .mcat-dropdown-panel {
+    margin: 0 16px 10px;
+  }
+
+  .mcat-dp-items {
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .mcat-dp-item {
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+}
