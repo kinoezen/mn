@@ -1,916 +1,159 @@
-<!DOCTYPE html>
-<html lang="mn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>КиноЭзэн — Монгол хэлний кино платформ</title>
-<meta name="description" content="КиноЭзэн — Монгол хэлний кино товчлол, шинэ кинонууд, мэдээ мэдээлэл.">
-<meta name="keywords" content="монгол кино, кино үзэх, монгол дуу, кино мэдээ, КиноЭзэн">
-<meta name="robots" content="index, follow">
-<meta property="og:type" content="website">
-<meta property="og:title" content="КиноЭзэн — Монгол хэлний кино платформ">
-<meta property="og:description" content="Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.">
-<meta property="og:url" content="https://kinoezen.mn">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://kinoezen.mn">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="navbar.css">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"КиноЭзэн","url":"https://kinoezen.mn"}
-</script>
-</head>
-<body>
+// ===== NAVBAR.JS — КиноЭзэн навигац, dropdown, хайлт, цаг агаар =====
 
-<!-- NAVBAR -->
-<nav class="nav" role="navigation" aria-label="Үндсэн цэс">
-  <a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
-    <div class="logo-icon">
-      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
-        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
-        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
-        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
-        <circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/>
-        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
-      </svg>
-    </div>
-    <div class="logo-text">КиноЭзэн</div>
-  </a>
-  <button class="mobile-search-btn" id="mobile-search-btn" onclick="toggleMobileSearch()" aria-label="Хайх">🔍</button>
-  <div class="nav-links" id="nav-links">
-    <a href="index.html" class="active">Нүүр</a>
-    <a href="movies.html">Кинонууд</a>
-    <a href="news.html">Мэдээ</a>
-    <a href="services.html">Үйлчилгээ</a>
-    <a href="profile.html">Профайл</a>
-  </div>
-  <div class="nav-right" id="nav-right">
-    <div class="nav-search" role="search">
-      <span aria-hidden="true">🔍</span>
-      <input type="text" placeholder="Кино хайх..." id="search-input" aria-label="Кино хайх" autocomplete="off" oninput="searchMovies()">
-    </div>
-    <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
-    <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
-  </div>
-  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс" aria-expanded="false">☰</button>
-  <div class="mobile-search-bar" id="mobile-search-bar">
-    <input type="text" placeholder="Кино, мэдээ хайх..." id="mobile-search-input" autocomplete="off" aria-label="Хайх">
-    <button class="mobile-search-close" onclick="toggleMobileSearch()">✕</button>
-  </div>
-</nav>
+// DATE
+const now = new Date();
+const dateEl = document.getElementById('today-date');
+if (dateEl) dateEl.textContent = now.getFullYear() + '.' + String(now.getMonth() + 1).padStart(2, '0') + '.' + String(now.getDate()).padStart(2, '0');
 
-<!-- WEATHER BAR -->
-<div class="weather-bar" role="complementary" aria-label="Цаг агаар">
-  <div class="weather-left">
-    <div class="weather-item">📅 <time id="today-date"></time></div>
-    <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
-    <div class="weather-item">📍 Улаанбаатар</div>
-  </div>
-  <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
-</div>
-
-<!-- AD BANNER -->
-<div class="ad-wrapper">
-  <div id="ad-inner">
-    <div class="ad-banner" role="complementary">
-      <div class="ad-text">
-        <strong>🏢 Таны компанийн реклам энд</strong>
-        Сарын 50,000₮-өөс эхлэн рекламаа байршуул
-      </div>
-      <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
-    </div>
-    <div class="ad-label">Реклам</div>
-  </div>
-</div>
-
-<!-- HERO CAROUSEL -->
-<section class="hero-section" aria-label="Онцлох кино">
-  <div class="hero-label">
-    <div class="hero-label-icon">⭐</div>
-    <div class="hero-label-text">Онцлох кино</div>
-  </div>
-  <div class="featured-carousel-wrapper" id="featured-wrapper">
-    <div class="featured-track" id="featured-track"></div>
-    <div class="carousel-auto-bar" id="carousel-bar"></div>
-  </div>
-  <div class="carousel-controls">
-    <button class="carousel-btn" id="carousel-prev" aria-label="Өмнөх">‹</button>
-    <div class="carousel-dots" id="carousel-dots"></div>
-    <button class="carousel-btn" id="carousel-next" aria-label="Дараах">›</button>
-  </div>
-</section>
-
-<!-- АНГИЛАЛ СОНГОХ -->
-<section class="main-cats-section" aria-label="Үндсэн ангилал">
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title"><span>Ангилал</span> сонгох</h2>
-    </div>
-  </div>
-  <div class="main-cats-grid" id="main-cats-grid">
-    <div class="mcat-card mcat-all selected" id="mcat-all" onclick="showAll(this)" tabindex="0" role="button" aria-label="Бүгд">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg></div>
-      <div class="mcat-label">Бүгд</div><div class="mcat-sub">Бүх агуулга</div><div class="mcat-badge" id="badge-all">—</div>
-    </div>
-    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg></div>
-      <div class="mcat-label">Бүтээгдэхүүн</div><div class="mcat-sub">Манай үйлчилгээ</div><div class="mcat-badge">→</div>
-    </div>
-    <div class="mcat-card mcat-stars" onclick="location.href='stars.html'" tabindex="0" role="button" aria-label="Одод ертөнц">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg></div>
-      <div class="mcat-label">Одод ертөнц</div><div class="mcat-sub">Алдартнууд</div><div class="mcat-badge">✦</div>
-    </div>
-    <div class="mcat-card mcat-movie" id="mcat-movie" onclick="showMoviesOnly(this)" tabindex="0" role="button" aria-label="Кино">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg></div>
-      <div class="mcat-label">Кино</div><div class="mcat-sub">Монгол дуутай</div><div class="mcat-badge" id="badge-movie">8</div>
-    </div>
-    <div class="mcat-card mcat-news" id="mcat-news" onclick="showNewsOnly(this)" tabindex="0" role="button" aria-label="Мэдээ">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
-      <div class="mcat-label">Мэдээ</div><div class="mcat-sub">Шинэ мэдээлэл</div><div class="mcat-badge" id="badge-news">4</div>
-    </div>
-    <div class="mcat-card mcat-travel" onclick="openMcatDropdown(event,this,'Аялал')" tabindex="0" role="button" aria-label="Аялал">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg></div>
-      <div class="mcat-label">Аялал</div><div class="mcat-sub">Дэлхийн газрууд</div><div class="mcat-badge">3</div>
-    </div>
-    <div class="mcat-card mcat-science" onclick="openMcatDropdown(event,this,'Шинжлэх ухаан')" tabindex="0" role="button" aria-label="Шинжлэх ухаан">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg></div>
-      <div class="mcat-label">Шинжлэх ухаан</div><div class="mcat-sub">Нээлт судалгаа</div><div class="mcat-badge">4</div>
-    </div>
-    <div class="mcat-card mcat-ai" onclick="openMcatDropdown(event,this,'AI')" tabindex="0" role="button" aria-label="AI">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg></div>
-      <div class="mcat-label">AI</div><div class="mcat-sub">Хиймэл оюун</div><div class="mcat-badge">4</div>
-    </div>
-    <div class="mcat-card mcat-history" onclick="openMcatDropdown(event,this,'Кино түүх')" tabindex="0" role="button" aria-label="Кино түүх">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-      <div class="mcat-label">Кино түүх</div><div class="mcat-sub">Классик кинонууд</div><div class="mcat-badge">4</div>
-    </div>
-    <div class="mcat-card mcat-knowledge" onclick="openMcatDropdown(event,this,'Танин мэдэхүй')" tabindex="0" role="button" aria-label="Танин мэдэхүй">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg></div>
-      <div class="mcat-label">Танин мэдэхүй</div><div class="mcat-sub">Мэдлэг боловсрол</div><div class="mcat-badge">4</div>
-    </div>
-  </div>
-  <!-- DROPDOWN PANEL — ангилалын доор гарна -->
-  <div id="mcat-dropdown-panel" class="mcat-dropdown-panel" style="display:none;"></div>
-</section>
-
-<!-- MOVIES -->
-<section id="movies" aria-label="Кинонуудын жагсаалт">
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title"><span>Шинэ</span> кинонууд</h2>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="genre-toggle-btn" id="genre-toggle-btn" onclick="toggleGenreRow()">Жанр ▾</button>
-        <a href="movies.html" class="see-all">Бүгдийг харах →</a>
-      </div>
-    </div>
-  </div>
-  <div class="cat-section-wrap" id="movie-genre-section" style="display:none;">
-    <div class="cat-row" role="tablist">
-      <button class="cat-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Экшн')">Экшн</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Фантастик')">Фантастик</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Драм')">Драм</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аймаар')">Аймаар</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Романтик')">Романтик</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аниме')">Аниме</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Олон ангит')">Олон ангит</button>
-    </div>
-  </div>
-  <div class="grid-4" id="movies-list" role="list">
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-  </div>
-</section>
-
-<!-- NEWS -->
-<section id="news" aria-label="Мэдээ мэдээлэл">
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title"><span>Мэдээ</span> мэдээлэл</h2>
-      <a href="news.html" class="see-all">Бүгдийг харах →</a>
-    </div>
-  </div>
-  <div class="news-grid" id="news-list" role="list">
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-  </div>
-</section>
-
-<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
-
-<!-- FOOTER -->
-<footer class="footer" id="contact" role="contentinfo">
-  <div class="footer-grid">
-    <div class="footer-col">
-      <h4>КиноЭзэн</h4>
-      <p>Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.</p>
-      <div class="footer-social">
-        <a class="social-btn sb-fb" href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
-        <a class="social-btn sb-ig" href="https://instagram.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
-        <a class="social-btn sb-yt" href="https://youtube.com/@kinoezen" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
-        <a class="social-btn sb-x" href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-      </div>
-      <div class="footer-phone"><span>📞</span> +976 8551-05**</div>
-    </div>
-    <div class="footer-col">
-      <h4>Холбоо барих</h4>
-      <a href="mailto:kinoezen@gmail.com">📧 kinoezen@gmail.com</a>
-      <a href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer">📘 Facebook: КиноЭзэн</a>
-      <a href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer">💬 Messenger холбоо</a>
-      <a href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer">𝕏 X: @kinoezen</a>
-    </div>
-    <div class="footer-col">
-      <h4>Реклам</h4>
-      <p>Сайт дээр реклам байршуулахыг хүсвэл бидэнтэй холбоо барина уу.</p>
-      <a href="mailto:kinoezen@gmail.com?subject=Реклам">📨 Реклам авах →</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-copy">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
-    <nav class="footer-links">
-      <a href="privacy.html">Нууцлал</a>
-      <a href="terms.html">Үйлчилгээний нөхцөл</a>
-      <a href="about.html">Бидний тухай</a>
-    </nav>
-  </div>
-</footer>
-
-<!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-bottom-nav" aria-label="Доод цэс">
-  <div class="mbn-inner">
-    <a class="mbn-item active" href="index.html" aria-label="Нүүр">
-      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
-      <span>Нүүр</span>
-    </a>
-    <a class="mbn-item" href="movies.html" aria-label="Кинонууд">
-      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/><circle cx="12" cy="14" r="3"/><path d="M10.5 13l3 1.5-3 1.5V13z" fill="currentColor" stroke="none"/></svg>
-      <span>Кино</span>
-    </a>
-    <a class="mbn-item" href="news.html" aria-label="Топ">
-      <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4H4a1 1 0 00-1 1v3a4 4 0 004 4h1"/><path d="M17 4h3a1 1 0 011 1v3a4 4 0 01-4 4h-1"/><path d="M7 4h10v7a5 5 0 01-10 0V4z"/></svg>
-      <span>Топ</span>
-    </a>
-    <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
-      <span>Үйлчилгээ</span>
-    </a>
-    <a class="mbn-item" href="profile.html" aria-label="Профайл">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      <span>Профайл</span>
-    </a>
-  </div>
-</nav>
-
-<script src="navbar.js"></script>
-
-<style>
-/* ===== GENRE TOGGLE BUTTON ===== */
-.genre-toggle-btn{padding:6px 12px;border-radius:20px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);color:#4ade80;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all 0.2s;}
-.genre-toggle-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;}
-
-/* ===== DROPDOWN PANEL ===== */
-.mcat-dropdown-panel{
-  margin: 8px 16px 0;
-  background: rgba(20,20,30,0.97);
-  border: 1px solid rgba(74,222,128,0.25);
-  border-radius: 14px;
-  padding: 14px 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-  animation: dpFadeIn 0.18s ease;
-}
-@keyframes dpFadeIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-.mcat-dp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.mcat-dp-title{font-family:'Nunito',sans-serif;font-weight:800;color:#4ade80;font-size:14px;}
-.mcat-dp-close{background:none;border:none;color:rgba(255,255,255,0.4);font-size:16px;cursor:pointer;padding:2px 6px;border-radius:6px;transition:color 0.2s;}
-.mcat-dp-close:hover{color:#fff;}
-.mcat-dp-items{display:flex;flex-wrap:wrap;gap:8px;}
-.mcat-dp-item{
-  padding:7px 16px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(255,255,255,0.05);
-  color:rgba(255,255,255,0.75);
-  font-size:13px;
-  font-family:'Nunito',sans-serif;
-  font-weight:600;
-  cursor:pointer;
-  transition:all 0.18s;
-}
-.mcat-dp-item:hover{background:rgba(74,222,128,0.12);border-color:rgba(74,222,128,0.4);color:#fff;}
-.mcat-dp-item.active{background:rgba(74,222,128,0.18);border-color:#4ade80;color:#4ade80;}
-</style>
-
-<script>
-/* ===== HELPERS ===== */
-const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-
-function sanitize(str) {
-  if (!str) return '';
-  const d = document.createElement('div');
-  d.textContent = String(str);
-  return d.innerHTML;
-}
-
-async function supaFetch(table, params = '') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  });
-  if (!res.ok) throw new Error('supabase error');
-  return res.json();
-}
-
-const genreColors = {
-  'Фантастик': 'cp-sci', 'Экшн': 'cp-act', 'Драм': 'cp-drm',
-  'Аймаар': 'cp-act', 'Романтик': 'cp-drm', 'Аниме': 'cp-sci', 'Олон ангит': 'cp-drm'
+// WEATHER
+const WMN = {
+  'Sunny': 'Нартай', 'Clear': 'Цэлмэг', 'Partly cloudy': 'Үүлэрхэг',
+  'Cloudy': 'Бүрхэг', 'Overcast': 'Бүрхэг', 'Mist': 'Манантай',
+  'Fog': 'Манантай', 'Light rain': 'Бага бороо', 'Moderate rain': 'Бороо',
+  'Heavy rain': 'Их бороо', 'Light snow': 'Бага цас',
+  'Moderate snow': 'Цас', 'Heavy snow': 'Их цас'
 };
-const genreGradients = {
-  'Фантастик': 'linear-gradient(135deg,#1a0a2e,#3b1f6b)',
-  'Экшн': 'linear-gradient(135deg,#2a0a0a,#6b1f1f)',
-  'Драм': 'linear-gradient(135deg,#0a1a0a,#1a3a20)',
-  'Аймаар': 'linear-gradient(135deg,#1a0a1a,#3b1f3b)',
-  'Романтик': 'linear-gradient(135deg,#1a0a0a,#3b1010)',
-  'Аниме': 'linear-gradient(135deg,#0a0a2a,#1f1f6b)',
-  'Олон ангит': 'linear-gradient(135deg,#0a1a2a,#1a3050)'
-};
-
-/* ===== CAROUSEL ===== */
-const FEATURED_MOVIES = [
-  {id:'f1',title:'Дюн: Хоёрдугаар хэсэг',genre:'Фантастик',genre2:'Экшн',desc:'Пол Атреидес Фрэменүүдтэй нэгдэж дэлхийн шилдэг киног монголоор...',views:'1.2к',likes:'234',mins:'18',tags:['Онцлох','Шинэ'],emoji:'🏜️'},
-  {id:'f2',title:'Оппенхаймер',genre:'Драм',genre2:'Түүх',desc:'Атомын бөмбөгийг бүтээсэн эрдэмтний амьдрал, шийдвэрийн тухай...',views:'980',likes:'187',mins:'12',tags:['Онцлох'],emoji:'💥'},
-  {id:'f3',title:'Интерстеллар',genre:'Фантастик',genre2:'Драм',desc:'Хүн төрөлхтний нүүдэл — сансрын гүнд хайлт хайж гарсан нисгэгчид...',views:'1.5к',likes:'312',mins:'22',tags:['Онцлох','Дуу'],emoji:'🚀'},
-  {id:'f4',title:'Жон Вик 4',genre:'Экшн',genre2:'',desc:'Дэлхийн хамгийн аюулт алуурчин Жон Викийн дараагийн тулааны аялал...',views:'870',likes:'201',mins:'15',tags:['Шинэ'],emoji:'🔫'},
-  {id:'f5',title:'Аватар: Усны зам',genre:'Фантастик',genre2:'Экшн',desc:'Пандорагийн далайн гүнд шинэ аялал — Сулли гэр бүлийн тулаан...',views:'2.1к',likes:'445',mins:'25',tags:['Онцлох','Шинэ'],emoji:'🌊'},
-  {id:'f6',title:'Барби',genre:'Романтик',genre2:'Инээдэм',desc:'Барбилэнд-ийн хамгийн төгс Барби жинхэнэ ертөнцийг нээж олж...',views:'760',likes:'143',mins:'10',tags:['Шинэ'],emoji:'💗'},
-  {id:'f7',title:'Хүнлэг яс',genre:'Аниме',genre2:'Фантастик',desc:'Монгол дуутай аниме — гайхалтай дайчдын тулааны өгүүллэг...',views:'640',likes:'118',mins:'8',tags:['Шинэ','Монгол'],emoji:'⚔️'},
-  {id:'f8',title:'Аянга хүн',genre:'Экшн',genre2:'Фантастик',desc:'Цахилгааны хүчтэй баатар нийслэлийг аварах тулаанд оров...',views:'530',likes:'96',mins:'14',tags:['Шинэ'],emoji:'⚡'},
-];
-
-let carouselIndex = 0;
-let carouselAuto;
-const AUTO_INTERVAL = 5000;
-
-function getCardsVisible() {
-  return window.innerWidth <= 480 ? 1 : window.innerWidth <= 768 ? 2 : 4;
+async function loadWeather() {
+  const el = document.getElementById('weather-temp');
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 6000);
+    const res = await fetch('https://wttr.in/Ulaanbaatar?format=j1', { signal: ctrl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    const temp = data.current_condition[0].temp_C;
+    const descEn = data.current_condition[0].weatherDesc[0].value;
+    if (el) el.textContent = `${temp}°C · ${WMN[descEn] || descEn}`;
+  } catch {
+    if (el) el.textContent = '—';
+  }
 }
+loadWeather();
 
-function buildFeaturedCard(m) {
-  const g1 = genreColors[m.genre] || 'cp-sci';
-  const g2 = genreColors[m.genre2] || 'cp-sci';
-  const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-  const tags = m.tags.map(t =>
-    t === 'Онцлох'
-      ? `<span class="ftag ftag-top">✦ ${t}</span>`
-      : `<span class="ftag ftag-new">${t}</span>`
-  ).join('');
-  return `<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
-    <div class="featured-img" style="background:${bg}">
-      <span style="font-size:48px;z-index:1;position:relative;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.6))">${m.emoji}</span>
-      <div class="featured-overlay"></div>
-      <div class="featured-tags">${tags}</div>
-    </div>
-    <div class="featured-body">
-      <div class="featured-cats">
-        <span class="cpill ${g1}">${sanitize(m.genre)}</span>
-        ${m.genre2 ? `<span class="cpill ${g2}">${sanitize(m.genre2)}</span>` : ''}
-      </div>
-      <h2 class="featured-title">${sanitize(m.title)}</h2>
-      <p class="featured-desc">${sanitize(m.desc)}</p>
-      <div class="featured-foot">
-        <div class="author">
-          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">КЭ</div>
-          <div class="ava-name">КиноЭзэн · ${m.mins} мин</div>
-        </div>
-        <div class="stats-row">
-          <div class="stat-item">👁 ${m.views}</div>
-          <div class="stat-item">❤️ ${m.likes}</div>
-        </div>
-      </div>
-      <button class="watch-btn" onclick="event.stopPropagation();location.href='movie.html?id=${sanitize(m.id)}'">▶ Үзэх</button>
-    </div>
-  </article>`;
-}
-
-function initCarousel() {
-  const track = document.getElementById('featured-track');
-  track.innerHTML = FEATURED_MOVIES.map(buildFeaturedCard).join('');
-  buildDots();
-  document.getElementById('carousel-prev').onclick = () => { prevPage(); resetAuto(); };
-  document.getElementById('carousel-next').onclick = () => { nextPage(); resetAuto(); };
-  startAuto();
-
-  // Swipe дэмжлэг
-  let tx = 0;
-  const w = document.getElementById('featured-wrapper');
-  w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-  w.addEventListener('touchend', e => {
-    const d = tx - e.changedTouches[0].clientX;
-    if (Math.abs(d) > 50) { d > 0 ? nextPage() : prevPage(); resetAuto(); }
-  }, { passive: true });
-}
-
-function buildDots() {
-  const cv = getCardsVisible();
-  const total = Math.ceil(FEATURED_MOVIES.length / cv);
-  document.getElementById('carousel-dots').innerHTML =
-    Array.from({ length: total }, (_, i) =>
-      `<div class="dot${i === 0 ? ' active' : ''}" onclick="goToPage(${i})"></div>`
-    ).join('');
-}
-
-function getCardWidth() {
-  const c = document.querySelector('.featured-card');
-  if (!c) return 0;
-  return c.offsetWidth + parseInt(getComputedStyle(c).marginRight || 12);
-}
-
-function goToPage(p) {
-  const cv = getCardsVisible();
-  const total = Math.ceil(FEATURED_MOVIES.length / cv);
-  carouselIndex = Math.max(0, Math.min(p, total - 1));
-  updateCarousel();
-}
-
-function nextPage() {
-  const cv = getCardsVisible();
-  const total = Math.ceil(FEATURED_MOVIES.length / cv);
-  carouselIndex = (carouselIndex + 1) % total;
-  updateCarousel();
-}
-
-function prevPage() {
-  const cv = getCardsVisible();
-  const total = Math.ceil(FEATURED_MOVIES.length / cv);
-  carouselIndex = (carouselIndex - 1 + total) % total;
-  updateCarousel();
-}
-
-function updateCarousel() {
-  const cv = getCardsVisible();
-  const offset = carouselIndex * cv * getCardWidth();
-  document.getElementById('featured-track').style.transform = `translateX(-${offset}px)`;
-  document.querySelectorAll('.dot').forEach((d, i) =>
-    d.classList.toggle('active', i === carouselIndex)
-  );
-  restartBar();
-}
-
-function restartBar() {
-  const b = document.getElementById('carousel-bar');
-  b.classList.remove('running');
-  void b.offsetWidth;
-  b.classList.add('running');
-}
-
-function startAuto() {
-  restartBar();
-  carouselAuto = setInterval(nextPage, AUTO_INTERVAL);
-}
-
-function resetAuto() {
-  clearInterval(carouselAuto);
-  startAuto();
-}
-
-window.addEventListener('resize', () => {
-  buildDots();
-  updateCarousel();
-});
-
-/* ===== АНГИЛАЛ — ИДЭВХТЭЙ СОНГОЛТ ===== */
-function setActiveMcat(el) {
-  document.querySelectorAll('.mcat-card').forEach(c => c.classList.remove('selected'));
-  el.classList.add('selected');
-}
-
-function showAll(el) {
-  setActiveMcat(el);
-  closeMcatDropdown();
-  loadMovies('');
-  renderNews('');
-  setTimeout(() => goSection('movies'), 100);
-}
-
-function showMoviesOnly(el) {
-  setActiveMcat(el);
-  closeMcatDropdown();
-  loadMovies('');
-  setTimeout(() => goSection('movies'), 100);
-}
-
-function showNewsOnly(el) {
-  setActiveMcat(el);
-  closeMcatDropdown();
-  renderNews('');
-  setTimeout(() => goSection('news'), 100);
-}
-
-/* ===== DROPDOWN PANEL ===== */
+// ===== NAVBAR DROPDOWN — зөвхөн дээд цэс (Мэдээ гэх мэт) =====
 const DROPDOWN_MENUS = {
-  'Аялал': [
+  'Мэдээ': [
     { label: 'Бүгд', cat: '' },
-    { label: 'Миний аялал', cat: 'Миний аялал' },
-    { label: 'Монгол аялал', cat: 'Монгол аялал' },
-    { label: 'Гадаад аялал', cat: 'Гадаад аялал' }
-  ],
-  'Шинжлэх ухаан': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
-    { label: 'Ирээдүй', cat: 'Ирээдүй' },
-    { label: 'Туршилт', cat: 'Туршилт' }
-  ],
-  'AI': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
-    { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
-    { label: 'Сургалт', cat: 'Сургалт' }
-  ],
-  'Кино түүх': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
-    { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }
-  ],
-  'Танин мэдэхүй': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
-    { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
-    { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }
+    { label: 'Монголын мэдээ', cat: 'Монголын мэдээ' },
+    { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' },
+    { label: 'Улс төр', cat: 'Улс төр' },
+    { label: 'Эдийн засаг', cat: 'Эдийн засаг' },
+    { label: 'Сурвалжилга', cat: 'Сурвалжилга' },
   ],
 };
 
-let currentDropdownMenu = null;
+function buildDropdowns() {
+  const navLinks = document.getElementById('nav-links');
+  if (!navLinks) return;
 
-function openMcatDropdown(e, card, menuKey) {
-  e.stopPropagation();
-  const panel = document.getElementById('mcat-dropdown-panel');
+  navLinks.querySelectorAll('a').forEach(link => {
+    const text = link.textContent.trim();
+    if (DROPDOWN_MENUS[text]) {
+      link.classList.add('has-dropdown');
+      link.setAttribute('aria-haspopup', 'true');
+      link.setAttribute('aria-expanded', 'false');
 
-  // Хэрэв ижил цэс нээлттэй бол хаана
-  if (currentDropdownMenu === menuKey && panel.style.display !== 'none') {
-    closeMcatDropdown();
-    return;
-  }
+      const dropdown = document.createElement('div');
+      dropdown.className = 'nav-dropdown';
+      dropdown.innerHTML = DROPDOWN_MENUS[text].map(item =>
+        `<a class="nav-dropdown-item" href="#" onclick="handleDropdownClick(event,'${text}','${item.cat}')">${item.label}</a>`
+      ).join('');
 
-  setActiveMcat(card);
-  currentDropdownMenu = menuKey;
-
-  const items = DROPDOWN_MENUS[menuKey] || [];
-  panel.innerHTML = `
-    <div class="mcat-dp-header">
-      <span class="mcat-dp-title">${menuKey}</span>
-      <button class="mcat-dp-close" onclick="closeMcatDropdown()">✕</button>
-    </div>
-    <div class="mcat-dp-items">
-      ${items.map(item =>
-        `<button class="mcat-dp-item${item.cat === '' ? ' active' : ''}"
-          onclick="handleMcatSub('${item.cat}', this)">${item.label}</button>`
-      ).join('')}
-    </div>`;
-  panel.style.display = 'block';
-
-  // Мэдээ хэсгийг scroll хийх
-  setTimeout(() => {
-    renderNews('');
-    goSection('news');
-  }, 80);
-}
-
-function closeMcatDropdown() {
-  const panel = document.getElementById('mcat-dropdown-panel');
-  if (panel) panel.style.display = 'none';
-  currentDropdownMenu = null;
-}
-
-function handleMcatSub(cat, btn) {
-  document.querySelectorAll('.mcat-dp-item').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderNews(cat);
-  setTimeout(() => goSection('news'), 100);
-}
-
-// Dropdown-оос гадна дарахад хаана
-document.addEventListener('click', (e) => {
-  const panel = document.getElementById('mcat-dropdown-panel');
-  if (!panel || panel.style.display === 'none') return;
-  if (!e.target.closest('#mcat-dropdown-panel') && !e.target.closest('.mcat-card')) {
-    closeMcatDropdown();
-  }
-});
-
-/* ===== КИНО КАРДНУУД ===== */
-function buildSkeletons(n = 4) {
-  return Array(n).fill(0).map(() =>
-    `<div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`
-  ).join('');
-}
-
-const FALLBACK_MOVIES = [
-  { title: 'Интерстеллар', genre: 'Фантастик', likes: 187, views: 980, id: 'demo1' },
-  { title: 'Оппенхаймер', genre: 'Драм', likes: 143, views: 870, id: 'demo2' },
-  { title: 'Жон Вик 4', genre: 'Экшн', likes: 201, views: 760, id: 'demo3' },
-  { title: 'Аватар 2', genre: 'Фантастик', likes: 165, views: 640, id: 'demo4' }
-];
-
-let currentGenre = '';
-
-function selCat(el, genre) {
-  document.querySelectorAll('.cat-btn').forEach(b => {
-    b.classList.remove('on');
-    b.setAttribute('aria-selected', 'false');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'nav-dropdown-wrap';
+      link.parentNode.insertBefore(wrapper, link);
+      wrapper.appendChild(link);
+      wrapper.appendChild(dropdown);
+    }
   });
-  el.classList.add('on');
-  el.setAttribute('aria-selected', 'true');
-  currentGenre = genre;
-  loadMovies(genre);
 }
 
-// Жанр toggle
-let genreOpen = false;
-function toggleGenreRow() {
-  genreOpen = !genreOpen;
-  const row = document.getElementById('movie-genre-section');
-  const btn = document.getElementById('genre-toggle-btn');
-  row.style.display = genreOpen ? '' : 'none';
-  btn.textContent = genreOpen ? 'Жанр ▴' : 'Жанр ▾';
+function handleDropdownClick(e, menuName, cat) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (typeof renderNews === 'function') renderNews(cat);
+  const newsSection = document.getElementById('news');
+  setTimeout(() => {
+    if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+  closeAllDropdowns();
 }
 
-async function loadMovies(genre = '') {
-  const list = document.getElementById('movies-list');
-  // Эхэндээ fallback-г шууд харуул
-  renderMovieCards(FALLBACK_MOVIES, list);
-  try {
-    let params = 'order=created_at.desc&limit=4';
-    if (genre) params += `&genre=eq.${encodeURIComponent(genre)}`;
-    const movies = await supaFetch('movies', params);
-    if (movies && movies.length > 0) {
-      renderMovieCards(movies, list);
-    }
-  } catch {
-    // fallback аль хэдийн харагдаж байна
-  }
+function closeAllDropdowns() {
+  document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('show'));
+  document.querySelectorAll('.has-dropdown').forEach(a => a.setAttribute('aria-expanded', 'false'));
 }
 
-function renderMovieCards(movies, list) {
-  list.innerHTML = movies.map(m => {
-    const title = sanitize(m.title);
-    const g = sanitize(m.genre);
-    const id = encodeURIComponent(sanitize(m.id));
-    const likes = parseInt(m.likes) || 0;
-    const views = parseInt(m.views) || 0;
-    const cls = genreColors[m.genre] || 'cp-sci';
-    const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-    const thumb = m.thumbnail
-      ? `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
-      : '🎬';
-    return `<article class="grid-card" role="listitem" tabindex="0"
-        onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
-      <div class="grid-img" style="background:${bg}">${thumb}
-        <span class="grid-badge ${cls}">${g || 'Кино'}</span>
-      </div>
-      <div class="grid-body">
-        <h3 class="grid-title">${title}</h3>
-        <div class="grid-meta">КиноЭзэн</div>
-        <div class="grid-stats">
-          <button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button>
-          <span class="gstat">👁 <span>${views}</span></span>
-        </div>
-      </div>
-    </article>`;
-  }).join('');
-}
-
-/* ===== МЭДЭЭ КАРДНУУД ===== */
-const NEWS_DATA = {
-  '': [
-    { id: 's1', emoji: '🌍', cat: 'Түүх', title: 'Монголын эзэнт гүрний хамгийн том дайлалт', date: '2026.06.08', views: '1.2к' },
-    { id: 's2', emoji: '🎬', cat: 'Кино мэдээ', title: '2026 оны хамгийн их орлого олсон кинонууд', date: '2026.06.07', views: '890' },
-    { id: 's3', emoji: '🚀', cat: 'Шинжлэх ухаан', title: 'Сансрын судалгааны шинэ нээлт', date: '2026.06.06', views: '654' },
-    { id: 's4', emoji: '💡', cat: 'Танин мэдэхүй', title: 'Дэлхийн хамгийн гайхалтай 10 газар', date: '2026.06.05', views: '432' }
-  ],
-  'Аялал': [
-    { id: 'ay1', emoji: '✈️', cat: 'Аялал', title: 'Монголын хамгийн үзэсгэлэнт 10 газар', date: '2026.06.08', views: '543' },
-    { id: 'ay2', emoji: '🏔️', cat: 'Аялал', title: 'Европт аялах хамгийн хямд арга', date: '2026.06.07', views: '432' },
-    { id: 'ay3', emoji: '🌏', cat: 'Аялал', title: 'Азийн гайхамшигт улс орнууд', date: '2026.06.06', views: '321' },
-    { id: 'ay4', emoji: '🏝️', cat: 'Аялал', title: 'Далайн эрэг дэх хамгийн сайхан зуслан', date: '2026.06.05', views: '234' }
-  ],
-  'Миний аялал': [
-    { id: 'ay1', emoji: '✈️', cat: 'Миний аялал', title: 'Монголын хамгийн үзэсгэлэнт 10 газар', date: '2026.06.08', views: '543' },
-    { id: 'ay3', emoji: '🌏', cat: 'Миний аялал', title: 'Азийн гайхамшигт улс орнууд', date: '2026.06.06', views: '321' }
-  ],
-  'Монгол аялал': [
-    { id: 'ay1', emoji: '🏔️', cat: 'Монгол аялал', title: 'Монголын хамгийн үзэсгэлэнт 10 газар', date: '2026.06.08', views: '543' },
-    { id: 'ay5', emoji: '🌿', cat: 'Монгол аялал', title: 'Хэнтий аймгийн нууц газрууд', date: '2026.06.04', views: '312' }
-  ],
-  'Гадаад аялал': [
-    { id: 'ay2', emoji: '🗼', cat: 'Гадаад аялал', title: 'Европт аялах хамгийн хямд арга', date: '2026.06.07', views: '432' },
-    { id: 'ay4', emoji: '🏝️', cat: 'Гадаад аялал', title: 'Далайн эрэг дэх хамгийн сайхан зуслан', date: '2026.06.05', views: '234' }
-  ],
-  'Танин мэдэхүй': [
-    { id: 't1', emoji: '🧠', cat: 'Танин мэдэхүй', title: 'Хүний тархины нууц — шинэ судалгаа', date: '2026.06.08', views: '543' },
-    { id: 't2', emoji: '🌿', cat: 'Танин мэдэхүй', title: 'Байгаль дахь хамгийн гайхамшигт амьдрал', date: '2026.06.07', views: '321' },
-    { id: 't3', emoji: '🔭', cat: 'Танин мэдэхүй', title: 'Одон орны шинэ нээлтүүд 2026', date: '2026.06.06', views: '276' },
-    { id: 't4', emoji: '💎', cat: 'Танин мэдэхүй', title: 'Эрдэс чулууны ертөнц', date: '2026.06.05', views: '198' }
-  ],
-  'Дэлхийг танья': [
-    { id: 't1', emoji: '🌍', cat: 'Дэлхийг танья', title: 'Дэлхийн 7 гайхамшиг', date: '2026.06.08', views: '765' },
-    { id: 't2', emoji: '🗺️', cat: 'Дэлхийг танья', title: 'Хамгийн тусгаарлагдсан улсууд', date: '2026.06.07', views: '432' }
-  ],
-  'Гайхамшиг': [
-    { id: 'g1', emoji: '🌌', cat: 'Гайхамшиг', title: 'Байгалийн хамгийн гайхамшигт үзэгдлүүд', date: '2026.06.08', views: '654' },
-    { id: 'g2', emoji: '🦋', cat: 'Гайхамшиг', title: 'Амьтдын нууц амьдрал', date: '2026.06.06', views: '421' }
-  ],
-  'Зөвлөгөө': [
-    { id: 'z1', emoji: '💡', cat: 'Зөвлөгөө', title: 'Амжилттай хүмүүсийн 10 зуршил', date: '2026.06.08', views: '987' },
-    { id: 'z2', emoji: '📚', cat: 'Зөвлөгөө', title: 'Уншиж эхлэх 5 ном', date: '2026.06.07', views: '543' }
-  ],
-  'Шинжлэх ухаан': [
-    { id: 'sc1', emoji: '🔬', cat: 'Шинжлэх ухаан', title: 'Сансрын судалгааны шинэ нээлт 2026', date: '2026.06.08', views: '654' },
-    { id: 'sc2', emoji: '⚗️', cat: 'Шинжлэх ухаан', title: 'Квант компьютерийн дараагийн алхам', date: '2026.06.07', views: '512' },
-    { id: 'sc3', emoji: '🧬', cat: 'Шинжлэх ухаан', title: 'ДНХ засварлах шинэ арга', date: '2026.06.06', views: '443' },
-    { id: 'sc4', emoji: '🌊', cat: 'Шинжлэх ухаан', title: 'Далайн гүнд шинэ амьтад нээгдэв', date: '2026.06.05', views: '387' }
-  ],
-  'Шинэ нээлт': [
-    { id: 'sc1', emoji: '🔬', cat: 'Шинэ нээлт', title: 'Сансрын судалгааны шинэ нээлт 2026', date: '2026.06.08', views: '654' },
-    { id: 'sc3', emoji: '🧬', cat: 'Шинэ нээлт', title: 'ДНХ засварлах шинэ арга', date: '2026.06.06', views: '443' }
-  ],
-  'Ирээдүй': [
-    { id: 'sc2', emoji: '⚗️', cat: 'Ирээдүй', title: 'Квант компьютерийн дараагийн алхам', date: '2026.06.07', views: '512' },
-    { id: 'ir1', emoji: '🤖', cat: 'Ирээдүй', title: '2050 онд дэлхий хэрхэн харагдах вэ', date: '2026.06.05', views: '876' }
-  ],
-  'Туршилт': [
-    { id: 'sc4', emoji: '🌊', cat: 'Туршилт', title: 'Далайн гүнд шинэ амьтад нээгдэв', date: '2026.06.05', views: '387' },
-    { id: 'tu1', emoji: '⚛️', cat: 'Туршилт', title: 'Цөмийн нэгдэлийн шинэ туршилт', date: '2026.06.04', views: '298' }
-  ],
-  'AI': [
-    { id: 'ai1', emoji: '🤖', cat: 'AI', title: 'ChatGPT-ийн шинэ хувилбар гарлаа', date: '2026.06.08', views: '1.5к' },
-    { id: 'ai2', emoji: '🧠', cat: 'AI', title: 'AI киноны дүрслэл хийж байна', date: '2026.06.07', views: '876' },
-    { id: 'ai3', emoji: '💻', cat: 'AI', title: 'Монгол хэлний AI хөгжил', date: '2026.06.06', views: '654' },
-    { id: 'ai4', emoji: '🎨', cat: 'AI', title: 'AI урлагийн хамгийн сайн жишээнүүд', date: '2026.06.05', views: '432' }
-  ],
-  'Шинэ мэдээ': [
-    { id: 'ai1', emoji: '🤖', cat: 'Шинэ мэдээ', title: 'ChatGPT-ийн шинэ хувилбар гарлаа', date: '2026.06.08', views: '1.5к' },
-    { id: 'ai3', emoji: '💻', cat: 'Шинэ мэдээ', title: 'Монгол хэлний AI хөгжил', date: '2026.06.06', views: '654' }
-  ],
-  'Хэрэгсэл': [
-    { id: 'ai4', emoji: '🎨', cat: 'Хэрэгсэл', title: 'AI урлагийн хамгийн сайн жишээнүүд', date: '2026.06.05', views: '432' },
-    { id: 'he1', emoji: '🛠️', cat: 'Хэрэгсэл', title: 'Хамгийн ашигтай AI хэрэгслүүд 2026', date: '2026.06.04', views: '765' }
-  ],
-  'Сургалт': [
-    { id: 'su1', emoji: '📖', cat: 'Сургалт', title: 'AI-г суралцаж эхлэх хамгийн сайн арга', date: '2026.06.08', views: '543' },
-    { id: 'su2', emoji: '🎓', cat: 'Сургалт', title: 'Онлайн AI сургалтын шилдэг платформууд', date: '2026.06.06', views: '432' }
-  ],
-  'Кино түүх': [
-    { id: 'kh1', emoji: '🎞️', cat: 'Кино түүх', title: 'Дэлхийн анхны кино хэрхэн бүтсэн бэ', date: '2026.06.08', views: '765' },
-    { id: 'kh2', emoji: '🏆', cat: 'Кино түүх', title: 'Оскарын шилдэг киноны түүх', date: '2026.06.07', views: '543' },
-    { id: 'kh3', emoji: '🎭', cat: 'Кино түүх', title: 'Монгол киноны 100 жилийн түүх', date: '2026.06.06', views: '432' },
-    { id: 'kh4', emoji: '📽️', cat: 'Кино түүх', title: 'Хамгийн нөлөөтэй найруулагчид', date: '2026.06.05', views: '321' }
-  ],
-  'Монгол кино түүх': [
-    { id: 'kh3', emoji: '🎭', cat: 'Монгол кино түүх', title: 'Монгол киноны 100 жилийн түүх', date: '2026.06.06', views: '432' },
-    { id: 'mk1', emoji: '🏔️', cat: 'Монгол кино түүх', title: 'Монголын анхны дуут кино', date: '2026.06.04', views: '287' }
-  ],
-  'Гадаад кино түүх': [
-    { id: 'kh1', emoji: '🎞️', cat: 'Гадаад кино түүх', title: 'Дэлхийн анхны кино хэрхэн бүтсэн бэ', date: '2026.06.08', views: '765' },
-    { id: 'kh2', emoji: '🏆', cat: 'Гадаад кино түүх', title: 'Оскарын шилдэг киноны түүх', date: '2026.06.07', views: '543' }
-  ]
-};
-
-function renderNews(cat = '') {
-  const list = document.getElementById('news-list');
-  const items = NEWS_DATA[cat] || NEWS_DATA[''];
-  list.innerHTML = items.map(item =>
-    `<article class="news-card" role="listitem" tabindex="0"
-      onclick="location.href='news-detail.html?id=${item.id}'" aria-label="${item.title}">
-      <div class="news-img"><span class="n-emoji">${item.emoji}</span></div>
-      <div class="news-body">
-        <span class="news-cat">${item.cat}</span>
-        <h3 class="news-title">${item.title}</h3>
-        <div class="news-foot">
-          <time class="news-date">${item.date}</time>
-          <span class="news-views">👁 ${item.views}</span>
-        </div>
-      </div>
-    </article>`
-  ).join('');
-}
-
-async function loadNews() {
-  const list = document.getElementById('news-list');
-  // Эхэндээ fallback-г шууд харуул
-  renderNews('');
-  try {
-    const news = await supaFetch('news', 'order=created_at.desc&limit=4');
-    if (!news || news.length === 0) { return; }
-    list.innerHTML = news.map((item, i) => {
-      const title = sanitize(item.title);
-      const cat = sanitize(item.category || 'Мэдээ');
-      const id = sanitize(item.id);
-      const views = parseInt(item.views) || 0;
-      const date = new Date(item.created_at).toLocaleDateString('mn-MN');
-      const thumb = item.thumbnail
-        ? `<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy">`
-        : `<span class="n-emoji">${['🌍','🎭','🚀','💡'][i % 4]}</span>`;
-      return `<article class="news-card" role="listitem" tabindex="0"
-          onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}">
-        <div class="news-img">${thumb}</div>
-        <div class="news-body">
-          <span class="news-cat">${cat}</span>
-          <h3 class="news-title">${title}</h3>
-          <div class="news-foot">
-            <time class="news-date">${date}</time>
-            <span class="news-views">👁 ${views}</span>
-          </div>
-        </div>
-      </article>`;
-    }).join('');
-  } catch {
-    renderNews('');
-  }
-}
-
-async function loadAd() {
-  try {
-    const ads = await supaFetch('ads', 'active=eq.true&limit=1');
-    if (ads && ads.length > 0) {
-      const ad = ads[0];
-      document.getElementById('ad-inner').innerHTML = `
-        <div class="ad-banner">
-          <div class="ad-text">
-            <strong>${sanitize(ad.title)}</strong>${sanitize(ad.description || '')}
-          </div>
-          <button class="ad-btn">${sanitize(ad.button_text || 'Холбоо барих')}</button>
-        </div>
-        <div class="ad-label">Реклам</div>`;
-    }
-  } catch {}
-}
-
-/* ===== ХАЙЛТ ===== */
-let searchTimeout;
-function searchMovies() {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(async () => {
-    const q = (document.getElementById('search-input').value.trim()) ||
-      (document.getElementById('mobile-search-input') ? document.getElementById('mobile-search-input').value.trim() : '');
-    if (!q) { loadMovies(currentGenre); return; }
-    const list = document.getElementById('movies-list');
-    list.innerHTML = buildSkeletons(4);
-    try {
-      const movies = await supaFetch('movies', `title=ilike.*${encodeURIComponent(q)}*&limit=8`);
-      if (!movies || movies.length === 0) {
-        list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>"${sanitize(q)}" олдсонгүй</p></div>`;
-        return;
-      }
-      renderMovieCards(movies, list);
-    } catch {}
-  }, 300);
-}
-
-/* ===== LIKE TOGGLE ===== */
-function toggleLike(btn) {
-  const isLiked = btn.classList.toggle('liked');
-  const c = btn.querySelector('span');
-  const cur = parseInt(c.textContent) || 0;
-  c.textContent = isLiked ? cur + 1 : Math.max(0, cur - 1);
-  showToast(isLiked ? '❤️ Дуртай жагсаалтад нэмлээ' : '💔 Дуртай жагсаалтаас хаслаа');
-}
-
-function showToast(msg) {
-  const old = document.querySelector('.toast');
-  if (old) old.remove();
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  t.setAttribute('role', 'status');
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
-}
-
-function goSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-/* ===== INIT ===== */
 document.addEventListener('DOMContentLoaded', () => {
-  initCarousel();
-  loadMovies();
-  loadNews();
-  loadAd();
+  buildDropdowns();
+
+  // Desktop: hover
+  document.querySelectorAll('.nav-dropdown-wrap').forEach(wrap => {
+    wrap.addEventListener('mouseenter', () => wrap.querySelector('.nav-dropdown').classList.add('show'));
+    wrap.addEventListener('mouseleave', () => wrap.querySelector('.nav-dropdown').classList.remove('show'));
+  });
+
+  // Mobile: click
+  document.querySelectorAll('.has-dropdown').forEach(link => {
+    link.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768) {
+        e.preventDefault();
+        const dropdown = link.nextElementSibling;
+        const isOpen = dropdown.classList.toggle('show');
+        link.setAttribute('aria-expanded', isOpen);
+      }
+    });
+  });
+
+  // Гадна дарахад хаах
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown-wrap')) closeAllDropdowns();
+  });
 });
-</script>
-</body>
-</html>
+
+// NAV TOGGLE (mobile)
+let navOpen = false;
+function toggleNav() {
+  navOpen = !navOpen;
+  document.getElementById('nav-links').classList.toggle('open', navOpen);
+  document.getElementById('nav-right').classList.toggle('open', navOpen);
+  const t = document.getElementById('nav-toggle');
+  t.textContent = navOpen ? '✕' : '☰';
+  t.setAttribute('aria-expanded', navOpen);
+}
+document.addEventListener('click', e => {
+  if (navOpen && !e.target.closest('.nav')) {
+    navOpen = false;
+    document.getElementById('nav-links').classList.remove('open');
+    document.getElementById('nav-right').classList.remove('open');
+    document.getElementById('nav-toggle').textContent = '☰';
+  }
+});
+
+// MOBILE SEARCH
+let mobileSearchOpen = false;
+function toggleMobileSearch() {
+  mobileSearchOpen = !mobileSearchOpen;
+  const bar = document.getElementById('mobile-search-bar');
+  bar.classList.toggle('open', mobileSearchOpen);
+  if (mobileSearchOpen) setTimeout(() => document.getElementById('mobile-search-input').focus(), 80);
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const msi = document.getElementById('mobile-search-input');
+  if (msi) msi.addEventListener('input', () => {
+    const dsi = document.getElementById('search-input');
+    if (dsi) dsi.value = msi.value;
+    if (typeof searchMovies === 'function') searchMovies();
+  });
+});
+
+// BOTTOM NAV active
+(function () {
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.mbn-item').forEach(a => {
+    a.classList.remove('active');
+    const href = a.getAttribute('href');
+    if (href === path || (path === '' && href === 'index.html')) a.classList.add('active');
+  });
+})();
