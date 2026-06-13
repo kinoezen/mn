@@ -190,8 +190,9 @@
 <!-- NEWS -->
 <section id="news" aria-label="Мэдээ мэдээлэл">
   <div class="section">
-    <div class="section-header">
+    <div class="section-header" style="flex-wrap:wrap;gap:8px;">
       <h2 class="section-title"><span>Мэдээ</span> мэдээлэл</h2>
+      <div id="news-filter-tabs" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
       <a href="news.html" class="see-all">Бүгдийг харах →</a>
     </div>
   </div>
@@ -373,39 +374,18 @@ const MCAT_MENUS={
 };
 
 function openMcatDropdown(card,menuKey){
-  const existing=document.getElementById('mcat-dropdown-panel');
-  if(existing){
-    const isOpen=existing.dataset.menu===menuKey&&existing.classList.contains('open');
-    closeMcatDropdown();
-    if(isOpen)return;
-  }
   setActiveMcat(card);
   const items=MCAT_MENUS[menuKey]||[];
-  const panel=document.createElement('div');
-  panel.id='mcat-dropdown-panel';
-  panel.className='mcat-dropdown-panel open';
-  panel.dataset.menu=menuKey;
-  panel.innerHTML=`<div class="mcat-dp-header"><span class="mcat-dp-title">${menuKey}</span><button class="mcat-dp-close" onclick="closeMcatDropdown()">✕</button></div><div class="mcat-dp-items">${items.map(item=>`<button class="mcat-dp-item${item.cat===''?' active':''}" onclick="handleMcatSub('${item.cat}',this)">${item.label}</button>`).join('')}</div>`;
-  const grid=document.getElementById('main-cats-grid');
-  if(grid)grid.insertAdjacentElement('afterend',panel);
-  setTimeout(()=>document.addEventListener('click',closeMcatOutside),100);
-}
-
-function closeMcatOutside(e){
-  if(!e.target.closest('#mcat-dropdown-panel')&&!e.target.closest('.mcat-card')){closeMcatDropdown();}
-}
-
-function closeMcatDropdown(){
-  const p=document.getElementById('mcat-dropdown-panel');
-  if(p)p.remove();
-  document.removeEventListener('click',closeMcatOutside);
+  const tabsEl=document.getElementById('news-filter-tabs');
+  tabsEl.innerHTML=items.map(item=>`<button class="news-filter-btn${item.cat===''?' active':''}" onclick="handleMcatSub('${item.cat}',this)">${item.label}</button>`).join('');
+  renderNews('');
+  setTimeout(()=>goSection('news'),150);
 }
 
 function handleMcatSub(cat,btn){
-  document.querySelectorAll('.mcat-dp-item').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.news-filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderNews(cat);
-  setTimeout(()=>goSection('news'),150);
 }
 
 // MOVIES
@@ -488,6 +468,9 @@ document.addEventListener('DOMContentLoaded',()=>{initCarousel();loadMovies();lo
 <style>
 .genre-toggle-btn{padding:6px 12px;border-radius:20px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);color:#4ade80;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all 0.2s;}
 .genre-toggle-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;}
+.news-filter-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.06);color:#ccc;font-size:12px;font-family:"Nunito",sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.news-filter-btn:hover{background:rgba(74,222,128,0.12);color:#4ade80;}
+.news-filter-btn.active{background:rgba(74,222,128,0.18);border-color:#4ade80;color:#4ade80;}
 </style>
 </body>
 </html>
