@@ -31,7 +31,7 @@ async function loadWeather() {
 }
 loadWeather();
 
-// ===== DROPDOWN ЦЭСИЙН БҮТЭЦ =====
+// ===== NAVBAR DROPDOWN — зөвхөн дээд цэс (Мэдээ гэх мэт) =====
 const DROPDOWN_MENUS = {
   'Мэдээ': [
     { label: 'Бүгд', cat: '' },
@@ -41,49 +41,12 @@ const DROPDOWN_MENUS = {
     { label: 'Эдийн засаг', cat: 'Эдийн засаг' },
     { label: 'Сурвалжилга', cat: 'Сурвалжилга' },
   ],
-  'Одод ертөнц': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Харь гараг', cat: 'Харь гараг' },
-    { label: 'Манай ертөнц', cat: 'Манай ертөнц' },
-  ],
-  'Аялал': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Миний аялал', cat: 'Миний аялал' },
-    { label: 'Монгол аялал', cat: 'Монгол аялал' },
-    { label: 'Гадаад аялал', cat: 'Гадаад аялал' },
-  ],
-  'Шинжлэх ухаан': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
-    { label: 'Ирээдүй', cat: 'Ирээдүй' },
-    { label: 'Туршилт', cat: 'Туршилт' },
-  ],
-  'Кино түүх': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
-    { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' },
-  ],
-  'Танин мэдэхүй': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
-    { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
-    { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' },
-  ],
-  'AI': [
-    { label: 'Бүгд', cat: '' },
-    { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
-    { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
-    { label: 'Сургалт', cat: 'Сургалт' },
-  ],
 };
 
-// ===== DROPDOWN ҮҮСГЭХ =====
 function buildDropdowns() {
-  // Дээд navbar-ийн цэс дээр dropdown нэмэх
   const navLinks = document.getElementById('nav-links');
   if (!navLinks) return;
 
-  // Мэдээ линк дээр dropdown нэмэх
   navLinks.querySelectorAll('a').forEach(link => {
     const text = link.textContent.trim();
     if (DROPDOWN_MENUS[text]) {
@@ -94,7 +57,7 @@ function buildDropdowns() {
       const dropdown = document.createElement('div');
       dropdown.className = 'nav-dropdown';
       dropdown.innerHTML = DROPDOWN_MENUS[text].map(item =>
-        `<a class="nav-dropdown-item" href="#" onclick="handleDropdownClick(event,'${text}','${item.cat}','${item.label}')">${item.label}</a>`
+        `<a class="nav-dropdown-item" href="#" onclick="handleDropdownClick(event,'${text}','${item.cat}')">${item.label}</a>`
       ).join('');
 
       const wrapper = document.createElement('div');
@@ -104,157 +67,34 @@ function buildDropdowns() {
       wrapper.appendChild(dropdown);
     }
   });
-
-  // Ангилал grid дээр dropdown нэмэх (mcat cardууд)
-  buildMcatDropdowns();
 }
 
-// ===== АНГИЛАЛ GRID DROPDOWN =====
-function buildMcatDropdowns() {
-  const mcatMap = {
-    'mcat-news': 'Мэдээ',
-    'mcat-travel': 'Аялал',
-    'mcat-science': 'Шинжлэх ухаан',
-    'mcat-ai': 'AI',
-    'mcat-history': 'Кино түүх',
-    'mcat-knowledge': 'Танин мэдэхүй',
-    'mcat-stars': 'Одод ертөнц',
-  };
-
-  Object.entries(mcatMap).forEach(([cls, menuKey]) => {
-    const card = document.querySelector('.' + cls);
-    if (!card || !DROPDOWN_MENUS[menuKey]) return;
-
-    // Өмнөх onclick-ийг солих
-    card.onclick = (e) => {
-      e.stopPropagation();
-      openMcatDropdown(card, menuKey);
-    };
-  });
-}
-
-// ===== MCAT DROPDOWN PANEL =====
-function openMcatDropdown(card, menuKey) {
-  // Аль хэдийн нээлттэй бол хааx
-  const existing = document.getElementById('mcat-dropdown-panel');
-  if (existing) {
-    const isOpen = existing.dataset.menu === menuKey && existing.classList.contains('open');
-    closeMcatDropdown();
-    if (isOpen) return;
-  }
-
-  setActiveMcat(card);
-
-  const items = DROPDOWN_MENUS[menuKey];
-  const panel = document.createElement('div');
-  panel.id = 'mcat-dropdown-panel';
-  panel.className = 'mcat-dropdown-panel open';
-  panel.dataset.menu = menuKey;
-
-  panel.innerHTML = `
-    <div class="mcat-dp-header">
-      <span class="mcat-dp-title">${menuKey}</span>
-      <button class="mcat-dp-close" onclick="closeMcatDropdown()">✕</button>
-    </div>
-    <div class="mcat-dp-items">
-      ${items.map(item =>
-        `<button class="mcat-dp-item" onclick="handleMcatSubClick('${menuKey}','${item.cat}','${item.label}',this)">
-          ${item.label}
-        </button>`
-      ).join('')}
-    </div>
-  `;
-
-  // Ангилал grid-ийн доор оруулах
-  const grid = document.getElementById('main-cats-grid');
-  if (grid) grid.insertAdjacentElement('afterend', panel);
-
-  // Гадна дарахад хаах
-  setTimeout(() => {
-    document.addEventListener('click', closeMcatDropdownOutside);
-  }, 100);
-}
-
-function closeMcatDropdownOutside(e) {
-  if (!e.target.closest('#mcat-dropdown-panel') && !e.target.closest('.mcat-card')) {
-    closeMcatDropdown();
-  }
-}
-
-function closeMcatDropdown() {
-  const panel = document.getElementById('mcat-dropdown-panel');
-  if (panel) panel.remove();
-  document.removeEventListener('click', closeMcatDropdownOutside);
-}
-
-// ===== DROPDOWN ТОВЧ ДАРАХ =====
-function handleDropdownClick(e, menuName, cat, label) {
+function handleDropdownClick(e, menuName, cat) {
   e.preventDefault();
   e.stopPropagation();
-
-  // Мэдээний хэсэг рүү шилжих
-  const newsSection = document.getElementById('news');
-  const moviesSection = document.getElementById('movies');
-  const genreSection = document.getElementById('movie-genre-section');
-
-  if (newsSection) newsSection.style.display = '';
-  if (moviesSection) moviesSection.style.display = 'none';
-  if (genreSection) genreSection.style.display = 'none';
-
-  // News filter
   if (typeof renderNews === 'function') renderNews(cat);
-
-  // Scroll
+  const newsSection = document.getElementById('news');
   setTimeout(() => {
     if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 100);
-
-  // Dropdown хаах
   closeAllDropdowns();
 }
 
-function handleMcatSubClick(menuName, cat, label, btn) {
-  // Active болгох
-  document.querySelectorAll('.mcat-dp-item').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-
-  // Мэдээний хэсэг харуулах
-  const newsSection = document.getElementById('news');
-  const moviesSection = document.getElementById('movies');
-  const genreSection = document.getElementById('movie-genre-section');
-
-  if (newsSection) newsSection.style.display = '';
-  if (moviesSection) moviesSection.style.display = 'none';
-  if (genreSection) genreSection.style.display = 'none';
-
-  if (typeof renderNews === 'function') renderNews(cat);
-
-  setTimeout(() => {
-    if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 150);
-}
-
-// ===== DROPDOWN НЭЭХ/ХААХ =====
 function closeAllDropdowns() {
   document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('show'));
   document.querySelectorAll('.has-dropdown').forEach(a => a.setAttribute('aria-expanded', 'false'));
 }
 
-// Hover болон click хоёуланд ажиллах
 document.addEventListener('DOMContentLoaded', () => {
   buildDropdowns();
 
-  // Desktop: hover-оор нээх
+  // Desktop: hover
   document.querySelectorAll('.nav-dropdown-wrap').forEach(wrap => {
-    wrap.addEventListener('mouseenter', () => {
-      wrap.querySelector('.nav-dropdown').classList.add('show');
-    });
-    wrap.addEventListener('mouseleave', () => {
-      wrap.querySelector('.nav-dropdown').classList.remove('show');
-    });
+    wrap.addEventListener('mouseenter', () => wrap.querySelector('.nav-dropdown').classList.add('show'));
+    wrap.addEventListener('mouseleave', () => wrap.querySelector('.nav-dropdown').classList.remove('show'));
   });
 
-  // Mobile: click-ээр нээх
+  // Mobile: click
   document.querySelectorAll('.has-dropdown').forEach(link => {
     link.addEventListener('click', (e) => {
       if (window.innerWidth <= 768) {
@@ -266,11 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Гадна дарахад dropdown хаах
+  // Гадна дарахад хаах
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.nav-dropdown-wrap')) {
-      closeAllDropdowns();
-    }
+    if (!e.target.closest('.nav-dropdown-wrap')) closeAllDropdowns();
   });
 });
 
@@ -310,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// BOTTOM NAV active highlight
+// BOTTOM NAV active
 (function () {
   const path = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.mbn-item').forEach(a => {
