@@ -182,7 +182,12 @@
       <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Олон ангит')">Олон ангит</button>
     </div>
   </div>
-  <div class="grid-4" id="movies-list" role="list"></div>
+  <div class="grid-4" id="movies-list" role="list">
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+  </div>
 </section>
 
 <!-- NEWS -->
@@ -193,7 +198,12 @@
       <a href="news.html" class="see-all">Бүгдийг харах →</a>
     </div>
   </div>
-  <div class="news-grid" id="news-list" role="list"></div>
+  <div class="news-grid" id="news-list" role="list">
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+    <div class="skel-card skeleton" style="height:220px"></div>
+  </div>
 </section>
 
 <a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
@@ -639,19 +649,17 @@ function toggleGenreRow() {
 
 async function loadMovies(genre = '') {
   const list = document.getElementById('movies-list');
-  list.innerHTML = buildSkeletons(4);
+  // Эхэндээ fallback-г шууд харуул
+  renderMovieCards(FALLBACK_MOVIES, list);
   try {
     let params = 'order=created_at.desc&limit=4';
     if (genre) params += `&genre=eq.${encodeURIComponent(genre)}`;
     const movies = await supaFetch('movies', params);
-    if (!movies || movies.length === 0) {
-      // Суурь дата алга бол fallback-г харуул
-      renderMovieCards(FALLBACK_MOVIES, list);
-      return;
+    if (movies && movies.length > 0) {
+      renderMovieCards(movies, list);
     }
-    renderMovieCards(movies, list);
   } catch {
-    renderMovieCards(FALLBACK_MOVIES, list);
+    // fallback аль хэдийн харагдаж байна
   }
 }
 
@@ -801,9 +809,11 @@ function renderNews(cat = '') {
 
 async function loadNews() {
   const list = document.getElementById('news-list');
+  // Эхэндээ fallback-г шууд харуул
+  renderNews('');
   try {
     const news = await supaFetch('news', 'order=created_at.desc&limit=4');
-    if (!news || news.length === 0) { renderNews(''); return; }
+    if (!news || news.length === 0) { return; }
     list.innerHTML = news.map((item, i) => {
       const title = sanitize(item.title);
       const cat = sanitize(item.category || 'Мэдээ');
