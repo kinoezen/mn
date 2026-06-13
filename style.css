@@ -317,24 +317,3 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .logo-text{font-size:21px;}
   .featured-img{height:160px;}
 }
-/* ===== DUAL TABS (Кино / Мэдээ — 2 байнгын таб) ===== */
-.dual-tabs-bar{display:flex;gap:0;padding:0 24px;margin-bottom:0;border-bottom:2px solid var(--border);}
-.dual-tab{flex:1;padding:13px 10px;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;color:var(--text3);font-family:var(--font-display);font-size:17px;letter-spacing:1px;cursor:pointer;transition:all 0.2s;text-align:center;}
-.dual-tab:hover{color:var(--text2);}
-.dual-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-
-/* ===== SUB-CATEGORY ROW (Дэд цэсүүд) ===== */
-.sub-cats-wrap{padding:0 24px 4px;}
-.sub-cat-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
-.sub-cat-row::-webkit-scrollbar{display:none;}
-.sub-cat-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
-.sub-cat-btn:hover{border-color:var(--border2);color:var(--accent);}
-.sub-cat-btn.on{background:var(--accent);color:#0a2a0a;border-color:var(--accent);}
-
-@media(max-width:768px){
-  .dual-tabs-bar{padding:0 16px;}
-  .dual-tab{font-size:14px;padding:11px 8px;}
-  .sub-cats-wrap{padding:0 16px 4px;}
-  .sub-cat-row{display:grid;grid-template-columns:repeat(2,1fr);overflow-x:visible;padding-bottom:8px;gap:8px;}
-  .sub-cat-btn{white-space:normal;text-align:center;flex-shrink:unset;padding:8px 10px;}
-}
