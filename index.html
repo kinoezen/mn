@@ -105,7 +105,38 @@
   </div>
 </section>
 
-<!-- АНГИЛАЛ СОНГОХ -->
+<!-- MOVIES — байнга харагдана -->
+<section id="movies" aria-label="Кинонуудын жагсаалт">
+  <div class="section">
+    <div class="section-header">
+      <h2 class="section-title"><span>Шинэ</span> кинонууд</h2>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="genre-toggle-btn" id="genre-toggle-btn" onclick="toggleGenreRow()">Жанр ▾</button>
+        <a href="movies.html" class="see-all">Бүгдийг харах →</a>
+      </div>
+    </div>
+  </div>
+  <div class="cat-section-wrap" id="movie-genre-section" style="display:none;">
+    <div class="cat-row" role="tablist">
+      <button class="cat-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Экшн')">Экшн</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Фантастик')">Фантастик</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Драм')">Драм</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аймаар')">Аймаар</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Романтик')">Романтик</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аниме')">Аниме</button>
+      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Олон ангит')">Олон ангит</button>
+    </div>
+  </div>
+  <div class="grid-4" id="movies-list" role="list">
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+  </div>
+</section>
+
+<!-- АНГИЛАЛ СОНГОХ — Шинэ кинонуудын дараа, Мэдээний өмнө -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -153,37 +184,6 @@
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg></div>
       <div class="mcat-label">Танин мэдэхүй</div><div class="mcat-sub">Мэдлэг боловсрол</div><div class="mcat-badge">4</div>
     </div>
-  </div>
-</section>
-
-<!-- MOVIES — байнга харагдана -->
-<section id="movies" aria-label="Кинонуудын жагсаалт">
-  <div class="section">
-    <div class="section-header">
-      <h2 class="section-title"><span>Шинэ</span> кинонууд</h2>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="genre-toggle-btn" id="genre-toggle-btn" onclick="toggleGenreRow()">Жанр ▾</button>
-        <a href="movies.html" class="see-all">Бүгдийг харах →</a>
-      </div>
-    </div>
-  </div>
-  <div class="cat-section-wrap" id="movie-genre-section" style="display:none;">
-    <div class="cat-row" role="tablist">
-      <button class="cat-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Экшн')">Экшн</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Фантастик')">Фантастик</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Драм')">Драм</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аймаар')">Аймаар</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Романтик')">Романтик</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аниме')">Аниме</button>
-      <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Олон ангит')">Олон ангит</button>
-    </div>
-  </div>
-  <div class="grid-4" id="movies-list" role="list">
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
   </div>
 </section>
 
@@ -362,7 +362,7 @@ function showNewsOnly(el){
   setTimeout(()=>goSection('news'),100);
 }
 
-// MCAT DROPDOWN — index.html-д зориулсан (navbar dropdown-оос ТУСДАА)
+// MCAT DROPDOWN
 const MCAT_MENUS={
   'Аялал':[{label:'Бүгд',cat:''},{label:'Миний аялал',cat:'Миний аялал'},{label:'Монгол аялал',cat:'Монгол аялал'},{label:'Гадаад аялал',cat:'Гадаад аялал'}],
   'Шинжлэх ухаан':[{label:'Бүгд',cat:''},{label:'Шинэ нээлт',cat:'Шинэ нээлт'},{label:'Ирээдүй',cat:'Ирээдүй'},{label:'Туршилт',cat:'Туршилт'}],
