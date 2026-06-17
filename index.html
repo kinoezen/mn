@@ -47,7 +47,85 @@
     display: block !important;
   }
 
-  /* ===== MOBILE BOTTOM NAV — ШИНЭ ЗАГВАР ===== */
+  /* ===== "Бүгдийг харах" УСТГАСАН ===== */
+  .see-all {
+    display: none !important;
+  }
+
+  /* ===== GENRE TOGGLE УСТГАСАН ===== */
+  .genre-toggle-btn {
+    display: none !important;
+  }
+
+  /* ===== ДЭД ЦЭСНИЙ ӨНГӨ ЗАСАХ ===== */
+  .news-filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.06);
+    color: #ccc !important;
+    font-size: 12px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .news-filter-btn:hover {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80 !important;
+  }
+  .news-filter-btn.active {
+    background: rgba(74, 222, 128, 0.18);
+    border-color: #4ade80;
+    color: #4ade80 !important;
+  }
+
+  /* ===== ХАЙЛТЫН ШИЛ (MAGNIFIER) ЗАСАХ ===== */
+  .nav-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.06);
+    border-radius: 30px;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.3s;
+  }
+  .nav-search:focus-within {
+    border-color: #4ade80;
+  }
+  .nav-search span {
+    color: rgba(255,255,255,0.3);
+    font-size: 14px;
+    margin-right: 6px;
+  }
+  .nav-search input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 6px 4px;
+    font-size: 13px;
+    outline: none;
+    width: 140px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .nav-search input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  .mobile-search-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 6px 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .mobile-search-btn:hover {
+    background: rgba(74,222,128,0.12);
+  }
+
+  /* ===== MOBILE BOTTOM NAV ===== */
   .mobile-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -90,19 +168,9 @@
     color: rgba(255, 255, 255, 0.7);
   }
 
-  /* ===== GENRE TOGGLE УСТГАСАН ===== */
-  .genre-toggle-btn {
-    display: none !important;
-  }
-
-  /* ===== "Бүгдийг харах" УСТГАСАН ===== */
-  .see-all {
-    display: none !important;
-  }
-
-  /* ===== SECTION HEADER-ЭЭС ЖАНР ТОВЧ УСТГАХ ===== */
-  .section-header .genre-toggle-btn {
-    display: none !important;
+  /* ===== ЦАГ АГААРЫН МОНГОЛ ХЭЛ ===== */
+  .weather-temp {
+    color: #fff;
   }
 </style>
 </head>
@@ -148,7 +216,7 @@
   </div>
 </nav>
 
-<!-- WEATHER BAR -->
+<!-- WEATHER BAR — МОНГОЛ ХЭЛТЭЙ -->
 <div class="weather-bar" role="complementary" aria-label="Цаг агаар">
   <div class="weather-left">
     <div class="weather-item">📅 <time id="today-date"></time></div>
@@ -257,7 +325,6 @@
   <div class="section">
     <div class="section-header">
       <h2 class="section-title"><span>Шинэ</span> кинонууд</h2>
-      <!-- "Жанр" товч УСТГАСАН, "Бүгдийг харах" УСТГАСАН -->
     </div>
   </div>
   
@@ -290,7 +357,6 @@
       <h2 class="section-title"><span>Мэдээ</span> мэдээлэл</h2>
       <span id="news-category-label" style="font-size:13px;color:#4ade80;font-weight:600;background:rgba(74,222,128,0.1);padding:3px 12px;border-radius:12px;border:1px solid rgba(74,222,128,0.2);">Бүгд</span>
       <div id="news-filter-tabs" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
-      <a href="news.html" class="see-all">Бүгдийг харах →</a>
     </div>
   </div>
   <div class="news-grid" id="news-list" role="list">
@@ -340,7 +406,7 @@
   </div>
 </footer>
 
-<!-- MOBILE BOTTOM NAV — ШИНЭ ЗАГВАР -->
+<!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
     <a class="mbn-item active" href="index.html" aria-label="Нүүр">
@@ -430,6 +496,25 @@ const genreGradients = {
 };
 
 // ============================================================
+// ЦАГ АГААРЫН МЭДЭЭ (Монгол хэл)
+// ============================================================
+async function loadWeather() {
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.92&longitude=106.92&current_weather=true&timezone=Asia%2FShanghai');
+    const data = await res.json();
+    if (data.current_weather) {
+      const temp = data.current_weather.temperature;
+      const weatherEl = document.getElementById('weather-temp');
+      if (weatherEl) {
+        weatherEl.textContent = temp + '°C';
+      }
+    }
+  } catch (error) {
+    console.error('Weather error:', error);
+  }
+}
+
+// ============================================================
 // ОНЦЛОХ КИНО КАРУСЕЛЬ (Supabase-аас)
 // ============================================================
 let carouselIndex = 0;
@@ -447,7 +532,6 @@ function buildFeaturedCardFromMovie(m) {
   const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
   const tags = m.featured ? `<span class="ftag ftag-top">✦ Онцлох</span>` : '';
   
-  // 🔥 ЗУРГИЙГ ТОМРУУЛСАН
   const thumbHtml = m.thumbnail ? 
     `<img src="${sanitize(m.thumbnail)}" alt="${sanitize(m.title)}" loading="lazy" onerror="this.style.display='none'">` : 
     `<span class="fallback-emoji">🎬</span>`;
@@ -737,7 +821,7 @@ function renderMovieCards(movies, list) {
 }
 
 // ============================================================
-// NEWS - Supabase-аас татах
+// NEWS - Supabase-аас татах (ЦАГИЙГ ЗӨВ ХАРУУЛНА)
 // ============================================================
 async function loadNews() {
   const list = document.getElementById('news-list');
@@ -783,7 +867,15 @@ function renderNewsList(news, list) {
     const cat = sanitize(item.category || 'Мэдээ');
     const id = sanitize(item.id);
     const views = parseInt(item.views) || 0;
-    const date = new Date(item.created_at).toLocaleDateString('mn-MN');
+    
+    // 🔥 ЦАГИЙГ ЗӨВ ХАРУУЛАХ (огноо + цаг)
+    const date = new Date(item.created_at);
+    const formattedDate = date.getFullYear() + '.' + 
+      (date.getMonth()+1).toString().padStart(2,'0') + '.' + 
+      date.getDate().toString().padStart(2,'0') + ' ' +
+      date.getHours().toString().padStart(2,'0') + ':' +
+      date.getMinutes().toString().padStart(2,'0');
+    
     const thumb = item.thumbnail ?
       `<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy">` :
       `<span class="n-emoji">📰</span>`;
@@ -794,7 +886,7 @@ function renderNewsList(news, list) {
         <span class="news-cat">${cat}</span>
         <h3 class="news-title">${title}</h3>
         <div class="news-foot">
-          <time class="news-date">${date}</time>
+          <time class="news-date">${formattedDate}</time>
           <span class="news-views">👁 ${views}</span>
         </div>
       </div>
@@ -880,7 +972,7 @@ function goSection(id) {
 }
 
 // ============================================================
-// 🌟 НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ
+// НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ
 // ============================================================
 (function() {
     let clickCount = 0;
@@ -960,14 +1052,9 @@ document.addEventListener('DOMContentLoaded', function() {
   loadMovies();
   loadNews();
   loadAd();
+  loadWeather();
 });
 </script>
 
-<style>
-.genre-toggle-btn{display:none !important;}
-.see-all{display:none !important;}
-.section-header .genre-toggle-btn{display:none !important;}
-#movie-genre-section{display:block !important;}
-</style>
 </body>
 </html>
