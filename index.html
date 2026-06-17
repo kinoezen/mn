@@ -247,7 +247,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+    <div class="footer-copy" id="secret-admin-trigger">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
     <nav class="footer-links">
       <a href="privacy.html">Нууцлал</a>
       <a href="terms.html">Үйлчилгээний нөхцөл</a>
@@ -285,7 +285,7 @@
 <script src="navbar.js"></script>
 <script>
 // ============================================================
-// КИНОЭЗЭН — ҮНДСЭН JAVASCRIPT (БҮРЭН ШИНЭЧЛЭГДСЭН)
+// КИНОЭЗЭН — ҮНДСЭН JAVASCRIPT
 // ============================================================
 
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -359,7 +359,6 @@ function buildFeaturedCardFromMovie(m) {
   const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
   const tags = m.featured ? `<span class="ftag ftag-top">✦ Онцлох</span>` : '';
   
-  // Хэрэв thumbnail байхгүй бол emoji эсвэл default зураг
   const thumbHtml = m.thumbnail ? 
     `<img src="${sanitize(m.thumbnail)}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #4ade80;">` : 
     `<span style="font-size:48px;">🎬</span>`;
@@ -402,7 +401,6 @@ async function loadFeaturedMovies() {
     const movies = await supaFetch('movies', 'featured=eq.true&order=created_at.desc&limit=10');
     
     if (!movies || movies.length === 0) {
-      // Онцлох кино байхгүй үед default
       track.innerHTML = `
         <div class="featured-card" style="text-align:center;padding:40px;background:#1a1a2e;border-radius:12px;">
           <div style="font-size:48px;margin-bottom:12px;">🎬</div>
@@ -566,7 +564,6 @@ function openMcatDropdown(card, menuKey) {
   document.getElementById('news-filter-tabs').innerHTML = items.map(item =>
     `<button class="news-filter-btn${item.cat === '' ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
   ).join('');
-  // Холбогдох мэдээг харуулах
   if (items.length > 0) {
     const firstCat = items.find(i => i.cat !== '')?.cat || '';
     loadNewsByCategory(firstCat);
@@ -796,64 +793,71 @@ function goSection(id) {
 }
 
 // ============================================================
-// НУУЦ АДМИН ОРОХ (3 товшилт)
+// 🌟 НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ 🌟
 // ============================================================
 (function() {
-  let clickCount = 0;
-  let clickTimer = null;
-  const CLICK_TIMEOUT = 1500;
-  const SECRET_KEY = 'kinoezen2026';
-  
-  document.addEventListener('click', function(e) {
-    const isBody = e.target.tagName === 'BODY';
-    const isLogo = e.target.closest('.logo') !== null;
-    const isFooter = e.target.closest('.footer') !== null;
-    if (!isBody && !isLogo && !isFooter) return;
+    let clickCount = 0;
+    let clickTimer = null;
+    const CLICK_TIMEOUT = 2000; // 2 секунд
+    const SECRET_KEY = 'kinoezen2026';
     
-    clickCount++;
-    clearTimeout(clickTimer);
-    clickTimer = setTimeout(() => { clickCount = 0; }, CLICK_TIMEOUT);
-    
-    if (clickCount === 3) {
-      clickCount = 0;
-      clearTimeout(clickTimer);
-      showSecretToast('🔐 Админ руу шилжиж байна...');
-      setTimeout(() => {
-        const pass = prompt('🔑 Админ түлхүүр оруулна уу:');
-        if (pass === SECRET_KEY) {
-          window.location.href = 'admin.html';
-        } else if (pass !== null) {
-          showSecretToast('❌ Түлхүүр буруу байна!');
+    // Footer-ын "Бүх эрх..." текст дээр товшилт хянах
+    document.addEventListener('click', function(e) {
+        const target = e.target;
+        // Зөвхөн footer-copy дээр товшсон үед ажиллана
+        if (!target.closest('#secret-admin-trigger')) return;
+        
+        clickCount++;
+        clearTimeout(clickTimer);
+        
+        clickTimer = setTimeout(() => {
+            clickCount = 0;
+        }, CLICK_TIMEOUT);
+        
+        if (clickCount === 3) {
+            clickCount = 0;
+            clearTimeout(clickTimer);
+            
+            // Жижиг мэдэгдэл харуулах
+            showSecretToast('🔐 Админ руу шилжиж байна...');
+            
+            setTimeout(() => {
+                const pass = prompt('🔑 Админ түлхүүр оруулна уу:');
+                if (pass === SECRET_KEY) {
+                    window.location.href = 'admin.html';
+                } else if (pass !== null) {
+                    showSecretToast('❌ Түлхүүр буруу байна!');
+                }
+            }, 500);
         }
-      }, 400);
+    });
+    
+    function showSecretToast(msg) {
+        const old = document.querySelector('.secret-toast');
+        if (old) old.remove();
+        
+        const t = document.createElement('div');
+        t.className = 'secret-toast';
+        t.textContent = msg;
+        t.style.cssText = `
+            position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.85); color: #4ade80; padding: 12px 24px;
+            border-radius: 12px; font-size: 14px; font-weight: 600;
+            font-family: 'Nunito', sans-serif; z-index: 9999;
+            border: 1px solid rgba(74,222,128,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px); transition: all 0.3s; pointer-events: none;
+        `;
+        document.body.appendChild(t);
+        
+        setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.transform = 'translateX(-50%) translateY(20px)';
+            setTimeout(() => t.remove(), 400);
+        }, 1500);
     }
-  });
-  
-  function showSecretToast(msg) {
-    const old = document.querySelector('.secret-toast');
-    if (old) old.remove();
-    const t = document.createElement('div');
-    t.className = 'secret-toast';
-    t.textContent = msg;
-    t.style.cssText = `
-      position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
-      background: rgba(0,0,0,0.85); color: #4ade80; padding: 12px 24px;
-      border-radius: 12px; font-size: 14px; font-weight: 600;
-      font-family: 'Nunito', sans-serif; z-index: 9999;
-      border: 1px solid rgba(74,222,128,0.3);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      backdrop-filter: blur(12px); transition: all 0.3s; pointer-events: none;
-    `;
-    document.body.appendChild(t);
-    setTimeout(() => {
-      t.style.opacity = '0';
-      t.style.transform = 'translateX(-50%) translateY(20px)';
-      setTimeout(() => t.remove(), 400);
-    }, 1500);
-  }
-  
-  console.log('%c🔐 КиноЭзэн — Нууц админ', 'font-size:14px;color:#4ade80;font-weight:bold;');
-  console.log('%c💡 3 удаа товшиход админ нээгдэнэ', 'font-size:12px;color:#888;');
+    
+    console.log('%c🔐 КиноЭзэн — Footer дээр 3 товшиход админ нээгдэнэ', 'font-size:14px;color:#4ade80;font-weight:bold;');
 })();
 
 // ============================================================
