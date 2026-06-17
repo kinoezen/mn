@@ -26,6 +26,7 @@ body{background:#0f0f1a;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .sidebar-bottom{position:absolute;bottom:0;left:0;right:0;padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:8px;}
 .logout-btn{width:100%;padding:8px;border-radius:8px;background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;font-size:12px;cursor:pointer;}
 .view-site-btn{width:100%;padding:8px;border-radius:8px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:12px;cursor:pointer;text-decoration:none;display:block;text-align:center;}
+.back-btn{width:100%;padding:8px;border-radius:8px;background:rgba(107,127,247,0.15);border:1px solid rgba(107,127,247,0.3);color:#818cf8;font-size:12px;cursor:pointer;}
 .main-content{margin-left:220px;padding:24px;}
 .page-title{font-size:20px;font-weight:700;margin-bottom:20px;}
 .page{display:none;}
@@ -130,6 +131,7 @@ tr:last-child td{border-bottom:none;}
     <div class="nav-item" onclick="showPage('list-news',this)"><span>📋</span> Мэдээ жагсаалт</div>
     <div class="nav-item" onclick="showPage('list-ads',this)"><span>📋</span> Реклам жагсаалт</div>
     <div class="sidebar-bottom">
+      <button class="back-btn" onclick="history.back()">🔙 Буцах</button>
       <a class="view-site-btn" href="index.html" target="_blank">🌐 Сайт руу харах</a>
       <button class="logout-btn" onclick="doLogout()">🚪 Гарах</button>
     </div>
@@ -179,7 +181,7 @@ tr:last-child td{border-bottom:none;}
           <div class="form-group"><label class="form-label">Жанр</label>
             <select class="form-inp" id="m-genre">
               <option>Фантастик</option><option>Экшн</option><option>Драм</option>
-              <option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Бусад</option>
+              <option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Олон ангит</option><option>Бусад</option>
             </select>
           </div>
           <div class="form-group full"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="m-desc" placeholder="Киноны товч тайлбар..."></textarea></div>
@@ -261,11 +263,21 @@ tr:last-child td{border-bottom:none;}
         <div class="form-title">➕ Шинэ мэдээ</div>
         <div class="form-grid">
           <div class="form-group full"><label class="form-label">Гарчиг *</label><input class="form-inp" id="n-title" placeholder="жш: Шинэ кино гарлаа..."></div>
-          <div class="form-group"><label class="form-label">Ангилал</label>
-            <select class="form-inp" id="n-cat">
-              <option>Кино мэдээ</option><option>Мэдээ</option><option>Аялал</option>
-              <option>Шинжлэх ухаан</option><option>AI</option><option>Кино түүх</option>
-              <option>Одод ёртөнц</option><option>Бусад</option>
+          <div class="form-group"><label class="form-label">Үндсэн ангилал</label>
+            <select class="form-inp" id="n-main-cat" onchange="updateSubCatOptions()">
+              <option value="Аялал">Аялал</option>
+              <option value="Шинжлэх ухаан">Шинжлэх ухаан</option>
+              <option value="AI">AI</option>
+              <option value="Кино түүх">Кино түүх</option>
+              <option value="Танин мэдэхүй">Танин мэдэхүй</option>
+              <option value="Одод ертөнц">Одод ертөнц</option>
+              <option value="Мэдээ">Мэдээ</option>
+              <option value="Бусад">Бусад</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Дэд ангилал</label>
+            <select class="form-inp" id="n-sub-cat">
+              <option value="">Сонгох</option>
             </select>
           </div>
           <!-- МЭДЭЭ ЗУРАГ UPLOAD -->
@@ -315,6 +327,33 @@ tr:last-child td{border-bottom:none;}
           <div class="form-group"><label class="form-label">Идэвхтэй эсэх</label>
             <select class="form-inp" id="a-active"><option value="true">✅ Идэвхтэй</option><option value="false">❌ Идэвхгүй</option></select>
           </div>
+          <!-- РЕКЛАМ ЗУРАГ -->
+          <div class="form-group full">
+            <label class="form-label">Рекламын зураг</label>
+            <div class="upload-tabs">
+              <div class="upload-tab on" onclick="switchTab('a-img','upload',this)">📁 Файл оруулах</div>
+              <div class="upload-tab" onclick="switchTab('a-img','url',this)">🔗 URL</div>
+            </div>
+            <div id="a-img-upload">
+              <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'a-img-file','a-img-preview')">
+                <input type="file" id="a-img-file" accept="image/*" onchange="previewFile(this,'a-img-preview','image')">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">Зураг сонгох эсвэл чирж оруулах</div>
+                <div class="upload-hint">JPG, PNG, WEBP — 5MB хүртэл</div>
+              </div>
+              <div class="upload-preview" id="a-img-preview">
+                <img id="a-img-preview-img" src="" alt="preview">
+                <div class="upload-preview-name" id="a-img-preview-name"></div>
+              </div>
+              <div class="upload-progress" id="a-img-progress">
+                <div class="progress-bar"><div class="progress-fill" id="a-img-fill"></div></div>
+                <div class="progress-text" id="a-img-ptext">Ачааллаж байна...</div>
+              </div>
+            </div>
+            <div id="a-img-url" style="display:none;">
+              <input class="form-inp" id="a-thumb-url" placeholder="https://...jpg">
+            </div>
+          </div>
         </div>
         <button class="form-btn" onclick="addAd()">💾 Хадгалах</button>
         <div class="success-msg" id="a-ok">✅ Реклам амжилттай нэмэгдлээ!</div>
@@ -359,7 +398,7 @@ tr:last-child td{border-bottom:none;}
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-m-title"></div>
       <div class="form-group"><label class="form-label">Жанр</label>
-        <select class="form-inp" id="edit-m-genre"><option>Фантастик</option><option>Экшн</option><option>Драм</option><option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Бусад</option></select>
+        <select class="form-inp" id="edit-m-genre"><option>Фантастик</option><option>Экшн</option><option>Драм</option><option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Олон ангит</option><option>Бусад</option></select>
       </div>
       <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-m-desc" style="min-height:70px;"></textarea></div>
       <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-m-thumb" placeholder="https://...jpg"></div>
@@ -414,6 +453,7 @@ tr:last-child td{border-bottom:none;}
       <div class="form-group"><label class="form-label">Гарчиг *</label><input class="form-inp" id="edit-a-title"></div>
       <div class="form-group"><label class="form-label">Тайлбар</label><input class="form-inp" id="edit-a-desc"></div>
       <div class="form-group"><label class="form-label">Товчны текст</label><input class="form-inp" id="edit-a-btn"></div>
+      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-a-thumb" placeholder="https://...jpg"></div>
       <div class="form-group"><label class="form-label">Идэвхтэй эсэх</label>
         <select class="form-inp" id="edit-a-active"><option value="true">✅ Идэвхтэй</option><option value="false">❌ Идэвхгүй</option></select>
       </div>
@@ -433,6 +473,29 @@ const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 const ADMIN_USER='admin';
 const ADMIN_PASS='kinoezen2026';
 const BUCKET='images';
+
+// ========== ДЭД ЦЭСНИЙ СОНГОЛТ ==========
+const SUB_CAT_OPTIONS = {
+  'Аялал': ['Миний аялал','Монгол аялал','Гадаад аялал'],
+  'Шинжлэх ухаан': ['Шинэ нээлт','Ирээдүй','Туршилт'],
+  'AI': ['Шинэ мэдээ','Хэрэгсэл','Сургалт'],
+  'Кино түүх': ['Монгол кино түүх','Гадаад кино түүх'],
+  'Танин мэдэхүй': ['Дэлхийг танья','Гайхамшиг','Зөвлөгөө'],
+  'Одод ертөнц': ['Харь гараг','Манай ертөнц'],
+  'Мэдээ': ['Монгол мэдээ','Дэлхийн мэдээ','Улс төр','Сурвалжилга'],
+  'Бусад': []
+};
+
+function updateSubCatOptions() {
+  const mainCat = document.getElementById('n-main-cat').value;
+  const subSelect = document.getElementById('n-sub-cat');
+  const options = SUB_CAT_OPTIONS[mainCat] || [];
+  subSelect.innerHTML = '<option value="">Сонгох</option>' + 
+    options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+}
+
+// Анхны ачаалал дээр дүүргэх
+document.addEventListener('DOMContentLoaded', updateSubCatOptions);
 
 function doLogin(){
   const u=document.getElementById('admin-user').value;
@@ -530,8 +593,7 @@ function toggleFeatured(){
   const cur=document.getElementById('m-featured').value==='true';
   const next=!cur;
   document.getElementById('m-featured').value=String(next);
-  const track=document.getElementById('featured-track-el');
-  track.classList.toggle('on',next);
+  document.getElementById('featured-track-el').classList.toggle('on',next);
   document.getElementById('featured-badge').textContent=next?'Идэвхтэй':'Идэвхгүй';
 }
 function toggleEditFeatured(){
@@ -578,22 +640,13 @@ async function loadDashPreviews(){
     const movies=await supaFetch('movies','order=created_at.desc&limit=5');
     const dm=document.getElementById('dash-movies');
     if(!Array.isArray(movies)||movies.length===0){dm.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:13px;padding:10px;">Кино байхгүй</div>';return;}
-    dm.innerHTML=`<table style="width:100%;border-collapse:collapse;">${movies.map(m=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-      <td style="padding:8px 4px;font-size:12px;">${m.thumbnail?`<img src="${m.thumbnail}" style="width:40px;height:24px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px;">`:''}${m.title}</td>
-      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.genre||'-'}</td>
-      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.featured?'⭐':''}</td>
-      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${m.views||0}</td>
-    </tr>`).join('')}</table>`;
+    dm.innerHTML=`<table style="width:100%;border-collapse:collapse;">${movies.map(m=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px 4px;font-size:12px;">${m.thumbnail?`<img src="${m.thumbnail}" style="width:40px;height:24px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:8px;">`:''}${m.title}</td><td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.genre||'-'}</td><td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${m.featured?'⭐':''}</td><td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${m.views||0}</td></tr>`).join('')}</table>`;
   }catch(e){}
   try{
     const news=await supaFetch('news','order=created_at.desc&limit=5');
     const dn=document.getElementById('dash-news');
     if(!Array.isArray(news)||news.length===0){dn.innerHTML='<div style="color:rgba(255,255,255,0.3);font-size:13px;padding:10px;">Мэдээ байхгүй</div>';return;}
-    dn.innerHTML=`<table style="width:100%;border-collapse:collapse;">${news.map(n=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-      <td style="padding:8px 4px;font-size:12px;">${n.title}</td>
-      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${n.category||'-'}</td>
-      <td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${n.views||0}</td>
-    </tr>`).join('')}</table>`;
+    dn.innerHTML=`<table style="width:100%;border-collapse:collapse;">${news.map(n=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:8px 4px;font-size:12px;">${n.title}</td><td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">${n.category||'-'}</td><td style="padding:8px 4px;font-size:11px;color:rgba(255,255,255,0.4);">👁 ${n.views||0}</td></tr>`).join('')}</table>`;
   }catch(e){}
 }
 
@@ -641,7 +694,17 @@ async function addNews(){
       const imgFile=document.getElementById('n-img-file');
       if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'news','n-img');
     }else{thumbUrl=document.getElementById('n-thumb-url').value.trim()||null;}
-    const ok=await supaInsert('news',{title,category:document.getElementById('n-cat').value,thumbnail:thumbUrl,content:document.getElementById('n-content').value});
+    const mainCat=document.getElementById('n-main-cat').value;
+    const subCat=document.getElementById('n-sub-cat').value;
+    const category = subCat || mainCat;
+    const ok=await supaInsert('news',{
+      title,
+      category: category,
+      main_category: mainCat,
+      sub_category: subCat,
+      thumbnail: thumbUrl,
+      content: document.getElementById('n-content').value
+    });
     if(ok){
       document.getElementById('n-ok').style.display='block';
       ['n-title','n-content','n-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -656,9 +719,30 @@ async function addNews(){
 async function addAd(){
   const title=document.getElementById('a-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
-  const ok=await supaInsert('ads',{title,description:document.getElementById('a-desc').value,button_text:document.getElementById('a-btn').value||'Холбоо барих',active:document.getElementById('a-active').value==='true'});
-  if(ok){document.getElementById('a-ok').style.display='block';document.getElementById('a-title').value='';setTimeout(()=>document.getElementById('a-ok').style.display='none',3000);}
-  else{document.getElementById('a-err').style.display='block';}
+  const btn=event.target;btn.textContent='⏳ Хадгалаж байна...';btn.disabled=true;
+  try{
+    let imageUrl=null;
+    const aImgUpload=document.getElementById('a-img-upload');
+    if(aImgUpload&&aImgUpload.style.display!=='none'){
+      const imgFile=document.getElementById('a-img-file');
+      if(imgFile&&imgFile.files.length>0)imageUrl=await uploadFile(imgFile.files[0],'ads','a-img');
+    }else{imageUrl=document.getElementById('a-thumb-url').value.trim()||null;}
+    const ok=await supaInsert('ads',{
+      title,
+      description:document.getElementById('a-desc').value,
+      button_text:document.getElementById('a-btn').value||'Холбоо барих',
+      image_url:imageUrl,
+      active:document.getElementById('a-active').value==='true'
+    });
+    if(ok){
+      document.getElementById('a-ok').style.display='block';
+      ['a-title','a-desc','a-btn','a-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      const ap=document.getElementById('a-img-preview');if(ap)ap.style.display='none';
+      setTimeout(()=>document.getElementById('a-ok').style.display='none',3000);
+      loadStats();
+    }else{document.getElementById('a-err').style.display='block';}
+  }catch(e){document.getElementById('a-err').textContent='❌ Алдаа: '+e.message;document.getElementById('a-err').style.display='block';}
+  btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
 
 function escStr(s){return(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
@@ -708,10 +792,11 @@ async function loadNewsList(){
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const news=await supaFetch('news','order=created_at.desc');
   if(!Array.isArray(news)||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
   ${news.map(n=>`<tr>
     <td>${n.title}</td>
     <td><span class="badge badge-green">${n.category||'-'}</span></td>
+    <td>${n.sub_category?`<span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${n.sub_category}</span>`:'—'}</td>
     <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
     <td>👁 ${n.views||0}</td>
     <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
@@ -744,25 +829,27 @@ async function loadAdList(){
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const ads=await supaFetch('ads','order=created_at.desc');
   if(!Array.isArray(ads)||ads.length===0){el.innerHTML='<div class="loading">Реклам байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Зураг</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
   ${ads.map(a=>`<tr>
     <td>${a.title}</td>
     <td style="color:rgba(255,255,255,0.5);font-size:11px;">${a.description||'-'}</td>
+    <td>${a.image_url?`<img src="${a.image_url}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
     <td><span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${a.button_text||'-'}</span></td>
     <td>${a.active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
     <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
     <td style="white-space:nowrap;">
-      <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}',${!!a.active})">✏️ Засах</button>
+      <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}','${a.image_url||''}',${!!a.active})">✏️ Засах</button>
       <button class="action-btn del-btn" onclick="deleteAd('${a.id}')">🗑 Устгах</button>
     </td>
   </tr>`).join('')}</tbody></table>`;
 }
 async function deleteAd(id){if(!confirm('Рекламыг устгах уу?'))return;await supaDelete('ads',id);loadAdList();loadStats();}
-function openEditAd(id,title,desc,btn,active){
+function openEditAd(id,title,desc,btn,image,active){
   document.getElementById('edit-ad-id').value=id;
   document.getElementById('edit-a-title').value=title;
   document.getElementById('edit-a-desc').value=desc;
   document.getElementById('edit-a-btn').value=btn;
+  document.getElementById('edit-a-thumb').value=image||'';
   document.getElementById('edit-a-active').value=String(active);
   openModal('modal-ad');
 }
@@ -770,7 +857,13 @@ async function saveAd(){
   const id=document.getElementById('edit-ad-id').value;
   const title=document.getElementById('edit-a-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
-  const ok=await supaUpdate('ads',id,{title,description:document.getElementById('edit-a-desc').value,button_text:document.getElementById('edit-a-btn').value||'Холбоо барих',active:document.getElementById('edit-a-active').value==='true'});
+  const ok=await supaUpdate('ads',id,{
+    title,
+    description:document.getElementById('edit-a-desc').value,
+    button_text:document.getElementById('edit-a-btn').value||'Холбоо барих',
+    image_url:document.getElementById('edit-a-thumb').value||null,
+    active:document.getElementById('edit-a-active').value==='true'
+  });
   if(ok){document.getElementById('edit-a-ok').style.display='block';setTimeout(()=>{closeModal('modal-ad');loadAdList();loadStats();},1200);}
   else{document.getElementById('edit-a-err').style.display='block';}
 }
