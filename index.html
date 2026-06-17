@@ -21,6 +21,90 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"КиноЭзэн","url":"https://kinoezen.mn"}
 </script>
+<style>
+  /* ===== ОНЦЛОХ КИНОНЫ ЗУРГИЙГ ТОМРУУЛАХ ===== */
+  .featured-img {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .featured-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .featured-img .fallback-emoji {
+    font-size: 64px;
+  }
+
+  /* ===== ЖАНРЫН ЦЭСНҮҮД ИЛ ХАРАГДАНА ===== */
+  #movie-genre-section {
+    display: block !important;
+  }
+
+  /* ===== MOBILE BOTTOM NAV — ШИНЭ ЗАГВАР ===== */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0a0a14;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 0 env(safe-area-inset-bottom);
+    z-index: 1000;
+  }
+  .mbn-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 12px;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 10px;
+    font-weight: 600;
+  }
+  .mbn-item svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+  }
+  .mbn-item.active {
+    color: #4ade80;
+  }
+  .mbn-item:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* ===== GENRE TOGGLE УСТГАСАН ===== */
+  .genre-toggle-btn {
+    display: none !important;
+  }
+
+  /* ===== "Бүгдийг харах" УСТГАСАН ===== */
+  .see-all {
+    display: none !important;
+  }
+
+  /* ===== SECTION HEADER-ЭЭС ЖАНР ТОВЧ УСТГАХ ===== */
+  .section-header .genre-toggle-btn {
+    display: none !important;
+  }
+</style>
 </head>
 <body>
 
@@ -173,13 +257,12 @@
   <div class="section">
     <div class="section-header">
       <h2 class="section-title"><span>Шинэ</span> кинонууд</h2>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <button class="genre-toggle-btn" id="genre-toggle-btn" onclick="toggleGenreRow()">Жанр ▾</button>
-        <a href="movies.html" class="see-all">Бүгдийг харах →</a>
-      </div>
+      <!-- "Жанр" товч УСТГАСАН, "Бүгдийг харах" УСТГАСАН -->
     </div>
   </div>
-  <div class="cat-section-wrap" id="movie-genre-section" style="display:none;">
+  
+  <!-- Жанрын цэснүүд ШУУД ХАРАГДАНА -->
+  <div class="cat-section-wrap" id="movie-genre-section">
     <div class="cat-row" role="tablist">
       <button class="cat-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
       <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Экшн')">Экшн</button>
@@ -191,6 +274,7 @@
       <button class="cat-btn" role="tab" aria-selected="false" onclick="selCat(this,'Олон ангит')">Олон ангит</button>
     </div>
   </div>
+  
   <div class="grid-4" id="movies-list" role="list">
     <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
     <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
@@ -256,27 +340,41 @@
   </div>
 </footer>
 
-<!-- MOBILE BOTTOM NAV -->
+<!-- MOBILE BOTTOM NAV — ШИНЭ ЗАГВАР -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
     <a class="mbn-item active" href="index.html" aria-label="Нүүр">
-      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/>
+      </svg>
       <span>Нүүр</span>
     </a>
     <a class="mbn-item" href="movies.html" aria-label="Кинонууд">
-      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/><circle cx="12" cy="14" r="3"/><path d="M10.5 13l3 1.5-3 1.5V13z" fill="currentColor" stroke="none"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="M10 9l5 3-5 3V9z"/>
+      </svg>
       <span>Кино</span>
     </a>
     <a class="mbn-item" href="news.html" aria-label="Топ">
-      <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4"/><path d="M7 4H4a1 1 0 00-1 1v3a4 4 0 004 4h1"/><path d="M17 4h3a1 1 0 011 1v3a4 4 0 01-4 4h-1"/><path d="M7 4h10v7a5 5 0 01-10 0V4z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
       <span>Топ</span>
     </a>
     <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/><path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
+        <path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/>
+      </svg>
       <span>Үйлчилгээ</span>
     </a>
     <a class="mbn-item" href="profile.html" aria-label="Профайл">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
       <span>Профайл</span>
     </a>
   </div>
@@ -332,16 +430,6 @@ const genreGradients = {
 };
 
 // ============================================================
-// ЖАНР TOGGLE
-// ============================================================
-let genreOpen = false;
-function toggleGenreRow() {
-  genreOpen = !genreOpen;
-  document.getElementById('movie-genre-section').style.display = genreOpen ? '' : 'none';
-  document.getElementById('genre-toggle-btn').textContent = genreOpen ? 'Жанр ▴' : 'Жанр ▾';
-}
-
-// ============================================================
 // ОНЦЛОХ КИНО КАРУСЕЛЬ (Supabase-аас)
 // ============================================================
 let carouselIndex = 0;
@@ -359,15 +447,14 @@ function buildFeaturedCardFromMovie(m) {
   const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
   const tags = m.featured ? `<span class="ftag ftag-top">✦ Онцлох</span>` : '';
   
+  // 🔥 ЗУРГИЙГ ТОМРУУЛСАН
   const thumbHtml = m.thumbnail ? 
-    `<img src="${sanitize(m.thumbnail)}" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:2px solid #4ade80;">` : 
-    `<span style="font-size:48px;">🎬</span>`;
+    `<img src="${sanitize(m.thumbnail)}" alt="${sanitize(m.title)}" loading="lazy" onerror="this.style.display='none'">` : 
+    `<span class="fallback-emoji">🎬</span>`;
   
   return `<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
     <div class="featured-img" style="background:${bg}">
-      <div style="font-size:48px;z-index:1;position:relative;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.6));">
-        ${thumbHtml}
-      </div>
+      ${thumbHtml}
       <div class="featured-overlay"></div>
       <div class="featured-tags">${tags}</div>
     </div>
@@ -793,18 +880,16 @@ function goSection(id) {
 }
 
 // ============================================================
-// 🌟 НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ 🌟
+// 🌟 НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ
 // ============================================================
 (function() {
     let clickCount = 0;
     let clickTimer = null;
-    const CLICK_TIMEOUT = 2000; // 2 секунд
+    const CLICK_TIMEOUT = 2000;
     const SECRET_KEY = 'kinoezen2026';
     
-    // Footer-ын "Бүх эрх..." текст дээр товшилт хянах
     document.addEventListener('click', function(e) {
         const target = e.target;
-        // Зөвхөн footer-copy дээр товшсон үед ажиллана
         if (!target.closest('#secret-admin-trigger')) return;
         
         clickCount++;
@@ -818,7 +903,6 @@ function goSection(id) {
             clickCount = 0;
             clearTimeout(clickTimer);
             
-            // Жижиг мэдэгдэл харуулах
             showSecretToast('🔐 Админ руу шилжиж байна...');
             
             setTimeout(() => {
@@ -864,7 +948,6 @@ function goSection(id) {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  // Цаг агаар
   const now = new Date();
   const dateEl = document.getElementById('today-date');
   if (dateEl) {
@@ -873,7 +956,6 @@ document.addEventListener('DOMContentLoaded', function() {
       now.getDate().toString().padStart(2, '0');
   }
   
-  // Бүх функцийг ачаалах
   initCarousel();
   loadMovies();
   loadNews();
@@ -882,15 +964,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
-.genre-toggle-btn{padding:6px 12px;border-radius:20px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.08);color:#4ade80;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;transition:all 0.2s;}
-.genre-toggle-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;}
-.news-filter-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.06);color:#ccc;font-size:12px;font-family:"Nunito",sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;}
-.news-filter-btn:hover{background:rgba(74,222,128,0.12);color:#4ade80;}
-.news-filter-btn.active{background:rgba(74,222,128,0.18);border-color:#4ade80;color:#4ade80;}
-.secret-toast{animation:secretPop 0.3s ease-out;}
-@keyframes secretPop{0%{opacity:0;transform:translateX(-50%) scale(0.9) translateY(20px);}100%{opacity:1;transform:translateX(-50%) scale(1) translateY(0);}}
-.empty-state{text-align:center;padding:40px 20px;color:rgba(255,255,255,0.4);}
-.empty-state .icon{font-size:48px;margin-bottom:12px;}
+.genre-toggle-btn{display:none !important;}
+.see-all{display:none !important;}
+.section-header .genre-toggle-btn{display:none !important;}
+#movie-genre-section{display:block !important;}
 </style>
 </body>
 </html>
