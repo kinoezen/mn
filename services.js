@@ -1,14 +1,10 @@
 // ============================================================
-// services.js — КиноЭзэн AI Үйлчилгээнүүд (НЭГТГЭСЭН)
+// services.js — КиноЭзэн AI Үйлчилгээнүүд (КРЕДИТГҮЙ ХУВИЛБАР)
 // ============================================================
 
 // ===== SUPABASE ХОЛБОЛТ =====
 const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-
-// ===== КРЕДИТ СИСТЕМ =====
-let userCredits = 50;
-const MAX_CREDITS = 100;
 
 // ===== TOAST МЭДЭГДЭЛ =====
 function showToast(message, type = 'info') {
@@ -46,34 +42,23 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// ===== КРЕДИТ ШАЛГАХ =====
+// ===== КРЕДИТ СИСТЕМ (ТҮР ХААСАН — БҮХ ҮЙЛЧИЛГЭЭ ҮНЭГҮЙ) =====
 function checkCredits(cost) {
-    if (userCredits < cost) {
-        showToast(`❌ Хангалттай кредитгүй байна! ${cost} кредит шаардлагатай.`, 'error');
-        return false;
-    }
+    // ✅ Одоохондоо бүх үйлчилгээг ҮНЭГҮЙ болгосон
     return true;
 }
 
 function useCredits(cost) {
-    userCredits -= cost;
-    updateCreditUI();
-    return userCredits;
+    // ✅ Одоохондоо кредит зарцуулахгүй
+    return 0;
 }
 
 function updateCreditUI() {
-    const remainingEl = document.getElementById('cred-remaining');
-    const totalEl = document.getElementById('cred-total');
-    const fillEl = document.getElementById('cred-fill');
-    const pctEl = document.getElementById('cred-pct');
-    
-    if (remainingEl) remainingEl.textContent = userCredits;
-    if (totalEl) totalEl.textContent = MAX_CREDITS;
-    if (fillEl) {
-        const pct = Math.max(0, (userCredits / MAX_CREDITS) * 100);
-        fillEl.style.width = pct + '%';
-    }
-    if (pctEl) pctEl.textContent = Math.round(Math.max(0, (userCredits / MAX_CREDITS) * 100)) + '% үлдсэн';
+    // Credit UI-г нуух
+    const bar = document.getElementById('credit-bar');
+    if (bar) bar.style.display = 'none';
+    const guest = document.getElementById('credit-bar-guest');
+    if (guest) guest.style.display = 'none';
 }
 
 // ============================================================
@@ -82,7 +67,6 @@ function updateCreditUI() {
 async function runTTS() {
     const text = document.getElementById('tts-text').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(text.length)) return;
     
     const btn = document.getElementById('tts-run-btn');
     btn.disabled = true;
@@ -116,7 +100,6 @@ async function runTTS() {
             </audio>
         `;
         
-        useCredits(text.length);
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
         
     } catch (error) {
@@ -128,7 +111,6 @@ async function runTTS() {
             utterance.rate = 0.8 + (rateVal / 100) * 0.8;
             window.speechSynthesis.speak(utterance);
             showToast('✅ Системийн дуугаар уншиж байна...', 'success');
-            useCredits(text.length);
         } catch (e) {
             showToast('❌ Дуу үүсгэхэд алдаа гарлаа.', 'error');
         }
@@ -144,7 +126,6 @@ async function runTTS() {
 async function runHum() {
     const text = document.getElementById('hum-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(text.length)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -164,7 +145,6 @@ async function runHum() {
         document.getElementById('hum-before').textContent = text;
         document.getElementById('hum-after').textContent = humanized;
         document.getElementById('hum-result').style.display = 'grid';
-        useCredits(text.length);
         showToast('✅ Хүмүүнжүүлэлт амжилттай!', 'success');
         
     } catch (error) {
@@ -182,8 +162,6 @@ async function runHum() {
 async function runTranslate() {
     const text = document.getElementById('trans-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    const cost = text.length * 2;
-    if (!checkCredits(cost)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -209,7 +187,6 @@ async function runTranslate() {
             <div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.8);">${data.translatedText}</div>
         `;
         
-        useCredits(cost);
         showToast('✅ Орчуулга амжилттай!', 'success');
         
     } catch (error) {
@@ -223,7 +200,6 @@ async function runTranslate() {
                 <div class="result-label">✅ Орчуулга (MyMemory)</div>
                 <div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.8);">${fallbackData.responseData.translatedText || 'Орчуулга олдсонгүй'}</div>
             `;
-            useCredits(cost);
         } catch (e) {
             showToast('❌ Орчуулах үед алдаа гарлаа.', 'error');
         }
@@ -243,9 +219,6 @@ async function runSTT() {
         return;
     }
     
-    const cost = 10;
-    if (!checkCredits(cost)) return;
-    
     const btn = event.target;
     btn.disabled = true;
     btn.textContent = '⏳ Боловсруулж байна...';
@@ -262,14 +235,12 @@ async function runSTT() {
                 <source src="${audioUrl}">
             </audio>
             <div style="font-size:13px;color:rgba(255,255,255,0.4);padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
-                ⚠️ Бүрэн STT нь төлбөртэй API шаарддаг. Энэ нь демо хувилбар.<br>
                 🎤 Та доорх товчоор микрофоноор ярьж болно:
             </div>
             <button onclick="startSpeechRecognition()" style="padding:10px 20px;border-radius:10px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">🎤 Микрофоноор ярих</button>
             <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;min-height:40px;"></div>
         `;
         
-        useCredits(cost);
         showToast('✅ Аудио боловсруулагдлаа!', 'success');
         
     } catch (error) {
@@ -324,7 +295,6 @@ function startSpeechRecognition() {
 async function runTextEdit() {
     const text = document.getElementById('textedit-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(text.length)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -365,7 +335,6 @@ async function runTextEdit() {
         document.getElementById('textedit-after').textContent = edited;
         document.getElementById('textedit-result').style.display = 'grid';
         
-        useCredits(text.length);
         showToast('✅ Текст амжилттай засагдлаа!', 'success');
         
     } catch (error) {
@@ -383,7 +352,6 @@ async function runTextEdit() {
 async function runMovieReview() {
     const movieName = document.getElementById('movie-review-input').value.trim();
     if (!movieName) { showToast('⚠️ Кино нэр оруулна уу!', 'error'); return; }
-    if (!checkCredits(5)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -406,7 +374,6 @@ async function runMovieReview() {
             <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">⭐ AI-ээр үүсгэгдсэн тойм</div>
         `;
         
-        useCredits(5);
         showToast('✅ Тойм амжилттай!', 'success');
         
     } catch (error) {
@@ -426,7 +393,6 @@ function runMergeSubtitle() {
     const srtFile = document.getElementById('merge-srt-file').files[0];
     if (!videoFile) { showToast('⚠️ Видео файл оруулна уу!', 'error'); return; }
     if (!srtFile) { showToast('⚠️ SRT файл оруулна уу!', 'error'); return; }
-    if (!checkCredits(50)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -448,7 +414,6 @@ function runMergeSubtitle() {
                 <button onclick="downloadMergeSub()" style="margin-top:10px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:13px;font-weight:700;cursor:pointer;">⬇️ Татаж авах (демо)</button>
             </div>
         `;
-        useCredits(50);
         showToast('✅ Нийлүүлэлт амжилттай!', 'success');
         btn.disabled = false;
         btn.textContent = '🎞️ Нийлүүлэх';
@@ -469,7 +434,6 @@ function downloadMergeSub() {
 function runVideoSplit() {
     const file = document.getElementById('vsplit-file').files[0];
     if (!file) { showToast('⚠️ Видео файл оруулна уу!', 'error'); return; }
-    if (!checkCredits(30)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -495,7 +459,6 @@ function runVideoSplit() {
                 </div>
             </div>
         `;
-        useCredits(30);
         showToast('✅ Видео хуваагдал амжилттай!', 'success');
         btn.disabled = false;
         btn.textContent = '✂️ Хуваах';
@@ -516,9 +479,6 @@ function downloadSplitPart(part) {
 async function runNameTranslate() {
     const text = document.getElementById('name-translate-input').value.trim();
     if (!text) { showToast('⚠️ Нэрс оруулна уу!', 'error'); return; }
-    const names = text.split('\n').filter(n => n.trim());
-    const cost = names.length * 2;
-    if (!checkCredits(cost)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -526,6 +486,7 @@ async function runNameTranslate() {
     
     try {
         const lang = document.getElementById('name-translate-lang').value;
+        const names = text.split('\n').filter(n => n.trim());
         const translations = names.map(name => {
             const trimmed = name.trim();
             if (lang === 'en') {
@@ -544,7 +505,6 @@ async function runNameTranslate() {
             </div>
         `;
         
-        useCredits(cost);
         showToast('✅ Нэрс амжилттай орчуулагдлаа!', 'success');
         
     } catch (error) {
@@ -562,7 +522,6 @@ async function runNameTranslate() {
 async function runPostGen() {
     const text = document.getElementById('post-gen-input').value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
-    if (!checkCredits(3)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -586,7 +545,6 @@ async function runPostGen() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
         `;
         
-        useCredits(3);
         showToast('✅ Пост амжилттай үүсгэгдлээ!', 'success');
         
     } catch (error) {
@@ -604,7 +562,6 @@ async function runPostGen() {
 async function runThumbnail() {
     const text = document.getElementById('thumbnail-input').value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
-    if (!checkCredits(2)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -629,7 +586,6 @@ async function runThumbnail() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
         `;
         
-        useCredits(2);
         showToast('✅ Гарчиг амжилттай үүсгэгдлээ!', 'success');
         
     } catch (error) {
@@ -647,7 +603,6 @@ async function runThumbnail() {
 async function runTranscriptClean() {
     const text = document.getElementById('transcript-clean-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(text.length)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -679,7 +634,6 @@ async function runTranscriptClean() {
         document.getElementById('transcript-clean-after').textContent = cleaned;
         document.getElementById('transcript-clean-result').style.display = 'grid';
         
-        useCredits(text.length);
         showToast('✅ Транскрипт цэвэрлэгдлээ!', 'success');
         
     } catch (error) {
@@ -697,7 +651,6 @@ async function runTranscriptClean() {
 async function runSeoTitle() {
     const text = document.getElementById('seo-title-input').value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
-    if (!checkCredits(5)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -733,7 +686,6 @@ async function runSeoTitle() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
         `;
         
-        useCredits(5);
         showToast('✅ SEO гарчиг амжилттай!', 'success');
         
     } catch (error) {
@@ -751,7 +703,6 @@ async function runSeoTitle() {
 async function runPlagiarism() {
     const text = document.getElementById('plagiarism-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(10)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -786,7 +737,6 @@ async function runPlagiarism() {
             </div>
         `;
         
-        useCredits(10);
         showToast('✅ Шалгалт амжилттай!', 'success');
         
     } catch (error) {
@@ -804,7 +754,6 @@ async function runPlagiarism() {
 function runPdfOcr() {
     const file = document.getElementById('pdf-ocr-file').files[0];
     if (!file) { showToast('⚠️ PDF файл оруулна уу!', 'error'); return; }
-    if (!checkCredits(5)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -826,7 +775,6 @@ function runPdfOcr() {
             </div>
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Текст хуулах</button>
         `;
-        useCredits(5);
         showToast('✅ PDF боловсруулагдлаа!', 'success');
         btn.disabled = false;
         btn.textContent = '📑 Текст гаргах';
@@ -839,7 +787,6 @@ function runPdfOcr() {
 async function runAiDetect() {
     const text = document.getElementById('ai-detect-input').value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
-    if (!checkCredits(5)) return;
     
     const btn = event.target;
     btn.disabled = true;
@@ -870,7 +817,6 @@ async function runAiDetect() {
             </div>
         `;
         
-        useCredits(5);
         showToast('✅ Шалгалт амжилттай!', 'success');
         
     } catch (error) {
@@ -889,7 +835,6 @@ async function runChatbot() {
     const input = document.getElementById('chatbot-input');
     const question = input.value.trim();
     if (!question) { showToast('⚠️ Асуулт бичнэ үү!', 'error'); return; }
-    if (!checkCredits(2)) return;
     
     const btn = event?.target || document.querySelector('#chatbot-box .run-btn');
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Бодож байна...'; }
@@ -925,7 +870,6 @@ async function runChatbot() {
         messages.appendChild(botMsg);
         messages.scrollTop = messages.scrollHeight;
         
-        useCredits(2);
         showToast('✅ Хариу амжилттай!', 'success');
         
     } catch (error) {
@@ -962,16 +906,9 @@ function copyText(btn) {
 }
 
 // ============================================================
-// FILTER — services.html-д байгаа filter-тэй давхцахгүй
-// ============================================================
-// services.html-д аль хэдийн filter байгаа тул энд давтахгүй
-
-// ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Credit UI шинэчлэх
     updateCreditUI();
-    
-    console.log('✅ services.js ачаалагдлаа! Бүртгэлтэй үйлчилгээний тоо: 17');
+    console.log('✅ services.js ачаалагдлаа! (Кредитгүй горим — бүх үйлчилгээ үнэгүй)');
 });
