@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Мэдээ — КиноЭзэн</title>
-<meta name="description" content="КиноЭзэн мэдээ мэдээлэл — Кино, AI, Шинжлэх ухаан, Аялал болон бусад.">
+<meta name="description" content="КиноЭзэн мэдээ мэдээлэл — Монголын мэдээ, Дэлхий мэдээ, Улс төр, Эдийн засаг болон бусад.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kinoezen.mn/news.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,13 +23,11 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden;}
-
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 
 /* NAVBAR */
-.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:1000;gap:12px;}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
 .logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
 .logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -43,8 +41,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .nav-search input::placeholder{color:var(--text4);}
 .btn-login{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-login:hover{border-color:var(--accent);color:var(--accent);}
-.btn-join{padding:7px 14px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--red),var(--accent2));border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
-.btn-join:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-join{padding:7px 14px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--red),var(--accent2));border:none;color:#fff;font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;}
 .nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;border-radius:var(--radius-sm);}
 
 /* WEATHER */
@@ -57,7 +54,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 /* PAGE HERO */
 .page-hero{padding:24px 24px 16px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(74,222,128,0.04),transparent);}
 .page-hero-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-.page-hero-left{}
 .page-hero-label{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
 .page-hero-title{font-family:var(--font-display);font-size:36px;letter-spacing:2px;line-height:1.05;margin-bottom:8px;}
 .page-hero-title span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
@@ -67,23 +63,49 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .hero-stat-num{font-family:var(--font-display);font-size:28px;letter-spacing:1px;color:var(--accent);}
 .hero-stat-label{font-size:10px;color:var(--text4);font-weight:600;}
 
+/* ===== ДЭД ЦЭС (SUBCATEGORY) ===== */
+.subcat-bar{
+  display:flex;align-items:center;gap:0;
+  padding:0 24px;
+  background:var(--bg2);
+  border-bottom:2px solid var(--border);
+  overflow-x:auto;scrollbar-width:none;
+}
+.subcat-bar::-webkit-scrollbar{display:none;}
+.subcat-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:13px 16px;
+  color:var(--text3);font-size:13px;font-weight:600;
+  cursor:pointer;background:none;border:none;
+  border-bottom:2px solid transparent;
+  margin-bottom:-2px;
+  white-space:nowrap;flex-shrink:0;
+  font-family:var(--font-body);
+  transition:all 0.2s;
+}
+.subcat-btn:hover{color:var(--text);background:rgba(255,255,255,0.04);}
+.subcat-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(74,222,128,0.04);}
+.subcat-btn .sc-icon{font-size:16px;}
+.subcat-btn .sc-count{
+  font-size:10px;min-width:18px;height:18px;
+  padding:0 5px;border-radius:9px;
+  background:rgba(255,255,255,0.08);
+  color:var(--text4);font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.subcat-btn.active .sc-count{background:rgba(74,222,128,0.15);color:var(--accent);}
+
 /* FILTER BAR */
-.filter-bar{display:flex;align-items:center;gap:10px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap;}
+.filter-bar{display:flex;align-items:center;gap:10px;padding:12px 24px;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
 .filter-bar::-webkit-scrollbar{display:none;}
 .filter-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:8px 14px;border:1px solid var(--border);transition:border-color 0.2s;flex-shrink:0;min-width:200px;}
 .filter-search:focus-within{border-color:var(--accent);}
 .filter-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;width:100%;}
 .filter-search input::placeholder{color:var(--text4);}
-.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0;}
-.cat-pills{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;flex-shrink:0;}
-.cat-pills::-webkit-scrollbar{display:none;}
-.cpill-btn{padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all 0.2s;}
-.cpill-btn:hover{border-color:var(--border2);color:var(--accent);}
-.cpill-btn.on{background:rgba(74,222,128,0.12);color:var(--accent);border-color:var(--accent);}
 .sort-select{padding:7px 12px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;outline:none;flex-shrink:0;margin-left:auto;}
 .sort-select:focus{border-color:var(--accent);}
 
-/* FEATURED NEWS (top banner) */
+/* FEATURED NEWS */
 .featured-news{padding:16px 24px 0;}
 .featured-news-card{border-radius:var(--radius);overflow:hidden;background:var(--bg3);border:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;cursor:pointer;transition:border-color 0.3s,transform 0.3s;animation:fadeUp 0.4s ease both;}
 .featured-news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
@@ -102,9 +124,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .fn-ava{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#0a2a0a;}
 .fn-author-name{font-size:12px;color:var(--text3);font-weight:600;}
 .fn-stats{display:flex;gap:10px;}
-.fn-stat{font-size:11px;color:var(--text4);display:flex;align-items:center;gap:3px;}
-.fn-read-btn{padding:10px 22px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;width:fit-content;transition:opacity 0.2s;}
-.fn-read-btn:hover{opacity:0.9;}
+.fn-stat{font-size:11px;color:var(--text4);}
+.fn-read-btn{padding:10px 22px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;width:fit-content;}
 
 /* SECTION */
 .section{padding:20px 24px 8px;}
@@ -120,8 +141,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .news-img{width:100%;height:160px;background:linear-gradient(135deg,#1a1a0a,#2a2a10);overflow:hidden;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;}
 .news-img img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;position:absolute;top:0;left:0;transition:transform 0.4s;}
 .news-card:hover .news-img img{transform:scale(1.04);}
-.news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));position:relative;z-index:1;transition:transform 0.3s;}
-.news-card:hover .n-emoji{transform:scale(1.12) rotate(-4deg);}
+.news-img .n-emoji{font-size:44px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.5));position:relative;z-index:1;}
 .news-body{padding:10px 12px 12px;flex:1;display:flex;flex-direction:column;}
 .news-cat-pill{font-size:9px;padding:3px 8px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.12);color:var(--accent);display:inline-block;margin-bottom:5px;width:fit-content;}
 .news-title{font-size:12px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:auto;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -140,17 +160,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 /* EMPTY */
 .empty-state{grid-column:1/-1;text-align:center;padding:48px 20px;color:var(--text3);}
 .empty-state .icon{font-size:40px;margin-bottom:12px;}
-.empty-state p{font-size:14px;font-weight:600;}
 
 /* LOAD MORE */
 .load-more-wrap{display:flex;justify-content:center;padding:0 24px 32px;}
 .btn-load-more{padding:12px 32px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:all 0.2s;}
 .btn-load-more:hover{border-color:var(--accent);color:var(--accent);}
-.btn-load-more:disabled{opacity:0.4;cursor:not-allowed;}
 
 /* MESSENGER FAB */
-.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s;}
-.messenger-fab:hover{transform:scale(1.1);}
+.messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;}
 
 /* FOOTER */
 .footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);margin-top:8px;}
@@ -160,27 +177,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .footer-col a{display:block;font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;margin-bottom:7px;font-weight:500;transition:color 0.2s;}
 .footer-col a:hover{color:var(--accent);}
 .footer-social{display:flex;gap:8px;margin-top:12px;}
-.social-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;cursor:pointer;color:#fff;transition:transform 0.2s,opacity 0.2s;border:none;}
-.social-btn:hover{transform:translateY(-3px);opacity:0.9;}
+.social-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;text-decoration:none;color:#fff;border:none;}
 .sb-fb{background:linear-gradient(135deg,#1877f2,#0a5ab4);}
-.sb-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#bc1888);}
+.sb-ig{background:linear-gradient(135deg,#f09433,#bc1888);}
 .sb-yt{background:linear-gradient(135deg,#ff0000,#cc0000);}
-.sb-x{background:linear-gradient(135deg,#000000,#333333);}
+.sb-x{background:linear-gradient(135deg,#000,#333);}
 .social-btn svg{width:17px;height:17px;fill:#fff;}
 .footer-phone{display:flex;align-items:center;gap:8px;margin-top:10px;padding:9px 12px;background:rgba(74,222,128,0.06);border:1px solid var(--border2);border-radius:10px;font-size:13px;color:var(--accent);font-weight:700;}
 .footer-bottom{border-top:1px solid var(--border);padding-top:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
 .footer-copy{font-size:11px;color:var(--text4);}
 .footer-links{display:flex;gap:14px;}
-.footer-links a{font-size:11px;color:var(--text4);text-decoration:none;transition:color 0.2s;}
+.footer-links a{font-size:11px;color:var(--text4);text-decoration:none;}
 .footer-links a:hover{color:var(--accent);}
 
-/* STAGGER */
-.news-card:nth-child(1){animation-delay:.04s}.news-card:nth-child(2){animation-delay:.08s}
-.news-card:nth-child(3){animation-delay:.12s}.news-card:nth-child(4){animation-delay:.16s}
-.news-card:nth-child(5){animation-delay:.20s}.news-card:nth-child(6){animation-delay:.24s}
-.news-card:nth-child(7){animation-delay:.28s}.news-card:nth-child(8){animation-delay:.32s}
-
-/* RESPONSIVE */
 @media(max-width:1024px){.news-grid{grid-template-columns:repeat(3,1fr);}.featured-news-card{grid-template-columns:1fr;}.fn-img{height:200px;}}
 @media(max-width:768px){
   .nav{padding:10px 16px;flex-wrap:wrap;}
@@ -189,10 +198,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .nav-right{display:none;width:100%;flex-direction:column;gap:8px;}
   .nav-right.open{display:flex;}
   .nav-toggle{display:block;}
-  .nav-search input{width:100%;}
   .weather-bar{flex-direction:column;align-items:flex-start;gap:5px;padding:7px 16px;}
   .page-hero{padding:18px 16px 14px;}
   .page-hero-title{font-size:28px;}
+  .subcat-bar{padding:0 16px;}
   .filter-bar{padding:10px 16px;}
   .filter-search{min-width:150px;}
   .featured-news{padding:12px 16px 0;}
@@ -207,9 +216,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <body>
 
 <!-- NAVBAR -->
-<nav class="nav" role="navigation" aria-label="Үндсэн цэс">
-  <a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
-    <img src="logo.png" alt="КиноЭзэн лого" width="34" height="34" onerror="this.style.display='none'">
+<nav class="nav">
+  <a href="index.html" class="logo">
+    <img src="logo.png" alt="КиноЭзэн" width="34" height="34" onerror="this.style.display='none'">
     <div class="logo-text">КиноЭзэн</div>
   </a>
   <div class="nav-links" id="nav-links">
@@ -220,18 +229,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <a href="profile.html">Профайл</a>
   </div>
   <div class="nav-right" id="nav-right">
-    <div class="nav-search" role="search">
-      <span aria-hidden="true">🔍</span>
-      <input type="text" placeholder="Мэдээ хайх..." id="nav-search-input" aria-label="Мэдээ хайх" autocomplete="off">
+    <div class="nav-search">
+      <span>🔍</span>
+      <input type="text" placeholder="Мэдээ хайх..." id="nav-search-input" autocomplete="off">
     </div>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
-  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс" aria-expanded="false">☰</button>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">☰</button>
 </nav>
 
 <!-- WEATHER BAR -->
-<div class="weather-bar" role="complementary" aria-label="Цаг агаар">
+<div class="weather-bar">
   <div class="weather-left">
     <div class="weather-item">📅 <time id="today-date"></time></div>
     <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
@@ -246,32 +255,71 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <div class="page-hero-left">
       <div class="page-hero-label">📰 Мэдээ мэдээлэл</div>
       <h1 class="page-hero-title">Шинэ <span>Мэдээнүүд</span></h1>
-      <p class="page-hero-desc">Кино, AI, шинжлэх ухаан, аялал болон бусад сонирхолтой мэдээллүүд</p>
+      <p class="page-hero-desc">Монголын мэдээ, дэлхийн мэдээ, улс төр, эдийн засаг болон бусад сонирхолтой мэдээллүүд</p>
     </div>
     <div class="page-hero-stats">
       <div class="hero-stat"><div class="hero-stat-num" id="total-count">—</div><div class="hero-stat-label">Нийт мэдээ</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">Ангилал</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="cat-count">11</div><div class="hero-stat-label">Ангилал</div></div>
       <div class="hero-stat"><div class="hero-stat-num">↺</div><div class="hero-stat-label">Шинэчлэгдсэн</div></div>
     </div>
   </div>
 </div>
 
+<!-- ===== ДЭД ЦЭС (SUBCATEGORY TAB BAR) ===== -->
+<div class="subcat-bar" id="subcat-bar">
+  <button class="subcat-btn active" onclick="selSubcat(this,'')" data-cat="">
+    <span class="sc-icon">🌐</span> Бүгд
+    <span class="sc-count" id="cnt-all">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Монголын мэдээ')" data-cat="Монголын мэдээ">
+    <span class="sc-icon">🇲🇳</span> Монголын мэдээ
+    <span class="sc-count" id="cnt-mn">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Дэлхий мэдээ')" data-cat="Дэлхий мэдээ">
+    <span class="sc-icon">🌍</span> Дэлхий мэдээ
+    <span class="sc-count" id="cnt-world">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Улс төр')" data-cat="Улс төр">
+    <span class="sc-icon">🏛</span> Улс төр
+    <span class="sc-count" id="cnt-politics">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Эдийн засаг')" data-cat="Эдийн засаг">
+    <span class="sc-icon">💰</span> Эдийн засаг
+    <span class="sc-count" id="cnt-economy">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Сурвалжилга')" data-cat="Сурвалжилга">
+    <span class="sc-icon">🎙</span> Сурвалжилга
+    <span class="sc-count" id="cnt-report">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Танин мэдэхүй')" data-cat="Танин мэдэхүй">
+    <span class="sc-icon">🧠</span> Танин мэдэхүй
+    <span class="sc-count" id="cnt-know">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Шинжлэх ухаан')" data-cat="Шинжлэх ухаан">
+    <span class="sc-icon">🔬</span> Шинжлэх ухаан
+    <span class="sc-count" id="cnt-sci">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'AI')" data-cat="AI">
+    <span class="sc-icon">🤖</span> AI
+    <span class="sc-count" id="cnt-ai">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Кино түүх')" data-cat="Кино түүх">
+    <span class="sc-icon">🎬</span> Кино түүх
+    <span class="sc-count" id="cnt-history">0</span>
+  </button>
+  <button class="subcat-btn" onclick="selSubcat(this,'Аялал')" data-cat="Аялал">
+    <span class="sc-icon">✈️</span> Аялал
+    <span class="sc-count" id="cnt-travel">0</span>
+  </button>
+</div>
+
 <!-- FILTER BAR -->
-<div class="filter-bar" role="search" aria-label="Мэдээ шүүх">
+<div class="filter-bar">
   <div class="filter-search">
     <span>🔍</span>
     <input type="text" placeholder="Мэдээ хайх..." id="search-input" autocomplete="off" oninput="filterNews()">
   </div>
-  <div class="filter-sep"></div>
-  <div class="cat-pills" role="tablist">
-    <button class="cpill-btn on" role="tab" aria-selected="true" onclick="selCat(this,'')">Бүгд</button>
-    <button class="cpill-btn" role="tab" aria-selected="false" onclick="selCat(this,'Танин мэдэхүй')">🧠 Танин мэдэхүй</button>
-    <button class="cpill-btn" role="tab" aria-selected="false" onclick="selCat(this,'Шинжлэх ухаан')">🔬 Шинжлэх ухаан</button>
-    <button class="cpill-btn" role="tab" aria-selected="false" onclick="selCat(this,'AI')">🤖 AI</button>
-    <button class="cpill-btn" role="tab" aria-selected="false" onclick="selCat(this,'Кино түүх')">🎬 Кино түүх</button>
-    <button class="cpill-btn" role="tab" aria-selected="false" onclick="selCat(this,'Аялал')">✈️ Аялал</button>
-  </div>
-  <select class="sort-select" id="sort-select" onchange="filterNews()" aria-label="Эрэмблэх">
+  <select class="sort-select" id="sort-select" onchange="filterNews()">
     <option value="created_at">Шинэ эхэнд</option>
     <option value="views">Хамгийн их үзсэн</option>
     <option value="likes">Хамгийн их like</option>
@@ -279,17 +327,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 </div>
 
 <!-- FEATURED NEWS -->
-<div class="featured-news" id="featured-news-wrap" aria-label="Онцлох мэдээ"></div>
+<div class="featured-news" id="featured-news-wrap"></div>
 
 <!-- NEWS SECTION -->
-<section aria-label="Мэдээнүүдийн жагсаалт">
+<section>
   <div class="section">
     <div class="section-header">
       <h2 class="section-title"><span>Бүх</span> мэдээнүүд</h2>
       <span class="news-count" id="news-count"></span>
     </div>
   </div>
-  <div class="news-grid" id="news-list" role="list">
+  <div class="news-grid" id="news-list">
     <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
     <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
     <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
@@ -300,35 +348,25 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </section>
 
-<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
+<a class="messenger-fab" href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer">💬</a>
 
 <!-- FOOTER -->
-<footer class="footer" role="contentinfo">
+<footer class="footer">
   <div class="footer-grid">
     <div class="footer-col">
       <h4>КиноЭзэн</h4>
       <p>Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.</p>
       <div class="footer-social">
-        <a class="social-btn sb-fb" href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </a>
-        <a class="social-btn sb-ig" href="https://instagram.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        </a>
-        <a class="social-btn sb-yt" href="https://youtube.com/@kinoezen" target="_blank" rel="noopener noreferrer" aria-label="YouTube">
-          <svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
-        </a>
-        <a class="social-btn sb-x" href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer" aria-label="X">
-          <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        </a>
+        <a class="social-btn sb-fb" href="https://facebook.com/KinoEzen" target="_blank"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a class="social-btn sb-yt" href="https://youtube.com/@kinoezen" target="_blank"><svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg></a>
       </div>
       <div class="footer-phone"><span>📞</span> +976 8551-05**</div>
     </div>
     <div class="footer-col">
       <h4>Холбоо барих</h4>
       <a href="mailto:kinoezen@gmail.com">📧 kinoezen@gmail.com</a>
-      <a href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer">📘 Facebook: КиноЭзэн</a>
-      <a href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer">💬 Messenger холбоо</a>
+      <a href="https://facebook.com/KinoEzen" target="_blank">📘 Facebook: КиноЭзэн</a>
+      <a href="https://m.me/KinoEzen" target="_blank">💬 Messenger холбоо</a>
     </div>
     <div class="footer-col">
       <h4>Реклам</h4>
@@ -347,299 +385,216 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 </footer>
 
 <script>
-const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 
-// Sanitize HTML
-function sanitize(str) {
-  if (!str) return '';
-  const d = document.createElement('div');
-  d.textContent = String(str);
-  return d.innerHTML;
-}
+function sanitize(str){if(!str)return'';const d=document.createElement('div');d.textContent=String(str);return d.innerHTML;}
 
-// Supabase fetch helper
-async function supaFetch(table, params = '') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json'
-    }
-  });
-  if (!res.ok) throw new Error(`Supabase алдаа: ${res.status}`);
+async function supaFetch(table,params=''){
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+  if(!res.ok)throw new Error(res.status);
   return res.json();
 }
 
 // DATE
-const now = new Date();
-const dateEl = document.getElementById('today-date');
-if (dateEl) {
-  dateEl.textContent = now.getFullYear() + '.' +
-    String(now.getMonth() + 1).padStart(2, '0') + '.' +
-    String(now.getDate()).padStart(2, '0');
-}
+const now=new Date();
+const dateEl=document.getElementById('today-date');
+if(dateEl)dateEl.textContent=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
 
 // WEATHER
-const WEATHER_MN = {
-  'Sunny':'Нартай','Clear':'Цэлмэг','Partly cloudy':'Үүлэрхэг','Cloudy':'Бүрхэг',
-  'Overcast':'Бүрхэг','Mist':'Манантай','Fog':'Манантай','Light rain':'Бага бороо',
-  'Moderate rain':'Бороо','Heavy rain':'Их бороо','Light snow':'Бага цас',
-  'Moderate snow':'Цас','Heavy snow':'Их цас','Blizzard':'Цасан шуурга',
-  'Thundery outbreaks':'Аянга','Patchy rain possible':'Зарим газар бороо'
-};
-async function loadWeather() {
-  const el = document.getElementById('weather-temp');
-  try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 6000);
-    const res = await fetch('https://wttr.in/Ulaanbaatar?format=j1', { signal: ctrl.signal });
-    clearTimeout(t);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    const temp = data.current_condition[0].temp_C;
-    const descEn = data.current_condition[0].weatherDesc[0].value;
-    if (el) el.textContent = `${temp}°C · ${WEATHER_MN[descEn] || descEn}`;
-  } catch { if (el) el.textContent = '—'; }
+const WEATHER_MN={'Sunny':'Нартай','Clear':'Цэлмэг','Partly cloudy':'Үүлэрхэг','Cloudy':'Бүрхэг','Overcast':'Бүрхэг','Mist':'Манантай','Light rain':'Бага бороо','Moderate rain':'Бороо','Heavy rain':'Их бороо','Light snow':'Бага цас','Moderate snow':'Цас','Heavy snow':'Их цас'};
+async function loadWeather(){
+  const el=document.getElementById('weather-temp');
+  try{const r=await fetch('https://wttr.in/Ulaanbaatar?format=j1');const d=await r.json();const t=d.current_condition[0].temp_C;const desc=d.current_condition[0].weatherDesc[0].value;if(el)el.textContent=`${t}°C · ${WEATHER_MN[desc]||desc}`;}
+  catch{if(el)el.textContent='—';}
 }
 loadWeather();
 
-// NAV TOGGLE
-let navOpen = false;
-function toggleNav() {
-  navOpen = !navOpen;
-  document.getElementById('nav-links').classList.toggle('open', navOpen);
-  document.getElementById('nav-right').classList.toggle('open', navOpen);
-  const t = document.getElementById('nav-toggle');
-  t.textContent = navOpen ? '✕' : '☰';
-  t.setAttribute('aria-expanded', navOpen);
-}
-document.addEventListener('click', e => {
-  if (navOpen && !e.target.closest('.nav')) {
-    navOpen = false;
-    document.getElementById('nav-links').classList.remove('open');
-    document.getElementById('nav-right').classList.remove('open');
-    document.getElementById('nav-toggle').textContent = '☰';
-  }
-});
-
-// Category emoji map
-const CAT_EMOJI = {
-  'Танин мэдэхүй': '🧠', 'Шинжлэх ухаан': '🔬', 'AI': '🤖',
-  'Кино түүх': '🎬', 'Аялал': '✈️', 'Мэдээ': '📰', 'default': '📄'
-};
-
-// Fallback emoji backgrounds
-const CAT_BG = {
-  'Танин мэдэхүй': 'linear-gradient(135deg,#0d1a2a,#1a3a5a)',
-  'Шинжлэх ухаан': 'linear-gradient(135deg,#1a0d2a,#3a1a5a)',
-  'AI': 'linear-gradient(135deg,#1a1a0d,#3a3a10)',
-  'Кино түүх': 'linear-gradient(135deg,#2a0d0d,#5a1a10)',
-  'Аялал': 'linear-gradient(135deg,#0d2a2a,#1a5a5a)',
-  'default': 'linear-gradient(135deg,#1a1a2a,#2a2a4a)'
-};
-
-// State
-let allNews = [];
-let currentCat = '';
-let currentSearch = '';
-let currentSort = 'created_at';
-let displayCount = 8;
-
-// Format relative time in Mongolian
-function relativeTime(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr);
-  const diff = (Date.now() - d.getTime()) / 1000;
-  if (diff < 60) return 'Одоо';
-  if (diff < 3600) return Math.floor(diff / 60) + ' мин өмнө';
-  if (diff < 86400) return Math.floor(diff / 3600) + ' цаг өмнө';
-  if (diff < 604800) return Math.floor(diff / 86400) + ' өдрийн өмнө';
-  return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0') + '.' + String(d.getDate()).padStart(2,'0');
+// NAV
+let navOpen=false;
+function toggleNav(){
+  navOpen=!navOpen;
+  document.getElementById('nav-links').classList.toggle('open',navOpen);
+  document.getElementById('nav-right').classList.toggle('open',navOpen);
+  document.getElementById('nav-toggle').textContent=navOpen?'✕':'☰';
 }
 
-// Build news card HTML
-function buildNewsCard(n, i) {
-  const emoji = CAT_EMOJI[n.category] || CAT_EMOJI['default'];
-  const bg = CAT_BG[n.category] || CAT_BG['default'];
-  const hasImg = n.image_url && n.image_url.trim();
-  const imgHTML = hasImg
-    ? `<img src="${sanitize(n.image_url)}" alt="${sanitize(n.title)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.n-emoji').style.display='block'">`
-    : '';
-  return `<article class="news-card" tabindex="0"
-    onclick="location.href='news-detail.html?id=${sanitize(n.id)}'"
-    aria-label="${sanitize(n.title)}"
-    style="animation-delay:${i * 0.06}s">
+// ===== АНГИЛАЛ тоолуурын mapping =====
+const CAT_COUNT_IDS={
+  '':'cnt-all',
+  'Монголын мэдээ':'cnt-mn',
+  'Дэлхий мэдээ':'cnt-world',
+  'Улс төр':'cnt-politics',
+  'Эдийн засаг':'cnt-economy',
+  'Сурвалжилга':'cnt-report',
+  'Танин мэдэхүй':'cnt-know',
+  'Шинжлэх ухаан':'cnt-sci',
+  'AI':'cnt-ai',
+  'Кино түүх':'cnt-history',
+  'Аялал':'cnt-travel'
+};
+
+const CAT_EMOJI={'Монголын мэдээ':'🇲🇳','Дэлхий мэдээ':'🌍','Улс төр':'🏛','Эдийн засаг':'💰','Сурвалжилга':'🎙','Танин мэдэхүй':'🧠','Шинжлэх ухаан':'🔬','AI':'🤖','Кино түүх':'🎬','Аялал':'✈️','default':'📰'};
+const CAT_BG={'Монголын мэдээ':'linear-gradient(135deg,#1a0a0a,#3a1010)','Дэлхий мэдээ':'linear-gradient(135deg,#0a1a2a,#1a3a5a)','Улс төр':'linear-gradient(135deg,#1a0a2a,#2a1a4a)','Эдийн засаг':'linear-gradient(135deg,#0a1a0a,#1a3a1a)','Сурвалжилга':'linear-gradient(135deg,#1a1a0a,#3a2a0a)','Танин мэдэхүй':'linear-gradient(135deg,#0d1a2a,#1a3a5a)','Шинжлэх ухаан':'linear-gradient(135deg,#1a0d2a,#3a1a5a)','AI':'linear-gradient(135deg,#1a1a0d,#3a3a10)','Кино түүх':'linear-gradient(135deg,#2a0d0d,#5a1a10)','Аялал':'linear-gradient(135deg,#0d2a2a,#1a5a5a)','default':'linear-gradient(135deg,#1a1a2a,#2a2a4a)'};
+
+let allNews=[];
+let currentCat='';
+let currentSearch='';
+let currentSort='created_at';
+let displayCount=8;
+
+function relativeTime(dateStr){
+  if(!dateStr)return'';
+  const d=new Date(dateStr);const diff=(Date.now()-d.getTime())/1000;
+  if(diff<60)return'Одоо';
+  if(diff<3600)return Math.floor(diff/60)+' мин өмнө';
+  if(diff<86400)return Math.floor(diff/3600)+' цаг өмнө';
+  if(diff<604800)return Math.floor(diff/86400)+' өдрийн өмнө';
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');
+}
+
+function buildNewsCard(n,i){
+  const emoji=CAT_EMOJI[n.category]||CAT_EMOJI['default'];
+  const bg=CAT_BG[n.category]||CAT_BG['default'];
+  const hasImg=n.thumbnail&&n.thumbnail.trim();
+  return`<article class="news-card" tabindex="0" onclick="location.href='news-detail.html?id=${sanitize(n.id)}'" style="animation-delay:${i*0.06}s">
     <div class="news-img" style="background:${bg}">
-      ${imgHTML}
-      <span class="n-emoji" style="${hasImg ? 'display:none' : ''}">${emoji}</span>
+      ${hasImg?`<img src="${sanitize(n.thumbnail)}" alt="${sanitize(n.title)}" loading="lazy" onerror="this.style.display='none';this.parentElement.querySelector('.n-emoji').style.display='block'">`:''}
+      <span class="n-emoji" style="${hasImg?'display:none':''}">${emoji}</span>
     </div>
     <div class="news-body">
-      <span class="news-cat-pill">${sanitize(n.category || 'Мэдээ')}</span>
+      <span class="news-cat-pill">${sanitize(n.category||'Мэдээ')}</span>
       <p class="news-title">${sanitize(n.title)}</p>
       <div class="news-foot">
         <span class="news-date">${relativeTime(n.created_at)}</span>
-        <span class="news-views">👁 ${n.views || 0}</span>
+        <span class="news-views">👁 ${n.views||0}</span>
       </div>
     </div>
   </article>`;
 }
 
-// Build featured card (top large card)
-function buildFeatured(n) {
-  const emoji = CAT_EMOJI[n.category] || CAT_EMOJI['default'];
-  const bg = CAT_BG[n.category] || CAT_BG['default'];
-  const hasImg = n.image_url && n.image_url.trim();
-  return `<article class="featured-news-card" tabindex="0"
-    onclick="location.href='news-detail.html?id=${sanitize(n.id)}'"
-    aria-label="${sanitize(n.title)}">
+function buildFeatured(n){
+  const emoji=CAT_EMOJI[n.category]||CAT_EMOJI['default'];
+  const bg=CAT_BG[n.category]||CAT_BG['default'];
+  const hasImg=n.thumbnail&&n.thumbnail.trim();
+  return`<article class="featured-news-card" tabindex="0" onclick="location.href='news-detail.html?id=${sanitize(n.id)}'">
     <div class="fn-img" style="background:${bg}">
-      ${hasImg ? `<img src="${sanitize(n.image_url)}" alt="${sanitize(n.title)}" loading="lazy" onerror="this.style.display='none'">` : ''}
-      <span class="fn-emoji" ${hasImg ? 'style="display:none"' : ''}>${emoji}</span>
+      ${hasImg?`<img src="${sanitize(n.thumbnail)}" alt="${sanitize(n.title)}" loading="lazy">`:''}
+      <span class="fn-emoji" ${hasImg?'style="display:none"':''}>${emoji}</span>
       <div class="fn-overlay"></div>
       <span class="fn-tag">✦ Онцлох</span>
     </div>
     <div class="fn-body">
-      <span class="fn-cat">${sanitize(n.category || 'Мэдээ')}</span>
+      <span class="fn-cat">${sanitize(n.category||'Мэдээ')}</span>
       <h2 class="fn-title">${sanitize(n.title)}</h2>
-      <p class="fn-desc">${sanitize(n.summary || n.content?.slice(0, 120) || '')}</p>
+      <p class="fn-desc">${sanitize(n.content?n.content.slice(0,120):'')}...</p>
       <div class="fn-meta">
-        <div class="fn-author">
-          <div class="fn-ava">КЭ</div>
-          <span class="fn-author-name">КиноЭзэн · ${relativeTime(n.created_at)}</span>
-        </div>
-        <div class="fn-stats">
-          <span class="fn-stat">👁 ${n.views || 0}</span>
-          <span class="fn-stat">❤️ ${n.likes || 0}</span>
-        </div>
+        <div class="fn-author"><div class="fn-ava">КЭ</div><span class="fn-author-name">КиноЭзэн · ${relativeTime(n.created_at)}</span></div>
+        <div class="fn-stats"><span class="fn-stat">👁 ${n.views||0}</span></div>
       </div>
       <button class="fn-read-btn" onclick="event.stopPropagation();location.href='news-detail.html?id=${sanitize(n.id)}'">Унших →</button>
     </div>
   </article>`;
 }
 
-// Render news list
-function renderNews() {
-  const list = document.getElementById('news-list');
-  const countEl = document.getElementById('news-count');
-  const loadBtn = document.getElementById('load-more-btn');
-  const featured = document.getElementById('featured-news-wrap');
+// ===== ДЭД ЦЭС тоолуур шинэчлэх =====
+function updateCounts(){
+  // Бүгд
+  const allEl=document.getElementById('cnt-all');
+  if(allEl)allEl.textContent=allNews.length;
+  // Тус бүрийн ангилал
+  Object.keys(CAT_COUNT_IDS).forEach(cat=>{
+    if(!cat)return;
+    const el=document.getElementById(CAT_COUNT_IDS[cat]);
+    if(el)el.textContent=allNews.filter(n=>n.category===cat).length;
+  });
+  const totalEl=document.getElementById('total-count');
+  if(totalEl)totalEl.textContent=allNews.length;
+}
 
-  // Filter
-  let filtered = allNews.filter(n => {
-    const matchCat = !currentCat || n.category === currentCat;
-    const matchSearch = !currentSearch || (n.title || '').toLowerCase().includes(currentSearch.toLowerCase());
-    return matchCat && matchSearch;
+function renderNews(){
+  const list=document.getElementById('news-list');
+  const countEl=document.getElementById('news-count');
+  const loadBtn=document.getElementById('load-more-btn');
+  const featured=document.getElementById('featured-news-wrap');
+
+  let filtered=allNews.filter(n=>{
+    const matchCat=!currentCat||n.category===currentCat;
+    const matchSearch=!currentSearch||(n.title||'').toLowerCase().includes(currentSearch.toLowerCase());
+    return matchCat&&matchSearch;
   });
 
-  // Sort
-  filtered = filtered.slice().sort((a, b) => {
-    if (currentSort === 'views') return (b.views || 0) - (a.views || 0);
-    if (currentSort === 'likes') return (b.likes || 0) - (a.likes || 0);
-    return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+  filtered=filtered.slice().sort((a,b)=>{
+    if(currentSort==='views')return(b.views||0)-(a.views||0);
+    if(currentSort==='likes')return(b.likes||0)-(a.likes||0);
+    return new Date(b.created_at||0)-new Date(a.created_at||0);
   });
 
-  // Featured
-  if (featured) {
-    if (filtered.length > 0) {
-      featured.innerHTML = buildFeatured(filtered[0]);
-    } else {
-      featured.innerHTML = '';
-    }
+  if(featured){
+    featured.innerHTML=filtered.length>0?buildFeatured(filtered[0]):'';
   }
 
-  const rest = filtered.slice(1);
-  const shown = rest.slice(0, displayCount);
+  const rest=filtered.slice(1);
+  const shown=rest.slice(0,displayCount);
+  if(countEl)countEl.textContent=filtered.length+' мэдээ';
 
-  if (countEl) countEl.textContent = filtered.length + ' мэдээ';
-  document.getElementById('total-count').textContent = allNews.length;
-
-  if (shown.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Мэдээ олдсонгүй</p></div>`;
-    loadBtn.style.display = 'none';
+  if(shown.length===0){
+    list.innerHTML=`<div class="empty-state"><div class="icon">📭</div><p>Мэдээ олдсонгүй</p></div>`;
+    if(loadBtn)loadBtn.style.display='none';
     return;
   }
-
-  list.innerHTML = shown.map((n, i) => buildNewsCard(n, i)).join('');
-  loadBtn.style.display = rest.length > displayCount ? 'inline-block' : 'none';
+  list.innerHTML=shown.map((n,i)=>buildNewsCard(n,i)).join('');
+  if(loadBtn)loadBtn.style.display=rest.length>displayCount?'inline-block':'none';
 }
 
-function loadMore() {
-  displayCount += 8;
+function loadMore(){displayCount+=8;renderNews();}
+
+// ===== ДЭД ЦЭС СОНГОХ =====
+function selSubcat(el,cat){
+  document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentCat=cat;
+  displayCount=8;
   renderNews();
 }
 
-// Category filter
-function selCat(el, cat) {
-  document.querySelectorAll('.cpill-btn').forEach(b => {
-    b.classList.remove('on');
-    b.setAttribute('aria-selected', 'false');
-  });
-  el.classList.add('on');
-  el.setAttribute('aria-selected', 'true');
-  currentCat = cat;
-  displayCount = 8;
+function filterNews(){
+  currentSearch=document.getElementById('search-input').value;
+  currentSort=document.getElementById('sort-select').value;
+  displayCount=8;
   renderNews();
 }
 
-// Search filter
-function filterNews() {
-  currentSearch = document.getElementById('search-input').value;
-  currentSort = document.getElementById('sort-select').value;
-  displayCount = 8;
-  renderNews();
-}
-
-// Nav search mirrors main search
-document.getElementById('nav-search-input').addEventListener('input', function () {
-  document.getElementById('search-input').value = this.value;
+document.getElementById('nav-search-input').addEventListener('input',function(){
+  document.getElementById('search-input').value=this.value;
   filterNews();
 });
 
-// URL param: ?cat=XXX  (from index.html ангилал)
-function applyUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  const cat = params.get('cat');
-  if (cat) {
-    const btn = [...document.querySelectorAll('.cpill-btn')].find(b => b.textContent.includes(cat));
-    if (btn) {
-      selCat(btn, cat);
-    } else {
-      currentCat = cat;
-    }
+// URL param: ?cat=XXX
+function applyUrlParams(){
+  const params=new URLSearchParams(window.location.search);
+  const cat=params.get('cat');
+  if(cat){
+    const btn=[...document.querySelectorAll('.subcat-btn')].find(b=>b.dataset.cat===cat);
+    if(btn){selSubcat(btn,cat);}
+    else{currentCat=cat;}
   }
 }
 
-// LOAD NEWS from Supabase
-async function loadNews() {
-  const list = document.getElementById('news-list');
-  try {
-    const data = await supaFetch('news', 'order=created_at.desc&limit=100');
-    allNews = Array.isArray(data) ? data : [];
+async function loadNews(){
+  try{
+    const data=await supaFetch('news','order=created_at.desc&limit=100');
+    allNews=Array.isArray(data)?data:[];
+    updateCounts();
     applyUrlParams();
     renderNews();
-  } catch (err) {
-    console.error('Мэдээ ачаалах алдаа:', err);
-    // Fallback: show placeholder cards if Supabase unreachable
-    allNews = FALLBACK_NEWS;
-    applyUrlParams();
+  }catch(err){
+    console.error(err);
+    allNews=[];
     renderNews();
   }
 }
 
-// Fallback data if Supabase is unavailable
-const FALLBACK_NEWS = [
-  { id: 'n1', title: 'ChatGPT-ийн шинэ хувилбар гарлаа — Монгол хэл дэмжихээр болов', category: 'AI', views: 1240, likes: 89, created_at: new Date(Date.now() - 7200000).toISOString(), summary: 'OpenAI-н шинэ загвар нь Монгол хэлний дэмжлэгийг сайжруулж, орчуулга болон текст үүсгэх чадварыг нэмэгдүүллээ.' },
-  { id: 'n2', title: 'Монгол гаралтай эрдэмтэн NASA-д томилогдлоо', category: 'Шинжлэх ухаан', views: 980, likes: 124, created_at: new Date(Date.now() - 14400000).toISOString(), summary: 'Монгол гаралтай залуу эрдэмтэн NASA-ийн сансрын судалгааны хэлтэст ахлах судлаачаар томилогдов.' },
-  { id: 'n3', title: 'Байгалийн нуурт аялах шилдэг 5 газар', category: 'Аялал', views: 756, likes: 67, created_at: new Date(Date.now() - 86400000).toISOString(), summary: 'Монголын байгалийн үзэсгэлэнт газруудаас танд хамгийн тохиромжтой 5 аялалын маршрутыг санал болголоо.' },
-  { id: 'n4', title: 'Оскарт Монгол кино анх удаа нэр дэвшилтэт болов', category: 'Кино түүх', views: 2100, likes: 310, created_at: new Date(Date.now() - 172800000).toISOString(), summary: 'Монголын кино урлагийн түүхэнд анх удаа нэг бүтээл Оскарын нэр дэвшигчдийн жагсаалтад орлоо.' },
-  { id: 'n5', title: 'Тархины ажиллагааг сайжруулах 10 арга', category: 'Танин мэдэхүй', views: 1560, likes: 203, created_at: new Date(Date.now() - 259200000).toISOString(), summary: 'Шинжлэх ухааны судалгаагаар нотлогдсон тархины ажиллагааг сайжруулах арга техникүүдийг танилцуулж байна.' },
-  { id: 'n6', title: 'Хиймэл оюун ухаан ба кино найруулга — ирээдүйн чиг хандлага', category: 'AI', views: 834, likes: 91, created_at: new Date(Date.now() - 345600000).toISOString(), summary: 'AI технологи кино найруулгад хэрхэн нөлөөлж байгааг болон ирэх жилүүдийн чиг хандлагыг авч үзлээ.' },
-  { id: 'n7', title: 'Сэтгэл судлал: Аз жаргалтай байх нийтлэг 7 зуршил', category: 'Танин мэдэхүй', views: 1890, likes: 267, created_at: new Date(Date.now() - 432000000).toISOString(), summary: 'Дэлхийн шилдэг сэтгэл зүйчдийн судалгаанаас гаргасан аз жаргалтай амьдралын нийтлэг зуршлууд.' },
-  { id: 'n8', title: 'Говийн цөлд шинэ динозаврын яс олдлоо', category: 'Шинжлэх ухаан', views: 1340, likes: 178, created_at: new Date(Date.now() - 518400000).toISOString(), summary: 'Говийн цөлийн малтлагын явцад 75 сая жилийн настай шинэ динозаврын төрлийн яс олдсон гэж эрдэмтэд мэдэгдлээ.' },
-];
-
-// Init
 loadNews();
 </script>
 </body>
