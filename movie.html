@@ -55,18 +55,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .mstat{display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);}
 .movie-desc{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.7;}
 
-/* ACTION BUTTONS */
-.action-row{display:flex;gap:10px;margin:16px 0;flex-wrap:wrap;}
-.act-btn{display:flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
-.act-play{background:linear-gradient(90deg,#4ade80,#f4a261);color:#0a2a0a;flex:1;justify-content:center;}
-.act-like{background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;}
-.act-like.liked{background:#e63946;color:#fff;}
-.act-share{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.7);}
+/* ===== ACTION BUTTONS — НЭГ МӨРӨНД ===== */
+.action-row{display:flex;gap:8px;margin:16px 0;flex-wrap:wrap;}
+.act-btn{display:flex;align-items:center;justify-content:center;gap:5px;padding:8px 14px;border-radius:30px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);flex:1;min-width:60px;white-space:nowrap;}
+.act-play{background:linear-gradient(90deg,#4ade80,#f4a261);color:#0a2a0a;flex:1.2;}
+.act-like{background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.25);color:#e63946;}
+.act-like.liked{background:#e63946;color:#fff;border-color:#e63946;}
+.act-share{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);}
 .act-share:hover{background:rgba(255,255,255,0.12);}
-/* 🔖 Хадгалах товч */
-.act-save{background:rgba(244,162,97,0.12);border:1px solid rgba(244,162,97,0.3);color:var(--accent2);}
-.act-save.saved{background:var(--accent2);color:#0a1a00;}
-.act-save:hover{background:rgba(244,162,97,0.2);}
+.act-save{background:rgba(244,162,97,0.12);border:1px solid rgba(244,162,97,0.25);color:#f4a261;}
+.act-save.saved{background:#f4a261;color:#0a1a00;}
+.act-btn:hover{transform:translateY(-2px);}
 
 /* DIVIDER */
 .divider{height:1px;background:rgba(255,255,255,0.06);margin:20px 0;}
@@ -89,7 +88,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .comments-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--text2);margin-bottom:16px;}
 .comments-title span{color:var(--accent);}
 
-/* Сэтгэгдэл бичих хэсэг */
 .comment-form{background:var(--bg2);border-radius:var(--radius);padding:16px;margin-bottom:20px;border:1px solid var(--border);}
 .comment-form-top{display:flex;gap:12px;align-items:flex-start;}
 .comment-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#0a2a0a;flex-shrink:0;}
@@ -104,7 +102,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .btn-submit:hover{opacity:0.9;}
 .btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
 
-/* Сэтгэгдэл жагсаалт */
 .comments-list{display:flex;flex-direction:column;gap:14px;}
 .comment-item{display:flex;gap:12px;animation:fadeUp 0.3s ease both;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -126,12 +123,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
 .reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.15);color:var(--accent);}
 .reaction-btn .r-count{font-size:12px;font-weight:700;}
 
-/* Хоосон сэтгэгдэл */
 .comments-empty{text-align:center;padding:32px 20px;color:var(--text4);}
 .comments-empty .icon{font-size:32px;margin-bottom:8px;}
 .comments-empty p{font-size:13px;}
 
-/* LOADING */
 .loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;}
 .loading-wrap p{color:rgba(255,255,255,0.4);font-size:14px;}
 .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:#4ade80;border-radius:50%;animation:spin 0.8s linear infinite;}
@@ -157,6 +152,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);}
   .movie-wrap{padding:14px;}
   .reactions-bar{gap:6px;}
   .reaction-btn{padding:6px 10px;font-size:12px;}
+  .act-btn{flex:1 0 auto;padding:6px 10px;font-size:11px;}
 }
 </style>
 </head>
@@ -272,7 +268,6 @@ async function loadMovie(){
     const bg=genreGradients[m.genre]||'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
     const poster=m.thumbnail?`<img src="${m.thumbnail}" alt="${m.title}" onerror="this.style.display='none'">`:'🎬';
 
-    // Хадгалсан эсэхийг шалгах
     const savedMovies=JSON.parse(localStorage.getItem('saved_movies')||'[]');
     const isSaved=savedMovies.includes(m.id);
 
@@ -404,9 +399,9 @@ function shareMovie(title){
   else{navigator.clipboard.writeText(window.location.href);showToast('🔗 Линк хуулагдлаа!');}
 }
 
-// ===== РЕАКЦ — зөвхөн НЭГ нь дарагдана =====
+// ===== РЕАКЦ =====
 const reactionsData={heart:0,haha:0,wow:0,sad:0,angry:0,like:0};
-let myActiveReaction=null; // Одоо сонгосон реакцын type
+let myActiveReaction=null;
 
 function loadReactions(){
   const saved=localStorage.getItem('reactions_'+movieId);
@@ -418,7 +413,6 @@ function loadReactions(){
       renderReactions();
     }catch(e){}
   }
-  // Товч бүр дээр click listener нэмэх
   document.querySelectorAll('.reaction-btn').forEach(btn=>{
     btn.addEventListener('click',()=>react(btn));
   });
@@ -430,14 +424,11 @@ function saveReactions(){
 
 function react(btn){
   const type=btn.dataset.type;
-
   if(myActiveReaction===type){
-    // Дахин дарвал — болих (toggle off)
     reactionsData[type]=Math.max(0,(reactionsData[type]||0)-1);
     myActiveReaction=null;
     btn.classList.remove('active');
   } else {
-    // Өмнөх реакцыг хасах
     if(myActiveReaction){
       reactionsData[myActiveReaction]=Math.max(0,(reactionsData[myActiveReaction]||0)-1);
       const prevBtn=document.querySelector(`.reaction-btn[data-type="${myActiveReaction}"]`);
@@ -447,15 +438,12 @@ function react(btn){
         if(prevCount)prevCount.textContent=reactionsData[myActiveReaction];
       }
     }
-    // Шинэ реакц нэмэх
     reactionsData[type]=(reactionsData[type]||0)+1;
     myActiveReaction=type;
     btn.classList.add('active');
-    // Жижиг animation
     btn.style.transform='scale(1.25)';
     setTimeout(()=>btn.style.transform='',200);
   }
-
   const countEl=btn.querySelector('.r-count');
   if(countEl)countEl.textContent=reactionsData[type];
   saveReactions();
