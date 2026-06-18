@@ -67,10 +67,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 /* DIVIDER */
 .divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
 
-/* SHARE */
-.share-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.share-label{font-size:13px;color:var(--text3);font-weight:600;}
-.share-btn{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all 0.2s;}
+/* ===== ACTIONS ROW ===== */
+.actions-row{margin:20px 0 10px;display:flex;flex-direction:column;gap:16px;}
+.reactions-bar{display:flex;gap:8px;flex-wrap:wrap;}
+.reaction-btn{display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:30px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:14px;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
+.reaction-btn:hover{border-color:var(--border2);background:rgba(74,222,128,0.08);transform:scale(1.05);}
+.reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.15);color:var(--accent);}
+.reaction-emoji{font-size:18px;}
+.reaction-count{font-size:12px;font-weight:700;color:var(--text4);min-width:18px;text-align:center;}
+.action-buttons{display:flex;gap:8px;flex-wrap:wrap;}
+.save-btn{padding:8px 18px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:13px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s;}
+.save-btn:hover{opacity:0.85;}
+.save-btn.saved{background:var(--bg3);border:1px solid var(--accent);color:var(--accent);}
+.share-btn{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .share-btn:hover{border-color:var(--border2);color:var(--accent);}
 
 /* BACK BTN */
@@ -99,6 +108,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .messenger-fab{position:fixed;bottom:24px;right:20px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#0084ff,#00c6ff);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 24px rgba(0,132,255,0.4);z-index:999;text-decoration:none;font-size:22px;transition:transform 0.2s;}
 .messenger-fab:hover{transform:scale(1.1);}
 
+/* TOAST */
+.toast{animation:fadeUp 0.3s ease;}
+
 /* FOOTER */
 .footer{background:#0a0a14;padding:28px 24px 18px;border-top:1px solid var(--border);}
 .footer-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
@@ -118,6 +130,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .container{padding:20px 16px 36px;}
   .article-title{font-size:24px;}
   .related-grid{grid-template-columns:repeat(2,1fr);}
+  .reactions-bar{gap:4px;}
+  .reaction-btn{padding:4px 10px;font-size:12px;}
+  .reaction-emoji{font-size:15px;}
 }
 @media(max-width:480px){
   .related-grid{grid-template-columns:1fr;}
@@ -286,6 +301,119 @@ document.addEventListener('click', e => {
 // Get ID from URL
 const newsId = new URLSearchParams(window.location.search).get('id');
 
+// ============================================================
+// РЕАКЦ (Сэтгэл хөдлөл)
+// ============================================================
+const reactionData = {
+  '❤️': { id: 'react-love', count: 0 },
+  '😂': { id: 'react-haha', count: 0 },
+  '😮': { id: 'react-wow', count: 0 },
+  '😢': { id: 'react-sad', count: 0 },
+  '😡': { id: 'react-angry', count: 0 },
+  '🔥': { id: 'react-fire', count: 0 }
+};
+
+function loadReactions() {
+  const saved = localStorage.getItem('newsReactions_' + newsId);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach(emoji => {
+        if (reactionData[emoji]) {
+          reactionData[emoji].count = data[emoji] || 0;
+          const el = document.getElementById(reactionData[emoji].id);
+          if (el) el.textContent = reactionData[emoji].count;
+        }
+      });
+    } catch(e) {}
+  }
+}
+
+function react(emoji) {
+  if (!reactionData[emoji]) return;
+  
+  const key = 'reacted_' + newsId + '_' + emoji;
+  const btn = document.querySelector(`.reaction-btn[data-emoji="${emoji}"]`);
+  
+  if (localStorage.getItem(key)) {
+    reactionData[emoji].count--;
+    localStorage.removeItem(key);
+    if (btn) btn.classList.remove('active');
+  } else {
+    reactionData[emoji].count++;
+    localStorage.setItem(key, 'true');
+    if (btn) btn.classList.add('active');
+  }
+  
+  const el = document.getElementById(reactionData[emoji].id);
+  if (el) el.textContent = reactionData[emoji].count;
+  
+  const saveData = {};
+  Object.keys(reactionData).forEach(e => {
+    saveData[e] = reactionData[e].count;
+  });
+  localStorage.setItem('newsReactions_' + newsId, JSON.stringify(saveData));
+}
+
+// ============================================================
+// ХАДГАЛАХ
+// ============================================================
+function toggleSaveNews() {
+  const btn = document.getElementById('save-news-btn');
+  const key = 'saved_news_' + newsId;
+  
+  if (localStorage.getItem(key)) {
+    localStorage.removeItem(key);
+    btn.textContent = '💾 Хадгалах';
+    btn.classList.remove('saved');
+    showToast('💾 Хадгалсан жагсаалтаас хасагдлаа');
+  } else {
+    localStorage.setItem(key, 'true');
+    btn.textContent = '🔖 Хадгалсан';
+    btn.classList.add('saved');
+    showToast('✅ Хадгалсан жагсаалтад нэмэгдлээ');
+  }
+}
+
+function checkSaved() {
+  const btn = document.getElementById('save-news-btn');
+  if (!btn) return;
+  const key = 'saved_news_' + newsId;
+  if (localStorage.getItem(key)) {
+    btn.textContent = '🔖 Хадгалсан';
+    btn.classList.add('saved');
+  }
+}
+
+// ============================================================
+// МЭДЭЭГДЭЛ (Toast)
+// ============================================================
+function showToast(msg) {
+  const old = document.querySelector('.toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  t.style.cssText = `
+    position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,0,0.85); color: #4ade80; padding: 12px 24px;
+    border-radius: 12px; font-size: 14px; font-weight: 600;
+    font-family: 'Nunito', sans-serif; z-index: 9999;
+    border: 1px solid rgba(74,222,128,0.3);
+    backdrop-filter: blur(12px); transition: all 0.3s;
+    pointer-events: none;
+  `;
+  document.body.appendChild(t);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+    setTimeout(() => t.remove(), 400);
+  }, 2500);
+}
+
+// ============================================================
+// ҮНДСЭН АЧААЛАЛТ
+// ============================================================
 async function loadNews() {
   if (!newsId) { showError(); return; }
 
@@ -307,16 +435,17 @@ async function loadNews() {
       body: JSON.stringify({ views: (parseInt(n.views) || 0) + 1 })
     }).catch(() => {});
 
-    // Update page title & breadcrumb
     document.title = (n.title || 'Мэдээ') + ' — КиноЭзэн';
     document.getElementById('bc-title').textContent = n.title || '';
 
-    // Render article
     const emoji = CAT_EMOJI[n.category] || '📰';
     const bg = CAT_BG[n.category] || 'linear-gradient(135deg,#1a1a2a,#2a2a4a)';
     const imgHTML = n.thumbnail
       ? `<img class="article-img" src="${sanitize(n.thumbnail)}" alt="${sanitize(n.title)}" loading="lazy">`
       : `<div class="article-img-placeholder" style="background:${bg}">${emoji}</div>`;
+
+    // Check if saved
+    const isSaved = localStorage.getItem('saved_news_' + newsId) !== null;
 
     document.getElementById('article-wrap').innerHTML = `
       <span class="article-cat">${sanitize(n.category || 'Мэдээ')}</span>
@@ -328,19 +457,51 @@ async function loadNews() {
       </div>
       ${imgHTML}
       <div class="article-body">${sanitize(n.content || 'Агуулга байхгүй байна.')}</div>
+      
       <hr class="divider">
-      <div class="share-row">
-        <span class="share-label">Хуваалцах:</span>
-        <button class="share-btn" onclick="shareFB()">📘 Facebook</button>
-        <button class="share-btn" onclick="copyLink()">🔗 Холбоос хуулах</button>
+      
+      <div class="actions-row">
+        <div class="reactions-bar">
+          <button class="reaction-btn" data-emoji="❤️" onclick="react('❤️')">
+            <span class="reaction-emoji">❤️</span>
+            <span class="reaction-count" id="react-love">0</span>
+          </button>
+          <button class="reaction-btn" data-emoji="😂" onclick="react('😂')">
+            <span class="reaction-emoji">😂</span>
+            <span class="reaction-count" id="react-haha">0</span>
+          </button>
+          <button class="reaction-btn" data-emoji="😮" onclick="react('😮')">
+            <span class="reaction-emoji">😮</span>
+            <span class="reaction-count" id="react-wow">0</span>
+          </button>
+          <button class="reaction-btn" data-emoji="😢" onclick="react('😢')">
+            <span class="reaction-emoji">😢</span>
+            <span class="reaction-count" id="react-sad">0</span>
+          </button>
+          <button class="reaction-btn" data-emoji="😡" onclick="react('😡')">
+            <span class="reaction-emoji">😡</span>
+            <span class="reaction-count" id="react-angry">0</span>
+          </button>
+          <button class="reaction-btn" data-emoji="🔥" onclick="react('🔥')">
+            <span class="reaction-emoji">🔥</span>
+            <span class="reaction-count" id="react-fire">0</span>
+          </button>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="save-btn ${isSaved ? 'saved' : ''}" id="save-news-btn" onclick="toggleSaveNews()">
+            ${isSaved ? '🔖 Хадгалсан' : '💾 Хадгалах'}
+          </button>
+          <button class="share-btn" onclick="shareFB()">📤 Facebook</button>
+          <button class="share-btn" onclick="copyLink()">🔗 Холбоос хуулах</button>
+        </div>
       </div>
     `;
 
     document.getElementById('skeleton-wrap').style.display = 'none';
     document.getElementById('article-wrap').style.display = 'block';
-    document.getElementById('divider').style.display = 'none'; // divider inside article
 
-    // Load related
+    loadReactions();
     loadRelated(n.category, newsId);
 
   } catch (e) {
@@ -398,5 +559,3 @@ loadNews();
 </script>
 </body>
 </html>
-</html>
-<!-- v2 -->
