@@ -103,6 +103,12 @@ tr:last-child td{border-bottom:none;}
   .form-grid{grid-template-columns:1fr;}
   .form-group.full{grid-column:1;}
 }
+/* ===== БУЦАХ ТОВЧ ===== */
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.back-to-dash{background:none;border:none;color:#4ade80;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:600;padding:4px 8px;border-radius:6px;transition:background 0.2s;}
+.back-to-dash:hover{background:rgba(74,222,128,0.08);}
+.back-to-dash svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;}
+.page-title-text{font-size:20px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -138,7 +144,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 
   <div class="main-content">
-    <!-- ХЯНАХ САМБАР -->
+    <!-- ==================== ХЯНАХ САМБАР ==================== -->
     <div class="page active" id="page-dashboard">
       <div class="page-title">📊 Хянах самбар</div>
       <div class="stats-grid">
@@ -171,9 +177,15 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- КИНО НЭМЭХ -->
+    <!-- ==================== КИНО НЭМЭХ ==================== -->
     <div class="page" id="page-movies">
-      <div class="page-title">🎬 Кино нэмэх</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">🎬 Кино нэмэх</span>
+      </div>
       <div class="form-card">
         <div class="form-title">➕ Шинэ кино</div>
         <div class="form-grid">
@@ -256,15 +268,21 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- МЭДЭЭ НЭМЭХ -->
+    <!-- ==================== МЭДЭЭ НЭМЭХ ==================== -->
     <div class="page" id="page-news">
-      <div class="page-title">📰 Мэдээ нэмэх</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📰 Мэдээ нэмэх</span>
+      </div>
       <div class="form-card">
         <div class="form-title">➕ Шинэ мэдээ</div>
         <div class="form-grid">
           <div class="form-group full"><label class="form-label">Гарчиг *</label><input class="form-inp" id="n-title" placeholder="жш: Шинэ кино гарлаа..."></div>
           
-          <!-- ===== ҮНДСЭН АНГИЛАЛ ===== -->
+          <!-- ҮНДСЭН АНГИЛАЛ -->
           <div class="form-group">
             <label class="form-label">Үндсэн ангилал</label>
             <select class="form-inp" id="n-main-cat" onchange="updateSubCatOptions()">
@@ -279,7 +297,7 @@ tr:last-child td{border-bottom:none;}
             </select>
           </div>
 
-          <!-- ===== ДЭД АНГИЛАЛ ===== -->
+          <!-- ДЭД АНГИЛАЛ -->
           <div class="form-group">
             <label class="form-label">Дэд ангилал</label>
             <select class="form-inp" id="n-sub-cat">
@@ -287,7 +305,7 @@ tr:last-child td{border-bottom:none;}
             </select>
           </div>
 
-          <!-- МЭДЭЭ ЗУРАГ UPLOAD -->
+          <!-- МЭДЭЭ ЗУРАГ -->
           <div class="form-group">
             <label class="form-label">Зураг</label>
             <div class="upload-tabs">
@@ -314,6 +332,35 @@ tr:last-child td{border-bottom:none;}
               <input class="form-inp" id="n-thumb-url" placeholder="https://...jpg">
             </div>
           </div>
+
+          <!-- ===== МЭДЭЭНД ВИДЕО UPLOAD (ШИНЭ) ===== -->
+          <div class="form-group full">
+            <label class="form-label">Видео (заавал биш)</label>
+            <div class="upload-tabs">
+              <div class="upload-tab on" onclick="switchTab('n-vid','upload',this)">📁 Файл оруулах</div>
+              <div class="upload-tab" onclick="switchTab('n-vid','url',this)">🔗 YouTube/URL</div>
+            </div>
+            <div id="n-vid-upload">
+              <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'n-vid-file','n-vid-preview')">
+                <input type="file" id="n-vid-file" accept="video/*" onchange="previewFile(this,'n-vid-preview','video')">
+                <div class="upload-icon">🎞️</div>
+                <div class="upload-text">Видео файл сонгох эсвэл чирж оруулах</div>
+                <div class="upload-hint">MP4, MKV, WEBM — 200MB хүртэл</div>
+              </div>
+              <div class="upload-preview" id="n-vid-preview">
+                <video id="n-vid-preview-vid" controls style="max-height:160px;border-radius:8px;"></video>
+                <div class="upload-preview-name" id="n-vid-preview-name"></div>
+              </div>
+              <div class="upload-progress" id="n-vid-progress">
+                <div class="progress-bar"><div class="progress-fill" id="n-vid-fill"></div></div>
+                <div class="progress-text" id="n-vid-ptext">Ачааллаж байна...</div>
+              </div>
+            </div>
+            <div id="n-vid-url" style="display:none;">
+              <input class="form-inp" id="n-video-url" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+          </div>
+
           <div class="form-group full"><label class="form-label">Агуулга</label><textarea class="form-inp" id="n-content" placeholder="Мэдээний дэлгэрэнгүй..." style="min-height:120px;"></textarea></div>
         </div>
         <button class="form-btn" onclick="addNews()">💾 Хадгалах</button>
@@ -322,9 +369,15 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- РЕКЛАМ -->
+    <!-- ==================== РЕКЛАМ ==================== -->
     <div class="page" id="page-ads">
-      <div class="page-title">📢 Реклам нэмэх</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📢 Реклам нэмэх</span>
+      </div>
       <div class="form-card">
         <div class="form-title">➕ Шинэ реклам</div>
         <div class="form-grid">
@@ -335,7 +388,7 @@ tr:last-child td{border-bottom:none;}
             <select class="form-inp" id="a-active"><option value="true">✅ Идэвхтэй</option><option value="false">❌ Идэвхгүй</option></select>
           </div>
 
-          <!-- ===== РЕКЛАМ ЗУРАГ UPLOAD ===== -->
+          <!-- РЕКЛАМ ЗУРАГ -->
           <div class="form-group full">
             <label class="form-label">Рекламын зураг</label>
             <div class="upload-tabs">
@@ -362,6 +415,34 @@ tr:last-child td{border-bottom:none;}
               <input class="form-inp" id="a-thumb-url" placeholder="https://...jpg">
             </div>
           </div>
+
+          <!-- ===== РЕКЛАМД ВИДЕО UPLOAD (ШИНЭ) ===== -->
+          <div class="form-group full">
+            <label class="form-label">Рекламын видео (заавал биш)</label>
+            <div class="upload-tabs">
+              <div class="upload-tab on" onclick="switchTab('a-vid','upload',this)">📁 Файл оруулах</div>
+              <div class="upload-tab" onclick="switchTab('a-vid','url',this)">🔗 YouTube/URL</div>
+            </div>
+            <div id="a-vid-upload">
+              <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'a-vid-file','a-vid-preview')">
+                <input type="file" id="a-vid-file" accept="video/*" onchange="previewFile(this,'a-vid-preview','video')">
+                <div class="upload-icon">🎞️</div>
+                <div class="upload-text">Видео файл сонгох эсвэл чирж оруулах</div>
+                <div class="upload-hint">MP4, MKV, WEBM — 200MB хүртэл</div>
+              </div>
+              <div class="upload-preview" id="a-vid-preview">
+                <video id="a-vid-preview-vid" controls style="max-height:160px;border-radius:8px;"></video>
+                <div class="upload-preview-name" id="a-vid-preview-name"></div>
+              </div>
+              <div class="upload-progress" id="a-vid-progress">
+                <div class="progress-bar"><div class="progress-fill" id="a-vid-fill"></div></div>
+                <div class="progress-text" id="a-vid-ptext">Ачааллаж байна...</div>
+              </div>
+            </div>
+            <div id="a-vid-url" style="display:none;">
+              <input class="form-inp" id="a-video-url" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+          </div>
         </div>
         <button class="form-btn" onclick="addAd()">💾 Хадгалах</button>
         <div class="success-msg" id="a-ok">✅ Реклам амжилттай нэмэгдлээ!</div>
@@ -369,27 +450,45 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- КИНО ЖАГСААЛТ -->
+    <!-- ==================== КИНО ЖАГСААЛТ ==================== -->
     <div class="page" id="page-list-movies">
-      <div class="page-title">📋 Кино жагсаалт</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📋 Кино жагсаалт</span>
+      </div>
       <div class="table-card">
         <div class="table-head"><div class="table-head-title">Бүх кинонууд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadMovieList()">🔄 Шинэчлэх</button></div>
         <div id="movie-table"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
 
-    <!-- МЭДЭЭ ЖАГСААЛТ -->
+    <!-- ==================== МЭДЭЭ ЖАГСААЛТ ==================== -->
     <div class="page" id="page-list-news">
-      <div class="page-title">📋 Мэдээ жагсаалт</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📋 Мэдээ жагсаалт</span>
+      </div>
       <div class="table-card">
         <div class="table-head"><div class="table-head-title">Бүх мэдээнүүд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadNewsList()">🔄 Шинэчлэх</button></div>
         <div id="news-table"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
 
-    <!-- РЕКЛАМ ЖАГСААЛТ -->
+    <!-- ==================== РЕКЛАМ ЖАГСААЛТ ==================== -->
     <div class="page" id="page-list-ads">
-      <div class="page-title">📋 Реклам жагсаалт</div>
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📋 Реклам жагсаалт</span>
+      </div>
       <div class="table-card">
         <div class="table-head"><div class="table-head-title">Бүх рекламнууд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadAdList()">🔄 Шинэчлэх</button></div>
         <div id="ads-table"><div class="loading">Ачааллаж байна...</div></div>
@@ -398,7 +497,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Кино -->
+<!-- ==================== EDIT MODAL — КИНО ==================== -->
 <div class="modal-overlay" id="modal-movie">
   <div class="modal-box">
     <div class="modal-title">✏️ Кино засах<button class="modal-close" onclick="closeModal('modal-movie')">✕</button></div>
@@ -409,7 +508,22 @@ tr:last-child td{border-bottom:none;}
         <select class="form-inp" id="edit-m-genre"><option>Фантастик</option><option>Экшн</option><option>Драм</option><option>Аймаар</option><option>Романтик</option><option>Аниме</option><option>Олон ангит</option><option>Бусад</option></select>
       </div>
       <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-m-desc" style="min-height:70px;"></textarea></div>
-      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-m-thumb" placeholder="https://...jpg"></div>
+      
+      <!-- ===== ЗУРАГ UPLOAD (ЗАСВАРЛАХ) ===== -->
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-m-img-file','edit-m-img-preview')">
+          <input type="file" id="edit-m-img-file" accept="image/*" onchange="previewFile(this,'edit-m-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-m-img-preview">
+            <img id="edit-m-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-m-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-m-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      
       <div class="form-group"><label class="form-label">Видео URL</label><input class="form-inp" id="edit-m-video" placeholder="https://...mp4"></div>
       <div class="form-group">
         <label class="form-label">Онцлох</label>
@@ -430,7 +544,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Мэдээ -->
+<!-- ==================== EDIT MODAL — МЭДЭЭ ==================== -->
 <div class="modal-overlay" id="modal-news">
   <div class="modal-box">
     <div class="modal-title">✏️ Мэдээ засах<button class="modal-close" onclick="closeModal('modal-news')">✕</button></div>
@@ -440,7 +554,22 @@ tr:last-child td{border-bottom:none;}
       <div class="form-group"><label class="form-label">Ангилал</label>
         <select class="form-inp" id="edit-n-cat"><option>Кино мэдээ</option><option>Мэдээ</option><option>Аялал</option><option>Шинжлэх ухаан</option><option>AI</option><option>Кино түүх</option><option>Одод ёртөнц</option><option>Бусад</option></select>
       </div>
-      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-n-thumb"></div>
+      
+      <!-- ===== ЗУРАГ UPLOAD (ЗАСВАРЛАХ) ===== -->
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-n-img-file','edit-n-img-preview')">
+          <input type="file" id="edit-n-img-file" accept="image/*" onchange="previewFile(this,'edit-n-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-n-img-preview">
+            <img id="edit-n-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-n-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-n-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      
       <div class="form-group"><label class="form-label">Агуулга</label><textarea class="form-inp" id="edit-n-content" style="min-height:90px;"></textarea></div>
     </div>
     <div class="modal-btns">
@@ -452,7 +581,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Реклам -->
+<!-- ==================== EDIT MODAL — РЕКЛАМ ==================== -->
 <div class="modal-overlay" id="modal-ad">
   <div class="modal-box">
     <div class="modal-title">✏️ Реклам засах<button class="modal-close" onclick="closeModal('modal-ad')">✕</button></div>
@@ -461,7 +590,22 @@ tr:last-child td{border-bottom:none;}
       <div class="form-group"><label class="form-label">Гарчиг *</label><input class="form-inp" id="edit-a-title"></div>
       <div class="form-group"><label class="form-label">Тайлбар</label><input class="form-inp" id="edit-a-desc"></div>
       <div class="form-group"><label class="form-label">Товчны текст</label><input class="form-inp" id="edit-a-btn"></div>
-      <div class="form-group"><label class="form-label">Зургийн URL</label><input class="form-inp" id="edit-a-thumb" placeholder="https://...jpg"></div>
+      
+      <!-- ===== ЗУРАГ UPLOAD (ЗАСВАРЛАХ) ===== -->
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-a-img-file','edit-a-img-preview')">
+          <input type="file" id="edit-a-img-file" accept="image/*" onchange="previewFile(this,'edit-a-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-a-img-preview">
+            <img id="edit-a-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-a-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-a-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      
       <div class="form-group"><label class="form-label">Идэвхтэй эсэх</label>
         <select class="form-inp" id="edit-a-active"><option value="true">✅ Идэвхтэй</option><option value="false">❌ Идэвхгүй</option></select>
       </div>
@@ -715,7 +859,7 @@ async function addMovie(){
 }
 
 // ============================================================
-// МЭДЭЭ НЭМЭХ (Дэд цэстэй)
+// МЭДЭЭ НЭМЭХ (Дэд цэстэй + ВИДЕО)
 // ============================================================
 async function addNews(){
   const title=document.getElementById('n-title').value.trim();
@@ -728,6 +872,19 @@ async function addNews(){
       const imgFile=document.getElementById('n-img-file');
       if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'news','n-img');
     }else{thumbUrl=document.getElementById('n-thumb-url').value.trim()||null;}
+    
+    // ===== ВИДЕО UPLOAD =====
+    let videoUrl=null;
+    const nVidUpload=document.getElementById('n-vid-upload');
+    if(nVidUpload && nVidUpload.style.display!=='none'){
+      const vidFile=document.getElementById('n-vid-file');
+      if(vidFile && vidFile.files.length>0){
+        videoUrl=await uploadFile(vidFile.files[0],'news-videos','n-vid');
+      }
+    }else{
+      videoUrl=document.getElementById('n-video-url').value.trim()||null;
+    }
+    
     const mainCat=document.getElementById('n-main-cat').value;
     const subCat=document.getElementById('n-sub-cat').value;
     const category = subCat || mainCat;
@@ -737,12 +894,13 @@ async function addNews(){
       main_category: mainCat,
       sub_category: subCat,
       thumbnail: thumbUrl,
+      video_url: videoUrl,
       content: document.getElementById('n-content').value
     });
     if(ok){
       document.getElementById('n-ok').style.display='block';
-      ['n-title','n-content','n-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      const np=document.getElementById('n-img-preview');if(np)np.style.display='none';
+      ['n-title','n-content','n-thumb-url','n-video-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      ['n-img-preview','n-vid-preview'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
       setTimeout(()=>document.getElementById('n-ok').style.display='none',3000);
       loadStats();
     }else{document.getElementById('n-err').style.display='block';}
@@ -751,7 +909,7 @@ async function addNews(){
 }
 
 // ============================================================
-// РЕКЛАМ НЭМЭХ (Зурагтай)
+// РЕКЛАМ НЭМЭХ (Зурагтай + ВИДЕО)
 // ============================================================
 async function addAd(){
   const title=document.getElementById('a-title').value.trim();
@@ -764,17 +922,31 @@ async function addAd(){
       const imgFile=document.getElementById('a-img-file');
       if(imgFile&&imgFile.files.length>0)imageUrl=await uploadFile(imgFile.files[0],'ads','a-img');
     }else{imageUrl=document.getElementById('a-thumb-url').value.trim()||null;}
+    
+    // ===== ВИДЕО UPLOAD =====
+    let videoUrl=null;
+    const aVidUpload=document.getElementById('a-vid-upload');
+    if(aVidUpload && aVidUpload.style.display!=='none'){
+      const vidFile=document.getElementById('a-vid-file');
+      if(vidFile && vidFile.files.length>0){
+        videoUrl=await uploadFile(vidFile.files[0],'ads-videos','a-vid');
+      }
+    }else{
+      videoUrl=document.getElementById('a-video-url').value.trim()||null;
+    }
+    
     const ok=await supaInsert('ads',{
       title,
       description:document.getElementById('a-desc').value,
       button_text:document.getElementById('a-btn').value||'Холбоо барих',
       image_url:imageUrl,
+      video_url:videoUrl,
       active:document.getElementById('a-active').value==='true'
     });
     if(ok){
       document.getElementById('a-ok').style.display='block';
-      ['a-title','a-desc','a-btn','a-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      const ap=document.getElementById('a-img-preview');if(ap)ap.style.display='none';
+      ['a-title','a-desc','a-btn','a-thumb-url','a-video-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      ['a-img-preview','a-vid-preview'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
       setTimeout(()=>document.getElementById('a-ok').style.display='none',3000);
       loadStats();
     }else{document.getElementById('a-err').style.display='block';}
@@ -822,7 +994,22 @@ async function saveMovie(){
   const id=document.getElementById('edit-movie-id').value;
   const title=document.getElementById('edit-m-title').value.trim();
   if(!title){alert('Нэр оруулна уу!');return;}
-  const ok=await supaUpdate('movies',id,{title,genre:document.getElementById('edit-m-genre').value,description:document.getElementById('edit-m-desc').value,thumbnail:document.getElementById('edit-m-thumb').value||null,video_url:document.getElementById('edit-m-video').value||null,featured:document.getElementById('edit-m-featured').value==='true'});
+  
+  // Зураг upload (хэрэв шинэ сонгосон бол)
+  let thumbUrl = document.getElementById('edit-m-thumb').value.trim() || null;
+  const imgFile = document.getElementById('edit-m-img-file');
+  if(imgFile && imgFile.files.length > 0){
+    thumbUrl = await uploadFile(imgFile.files[0], 'movies', 'edit-m-img');
+  }
+  
+  const ok=await supaUpdate('movies',id,{
+    title,
+    genre:document.getElementById('edit-m-genre').value,
+    description:document.getElementById('edit-m-desc').value,
+    thumbnail:thumbUrl,
+    video_url:document.getElementById('edit-m-video').value.trim()||null,
+    featured:document.getElementById('edit-m-featured').value==='true'
+  });
   if(ok){document.getElementById('edit-m-ok').style.display='block';setTimeout(()=>{closeModal('modal-movie');loadMovieList();loadStats();},1200);}
   else{document.getElementById('edit-m-err').style.display='block';}
 }
@@ -832,12 +1019,13 @@ async function loadNewsList(){
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const news=await supaFetch('news','order=created_at.desc');
   if(!Array.isArray(news)||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Видео</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
   ${news.map(n=>`<tr>
     <td>${n.title}</td>
     <td><span class="badge badge-green">${n.category||'-'}</span></td>
     <td>${n.sub_category?`<span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${n.sub_category}</span>`:'—'}</td>
     <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+    <td>${n.video_url?`<a href="${n.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Видео</a>`:'—'}</td>
     <td>👁 ${n.views||0}</td>
     <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
     <td style="white-space:nowrap;">
@@ -859,7 +1047,19 @@ async function saveNews(){
   const id=document.getElementById('edit-news-id').value;
   const title=document.getElementById('edit-n-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
-  const ok=await supaUpdate('news',id,{title,category:document.getElementById('edit-n-cat').value,thumbnail:document.getElementById('edit-n-thumb').value||null,content:document.getElementById('edit-n-content').value});
+  
+  let thumbUrl = document.getElementById('edit-n-thumb').value.trim() || null;
+  const imgFile = document.getElementById('edit-n-img-file');
+  if(imgFile && imgFile.files.length > 0){
+    thumbUrl = await uploadFile(imgFile.files[0], 'news', 'edit-n-img');
+  }
+  
+  const ok=await supaUpdate('news',id,{
+    title,
+    category:document.getElementById('edit-n-cat').value,
+    thumbnail:thumbUrl,
+    content:document.getElementById('edit-n-content').value
+  });
   if(ok){document.getElementById('edit-n-ok').style.display='block';setTimeout(()=>{closeModal('modal-news');loadNewsList();loadStats();},1200);}
   else{document.getElementById('edit-n-err').style.display='block';}
 }
@@ -869,11 +1069,12 @@ async function loadAdList(){
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
   const ads=await supaFetch('ads','order=created_at.desc');
   if(!Array.isArray(ads)||ads.length===0){el.innerHTML='<div class="loading">Реклам байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Зураг</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Зураг</th><th>Видео</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
   ${ads.map(a=>`<tr>
     <td>${a.title}</td>
     <td style="color:rgba(255,255,255,0.5);font-size:11px;">${a.description||'-'}</td>
     <td>${a.image_url?`<img src="${a.image_url}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+    <td>${a.video_url?`<a href="${a.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Видео</a>`:'—'}</td>
     <td><span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${a.button_text||'-'}</span></td>
     <td>${a.active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
     <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
@@ -897,11 +1098,18 @@ async function saveAd(){
   const id=document.getElementById('edit-ad-id').value;
   const title=document.getElementById('edit-a-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
+  
+  let imageUrl = document.getElementById('edit-a-thumb').value.trim() || null;
+  const imgFile = document.getElementById('edit-a-img-file');
+  if(imgFile && imgFile.files.length > 0){
+    imageUrl = await uploadFile(imgFile.files[0], 'ads', 'edit-a-img');
+  }
+  
   const ok=await supaUpdate('ads',id,{
     title,
     description:document.getElementById('edit-a-desc').value,
     button_text:document.getElementById('edit-a-btn').value||'Холбоо барих',
-    image_url:document.getElementById('edit-a-thumb').value||null,
+    image_url:imageUrl,
     active:document.getElementById('edit-a-active').value==='true'
   });
   if(ok){document.getElementById('edit-a-ok').style.display='block';setTimeout(()=>{closeModal('modal-ad');loadAdList();loadStats();},1200);}
