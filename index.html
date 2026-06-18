@@ -172,6 +172,101 @@
   .weather-temp {
     color: #fff;
   }
+
+  /* ===== РЕКЛАМ СЛАЙДЕР ===== */
+  .ad-slider-container {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .ad-slider {
+    position: relative;
+    min-height: 80px;
+  }
+  .ad-slide {
+    display: none;
+    animation: adFade 0.6s ease;
+  }
+  .ad-slide.active {
+    display: block;
+  }
+  .ad-slide .ad-banner {
+    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
+    border: 1px solid rgba(74,222,128,0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    min-height: 80px;
+  }
+  .ad-slide .ad-banner img,
+  .ad-slide .ad-banner video {
+    max-height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .ad-slide .ad-text {
+    flex: 1;
+    min-width: 150px;
+  }
+  .ad-slide .ad-text strong {
+    color: #4ade80;
+    font-size: 15px;
+  }
+  .ad-slide .ad-text div {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+  }
+  .ad-slide .ad-btn {
+    padding: 8px 20px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #4ade80, #f4a261);
+    border: none;
+    color: #0a2a0a;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .ad-slide .ad-btn:hover {
+    opacity: 0.85;
+  }
+  .ad-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 0 4px;
+  }
+  .ad-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+  }
+  .ad-dot.active {
+    background: #4ade80;
+    transform: scale(1.2);
+  }
+  @keyframes adFade {
+    0% { opacity: 0; transform: scale(0.96); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .ad-label {
+    text-align: center;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    margin-top: 4px;
+    letter-spacing: 2px;
+  }
 </style>
 </head>
 <body>
@@ -226,17 +321,22 @@
   <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
 </div>
 
-<!-- AD BANNER -->
+<!-- ===== AD BANNER — СЛАЙДЕР ===== -->
 <div class="ad-wrapper">
-  <div id="ad-inner">
-    <div class="ad-banner" role="complementary">
-      <div class="ad-text">
-        <strong>🏢 Таны компанийн реклам энд</strong>
-        Сарын 50,000₮-өөс эхлэн рекламаа байршуул
+  <div class="ad-slider-container">
+    <div class="ad-slider" id="ad-slider">
+      <!-- Рекламууд динамикаар энд нэмэгдэнэ -->
+      <div class="ad-slide active">
+        <div class="ad-banner">
+          <div class="ad-text">
+            <strong>🏢 Таны компанийн реклам энд</strong>
+            <div>Сарын 50,000₮-өөс эхлэн рекламаа байршуул</div>
+          </div>
+          <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
+        </div>
       </div>
-      <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
     </div>
-    <div class="ad-label">Реклам</div>
+    <div class="ad-dots" id="ad-dots"></div>
   </div>
 </div>
 
@@ -895,28 +995,101 @@ function renderNewsList(news, list) {
 }
 
 // ============================================================
-// AD
+// AD — РЕКЛАМ СЛАЙДЕР (5 секунд)
 // ============================================================
+let adInterval = null;
+let adIndex = 0;
+let adsData = [];
+
 async function loadAd() {
   try {
-    const ads = await supaFetch('ads', 'active=eq.true&limit=1');
-    if (ads && ads.length > 0) {
-      const ad = ads[0];
-      const imgHtml = ad.image_url ? `<img src="${ad.image_url}" style="max-height:60px;border-radius:8px;margin-right:12px;">` : '';
-      document.getElementById('ad-inner').innerHTML = `
-        <div class="ad-banner">
-          <div class="ad-text">
-            ${imgHtml}
-            <div><strong>${sanitize(ad.title)}</strong> ${sanitize(ad.description || '')}</div>
-          </div>
-          <button class="ad-btn">${sanitize(ad.button_text || 'Холбоо барих')}</button>
-        </div>
-        <div class="ad-label">Реклам</div>
-      `;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads?active=eq.true&order=created_at.desc`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      }
+    });
+    adsData = await res.json();
+    
+    if (adsData && adsData.length > 0) {
+      renderAds();
+      startAdSlider();
+    } else {
+      showDefaultAd();
     }
   } catch (error) {
     console.error('loadAd error:', error);
+    showDefaultAd();
   }
+}
+
+function renderAds() {
+  const slider = document.getElementById('ad-slider');
+  const dots = document.getElementById('ad-dots');
+  
+  slider.innerHTML = adsData.map((ad, index) => {
+    let mediaHtml = '';
+    if (ad.video_url) {
+      mediaHtml = `<video autoplay muted loop playsinline style="max-height:80px;border-radius:8px;object-fit:cover;">
+        <source src="${ad.video_url}" type="video/mp4">
+      </video>`;
+    } else if (ad.image_url) {
+      mediaHtml = `<img src="${ad.image_url}" style="max-height:80px;border-radius:8px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
+    }
+    
+    return `<div class="ad-slide${index === 0 ? ' active' : ''}" data-index="${index}">
+      <div class="ad-banner">
+        ${mediaHtml}
+        <div class="ad-text">
+          <strong>${sanitize(ad.title)}</strong>
+          <div>${sanitize(ad.description || '')}</div>
+        </div>
+        <button class="ad-btn" onclick="location.href='#contact'">${sanitize(ad.button_text || 'Холбоо барих')}</button>
+      </div>
+    </div>`;
+  }).join('');
+  
+  dots.innerHTML = adsData.map((_, i) => 
+    `<button class="ad-dot${i === 0 ? ' active' : ''}" onclick="goToAd(${i})"></button>`
+  ).join('');
+}
+
+function showDefaultAd() {
+  const slider = document.getElementById('ad-slider');
+  slider.innerHTML = `
+    <div class="ad-slide active">
+      <div class="ad-banner">
+        <div class="ad-text">
+          <strong>🏢 Таны компанийн реклам энд</strong>
+          <div>Сарын 50,000₮-өөс эхлэн рекламаа байршуул</div>
+        </div>
+        <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
+      </div>
+    </div>
+  `;
+}
+
+function startAdSlider() {
+  if (adInterval) clearInterval(adInterval);
+  if (adsData.length <= 1) return;
+  
+  adInterval = setInterval(() => {
+    const nextIndex = (adIndex + 1) % adsData.length;
+    goToAd(nextIndex);
+  }, 5000); // 5 секунд
+}
+
+function goToAd(index) {
+  if (index === adIndex) return;
+  adIndex = index;
+  
+  document.querySelectorAll('.ad-slide').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
+  
+  document.querySelectorAll('.ad-dot').forEach((el, i) => {
+    el.classList.toggle('active', i === index);
+  });
 }
 
 // ============================================================
@@ -1035,6 +1208,21 @@ function goSection(id) {
     
     console.log('%c🔐 КиноЭзэн — Footer дээр 3 товшиход админ нээгдэнэ', 'font-size:14px;color:#4ade80;font-weight:bold;');
 })();
+
+// ============================================================
+// NAV TOGGLE
+// ============================================================
+function toggleNav() {
+  const nav = document.getElementById('nav-links');
+  const right = document.getElementById('nav-right');
+  if (nav) nav.classList.toggle('open');
+  if (right) right.classList.toggle('open');
+}
+
+function toggleMobileSearch() {
+  const bar = document.getElementById('mobile-search-bar');
+  if (bar) bar.classList.toggle('open');
+}
 
 // ============================================================
 // INIT
