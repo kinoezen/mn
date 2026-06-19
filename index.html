@@ -420,25 +420,25 @@
     </div>
     
     <!-- 3. Сургалт (ШИНЭ) -->
-    <div class="mcat-card mcat-lesson" onclick="location.href='lessons.html'" tabindex="0" role="button" aria-label="Сургалт">
+    <div class="mcat-card mcat-lesson" id="mcat-lesson" onclick="openMcatDropdown(this,'Сургалтууд')" tabindex="0" role="button" aria-label="Сургалтууд">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgLesson)"/><defs><linearGradient id="mgLesson" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="9" y="12" width="24" height="20" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1.5"/><line x1="14" y1="17" x2="28" y2="17" stroke="white" stroke-width="1.5"/><line x1="14" y1="21" x2="25" y2="21" stroke="white" stroke-width="1.5"/><line x1="14" y1="25" x2="22" y2="25" stroke="white" stroke-width="1.5"/></svg></div>
-      <div class="mcat-label">Сургалт</div><div class="mcat-sub">VN, Capcut, AI</div><div class="mcat-badge">📚</div>
+      <div class="mcat-label">Сургалтууд</div><div class="mcat-sub">VN, AI, YouTube</div><div class="mcat-badge">📚</div>
     </div>
     
     <!-- 4. Програм (ШИНЭ) -->
-    <div class="mcat-card mcat-software" onclick="location.href='software.html'" tabindex="0" role="button" aria-label="Програм">
+    <div class="mcat-card mcat-software" id="mcat-software" onclick="openMcatDropdown(this,'Програм')" tabindex="0" role="button" aria-label="Програм">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgSoftware)"/><defs><linearGradient id="mgSoftware" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><rect x="10" y="10" width="22" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="14" y1="16" x2="28" y2="16" stroke="white" stroke-width="1.5"/><line x1="14" y1="20" x2="28" y2="20" stroke="white" stroke-width="1.5"/><line x1="14" y1="24" x2="24" y2="24" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Програм</div><div class="mcat-sub">Татаж авах</div><div class="mcat-badge">💻</div>
     </div>
     
     <!-- 5. Зар мэдээ (ШИНЭ) -->
-    <div class="mcat-card mcat-ads" onclick="location.href='market-ads.html'" tabindex="0" role="button" aria-label="Зар мэдээ">
+    <div class="mcat-card mcat-ads" id="mcat-ads" onclick="openMcatDropdown(this,'Зар мэдээ')" tabindex="0" role="button" aria-label="Зар мэдээ">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgAds)"/><defs><linearGradient id="mgAds" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><rect x="8" y="14" width="26" height="16" rx="2" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="12" y1="18" x2="30" y2="18" stroke="white" stroke-width="1.5"/><line x1="12" y1="22" x2="26" y2="22" stroke="white" stroke-width="1.5"/><line x1="12" y1="26" x2="22" y2="26" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Зар мэдээ</div><div class="mcat-sub">Үл хөдлөх, ажил</div><div class="mcat-badge">📢</div>
     </div>
     
     <!-- 6. Е-Худалдаа (ШИНЭ) -->
-    <div class="mcat-card mcat-shop" onclick="location.href='ecommerce.html'" tabindex="0" role="button" aria-label="Е-Худалдаа">
+    <div class="mcat-card mcat-shop" id="mcat-shop" onclick="openMcatDropdown(this,'Е-Худалдаа')" tabindex="0" role="button" aria-label="Е-Худалдаа">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgShop)"/><defs><linearGradient id="mgShop" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="8" y="14" width="26" height="16" rx="2" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><circle cx="16" cy="24" r="2" fill="white"/><circle cx="26" cy="24" r="2" fill="white"/><path d="M12 14l-2 4h22l-2-4" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Е-Худалдаа</div><div class="mcat-sub">Бараа, дэлгүүр</div><div class="mcat-badge">🛒</div>
     </div>
@@ -470,7 +470,7 @@
     </div>
     
     <!-- 11. AI мэдлэг -->
-    <div class="mcat-card mcat-ai" onclick="openMcatDropdown(this,'AI')" tabindex="0" role="button" aria-label="AI мэдлэг">
+    <div class="mcat-card mcat-ai" onclick="openMcatDropdown(this,'AI мэдлэг')" tabindex="0" role="button" aria-label="AI мэдлэг">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg></div>
       <div class="mcat-label">AI мэдлэг</div><div class="mcat-sub">Хиймэл оюун</div><div class="mcat-badge">4</div>
     </div>
@@ -878,7 +878,7 @@ function initCarousel() {
 }
 
 // ============================================================
-// АНГИЛАЛЫН ДЭД ЦЭС
+// АНГИЛАЛЫН ДЭД ЦЭС — БҮХ ЦЭС ДЭД ЦЭСТЭЙ
 // ============================================================
 function setActiveMcat(el) {
   document.querySelectorAll('.mcat-card').forEach(c => c.classList.remove('selected'));
@@ -902,22 +902,81 @@ function showMoviesOnly(el) {
   setTimeout(() => goSection('movies'), 100);
 }
 
-function showNewsOnly(el) {
-  setActiveMcat(el);
-  closeMcatDropdown();
-  document.getElementById('news-category-label').textContent = 'Мэдээ';
-  loadNews();
-  setTimeout(() => goSection('news'), 100);
-}
-
+// ===== БҮХ ЦЭСНИЙ ДЭД ЦЭСНҮҮД =====
 const MCAT_MENUS = {
-  'Аялал': [{ label: 'Бүгд', cat: '' }, { label: 'Миний аялал', cat: 'Миний аялал' }, { label: 'Монгол аялал', cat: 'Монгол аялал' }, { label: 'Гадаад аялал', cat: 'Гадаад аялал' }],
-  'Шинжлэх ухаан': [{ label: 'Бүгд', cat: '' }, { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' }, { label: 'Ирээдүй', cat: 'Ирээдүй' }, { label: 'Туршилт', cat: 'Туршилт' }],
-  'AI': [{ label: 'Бүгд', cat: '' }, { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' }, { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' }, { label: 'Сургалт', cat: 'Сургалт' }],
-  'Кино түүх': [{ label: 'Бүгд', cat: '' }, { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' }, { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }],
-  'Танин мэдэхүй': [{ label: 'Бүгд', cat: '' }, { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' }, { label: 'Гайхамшиг', cat: 'Гайхамшиг' }, { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }],
-  'Одод ертөнц': [{ label: 'Бүгд', cat: '' }, { label: 'Харь гараг', cat: 'Харь гараг' }, { label: 'Манай ертөнц', cat: 'Манай ертөнц' }],
-  'Мэдээ': [{ label: 'Бүгд', cat: '' }, { label: 'Монгол мэдээ', cat: 'Монгол мэдээ' }, { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' }, { label: 'Улс төр', cat: 'Улс төр' }, { label: 'Сурвалжилга', cat: 'Сурвалжилга' }]
+  // ===== 1-Р ЭГНЭЭ: МӨНГӨ ОЛДОГ =====
+  'Сургалтууд': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'VN + Capcut сургалт', cat: 'VN Capcut' },
+    { label: 'AI Веб хөгжүүлэлт', cat: 'AI Веб' },
+    { label: 'YouTube суваг хэрхэн өсгөх вэ?', cat: 'YouTube' },
+    { label: 'Дата анализ үндэс', cat: 'Дата анализ' },
+    { label: 'AI агент бүтээх', cat: 'AI агент' },
+    { label: 'Олон улсын онлайн худалдаа', cat: 'Олон улсын худалдаа' }
+  ],
+  'Програм': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Татаж авах програм', cat: 'Татаж авах' },
+    { label: 'Онлайн програм', cat: 'Онлайн програм' },
+    { label: 'Mobile app', cat: 'Mobile app' }
+  ],
+  'Зар мэдээ': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Үл хөдлөх', cat: 'Үл хөдлөх' },
+    { label: 'Ажлын зар', cat: 'Ажлын зар' },
+    { label: 'Тээврийн хэрэгсэл', cat: 'Тээвэр' },
+    { label: 'Бараа', cat: 'Бараа' },
+    { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' }
+  ],
+  'Е-Худалдаа': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Цахим дэлгүүр', cat: 'Цахим дэлгүүр' },
+    { label: 'Бараа', cat: 'Бараа' },
+    { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' },
+    { label: 'Олон улсын худалдаа', cat: 'Олон улсын худалдаа' }
+  ],
+  // ===== 2-Р ЭГНЭЭ: МЭДЛЭГ =====
+  'Аялал': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Миний аялал', cat: 'Миний аялал' },
+    { label: 'Монгол аялал', cat: 'Монгол аялал' },
+    { label: 'Гадаад аялал', cat: 'Гадаад аялал' }
+  ],
+  'Шинжлэх ухаан': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
+    { label: 'Ирээдүй', cat: 'Ирээдүй' },
+    { label: 'Туршилт', cat: 'Туршилт' }
+  ],
+  'AI мэдлэг': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
+    { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
+    { label: 'Сургалт', cat: 'Сургалт' }
+  ],
+  'Кино түүх': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
+    { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }
+  ],
+  'Танин мэдэхүй': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
+    { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
+    { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }
+  ],
+  'Одод ертөнц': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Харь гараг', cat: 'Харь гараг' },
+    { label: 'Манай ертөнц', cat: 'Манай ертөнц' }
+  ],
+  'Мэдээ': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Монгол мэдээ', cat: 'Монгол мэдээ' },
+    { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' },
+    { label: 'Улс төр', cat: 'Улс төр' },
+    { label: 'Сурвалжилга', cat: 'Сурвалжилга' }
+  ]
 };
 
 let currentMainCategory = '';
