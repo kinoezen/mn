@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>КиноЭзэн — Монгол хэлний кино платформ</title>
-<meta name="description" content="КиноЭзэн — Монгол хэлний кино товчлол, шинэ кинонууд, мэдээ мэдээлэл.">
-<meta name="keywords" content="монгол кино, кино үзэх, монгол дуу, кино мэдээ, КиноЭзэн">
+<title>Эзэн — Монгол хэлний кино платформ</title>
+<meta name="description" content="Эзэн — Монгол хэлний кино товчлол, шинэ кинонууд, мэдээ мэдээлэл.">
+<meta name="keywords" content="монгол кино, кино үзэх, монгол дуу, кино мэдээ, Эзэн">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="КиноЭзэн — Монгол хэлний кино платформ">
+<meta property="og:title" content="Эзэн — Монгол хэлний кино платформ">
 <meta property="og:description" content="Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.">
-<meta property="og:url" content="https://kinoezen.mn">
+<meta property="og:url" content="https://ezen.mn">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://kinoezen.mn">
+<link rel="canonical" href="https://ezen.mn">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="navbar.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","name":"КиноЭзэн","url":"https://kinoezen.mn"}
+{"@context":"https://schema.org","@type":"WebSite","name":"Эзэн","url":"https://ezen.mn"}
 </script>
 <style>
   /* ===== ОНЦЛОХ КИНОНЫ ЗУРГИЙГ ТОМРУУЛАХ ===== */
@@ -267,13 +267,70 @@
     margin-top: 4px;
     letter-spacing: 2px;
   }
+
+  /* ===== 14 ЦЭС — 2 ЭГНЭЭ, 7 БАГАНА ===== */
+  .main-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 0 24px 8px;
+  }
+
+  /* Шинэ цэснүүдийн өнгө */
+  .mcat-lesson .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
+  .mcat-software .mcat-icon { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+  .mcat-ads .mcat-icon { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+  .mcat-shop .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
+
+  .mcat-lesson .mcat-badge { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+  .mcat-software .mcat-badge { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+  .mcat-ads .mcat-badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+  .mcat-shop .mcat-badge { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
+
+  /* ===== RESPONSIVE — 7 БАГАНА ===== */
+  @media(max-width: 900px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 7px;
+      padding: 0 16px 8px;
+    }
+    .mcat-icon { width: 36px; height: 36px; }
+    .mcat-icon svg { width: 36px; height: 36px; }
+    .mcat-label { font-size: 11px; }
+    .mcat-sub { display: none; }
+  }
+
+  @media(max-width: 600px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 0 12px 8px;
+    }
+    .mcat-card { padding: 9px 4px 8px; border-radius: 10px; }
+    .mcat-icon { width: 28px; height: 28px; }
+    .mcat-icon svg { width: 28px; height: 28px; }
+    .mcat-label { font-size: 9px; }
+    .mcat-badge { display: none; }
+    .mcat-sub { display: none; }
+  }
+
+  @media(max-width: 400px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .mcat-card { padding: 6px 2px 6px; }
+    .mcat-icon { width: 22px; height: 22px; }
+    .mcat-icon svg { width: 22px; height: 22px; }
+    .mcat-label { font-size: 8px; }
+  }
 </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="nav" role="navigation" aria-label="Үндсэн цэс">
-  <a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
+  <a href="index.html" class="logo" aria-label="Эзэн нүүр хуудас">
     <div class="logo-icon">
       <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
@@ -287,7 +344,7 @@
         <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
       </svg>
     </div>
-    <div class="logo-text">КиноЭзэн</div>
+    <div class="logo-text">Эзэн</div>
   </a>
   <button class="mobile-search-btn" id="mobile-search-btn" onclick="toggleMobileSearch()" aria-label="Хайх">🔍</button>
   <div class="nav-links" id="nav-links">
@@ -318,14 +375,13 @@
     <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
     <div class="weather-item">📍 Улаанбаатар</div>
   </div>
-  <div class="date-text">КиноЭзэн — Монгол кино платформ</div>
+  <div class="date-text">Эзэн — Монгол кино платформ</div>
 </div>
 
 <!-- ===== AD BANNER — СЛАЙДЕР ===== -->
 <div class="ad-wrapper">
   <div class="ad-slider-container">
     <div class="ad-slider" id="ad-slider">
-      <!-- Рекламууд динамикаар энд нэмэгдэнэ -->
       <div class="ad-slide active">
         <div class="ad-banner">
           <div class="ad-text">
@@ -340,7 +396,7 @@
   </div>
 </div>
 
-<!-- ========== АНГИЛАЛ СОНГОХ ========== -->
+<!-- ========== АНГИЛАЛ СОНГОХ — 14 ЦЭС ========== -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -348,56 +404,95 @@
     </div>
   </div>
   <div class="main-cats-grid" id="main-cats-grid">
-    <!-- Бүгд -->
+    
+    <!-- ===== 1-Р ЭГНЭЭ: МӨНГӨ ОЛОХ ҮЙЛЧИЛГЭЭ (7 цэс) ===== -->
+    
+    <!-- 1. Бүгд -->
     <div class="mcat-card mcat-all selected" id="mcat-all" onclick="showAll(this)" tabindex="0" role="button" aria-label="Бүгд">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="21" fill="url(#mgAll)"/><defs><linearGradient id="mgAll" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><circle cx="21" cy="21" r="7" fill="white" fill-opacity="0.9"/><circle cx="21" cy="21" r="11" fill="none" stroke="white" stroke-width="1.5" stroke-opacity="0.5"/><circle cx="21" cy="21" r="15" fill="none" stroke="white" stroke-width="1" stroke-opacity="0.25"/></svg></div>
       <div class="mcat-label">Бүгд</div><div class="mcat-sub">Бүх агуулга</div><div class="mcat-badge" id="badge-all">—</div>
     </div>
-    <!-- Бүтээгдэхүүн -->
-    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="Бүтээгдэхүүн">
+    
+    <!-- 2. AI үйлчилгээ -->
+    <div class="mcat-card mcat-product" onclick="location.href='services.html'" tabindex="0" role="button" aria-label="AI үйлчилгээ">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg8)"/><defs><linearGradient id="mg8" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#ec4899"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs><rect x="8" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/><rect x="23" y="8" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="8" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.6"/><rect x="23" y="23" width="11" height="11" rx="2.5" fill="white" fill-opacity="0.85"/></svg></div>
-      <div class="mcat-label">Бүтээгдэхүүн</div><div class="mcat-sub">Манай үйлчилгээ</div><div class="mcat-badge">→</div>
+      <div class="mcat-label">AI үйлчилгээ</div><div class="mcat-sub">TTS, STT, Зураг</div><div class="mcat-badge">→</div>
     </div>
-    <!-- Одод ертөнц -->
-    <div class="mcat-card mcat-stars" onclick="openMcatDropdown(this,'Одод ертөнц')" tabindex="0" role="button" aria-label="Одод ертөнц">
-      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg></div>
-      <div class="mcat-label">Одод ертөнц</div><div class="mcat-sub">Сансар огторгуй</div><div class="mcat-badge">✦</div>
+    
+    <!-- 3. Сургалт (ШИНЭ) -->
+    <div class="mcat-card mcat-lesson" onclick="location.href='lessons.html'" tabindex="0" role="button" aria-label="Сургалт">
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgLesson)"/><defs><linearGradient id="mgLesson" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="9" y="12" width="24" height="20" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1.5"/><line x1="14" y1="17" x2="28" y2="17" stroke="white" stroke-width="1.5"/><line x1="14" y1="21" x2="25" y2="21" stroke="white" stroke-width="1.5"/><line x1="14" y1="25" x2="22" y2="25" stroke="white" stroke-width="1.5"/></svg></div>
+      <div class="mcat-label">Сургалт</div><div class="mcat-sub">VN, Capcut, AI</div><div class="mcat-badge">📚</div>
     </div>
-    <!-- Кино -->
+    
+    <!-- 4. Програм (ШИНЭ) -->
+    <div class="mcat-card mcat-software" onclick="location.href='software.html'" tabindex="0" role="button" aria-label="Програм">
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgSoftware)"/><defs><linearGradient id="mgSoftware" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><rect x="10" y="10" width="22" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="14" y1="16" x2="28" y2="16" stroke="white" stroke-width="1.5"/><line x1="14" y1="20" x2="28" y2="20" stroke="white" stroke-width="1.5"/><line x1="14" y1="24" x2="24" y2="24" stroke="white" stroke-width="1.5"/></svg></div>
+      <div class="mcat-label">Програм</div><div class="mcat-sub">Татаж авах</div><div class="mcat-badge">💻</div>
+    </div>
+    
+    <!-- 5. Зар мэдээ (ШИНЭ) -->
+    <div class="mcat-card mcat-ads" onclick="location.href='market-ads.html'" tabindex="0" role="button" aria-label="Зар мэдээ">
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgAds)"/><defs><linearGradient id="mgAds" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><rect x="8" y="14" width="26" height="16" rx="2" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="12" y1="18" x2="30" y2="18" stroke="white" stroke-width="1.5"/><line x1="12" y1="22" x2="26" y2="22" stroke="white" stroke-width="1.5"/><line x1="12" y1="26" x2="22" y2="26" stroke="white" stroke-width="1.5"/></svg></div>
+      <div class="mcat-label">Зар мэдээ</div><div class="mcat-sub">Үл хөдлөх, ажил</div><div class="mcat-badge">📢</div>
+    </div>
+    
+    <!-- 6. Е-Худалдаа (ШИНЭ) -->
+    <div class="mcat-card mcat-shop" onclick="location.href='ecommerce.html'" tabindex="0" role="button" aria-label="Е-Худалдаа">
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgShop)"/><defs><linearGradient id="mgShop" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="8" y="14" width="26" height="16" rx="2" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><circle cx="16" cy="24" r="2" fill="white"/><circle cx="26" cy="24" r="2" fill="white"/><path d="M12 14l-2 4h22l-2-4" stroke="white" stroke-width="1.5"/></svg></div>
+      <div class="mcat-label">Е-Худалдаа</div><div class="mcat-sub">Бараа, дэлгүүр</div><div class="mcat-badge">🛒</div>
+    </div>
+    
+    <!-- 7. Кино -->
     <div class="mcat-card mcat-movie" id="mcat-movie" onclick="showMoviesOnly(this)" tabindex="0" role="button" aria-label="Кино">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg1)"/><defs><linearGradient id="mg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#e63946"/><stop offset="100%" stop-color="#f4a261"/></linearGradient></defs><rect x="7" y="13" width="28" height="18" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><path d="M12 13v18M30 13v18M7 21h28" stroke="white" stroke-width="1.5"/><circle cx="9.5" cy="16" r="1.5" fill="white"/><circle cx="9.5" cy="27" r="1.5" fill="white"/><circle cx="32.5" cy="16" r="1.5" fill="white"/><circle cx="32.5" cy="27" r="1.5" fill="white"/><path d="M18 18l7 3-7 3V18z" fill="white"/></svg></div>
       <div class="mcat-label">Кино</div><div class="mcat-sub">Монгол дуутай</div><div class="mcat-badge" id="badge-movie">8</div>
     </div>
-    <!-- Мэдээ -->
+    
+    <!-- ===== 2-Р ЭГНЭЭ: МЭДЛЭГ / СОНИРХОЛ (7 цэс) ===== -->
+    
+    <!-- 8. Мэдээ -->
     <div class="mcat-card mcat-news" id="mcat-news" onclick="openMcatDropdown(this,'Мэдээ')" tabindex="0" role="button" aria-label="Мэдээ">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg2)"/><defs><linearGradient id="mg2" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#4ade80"/><stop offset="100%" stop-color="#22c55e"/></linearGradient></defs><rect x="9" y="11" width="24" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><line x1="13" y1="17" x2="29" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="21" x2="29" y2="21" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="25" x2="22" y2="25" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
       <div class="mcat-label">Мэдээ</div><div class="mcat-sub">Шинэ мэдээлэл</div><div class="mcat-badge" id="badge-news">4</div>
     </div>
-    <!-- Аялал -->
+    
+    <!-- 9. Аялал -->
     <div class="mcat-card mcat-travel" onclick="openMcatDropdown(this,'Аялал')" tabindex="0" role="button" aria-label="Аялал">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg3)"/><defs><linearGradient id="mg3" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#06b6d4"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><path d="M21 9C15 9 10 14 10 19.5c0 8 11 15.5 11 15.5s11-7.5 11-15.5C32 14 27 9 21 9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><circle cx="21" cy="19" r="3.5" fill="white"/></svg></div>
       <div class="mcat-label">Аялал</div><div class="mcat-sub">Дэлхийн газрууд</div><div class="mcat-badge">3</div>
     </div>
-    <!-- Шинжлэх ухаан -->
+    
+    <!-- 10. Шинжлэх ухаан -->
     <div class="mcat-card mcat-science" onclick="openMcatDropdown(this,'Шинжлэх ухаан')" tabindex="0" role="button" aria-label="Шинжлэх ухаан">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg4)"/><defs><linearGradient id="mg4" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient></defs><path d="M16 9v9l-5.5 12h21L26 18V9" stroke="white" stroke-width="2" stroke-linejoin="round"/><line x1="14" y1="9" x2="28" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="18.5" cy="26" r="1.8" fill="white"/><circle cx="24" cy="29" r="1.3" fill="white"/></svg></div>
       <div class="mcat-label">Шинжлэх ухаан</div><div class="mcat-sub">Нээлт судалгаа</div><div class="mcat-badge">4</div>
     </div>
-    <!-- AI -->
-    <div class="mcat-card mcat-ai" onclick="openMcatDropdown(this,'AI')" tabindex="0" role="button" aria-label="AI">
+    
+    <!-- 11. AI мэдлэг -->
+    <div class="mcat-card mcat-ai" onclick="openMcatDropdown(this,'AI')" tabindex="0" role="button" aria-label="AI мэдлэг">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg5)"/><defs><linearGradient id="mg5" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs><rect x="11" y="11" width="20" height="20" rx="4" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><circle cx="17" cy="19" r="2" fill="white"/><circle cx="25" cy="19" r="2" fill="white"/><path d="M15 25c0 0 2 2.5 6 2.5s6-2.5 6-2.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="17" y1="11" x2="17" y2="8" stroke="white" stroke-width="2"/><line x1="25" y1="11" x2="25" y2="8" stroke="white" stroke-width="2"/><line x1="21" y1="11" x2="21" y2="7" stroke="white" stroke-width="2"/></svg></div>
-      <div class="mcat-label">AI</div><div class="mcat-sub">Хиймэл оюун</div><div class="mcat-badge">4</div>
+      <div class="mcat-label">AI мэдлэг</div><div class="mcat-sub">Хиймэл оюун</div><div class="mcat-badge">4</div>
     </div>
-    <!-- Кино түүх -->
+    
+    <!-- 12. Одод ертөнц -->
+    <div class="mcat-card mcat-stars" onclick="openMcatDropdown(this,'Одод ертөнц')" tabindex="0" role="button" aria-label="Одод ертөнц">
+      <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgStars)"/><defs><linearGradient id="mgStars" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#facc15"/><stop offset="100%" stop-color="#fb923c"/></linearGradient></defs><polygon points="21,8 24.5,17 34,17 26.5,22.5 29.5,32 21,26.5 12.5,32 15.5,22.5 8,17 17.5,17" fill="white" fill-opacity="0.9"/></svg></div>
+      <div class="mcat-label">Одод ертөнц</div><div class="mcat-sub">Сансар огторгуй</div><div class="mcat-badge">✦</div>
+    </div>
+    
+    <!-- 13. Кино түүх -->
     <div class="mcat-card mcat-history" onclick="openMcatDropdown(this,'Кино түүх')" tabindex="0" role="button" aria-label="Кино түүх">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg6)"/><defs><linearGradient id="mg6" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#dc2626"/></linearGradient></defs><circle cx="21" cy="21" r="11" fill="white" fill-opacity="0.15" stroke="white" stroke-width="2"/><polyline points="21,13 21,21 27,25" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="mcat-label">Кино түүх</div><div class="mcat-sub">Классик кинонууд</div><div class="mcat-badge">4</div>
     </div>
-    <!-- Танин мэдэхүй -->
+    
+    <!-- 14. Танин мэдэхүй -->
     <div class="mcat-card mcat-knowledge" onclick="openMcatDropdown(this,'Танин мэдэхүй')" tabindex="0" role="button" aria-label="Танин мэдэхүй">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mg7)"/><defs><linearGradient id="mg7" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#0891b2"/></linearGradient></defs><path d="M21 9c-5 0-9 4-9 9 0 3.4 1.9 6.4 4.7 7.9V29h8.6v-3.1C28.1 24.4 30 21.4 30 18c0-5-4-9-9-9z" fill="white" fill-opacity="0.2" stroke="white" stroke-width="2"/><rect x="17" y="29" width="8" height="2.5" rx="1" fill="white"/><rect x="18" y="31.5" width="6" height="2" rx="1" fill="white"/></svg></div>
       <div class="mcat-label">Танин мэдэхүй</div><div class="mcat-sub">Мэдлэг боловсрол</div><div class="mcat-badge">4</div>
     </div>
+    
   </div>
 </section>
 
@@ -473,7 +568,7 @@
 <footer class="footer" id="contact" role="contentinfo">
   <div class="footer-grid">
     <div class="footer-col">
-      <h4>КиноЭзэн</h4>
+      <h4>Эзэн</h4>
       <p>Монгол хэлний кино товчлол болон AI үйлчилгээний платформ.</p>
       <div class="footer-social">
         <a class="social-btn sb-fb" href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
@@ -486,7 +581,7 @@
     <div class="footer-col">
       <h4>Холбоо барих</h4>
       <a href="mailto:kinoezen@gmail.com">📧 kinoezen@gmail.com</a>
-      <a href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer">📘 Facebook: КиноЭзэн</a>
+      <a href="https://facebook.com/KinoEzen" target="_blank" rel="noopener noreferrer">📘 Facebook: Эзэн</a>
       <a href="https://m.me/KinoEzen" target="_blank" rel="noopener noreferrer">💬 Messenger холбоо</a>
       <a href="https://x.com/kinoezen" target="_blank" rel="noopener noreferrer">𝕏 X: @kinoezen</a>
     </div>
@@ -497,7 +592,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy" id="secret-admin-trigger">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+    <div class="footer-copy" id="secret-admin-trigger">© 2026 Эзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
     <nav class="footer-links">
       <a href="privacy.html">Нууцлал</a>
       <a href="terms.html">Үйлчилгээний нөхцөл</a>
@@ -549,7 +644,7 @@
 <script src="navbar.js"></script>
 <script>
 // ============================================================
-// КИНОЭЗЭН — ҮНДСЭН JAVASCRIPT
+// ЭЗЭН — ҮНДСЭН JAVASCRIPT
 // ============================================================
 
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -596,7 +691,7 @@ const genreGradients = {
 };
 
 // ============================================================
-// ЦАГ АГААРЫН МЭДЭЭ (Монгол хэл)
+// ЦАГ АГААРЫН МЭДЭЭ
 // ============================================================
 async function loadWeather() {
   try {
@@ -615,7 +710,7 @@ async function loadWeather() {
 }
 
 // ============================================================
-// ОНЦЛОХ КИНО КАРУСЕЛЬ (Supabase-аас)
+// ОНЦЛОХ КИНО КАРУСЕЛЬ
 // ============================================================
 let carouselIndex = 0;
 let carouselAuto;
@@ -651,8 +746,8 @@ function buildFeaturedCardFromMovie(m) {
       <p class="featured-desc">${sanitize(m.description || 'Киноны тухай...')}</p>
       <div class="featured-foot">
         <div class="author">
-          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">КЭ</div>
-          <div class="ava-name">КиноЭзэн</div>
+          <div class="ava" style="background:linear-gradient(135deg,#e63946,#f4a261)">Э</div>
+          <div class="ava-name">Эзэн</div>
         </div>
         <div class="stats-row">
           <div class="stat-item">👁 ${m.views || 0}</div>
@@ -915,13 +1010,13 @@ function renderMovieCards(movies, list) {
       '🎬';
     return `<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
       <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g || 'Кино'}</span></div>
-      <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">КиноЭзэн</div>
+      <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">Эзэн</div>
       <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div></article>`;
   }).join('');
 }
 
 // ============================================================
-// NEWS - Supabase-аас татах (ЦАГИЙГ ЗӨВ ХАРУУЛНА)
+// NEWS
 // ============================================================
 async function loadNews() {
   const list = document.getElementById('news-list');
@@ -968,7 +1063,6 @@ function renderNewsList(news, list) {
     const id = sanitize(item.id);
     const views = parseInt(item.views) || 0;
     
-    // 🔥 ЦАГИЙГ ЗӨВ ХАРУУЛАХ (огноо + цаг)
     const date = new Date(item.created_at);
     const formattedDate = date.getFullYear() + '.' + 
       (date.getMonth()+1).toString().padStart(2,'0') + '.' + 
@@ -995,7 +1089,7 @@ function renderNewsList(news, list) {
 }
 
 // ============================================================
-// AD — РЕКЛАМ СЛАЙДЕР (5 секунд)
+// AD — РЕКЛАМ СЛАЙДЕР
 // ============================================================
 let adInterval = null;
 let adIndex = 0;
@@ -1076,7 +1170,7 @@ function startAdSlider() {
   adInterval = setInterval(() => {
     const nextIndex = (adIndex + 1) % adsData.length;
     goToAd(nextIndex);
-  }, 5000); // 5 секунд
+  }, 5000);
 }
 
 function goToAd(index) {
@@ -1145,7 +1239,7 @@ function goSection(id) {
 }
 
 // ============================================================
-// НУУЦ АДМИН ОРОХ — FOOTER ДЭЭР 3 ТОВШИЛТ
+// НУУЦ АДМИН ОРОХ
 // ============================================================
 (function() {
     let clickCount = 0;
@@ -1206,7 +1300,7 @@ function goSection(id) {
         }, 1500);
     }
     
-    console.log('%c🔐 КиноЭзэн — Footer дээр 3 товшиход админ нээгдэнэ', 'font-size:14px;color:#4ade80;font-weight:bold;');
+    console.log('%c🔐 Эзэн — Footer дээр 3 товшиход админ нээгдэнэ', 'font-size:14px;color:#4ade80;font-weight:bold;');
 })();
 
 // ============================================================
