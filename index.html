@@ -72,7 +72,7 @@
     letter-spacing: 0.5px;
   }
 
-  /* ===== AD — 728×90 ===== */
+  /* ===== AD — 728×90 (ЗУРААСГҮЙ) ===== */
   .ad-wrapper {
     max-width: 728px;
     margin: 8px auto;
@@ -85,7 +85,8 @@
     overflow: hidden;
     border-radius: 12px;
     background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-    border: 1px solid rgba(74, 222, 128, 0.15);
+    border: none;
+    box-shadow: none;
   }
   .ad-slider {
     position: relative;
@@ -102,43 +103,44 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    gap: 12px;
+    padding: 0 16px;
+    gap: 10px;
   }
   .ad-slide .ad-banner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: nowrap;
   }
   .ad-slide .ad-banner img,
   .ad-slide .ad-banner video {
-    max-height: 70px;
-    border-radius: 8px;
+    max-height: 60px;
+    border-radius: 6px;
     object-fit: cover;
   }
   .ad-slide .ad-text {
     flex: 1;
-    min-width: 120px;
+    min-width: 80px;
   }
   .ad-slide .ad-text strong {
     color: #4ade80;
-    font-size: 14px;
+    font-size: 13px;
+    display: block;
   }
   .ad-slide .ad-text div {
     color: rgba(255,255,255,0.6);
-    font-size: 12px;
+    font-size: 11px;
   }
   .ad-btn {
     background: linear-gradient(90deg, #4ade80, #fbbf24);
     border: none;
     color: #0a0a14;
-    padding: 6px 16px;
+    padding: 5px 14px;
     border-radius: 30px;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 11px;
     cursor: pointer;
     white-space: nowrap;
   }
@@ -149,15 +151,12 @@
   .ad-dots {
     display: none;
   }
-  .ad-label {
-    display: none;
-  }
   .ad-size-label {
     position: absolute;
     bottom: 4px;
     right: 8px;
-    font-size: 10px;
-    color: rgba(255,255,255,0.15);
+    font-size: 9px;
+    color: rgba(255,255,255,0.12);
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -312,7 +311,7 @@
     background: rgba(74,222,128,0.12);
   }
 
-  /* ===== MOBILE BOTTOM NAV ===== */
+  /* ===== MOBILE BOTTOM NAV — 4 ЦЭС ===== */
   .mobile-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -327,7 +326,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 500px;
+    max-width: 400px;
     margin: 0 auto;
   }
   .mbn-item {
@@ -335,16 +334,16 @@
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 4px 12px;
+    padding: 4px 8px;
     color: rgba(255, 255, 255, 0.4);
     text-decoration: none;
     transition: color 0.2s;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 600;
   }
   .mbn-item svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     stroke: currentColor;
     fill: none;
   }
@@ -353,6 +352,18 @@
   }
   .mbn-item:hover {
     color: rgba(255, 255, 255, 0.7);
+  }
+  .mbn-item .mbn-logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #4ade80, #fbbf24);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    color: #0a0a14;
   }
 
   /* ===== 14 ЦЭС ===== */
@@ -430,21 +441,36 @@
     display: none !important;
   }
 
-  /* ===== AD RESPONSIVE ===== */
+  /* ===== RESPONSIVE AD ===== */
   @media(max-width: 600px) {
     .ad-slide .ad-banner {
       flex-wrap: wrap;
       justify-content: center;
     }
     .ad-slide .ad-text strong {
-      font-size: 12px;
+      font-size: 11px;
     }
     .ad-slide .ad-text div {
+      font-size: 9px;
+    }
+    .ad-btn {
+      font-size: 9px;
+      padding: 4px 10px;
+    }
+    .ad-slider-container {
+      height: 80px;
+    }
+  }
+  @media(max-width: 400px) {
+    .ad-slider-container {
+      height: 70px;
+    }
+    .ad-slide .ad-text strong {
       font-size: 10px;
     }
     .ad-btn {
-      font-size: 10px;
-      padding: 4px 12px;
+      font-size: 8px;
+      padding: 3px 8px;
     }
   }
 </style>
@@ -473,6 +499,7 @@
   <div class="nav-links" id="nav-links">
     <a href="index.html" class="active">Нүүр</a>
     <a href="movies.html">Кинонууд</a>
+    <a href="lessons.html">Сургалт</a>
     <a href="services.html">Үйлчилгээ</a>
     <a href="profile.html">Профайл</a>
   </div>
@@ -541,10 +568,10 @@
       <div class="mcat-label">AI үйлчилгээ</div><div class="mcat-sub">TTS, STT, Зураг</div><div class="mcat-badge">→</div>
     </div>
     
-    <!-- 3. Сургалтууд -->
-    <div class="mcat-card mcat-lesson" id="mcat-lesson" onclick="openMcatDropdown(this,'Сургалтууд')" tabindex="0" role="button" aria-label="Сургалтууд">
+    <!-- 3. Сургалт (багтах болгон өөрчилсөн) -->
+    <div class="mcat-card mcat-lesson" id="mcat-lesson" onclick="openMcatDropdown(this,'Сургалт')" tabindex="0" role="button" aria-label="Сургалт">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgLesson)"/><defs><linearGradient id="mgLesson" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="9" y="12" width="24" height="20" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1.5"/><line x1="14" y1="17" x2="28" y2="17" stroke="white" stroke-width="1.5"/><line x1="14" y1="21" x2="25" y2="21" stroke="white" stroke-width="1.5"/><line x1="14" y1="25" x2="22" y2="25" stroke="white" stroke-width="1.5"/></svg></div>
-      <div class="mcat-label">Сургалтууд</div><div class="mcat-sub">VN, AI, YouTube</div><div class="mcat-badge">📚</div>
+      <div class="mcat-label">Сургалт</div><div class="mcat-sub">VN, AI, YouTube</div><div class="mcat-badge">📚</div>
     </div>
     
     <!-- 4. Программ -->
@@ -719,48 +746,23 @@
   </div>
 </footer>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
+<!-- ===== MOBILE BOTTOM NAV — 4 ЦЭС ===== -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
     <a class="mbn-item active" href="index.html" aria-label="Нүүр">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/>
-      </svg>
+      <div class="mbn-logo-icon">🏠</div>
       <span>Нүүр</span>
     </a>
-    <a class="mbn-item" href="movies.html" aria-label="Кинонууд">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="2" y="4" width="20" height="16" rx="2"/>
-        <path d="M10 9l5 3-5 3V9z"/>
-      </svg>
-      <span>Кино</span>
-    </a>
-    <a class="mbn-item" href="news.html" aria-label="Топ">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-      </svg>
-      <span>Топ</span>
-    </a>
-    <a class="mbn-item" href="lessons.html" aria-label="Сургалтууд">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="4" y="4" width="16" height="16" rx="2"/>
-        <path d="M9 8l6 4-6 4V8z"/>
-      </svg>
-      <span>Сургалтууд</span>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
+      <div class="mbn-logo-icon">📚</div>
+      <span>Сургалт</span>
     </a>
     <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
-        <path d="M15.54 8.46a5 5 0 010 7.07M8.46 8.46a5 5 0 000 7.07"/>
-      </svg>
+      <div class="mbn-logo-icon">⚙️</div>
       <span>Үйлчилгээ</span>
     </a>
     <a class="mbn-item" href="profile.html" aria-label="Профайл">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-      </svg>
+      <div class="mbn-logo-icon">👤</div>
       <span>Профайл</span>
     </a>
   </div>
@@ -1018,7 +1020,7 @@ function showMoviesOnly(el) {
 }
 
 const MCAT_MENUS = {
-  'Сургалтууд': [
+  'Сургалт': [
     { label: 'Бүгд', cat: '' },
     { label: 'VN + Capcut сургалт', cat: 'VN Capcut' },
     { label: 'AI Веб хөгжүүлэлт', cat: 'AI Веб' },
@@ -1289,11 +1291,11 @@ function renderAds() {
   slider.innerHTML = adsData.map((ad, index) => {
     let mediaHtml = '';
     if (ad.video_url) {
-      mediaHtml = `<video autoplay muted loop playsinline style="max-height:70px;border-radius:8px;object-fit:cover;">
+      mediaHtml = `<video autoplay muted loop playsinline style="max-height:60px;border-radius:6px;object-fit:cover;">
         <source src="${ad.video_url}" type="video/mp4">
       </video>`;
     } else if (ad.image_url) {
-      mediaHtml = `<img src="${ad.image_url}" style="max-height:70px;border-radius:8px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
+      mediaHtml = `<img src="${ad.image_url}" style="max-height:60px;border-radius:6px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
     }
     
     return `<div class="ad-slide${index === 0 ? ' active' : ''}" data-index="${index}">
