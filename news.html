@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Мэдээ — КиноЭзэн</title>
-<meta name="description" content="КиноЭзэн мэдээ мэдээлэл — Монголын мэдээ, Дэлхий мэдээ, Улс төр, Эдийн засаг болон бусад.">
+<meta name="description" content="КиноЭзэн мэдээ мэдээлэл — Бүх төрлийн мэдээ, мэдээлэл.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://kinoezen.mn/news.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,28 +63,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .hero-stat-num{font-family:var(--font-display);font-size:28px;letter-spacing:1px;color:var(--accent);}
 .hero-stat-label{font-size:10px;color:var(--text4);font-weight:600;}
 
-/* ===== ДЭД ЦЭС (SUBCATEGORY) ===== */
+/* ===== ДЭД ЦЭС (SUBCATEGORY) — ЗӨВХӨН СОНГОСОН АНГИЛАЛ ===== */
 .subcat-bar{
-  display:flex;align-items:center;gap:0;
-  padding:0 24px;
+  display:flex;align-items:center;gap:8px;
+  padding:12px 24px;
   background:var(--bg2);
   border-bottom:2px solid var(--border);
   overflow-x:auto;scrollbar-width:none;
+  flex-wrap:nowrap;
 }
 .subcat-bar::-webkit-scrollbar{display:none;}
 .subcat-btn{
   display:flex;align-items:center;gap:6px;
-  padding:13px 16px;
+  padding:8px 14px;
   color:var(--text3);font-size:13px;font-weight:600;
   cursor:pointer;background:none;border:none;
-  border-bottom:2px solid transparent;
-  margin-bottom:-2px;
+  border-radius:var(--radius-sm);
   white-space:nowrap;flex-shrink:0;
   font-family:var(--font-body);
   transition:all 0.2s;
 }
 .subcat-btn:hover{color:var(--text);background:rgba(255,255,255,0.04);}
-.subcat-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(74,222,128,0.04);}
+.subcat-btn.active{color:var(--accent);background:rgba(74,222,128,0.12);}
 .subcat-btn .sc-icon{font-size:16px;}
 .subcat-btn .sc-count{
   font-size:10px;min-width:18px;height:18px;
@@ -105,7 +105,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .sort-select{padding:7px 12px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;outline:none;flex-shrink:0;margin-left:auto;}
 .sort-select:focus{border-color:var(--accent);}
 
-/* FEATURED NEWS */
+/* FEATURED NEWS — ЗӨВХӨН СОНГОСОН АНГИЛАЛТАЙ БОЛГОСОН */
 .featured-news{padding:16px 24px 0;}
 .featured-news-card{border-radius:var(--radius);overflow:hidden;background:var(--bg3);border:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;cursor:pointer;transition:border-color 0.3s,transform 0.3s;animation:fadeUp 0.4s ease both;}
 .featured-news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
@@ -201,9 +201,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .weather-bar{flex-direction:column;align-items:flex-start;gap:5px;padding:7px 16px;}
   .page-hero{padding:18px 16px 14px;}
   .page-hero-title{font-size:28px;}
-  .subcat-bar{padding:0 16px;}
-  .filter-bar{padding:10px 16px;}
-  .filter-search{min-width:150px;}
+  .subcat-bar{padding:10px 16px;gap:4px;flex-wrap:nowrap;overflow-x:auto;}
+  .subcat-btn{font-size:12px;padding:6px 10px;}
+  .filter-bar{padding:10px 16px;flex-wrap:wrap;}
+  .filter-search{min-width:120px;flex:1;}
+  .sort-select{margin-left:0;}
   .featured-news{padding:12px 16px 0;}
   .section{padding:14px 16px 6px;}
   .news-grid{grid-template-columns:repeat(2,1fr);padding:0 16px 18px;gap:10px;}
@@ -254,63 +256,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   <div class="page-hero-inner">
     <div class="page-hero-left">
       <div class="page-hero-label">📰 Мэдээ мэдээлэл</div>
-      <h1 class="page-hero-title">Шинэ <span>Мэдээнүүд</span></h1>
-      <p class="page-hero-desc">Монголын мэдээ, дэлхийн мэдээ, улс төр, эдийн засаг болон бусад сонирхолтой мэдээллүүд</p>
+      <h1 class="page-hero-title">Шинэ <span id="category-title">Мэдээнүүд</span></h1>
+      <p class="page-hero-desc" id="category-desc">Сонирхолтой мэдээ, мэдээллүүд</p>
     </div>
     <div class="page-hero-stats">
       <div class="hero-stat"><div class="hero-stat-num" id="total-count">—</div><div class="hero-stat-label">Нийт мэдээ</div></div>
-      <div class="hero-stat"><div class="hero-stat-num" id="cat-count">11</div><div class="hero-stat-label">Ангилал</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">↺</div><div class="hero-stat-label">Шинэчлэгдсэн</div></div>
+      <div class="hero-stat"><div class="hero-stat-num" id="cat-count">—</div><div class="hero-stat-label">Ангилал</div></div>
     </div>
   </div>
 </div>
 
-<!-- ===== ДЭД ЦЭС (SUBCATEGORY TAB BAR) ===== -->
+<!-- ===== ДЭД ЦЭС — ЗӨВХӨН АНГИЛАЛЫН ТОХИРУУЛГА ===== -->
 <div class="subcat-bar" id="subcat-bar">
-  <button class="subcat-btn active" onclick="selSubcat(this,'')" data-cat="">
-    <span class="sc-icon">🌐</span> Бүгд
-    <span class="sc-count" id="cnt-all">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Монголын мэдээ')" data-cat="Монголын мэдээ">
-    <span class="sc-icon">🇲🇳</span> Монголын мэдээ
-    <span class="sc-count" id="cnt-mn">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Дэлхий мэдээ')" data-cat="Дэлхий мэдээ">
-    <span class="sc-icon">🌍</span> Дэлхий мэдээ
-    <span class="sc-count" id="cnt-world">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Улс төр')" data-cat="Улс төр">
-    <span class="sc-icon">🏛</span> Улс төр
-    <span class="sc-count" id="cnt-politics">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Эдийн засаг')" data-cat="Эдийн засаг">
-    <span class="sc-icon">💰</span> Эдийн засаг
-    <span class="sc-count" id="cnt-economy">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Сурвалжилга')" data-cat="Сурвалжилга">
-    <span class="sc-icon">🎙</span> Сурвалжилга
-    <span class="sc-count" id="cnt-report">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Танин мэдэхүй')" data-cat="Танин мэдэхүй">
-    <span class="sc-icon">🧠</span> Танин мэдэхүй
-    <span class="sc-count" id="cnt-know">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Шинжлэх ухаан')" data-cat="Шинжлэх ухаан">
-    <span class="sc-icon">🔬</span> Шинжлэх ухаан
-    <span class="sc-count" id="cnt-sci">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'AI')" data-cat="AI">
-    <span class="sc-icon">🤖</span> AI
-    <span class="sc-count" id="cnt-ai">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Кино түүх')" data-cat="Кино түүх">
-    <span class="sc-icon">🎬</span> Кино түүх
-    <span class="sc-count" id="cnt-history">0</span>
-  </button>
-  <button class="subcat-btn" onclick="selSubcat(this,'Аялал')" data-cat="Аялал">
-    <span class="sc-icon">✈️</span> Аялал
-    <span class="sc-count" id="cnt-travel">0</span>
-  </button>
+  <!-- JavaScript-ээр динамик үүсгэнэ -->
 </div>
 
 <!-- FILTER BAR -->
@@ -333,7 +291,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <section>
   <div class="section">
     <div class="section-header">
-      <h2 class="section-title"><span>Бүх</span> мэдээнүүд</h2>
+      <h2 class="section-title"><span id="section-cat-label">Бүх</span> мэдээнүүд</h2>
       <span class="news-count" id="news-count"></span>
     </div>
   </div>
@@ -402,10 +360,9 @@ const dateEl=document.getElementById('today-date');
 if(dateEl)dateEl.textContent=now.getFullYear()+'.'+String(now.getMonth()+1).padStart(2,'0')+'.'+String(now.getDate()).padStart(2,'0');
 
 // WEATHER
-const WEATHER_MN={'Sunny':'Нартай','Clear':'Цэлмэг','Partly cloudy':'Үүлэрхэг','Cloudy':'Бүрхэг','Overcast':'Бүрхэг','Mist':'Манантай','Light rain':'Бага бороо','Moderate rain':'Бороо','Heavy rain':'Их бороо','Light snow':'Бага цас','Moderate snow':'Цас','Heavy snow':'Их цас'};
 async function loadWeather(){
   const el=document.getElementById('weather-temp');
-  try{const r=await fetch('https://wttr.in/Ulaanbaatar?format=j1');const d=await r.json();const t=d.current_condition[0].temp_C;const desc=d.current_condition[0].weatherDesc[0].value;if(el)el.textContent=`${t}°C · ${WEATHER_MN[desc]||desc}`;}
+  try{const r=await fetch('https://wttr.in/Ulaanbaatar?format=j1');const d=await r.json();const t=d.current_condition[0].temp_C;if(el)el.textContent=t+'°C';}
   catch{if(el)el.textContent='—';}
 }
 loadWeather();
@@ -419,29 +376,30 @@ function toggleNav(){
   document.getElementById('nav-toggle').textContent=navOpen?'✕':'☰';
 }
 
-// ===== АНГИЛАЛ тоолуурын mapping =====
-const CAT_COUNT_IDS={
-  '':'cnt-all',
-  'Монголын мэдээ':'cnt-mn',
-  'Дэлхий мэдээ':'cnt-world',
-  'Улс төр':'cnt-politics',
-  'Эдийн засаг':'cnt-economy',
-  'Сурвалжилга':'cnt-report',
-  'Танин мэдэхүй':'cnt-know',
-  'Шинжлэх ухаан':'cnt-sci',
-  'AI':'cnt-ai',
-  'Кино түүх':'cnt-history',
-  'Аялал':'cnt-travel'
+// ===== АНГИЛАЛ МЭДЭЭЛЭЛ =====
+const CAT_EMOJI={
+  'Монголын мэдээ':'🇲🇳','Дэлхий мэдээ':'🌍','Улс төр':'🏛','Эдийн засаг':'💰',
+  'Сурвалжилга':'🎙','Танин мэдэхүй':'🧠','Шинжлэх ухаан':'🔬','AI':'🤖',
+  'Кино түүх':'🎬','Аялал':'✈️','Одод ертөнц':'⭐','Мэдээ':'📰','default':'📰'
+};
+const CAT_BG={
+  'Монголын мэдээ':'linear-gradient(135deg,#1a0a0a,#3a1010)','Дэлхий мэдээ':'linear-gradient(135deg,#0a1a2a,#1a3a5a)',
+  'Улс төр':'linear-gradient(135deg,#1a0a2a,#2a1a4a)','Эдийн засаг':'linear-gradient(135deg,#0a1a0a,#1a3a1a)',
+  'Сурвалжилга':'linear-gradient(135deg,#1a1a0a,#3a2a0a)','Танин мэдэхүй':'linear-gradient(135deg,#0d1a2a,#1a3a5a)',
+  'Шинжлэх ухаан':'linear-gradient(135deg,#1a0d2a,#3a1a5a)','AI':'linear-gradient(135deg,#1a1a0d,#3a3a10)',
+  'Кино түүх':'linear-gradient(135deg,#2a0d0d,#5a1a10)','Аялал':'linear-gradient(135deg,#0d2a2a,#1a5a5a)',
+  'Одод ертөнц':'linear-gradient(135deg,#2a2a0a,#4a4a0a)','default':'linear-gradient(135deg,#1a1a2a,#2a2a4a)'
 };
 
-const CAT_EMOJI={'Монголын мэдээ':'🇲🇳','Дэлхий мэдээ':'🌍','Улс төр':'🏛','Эдийн засаг':'💰','Сурвалжилга':'🎙','Танин мэдэхүй':'🧠','Шинжлэх ухаан':'🔬','AI':'🤖','Кино түүх':'🎬','Аялал':'✈️','default':'📰'};
-const CAT_BG={'Монголын мэдээ':'linear-gradient(135deg,#1a0a0a,#3a1010)','Дэлхий мэдээ':'linear-gradient(135deg,#0a1a2a,#1a3a5a)','Улс төр':'linear-gradient(135deg,#1a0a2a,#2a1a4a)','Эдийн засаг':'linear-gradient(135deg,#0a1a0a,#1a3a1a)','Сурвалжилга':'linear-gradient(135deg,#1a1a0a,#3a2a0a)','Танин мэдэхүй':'linear-gradient(135deg,#0d1a2a,#1a3a5a)','Шинжлэх ухаан':'linear-gradient(135deg,#1a0d2a,#3a1a5a)','AI':'linear-gradient(135deg,#1a1a0d,#3a3a10)','Кино түүх':'linear-gradient(135deg,#2a0d0d,#5a1a10)','Аялал':'linear-gradient(135deg,#0d2a2a,#1a5a5a)','default':'linear-gradient(135deg,#1a1a2a,#2a2a4a)'};
-
 let allNews=[];
-let currentCat='';
+let currentCategory='';
 let currentSearch='';
 let currentSort='created_at';
 let displayCount=8;
+
+// URL-ээс ангилал унших
+const urlParams=new URLSearchParams(window.location.search);
+const catFromUrl=urlParams.get('cat');
 
 function relativeTime(dateStr){
   if(!dateStr)return'';
@@ -497,19 +455,76 @@ function buildFeatured(n){
   </article>`;
 }
 
-// ===== ДЭД ЦЭС тоолуур шинэчлэх =====
-function updateCounts(){
+// ===== ДЭД ЦЭСҮҮДИЙГ ДИНАМИК ҮҮСГЭХ =====
+function buildSubcatBar(categories){
+  const bar=document.getElementById('subcat-bar');
+  // Бүгд
+  let html=`<button class="subcat-btn active" onclick="selCategory(this,'')" data-cat="">
+    <span class="sc-icon">🌐</span> Бүгд
+    <span class="sc-count" id="cnt-all">0</span>
+  </button>`;
+  // Ангилал бүр
+  const sortedCats=categories.slice().sort();
+  sortedCats.forEach(cat=>{
+    const emoji=CAT_EMOJI[cat]||'📰';
+    const id='cnt-'+cat.replace(/ /g,'_');
+    html+=`<button class="subcat-btn" onclick="selCategory(this,'${cat}')" data-cat="${cat}">
+      <span class="sc-icon">${emoji}</span> ${cat}
+      <span class="sc-count" id="${id}">0</span>
+    </button>`;
+  });
+  bar.innerHTML=html;
+  
+  // Хэрэв URL-ээс ангилал ирсэн бол түүнийг идэвхжүүлэх
+  if(catFromUrl){
+    const btn=bar.querySelector(`[data-cat="${catFromUrl}"]`);
+    if(btn){
+      document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory=catFromUrl;
+    }
+  }
+}
+
+function updateCounts(categories){
   // Бүгд
   const allEl=document.getElementById('cnt-all');
   if(allEl)allEl.textContent=allNews.length;
-  // Тус бүрийн ангилал
-  Object.keys(CAT_COUNT_IDS).forEach(cat=>{
-    if(!cat)return;
-    const el=document.getElementById(CAT_COUNT_IDS[cat]);
+  
+  // Ангилал бүр
+  categories.forEach(cat=>{
+    const id='cnt-'+cat.replace(/ /g,'_');
+    const el=document.getElementById(id);
     if(el)el.textContent=allNews.filter(n=>n.category===cat).length;
   });
+  
   const totalEl=document.getElementById('total-count');
   if(totalEl)totalEl.textContent=allNews.length;
+}
+
+function selCategory(el,cat){
+  document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  currentCategory=cat;
+  displayCount=8;
+  updatePageTitle(cat);
+  renderNews();
+}
+
+function updatePageTitle(cat){
+  const titleEl=document.getElementById('category-title');
+  const descEl=document.getElementById('category-desc');
+  const labelEl=document.getElementById('section-cat-label');
+  if(cat){
+    const emoji=CAT_EMOJI[cat]||'📰';
+    titleEl.textContent=cat;
+    descEl.textContent=`${cat} ангиллын мэдээ, мэдээллүүд`;
+    labelEl.textContent=cat;
+  }else{
+    titleEl.textContent='Мэдээнүүд';
+    descEl.textContent='Сонирхолтой мэдээ, мэдээллүүд';
+    labelEl.textContent='Бүх';
+  }
 }
 
 function renderNews(){
@@ -519,7 +534,7 @@ function renderNews(){
   const featured=document.getElementById('featured-news-wrap');
 
   let filtered=allNews.filter(n=>{
-    const matchCat=!currentCat||n.category===currentCat;
+    const matchCat=!currentCategory||n.category===currentCategory;
     const matchSearch=!currentSearch||(n.title||'').toLowerCase().includes(currentSearch.toLowerCase());
     return matchCat&&matchSearch;
   });
@@ -530,6 +545,7 @@ function renderNews(){
     return new Date(b.created_at||0)-new Date(a.created_at||0);
   });
 
+  // Онцлох (featured) — зөвхөн сонгосон ангилалд тохирох эхний мэдээ
   if(featured){
     featured.innerHTML=filtered.length>0?buildFeatured(filtered[0]):'';
   }
@@ -549,15 +565,6 @@ function renderNews(){
 
 function loadMore(){displayCount+=8;renderNews();}
 
-// ===== ДЭД ЦЭС СОНГОХ =====
-function selSubcat(el,cat){
-  document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  currentCat=cat;
-  displayCount=8;
-  renderNews();
-}
-
 function filterNews(){
   currentSearch=document.getElementById('search-input').value;
   currentSort=document.getElementById('sort-select').value;
@@ -570,23 +577,26 @@ document.getElementById('nav-search-input').addEventListener('input',function(){
   filterNews();
 });
 
-// URL param: ?cat=XXX
-function applyUrlParams(){
-  const params=new URLSearchParams(window.location.search);
-  const cat=params.get('cat');
-  if(cat){
-    const btn=[...document.querySelectorAll('.subcat-btn')].find(b=>b.dataset.cat===cat);
-    if(btn){selSubcat(btn,cat);}
-    else{currentCat=cat;}
-  }
-}
-
 async function loadNews(){
   try{
     const data=await supaFetch('news','order=created_at.desc&limit=100');
     allNews=Array.isArray(data)?data:[];
-    updateCounts();
-    applyUrlParams();
+    
+    // Ангилалуудыг цуглуулах
+    const categories=[...new Set(allNews.map(n=>n.category).filter(Boolean))];
+    buildSubcatBar(categories);
+    updateCounts(categories);
+    
+    // URL-ээс ангилал ирсэн бол түүнийг хэрэглэх
+    if(catFromUrl && categories.includes(catFromUrl)){
+      currentCategory=catFromUrl;
+      const btn=document.querySelector(`.subcat-btn[data-cat="${catFromUrl}"]`);
+      if(btn){
+        document.querySelectorAll('.subcat-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    }
+    updatePageTitle(currentCategory);
     renderNews();
   }catch(err){
     console.error(err);
