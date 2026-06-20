@@ -615,7 +615,7 @@
       <div class="mcat-label">AI үйлчилгээ</div><div class="mcat-sub">TTS, STT, Зураг</div><div class="mcat-badge">→</div>
     </div>
     
-    <!-- 3. Сургалт (багтах болгон өөрчилсөн) -->
+    <!-- 3. Сургалт -->
     <div class="mcat-card mcat-lesson" id="mcat-lesson" onclick="openMcatDropdown(this,'Сургалт')" tabindex="0" role="button" aria-label="Сургалт">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgLesson)"/><defs><linearGradient id="mgLesson" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#f472b6"/><stop offset="100%" stop-color="#ec4899"/></linearGradient></defs><rect x="9" y="12" width="24" height="20" rx="3" fill="white" fill-opacity="0.2" stroke="white" stroke-width="1.5"/><line x1="14" y1="17" x2="28" y2="17" stroke="white" stroke-width="1.5"/><line x1="14" y1="21" x2="25" y2="21" stroke="white" stroke-width="1.5"/><line x1="14" y1="25" x2="22" y2="25" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Сургалт</div><div class="mcat-sub">VN, AI, YouTube</div><div class="mcat-badge">📚</div>
@@ -1064,9 +1064,10 @@ function showMoviesOnly(el) {
   setTimeout(() => goSection('movies'), 100);
 }
 
+// ✅ ЗАССАН MCAT_MENUS — БҮХ АНГИЛАЛД "БҮГД" ЗӨВ БОЛСОН
 const MCAT_MENUS = {
   'Сургалт': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Сургалт' },
     { label: 'VN + Capcut сургалт', cat: 'VN Capcut' },
     { label: 'AI Веб хөгжүүлэлт', cat: 'AI Веб' },
     { label: 'YouTube суваг хэрхэн өсгөх вэ?', cat: 'YouTube' },
@@ -1075,13 +1076,13 @@ const MCAT_MENUS = {
     { label: 'Олон улсын онлайн худалдаа', cat: 'Олон улсын худалдаа' }
   ],
   'Программ': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Программ' },
     { label: 'Татаж авах програм', cat: 'Татаж авах' },
     { label: 'Онлайн програм', cat: 'Онлайн програм' },
     { label: 'Mobile app', cat: 'Mobile app' }
   ],
   'Зар мэдээ': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Зар мэдээ' },
     { label: 'Үл хөдлөх', cat: 'Үл хөдлөх' },
     { label: 'Ажлын зар', cat: 'Ажлын зар' },
     { label: 'Тээврийн хэрэгсэл', cat: 'Тээвэр' },
@@ -1089,48 +1090,48 @@ const MCAT_MENUS = {
     { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' }
   ],
   'Е-Худалдаа': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Е-Худалдаа' },
     { label: 'Цахим дэлгүүр', cat: 'Цахим дэлгүүр' },
     { label: 'Бараа', cat: 'Бараа' },
     { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' },
     { label: 'Олон улсын худалдаа', cat: 'Олон улсын худалдаа' }
   ],
   'Аялал': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Аялал' },
     { label: 'Миний аялал', cat: 'Миний аялал' },
     { label: 'Монгол аялал', cat: 'Монгол аялал' },
     { label: 'Гадаад аялал', cat: 'Гадаад аялал' }
   ],
   'Шинжлэх ухаан': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Шинжлэх ухаан' },
     { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
     { label: 'Ирээдүй', cat: 'Ирээдүй' },
     { label: 'Туршилт', cat: 'Туршилт' }
   ],
   'AI мэдлэг': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'AI мэдлэг' },
     { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
     { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
     { label: 'Сургалт', cat: 'Сургалт' }
   ],
   'Кино түүх': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Кино түүх' },
     { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
     { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }
   ],
   'Танин мэдэхүй': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Танин мэдэхүй' },
     { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
     { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
     { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }
   ],
   'Одод ертөнц': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Одод ертөнц' },
     { label: 'Харь гараг', cat: 'Харь гараг' },
     { label: 'Манай ертөнц', cat: 'Манай ертөнц' }
   ],
   'Мэдээ': [
-    { label: 'Бүгд', cat: '' },
+    { label: 'Бүгд', cat: 'Мэдээ' },
     { label: 'Монгол мэдээ', cat: 'Монгол мэдээ' },
     { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' },
     { label: 'Улс төр', cat: 'Улс төр' },
