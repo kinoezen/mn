@@ -374,6 +374,45 @@
     padding: 0 24px 8px;
   }
 
+  /* ===== PAGINATION — ХУУДАС ===== */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 0 10px;
+    flex-wrap: wrap;
+  }
+  .pagination button {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--bg3, #1e1e32);
+    color: #ccc;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pagination button:hover {
+    border-color: #4ade80;
+    color: #4ade80;
+  }
+  .pagination button.active {
+    background: #4ade80;
+    border-color: #4ade80;
+    color: #0a0a14;
+  }
+  .pagination button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .pagination .page-num {
+    min-width: 36px;
+    text-align: center;
+  }
+
   @media(max-width: 900px) {
     .main-cats-grid {
       grid-template-columns: repeat(7, 1fr);
@@ -682,11 +721,10 @@
     </div>
   </div>
   <div class="grid-4" id="movies-list" role="list">
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
-    <div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>
+    <!-- JavaScript-ээр дүүргэнэ -->
   </div>
+  <!-- ===== ХУУДАС (PAGINATION) ===== -->
+  <div class="pagination" id="movie-pagination"></div>
 </section>
 
 <!-- ===== NEWS ===== -->
@@ -699,11 +737,10 @@
     </div>
   </div>
   <div class="news-grid" id="news-list" role="list">
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
-    <div class="skel-card skeleton" style="height:220px"></div>
+    <!-- JavaScript-ээр дүүргэнэ -->
   </div>
+  <!-- ===== ХУУДАС (PAGINATION) ===== -->
+  <div class="pagination" id="news-pagination"></div>
 </section>
 
 <!-- ===== MESSENGER FAB ===== -->
@@ -1130,6 +1167,10 @@ function handleMcatSub(cat, btn, mainKey) {
 }
 
 // ===== MOVIES =====
+let allMovies = [];
+let moviePage = 1;
+const MOVIES_PER_PAGE = 4;
+
 function buildSkeletons(n = 4) {
   return Array(n).fill(0).map(() =>
     `<div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`
@@ -1146,6 +1187,7 @@ function selCat(el, genre) {
   el.classList.add('on');
   el.setAttribute('aria-selected', 'true');
   currentGenre = genre;
+  moviePage = 1;
   loadMovies(genre);
 }
 
@@ -1153,51 +1195,87 @@ async function loadMovies(genre = '') {
   const list = document.getElementById('movies-list');
   list.innerHTML = buildSkeletons(4);
   try {
-    let params = 'order=created_at.desc&limit=4';
+    let params = 'order=created_at.desc&limit=100';
     if (genre) params += `&genre=eq.${encodeURIComponent(genre)}`;
     const movies = await supaFetch('movies', params);
     if (!movies || movies.length === 0) {
       list.innerHTML = `<div class="empty-state"><div class="icon">🎬</div><p>Кино байхгүй байна</p></div>`;
+      document.getElementById('movie-pagination').innerHTML = '';
       return;
     }
-    renderMovieCards(movies, list);
+    allMovies = movies;
+    renderMoviePage();
   } catch (error) {
     console.error('loadMovies error:', error);
     list.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Алдаа гарлаа</p></div>`;
   }
 }
 
-function renderMovieCards(movies, list) {
-  list.innerHTML = movies.map(m => {
-    const title = sanitize(m.title);
-    const g = sanitize(m.genre);
-    const id = encodeURIComponent(sanitize(m.id));
-    const likes = parseInt(m.likes) || 0;
-    const views = parseInt(m.views) || 0;
-    const cls = genreColors[m.genre] || 'cp-sci';
-    const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-    const thumb = m.thumbnail ?
-      `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">` :
-      '🎬';
-    return `<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
-      <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g || 'Кино'}</span></div>
-      <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">Кино Эзэн</div>
-      <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div></article>`;
-  }).join('');
+function renderMoviePage() {
+  const list = document.getElementById('movies-list');
+  const totalPages = Math.ceil(allMovies.length / MOVIES_PER_PAGE) || 1;
+  const start = (moviePage - 1) * MOVIES_PER_PAGE;
+  const end = start + MOVIES_PER_PAGE;
+  const pageMovies = allMovies.slice(start, end);
+  
+  if (pageMovies.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🎬</div><p>Кино байхгүй байна</p></div>`;
+  } else {
+    list.innerHTML = pageMovies.map(m => buildMovieCard(m)).join('');
+  }
+  
+  renderMoviePagination(totalPages);
+}
+
+function buildMovieCard(m) {
+  const title = sanitize(m.title);
+  const g = sanitize(m.genre);
+  const id = encodeURIComponent(sanitize(m.id));
+  const likes = parseInt(m.likes) || 0;
+  const views = parseInt(m.views) || 0;
+  const cls = genreColors[m.genre] || 'cp-sci';
+  const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+  const thumb = m.thumbnail ?
+    `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">` :
+    '🎬';
+  return `<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
+    <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g || 'Кино'}</span></div>
+    <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">Кино Эзэн</div>
+    <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div></article>`;
+}
+
+function renderMoviePagination(totalPages) {
+  const container = document.getElementById('movie-pagination');
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+  let html = `<button onclick="moviePage=1;renderMoviePage()" ${moviePage===1?'disabled':''}>«</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-num ${i===moviePage?'active':''}" onclick="moviePage=${i};renderMoviePage()">${i}</button>`;
+  }
+  html += `<button onclick="moviePage=${totalPages};renderMoviePage()" ${moviePage===totalPages?'disabled':''}>»</button>`;
+  container.innerHTML = html;
 }
 
 // ===== NEWS =====
+let allNews = [];
+let newsPage = 1;
+const NEWS_PER_PAGE = 12; // 3 эгнээ × 4
+
 async function loadNews() {
   const list = document.getElementById('news-list');
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
   
   try {
-    const news = await supaFetch('news', 'order=created_at.desc&limit=8');
+    const news = await supaFetch('news', 'order=created_at.desc&limit=100');
     if (!news || news.length === 0) {
       list.innerHTML = '<div class="empty-state"><p>Мэдээ байхгүй байна</p></div>';
+      document.getElementById('news-pagination').innerHTML = '';
       return;
     }
-    renderNewsList(news, list);
+    allNews = news;
+    renderNewsPage();
   } catch (error) {
     console.error('loadNews error:', error);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
@@ -1209,52 +1287,83 @@ async function loadNewsByCategory(category) {
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
   
   try {
-    let params = 'order=created_at.desc&limit=8';
+    let params = 'order=created_at.desc&limit=100';
     if (category) {
       params += `&sub_category=eq.${encodeURIComponent(category)}`;
     }
     const news = await supaFetch('news', params);
     if (!news || news.length === 0) {
       list.innerHTML = `<div class="empty-state"><p>"${category}" ангилалд мэдээ байхгүй</p></div>`;
+      document.getElementById('news-pagination').innerHTML = '';
       return;
     }
-    renderNewsList(news, list);
+    allNews = news;
+    newsPage = 1;
+    renderNewsPage();
   } catch (error) {
     console.error('loadNewsByCategory error:', error);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
 
-function renderNewsList(news, list) {
-  list.innerHTML = news.map(item => {
-    const title = sanitize(item.title);
-    const cat = sanitize(item.category || 'Мэдээ');
-    const id = sanitize(item.id);
-    const views = parseInt(item.views) || 0;
-    
-    const date = new Date(item.created_at);
-    const formattedDate = date.getFullYear() + '.' + 
-      (date.getMonth()+1).toString().padStart(2,'0') + '.' + 
-      date.getDate().toString().padStart(2,'0') + ' ' +
-      date.getHours().toString().padStart(2,'0') + ':' +
-      date.getMinutes().toString().padStart(2,'0');
-    
-    const thumb = item.thumbnail ?
-      `<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy">` :
-      `<span class="n-emoji">📰</span>`;
-    
-    return `<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}">
-      <div class="news-img">${thumb}</div>
-      <div class="news-body">
-        <span class="news-cat">${cat}</span>
-        <h3 class="news-title">${title}</h3>
-        <div class="news-foot">
-          <time class="news-date">${formattedDate}</time>
-          <span class="news-views">👁 ${views}</span>
-        </div>
+function renderNewsPage() {
+  const list = document.getElementById('news-list');
+  const totalPages = Math.ceil(allNews.length / NEWS_PER_PAGE) || 1;
+  const start = (newsPage - 1) * NEWS_PER_PAGE;
+  const end = start + NEWS_PER_PAGE;
+  const pageNews = allNews.slice(start, end);
+  
+  if (pageNews.length === 0) {
+    list.innerHTML = `<div class="empty-state"><p>Мэдээ байхгүй байна</p></div>`;
+  } else {
+    list.innerHTML = pageNews.map((item, idx) => buildNewsCard(item, idx)).join('');
+  }
+  
+  renderNewsPagination(totalPages);
+}
+
+function buildNewsCard(item, idx) {
+  const title = sanitize(item.title);
+  const cat = sanitize(item.category || 'Мэдээ');
+  const id = sanitize(item.id);
+  const views = parseInt(item.views) || 0;
+  
+  const date = new Date(item.created_at);
+  const formattedDate = date.getFullYear() + '.' + 
+    (date.getMonth()+1).toString().padStart(2,'0') + '.' + 
+    date.getDate().toString().padStart(2,'0') + ' ' +
+    date.getHours().toString().padStart(2,'0') + ':' +
+    date.getMinutes().toString().padStart(2,'0');
+  
+  const thumb = item.thumbnail ?
+    `<img src="${sanitize(item.thumbnail)}" alt="${title}" loading="lazy">` :
+    `<span class="n-emoji">📰</span>`;
+  
+  return `<article class="news-card" role="listitem" tabindex="0" onclick="location.href='news-detail.html?id=${id}'" aria-label="${title}" style="animation-delay:${idx*0.05}s">
+    <div class="news-img">${thumb}</div>
+    <div class="news-body">
+      <span class="news-cat">${cat}</span>
+      <h3 class="news-title">${title}</h3>
+      <div class="news-foot">
+        <time class="news-date">${formattedDate}</time>
+        <span class="news-views">👁 ${views}</span>
       </div>
-    </article>`;
-  }).join('');
+    </div>
+  </article>`;
+}
+
+function renderNewsPagination(totalPages) {
+  const container = document.getElementById('news-pagination');
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+  let html = `<button onclick="newsPage=1;renderNewsPage()" ${newsPage===1?'disabled':''}>«</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-num ${i===newsPage?'active':''}" onclick="newsPage=${i};renderNewsPage()">${i}</button>`;
+  }
+  html += `<button onclick="newsPage=${totalPages};renderNewsPage()" ${newsPage===totalPages?'disabled':''}>»</button>`;
+  container.innerHTML = html;
 }
 
 // ===== AD =====
@@ -1364,12 +1473,15 @@ function searchMovies() {
     const list = document.getElementById('movies-list');
     list.innerHTML = buildSkeletons(4);
     try {
-      const movies = await supaFetch('movies', `title=ilike.*${encodeURIComponent(q)}*&limit=8`);
+      const movies = await supaFetch('movies', `title=ilike.*${encodeURIComponent(q)}*&limit=100`);
       if (!movies || movies.length === 0) {
         list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>"${sanitize(q)}" олдсонгүй</p></div>`;
+        document.getElementById('movie-pagination').innerHTML = '';
         return;
       }
-      renderMovieCards(movies, list);
+      allMovies = movies;
+      moviePage = 1;
+      renderMoviePage();
     } catch (error) {
       console.error('searchMovies error:', error);
     }
