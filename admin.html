@@ -179,7 +179,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- КИНО НЭМЭХ -->
+    <!-- ==================== КИНО НЭМЭХ ==================== -->
     <div class="page" id="page-movies">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -268,7 +268,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- МЭДЭЭ НЭМЭХ -->
+    <!-- ==================== МЭДЭЭ НЭМЭХ ==================== -->
     <div class="page" id="page-news">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -332,7 +332,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- РЕКЛАМ -->
+    <!-- ==================== РЕКЛАМ ==================== -->
     <div class="page" id="page-ads">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -383,7 +383,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- СУРГАЛТ НЭМЭХ (ШИНЭ) -->
+    <!-- ==================== СУРГАЛТ НЭМЭХ ==================== -->
     <div class="page" id="page-lessons">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -416,9 +416,16 @@ tr:last-child td{border-bottom:none;}
           <div class="form-group"><label class="form-label">Үнэ</label>
             <input class="form-inp" id="l-price" placeholder="50,000">
           </div>
-          <div class="form-group full"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="l-desc" placeholder="Сургалтын товч тайлбар..."></textarea></div>
-          <div class="form-group full">
-            <label class="form-label">Хичээлийн жагсаалт (мөр тус бүр)</label>
+          <div class="form-group"><label class="form-label">Хичээлийн үргэлжлэх хугацаа</label>
+            <input class="form-inp" id="l-duration" placeholder="жш: 5 цаг 30 мин">
+          </div>
+          <div class="form-group"><label class="form-label">Багш / Сургагч</label>
+            <input class="form-inp" id="l-instructor" placeholder="жш: КиноЭзэн">
+          </div>
+          <div class="form-group full"><label class="form-label">Тайлбар</label>
+            <textarea class="form-inp" id="l-desc" placeholder="Сургалтын товч тайлбар..." style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group full"><label class="form-label">Хичээлийн жагсаалт (мөр тус бүр)</label>
             <textarea class="form-inp" id="l-lessons" placeholder="1. VN, Capcut гэж юу вэ? - Програмын ялгаа, суулгах" style="min-height:120px;"></textarea>
           </div>
           <div class="form-group full">
@@ -447,6 +454,49 @@ tr:last-child td{border-bottom:none;}
               <input class="form-inp" id="l-thumb-url" placeholder="https://...jpg">
             </div>
           </div>
+          <div class="form-group full">
+            <label class="form-label">Сургалтын видео</label>
+            <div class="upload-tabs">
+              <div class="upload-tab on" onclick="switchTab('l-vid','upload',this)">📁 Файл оруулах</div>
+              <div class="upload-tab" onclick="switchTab('l-vid','url',this)">🔗 YouTube/URL</div>
+            </div>
+            <div id="l-vid-upload">
+              <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'l-vid-file','l-vid-preview')">
+                <input type="file" id="l-vid-file" accept="video/*" onchange="previewFile(this,'l-vid-preview','video')">
+                <div class="upload-icon">🎞️</div>
+                <div class="upload-text">Видео файл сонгох эсвэл чирж оруулах</div>
+                <div class="upload-hint">MP4, MKV, WEBM — 500MB хүртэл</div>
+              </div>
+              <div class="upload-preview" id="l-vid-preview">
+                <video id="l-vid-preview-vid" controls style="max-height:160px;border-radius:8px;"></video>
+                <div class="upload-preview-name" id="l-vid-preview-name"></div>
+              </div>
+              <div class="upload-progress" id="l-vid-progress">
+                <div class="progress-bar"><div class="progress-fill" id="l-vid-fill"></div></div>
+                <div class="progress-text" id="l-vid-ptext">Ачааллаж байна...</div>
+              </div>
+            </div>
+            <div id="l-vid-url" style="display:none;">
+              <input class="form-inp" id="l-video-url" placeholder="https://www.youtube.com/watch?v=...">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Нэмэлт материал (PDF, DOCX, ZIP)</label>
+            <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'l-file-file','l-file-preview')">
+              <input type="file" id="l-file-file" accept=".pdf,.docx,.zip,.rar,.ppt,.pptx" onchange="previewFile(this,'l-file-preview','file')">
+              <div class="upload-icon">📄</div>
+              <div class="upload-text">Файл сонгох эсвэл чирж оруулах</div>
+              <div class="upload-hint">PDF, DOCX, ZIP, PPT — 100MB хүртэл</div>
+            </div>
+            <div class="upload-preview" id="l-file-preview">
+              <div class="upload-preview-name" id="l-file-preview-name"></div>
+            </div>
+            <div class="upload-progress" id="l-file-progress">
+              <div class="progress-bar"><div class="progress-fill" id="l-file-fill"></div></div>
+              <div class="progress-text" id="l-file-ptext">Ачааллаж байна...</div>
+            </div>
+            <input class="form-inp" id="l-file-url" placeholder="Эсвэл файлын URL оруулах" style="margin-top:8px;">
+          </div>
         </div>
         <button class="form-btn" onclick="addLesson()">💾 Хадгалах</button>
         <div class="success-msg" id="l-ok">✅ Сургалт амжилттай нэмэгдлээ!</div>
@@ -454,7 +504,7 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- КИНО ЖАГСААЛТ -->
+    <!-- ==================== ЖАГСААЛТУУД ==================== -->
     <div class="page" id="page-list-movies">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -469,7 +519,6 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- МЭДЭЭ ЖАГСААЛТ -->
     <div class="page" id="page-list-news">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -484,7 +533,6 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
-    <!-- РЕКЛАМ ЖАГСААЛТ -->
     <div class="page" id="page-list-ads">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -501,7 +549,7 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Кино -->
+<!-- ==================== EDIT MODALS ==================== -->
 <div class="modal-overlay" id="modal-movie">
   <div class="modal-box">
     <div class="modal-title">✏️ Кино засах<button class="modal-close" onclick="closeModal('modal-movie')">✕</button></div>
@@ -545,7 +593,6 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Мэдээ -->
 <div class="modal-overlay" id="modal-news">
   <div class="modal-box">
     <div class="modal-title">✏️ Мэдээ засах<button class="modal-close" onclick="closeModal('modal-news')">✕</button></div>
@@ -579,7 +626,6 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
-<!-- EDIT MODAL — Реклам -->
 <div class="modal-overlay" id="modal-ad">
   <div class="modal-box">
     <div class="modal-title">✏️ Реклам засах<button class="modal-close" onclick="closeModal('modal-ad')">✕</button></div>
@@ -615,13 +661,18 @@ tr:last-child td{border-bottom:none;}
 </div>
 
 <script>
+// ============================================================
+// SUPABASE ХОЛБОЛТ
+// ============================================================
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 const ADMIN_USER='admin';
 const ADMIN_PASS='kinoezen2026';
 const BUCKET='images';
 
-// ===== ДЭД ЦЭСНИЙ СОНГОЛТ =====
+// ============================================================
+// ДЭД ЦЭСНИЙ СОНГОЛТ
+// ============================================================
 const SUB_CAT_OPTIONS = {
   'Аялал': ['Миний аялал','Монгол аялал','Гадаад аялал'],
   'Шинжлэх ухаан': ['Шинэ нээлт','Ирээдүй','Туршилт'],
@@ -643,7 +694,9 @@ function updateSubCatOptions() {
 
 document.addEventListener('DOMContentLoaded', updateSubCatOptions);
 
-// ===== НЭВТРЭХ =====
+// ============================================================
+// НЭВТРЭХ
+// ============================================================
 function doLogin(){
   const u=document.getElementById('admin-user').value;
   const p=document.getElementById('admin-pass').value;
@@ -658,7 +711,9 @@ function doLogout(){
   document.getElementById('admin-page').style.display='none';
 }
 
-// ===== SUPABASE ФУНКЦУУД =====
+// ============================================================
+// SUPABASE ФУНКЦУУД
+// ============================================================
 async function supaFetch(table,params=''){
   const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
   return r.json();
@@ -676,7 +731,9 @@ async function supaDelete(table,id){
   return r.ok;
 }
 
-// ===== ФАЙЛ UPLOAD =====
+// ============================================================
+// ФАЙЛ UPLOAD
+// ============================================================
 async function uploadFile(file,folder,progressId){
   const ext=file.name.split('.').pop();
   const fileName=`${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
@@ -698,7 +755,9 @@ async function uploadFile(file,folder,progressId){
   }catch(err){if(ptext)ptext.textContent='❌ Алдаа: '+err.message;throw err;}
 }
 
-// ===== UI ФУНКЦУУД =====
+// ============================================================
+// UI ФУНКЦУУД
+// ============================================================
 function switchTab(prefix,mode,el){
   el.closest('.upload-tabs').querySelectorAll('.upload-tab').forEach(t=>t.classList.remove('on'));
   el.classList.add('on');
@@ -714,8 +773,11 @@ function previewFile(input,previewId,type){
   const preview=document.getElementById(previewId);preview.style.display='block';
   if(type==='image')document.getElementById(previewId+'-img').src=URL.createObjectURL(file);
   else if(type==='video')document.getElementById(previewId+'-vid').src=URL.createObjectURL(file);
+  else if(type==='file'){
+    document.getElementById(previewId+'-name').textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
+  }
   const nameEl=document.getElementById(previewId+'-name');
-  if(nameEl)nameEl.textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
+  if(nameEl&&type!=='file')nameEl.textContent=file.name+' ('+(file.size/1024/1024).toFixed(1)+'MB)';
 }
 function onDragOver(e,el){e.preventDefault();el.classList.add('dragover');}
 function onDragLeave(el){el.classList.remove('dragover');}
@@ -724,7 +786,7 @@ function onDrop(e,inputId,previewId){
   const file=e.dataTransfer.files[0];if(!file)return;
   const input=document.getElementById(inputId);
   const dt=new DataTransfer();dt.items.add(file);input.files=dt.files;
-  previewFile(input,previewId,file.type.startsWith('image')?'image':'video');
+  previewFile(input,previewId,file.type.startsWith('image')?'image':file.type.startsWith('video')?'video':'file');
 }
 function showPage(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -760,7 +822,9 @@ function setEditFeatured(val){
   document.getElementById('edit-featured-badge').textContent=val?'Идэвхтэй':'Идэвхгүй';
 }
 
-// ===== СТАТИСТИК =====
+// ============================================================
+// СТАТИСТИК
+// ============================================================
 async function loadStats(){
   try{
     const now=new Date();
@@ -806,7 +870,9 @@ async function loadDashPreviews(){
   }catch(e){}
 }
 
-// ===== КИНО НЭМЭХ =====
+// ============================================================
+// КИНО НЭМЭХ
+// ============================================================
 async function addMovie(){
   const title=document.getElementById('m-title').value.trim();
   if(!title){alert('Киноны нэрийг оруулна уу!');return;}
@@ -840,7 +906,9 @@ async function addMovie(){
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
 
-// ===== МЭДЭЭ НЭМЭХ =====
+// ============================================================
+// МЭДЭЭ НЭМЭХ
+// ============================================================
 async function addNews(){
   const title=document.getElementById('n-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
@@ -874,7 +942,9 @@ async function addNews(){
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
 
-// ===== РЕКЛАМ НЭМЭХ =====
+// ============================================================
+// РЕКЛАМ НЭМЭХ
+// ============================================================
 async function addAd(){
   const title=document.getElementById('a-title').value.trim();
   if(!title){alert('Гарчиг оруулна уу!');return;}
@@ -904,7 +974,9 @@ async function addAd(){
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
 
-// ===== СУРГАЛТ НЭМЭХ (ШИНЭ) =====
+// ============================================================
+// СУРГАЛТ НЭМЭХ
+// ============================================================
 async function addLesson(){
   const title=document.getElementById('l-title').value.trim();
   if(!title){alert('Сургалтын нэрийг оруулна уу!');return;}
@@ -916,6 +988,30 @@ async function addLesson(){
       const imgFile=document.getElementById('l-img-file');
       if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'lessons','l-img');
     }else{thumbUrl=document.getElementById('l-thumb-url').value.trim()||null;}
+    
+    let videoUrl=null;
+    const lVidUpload=document.getElementById('l-vid-upload');
+    if(lVidUpload&&lVidUpload.style.display!=='none'){
+      const vidFile=document.getElementById('l-vid-file');
+      if(vidFile&&vidFile.files.length>0){
+        videoUrl=await uploadFile(vidFile.files[0],'lesson-videos','l-vid');
+      }
+    }else{
+      videoUrl=document.getElementById('l-video-url').value.trim()||null;
+    }
+    
+    let fileUrl=null;
+    let fileName=null;
+    const fileInput=document.getElementById('l-file-file');
+    if(fileInput && fileInput.files.length > 0){
+      const file = fileInput.files[0];
+      fileUrl=await uploadFile(file,'lesson-files','l-file');
+      fileName=file.name;
+    }else{
+      fileUrl=document.getElementById('l-file-url').value.trim()||null;
+      if(fileUrl) fileName=fileUrl.split('/').pop();
+    }
+    
     const ok=await supaInsert('lessons',{
       title: title,
       category: document.getElementById('l-category').value,
@@ -923,12 +1019,23 @@ async function addLesson(){
       price: document.getElementById('l-price').value,
       description: document.getElementById('l-desc').value,
       lessons_list: document.getElementById('l-lessons').value,
-      thumbnail: thumbUrl
+      thumbnail: thumbUrl,
+      video_url: videoUrl,
+      file_url: fileUrl,
+      file_name: fileName,
+      duration: document.getElementById('l-duration').value,
+      instructor: document.getElementById('l-instructor').value
     });
     if(ok){
       document.getElementById('l-ok').style.display='block';
-      ['l-title','l-desc','l-lessons','l-price','l-thumb-url'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-      const lp=document.getElementById('l-img-preview');if(lp)lp.style.display='none';
+      ['l-title','l-desc','l-lessons','l-price','l-thumb-url','l-video-url','l-file-url','l-duration','l-instructor'].forEach(id=>{
+        const el=document.getElementById(id);if(el)el.value='';
+      });
+      ['l-img-preview','l-vid-preview','l-file-preview'].forEach(id=>{
+        const el=document.getElementById(id);if(el)el.style.display='none';
+      });
+      const fileInput2=document.getElementById('l-file-file');
+      if(fileInput2) fileInput2.value='';
       setTimeout(()=>document.getElementById('l-ok').style.display='none',3000);
       loadStats();
     }else{document.getElementById('l-err').style.display='block';}
@@ -936,30 +1043,36 @@ async function addLesson(){
   btn.textContent='💾 Хадгалах';btn.disabled=false;
 }
 
-// ===== ЖАГСААЛТУУД =====
+// ============================================================
+// ЖАГСААЛТУУД
+// ============================================================
 function escStr(s){return(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
 
 async function loadMovieList(){
   const el=document.getElementById('movie-table');
+  if(!el) return;
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
-  const movies=await supaFetch('movies','order=created_at.desc');
-  if(!Array.isArray(movies)||movies.length===0){el.innerHTML='<div class="loading">Кино байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Нэр</th><th>Жанр</th><th>Зураг</th><th>Видео</th><th>Үзэлт</th><th>Онцлох</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
-  ${movies.map(m=>`<tr>
-    <td>${m.title}</td>
-    <td><span class="badge badge-blue">${m.genre||'-'}</span></td>
-    <td>${m.thumbnail?`<img src="${m.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
-    <td>${m.video_url?`<a href="${m.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Линк</a>`:'—'}</td>
-    <td>👁 ${m.views||0}</td>
-    <td>${m.featured?'<span class="badge badge-green">⭐ Тийм</span>':'—'}</td>
-    <td>${new Date(m.created_at).toLocaleDateString('mn-MN')}</td>
-    <td style="white-space:nowrap;">
-      <button class="action-btn edit-btn" onclick="openEditMovie('${m.id}','${escStr(m.title)}','${m.genre||''}','${escStr(m.description||'')}','${m.thumbnail||''}','${m.video_url||''}',${!!m.featured})">✏️ Засах</button>
-      <button class="action-btn del-btn" onclick="deleteMovie('${m.id}')">🗑 Устгах</button>
-    </td>
-  </tr>`).join('')}</tbody></table>`;
+  try{
+    const movies=await supaFetch('movies','order=created_at.desc');
+    if(!Array.isArray(movies)||movies.length===0){el.innerHTML='<div class="loading">Кино байхгүй байна</div>';return;}
+    el.innerHTML=`<table><thead><tr><th>Нэр</th><th>Жанр</th><th>Зураг</th><th>Видео</th><th>Үзэлт</th><th>Онцлох</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${movies.map(m=>`<tr>
+      <td>${m.title}</td>
+      <td><span class="badge badge-blue">${m.genre||'-'}</span></td>
+      <td>${m.thumbnail?`<img src="${m.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+      <td>${m.video_url?`<a href="${m.video_url}" target="_blank" style="color:#4ade80;font-size:11px;">▶ Линк</a>`:'—'}</td>
+      <td>👁 ${m.views||0}</td>
+      <td>${m.featured?'<span class="badge badge-green">⭐ Тийм</span>':'—'}</td>
+      <td>${new Date(m.created_at).toLocaleDateString('mn-MN')}</td>
+      <td style="white-space:nowrap;">
+        <button class="action-btn edit-btn" onclick="openEditMovie('${m.id}','${escStr(m.title)}','${m.genre||''}','${escStr(m.description||'')}','${m.thumbnail||''}','${m.video_url||''}',${!!m.featured})">✏️ Засах</button>
+        <button class="action-btn del-btn" onclick="deleteMovie('${m.id}')">🗑 Устгах</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
 }
 async function deleteMovie(id){if(!confirm('Устгах уу?'))return;await supaDelete('movies',id);loadMovieList();loadStats();}
+
 function openEditMovie(id,title,genre,desc,thumb,video,featured){
   document.getElementById('edit-movie-id').value=id;
   document.getElementById('edit-m-title').value=title;
@@ -984,24 +1097,28 @@ async function saveMovie(){
 
 async function loadNewsList(){
   const el=document.getElementById('news-table');
+  if(!el) return;
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
-  const news=await supaFetch('news','order=created_at.desc');
-  if(!Array.isArray(news)||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
-  ${news.map(n=>`<tr>
-    <td>${n.title}</td>
-    <td><span class="badge badge-green">${n.category||'-'}</span></td>
-    <td>${n.sub_category?`<span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${n.sub_category}</span>`:'—'}</td>
-    <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
-    <td>👁 ${n.views||0}</td>
-    <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
-    <td style="white-space:nowrap;">
-      <button class="action-btn edit-btn" onclick="openEditNews('${n.id}','${escStr(n.title)}','${n.category||''}','${n.thumbnail||''}','${escStr(n.content||'')}')">✏️ Засах</button>
-      <button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button>
-    </td>
-  </tr>`).join('')}</tbody></table>`;
+  try{
+    const news=await supaFetch('news','order=created_at.desc');
+    if(!Array.isArray(news)||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
+    el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${news.map(n=>`<tr>
+      <td>${n.title}</td>
+      <td><span class="badge badge-green">${n.category||'-'}</span></td>
+      <td>${n.sub_category?`<span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${n.sub_category}</span>`:'—'}</td>
+      <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+      <td>👁 ${n.views||0}</td>
+      <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
+      <td style="white-space:nowrap;">
+        <button class="action-btn edit-btn" onclick="openEditNews('${n.id}','${escStr(n.title)}','${n.category||''}','${n.thumbnail||''}','${escStr(n.content||'')}')">✏️ Засах</button>
+        <button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
 }
 async function deleteNews(id){if(!confirm('Устгах уу?'))return;await supaDelete('news',id);loadNewsList();loadStats();}
+
 function openEditNews(id,title,cat,thumb,content){
   document.getElementById('edit-news-id').value=id;
   document.getElementById('edit-n-title').value=title;
@@ -1024,24 +1141,28 @@ async function saveNews(){
 
 async function loadAdList(){
   const el=document.getElementById('ads-table');
+  if(!el) return;
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
-  const ads=await supaFetch('ads','order=created_at.desc');
-  if(!Array.isArray(ads)||ads.length===0){el.innerHTML='<div class="loading">Реклам байхгүй байна</div>';return;}
-  el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Зураг</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
-  ${ads.map(a=>`<tr>
-    <td>${a.title}</td>
-    <td style="color:rgba(255,255,255,0.5);font-size:11px;">${a.description||'-'}</td>
-    <td>${a.image_url?`<img src="${a.image_url}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
-    <td><span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${a.button_text||'-'}</span></td>
-    <td>${a.active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
-    <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
-    <td style="white-space:nowrap;">
-      <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}','${a.image_url||''}',${!!a.active})">✏️ Засах</button>
-      <button class="action-btn del-btn" onclick="deleteAd('${a.id}')">🗑 Устгах</button>
-    </td>
-  </tr>`).join('')}</tbody></table>`;
+  try{
+    const ads=await supaFetch('ads','order=created_at.desc');
+    if(!Array.isArray(ads)||ads.length===0){el.innerHTML='<div class="loading">Реклам байхгүй байна</div>';return;}
+    el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Тайлбар</th><th>Зураг</th><th>Товч</th><th>Идэвхтэй</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${ads.map(a=>`<tr>
+      <td>${a.title}</td>
+      <td style="color:rgba(255,255,255,0.5);font-size:11px;">${a.description||'-'}</td>
+      <td>${a.image_url?`<img src="${a.image_url}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+      <td><span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${a.button_text||'-'}</span></td>
+      <td>${a.active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
+      <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
+      <td style="white-space:nowrap;">
+        <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}','${a.image_url||''}',${!!a.active})">✏️ Засах</button>
+        <button class="action-btn del-btn" onclick="deleteAd('${a.id}')">🗑 Устгах</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
 }
-async function deleteAd(id){if(!confirm('Рекламыг устгах уу?'))return;await supaDelete('ads',id);loadAdList();loadStats();}
+async function deleteAd(id){if(!confirm('Устгах уу?'))return;await supaDelete('ads',id);loadAdList();loadStats();}
+
 function openEditAd(id,title,desc,btn,image,active){
   document.getElementById('edit-ad-id').value=id;
   document.getElementById('edit-a-title').value=title;
