@@ -1161,18 +1161,42 @@ function closeMcatDropdown() {
   document.getElementById('news-filter-tabs').innerHTML = '';
 }
 
-// ✅ ЗАССАН FUNC — "БҮГД" ДЭЭР ТУХАЙ АНГИЛАЛЫН МЭДЭЭ ГАРАХ
+// ✅ ЗАССАН FUNC — "БҮГД" БА "ДЭД АНГИЛАЛ" ТУСДАА ШҮҮХ
 function handleMcatSub(cat, btn, mainKey) {
   document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const label = btn.textContent;
-  
+
   if (label === 'Бүгд') {
     document.getElementById('news-category-label').textContent = mainKey;
-    loadNewsByCategory(mainKey);
+    loadNewsByCategory(mainKey);       // category-аар шүүнэ
   } else {
     document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
-    loadNewsByCategory(cat);
+    loadNewsBySubCategory(cat);        // sub_category-аар шүүнэ
+  }
+}
+
+// ✅ ШИНЭ FUNC — sub_category-аар шүүх
+async function loadNewsBySubCategory(subCategory) {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
+  try {
+    let params = 'order=created_at.desc&limit=100';
+    if (subCategory) {
+      params += `&sub_category=eq.${encodeURIComponent(subCategory)}`;
+    }
+    const news = await supaFetch('news', params);
+    if (!news || news.length === 0) {
+      list.innerHTML = `<div class="empty-state"><p>"${subCategory}" ангилалд мэдээ байхгүй</p></div>`;
+      document.getElementById('news-pagination').innerHTML = '';
+      return;
+    }
+    allNews = news;
+    newsPage = 1;
+    renderNewsPage();
+  } catch (error) {
+    console.error('loadNewsBySubCategory error:', error);
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
 
@@ -1273,7 +1297,6 @@ let allNews = [];
 let newsPage = 1;
 const NEWS_PER_PAGE = 8; // 2 эгнээ × 4
 
-// ✅ ЗАССАН FUNC — category БАГАНААР ШҮҮХ
 async function loadNewsByCategory(category) {
   const list = document.getElementById('news-list');
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
@@ -1281,7 +1304,6 @@ async function loadNewsByCategory(category) {
   try {
     let params = 'order=created_at.desc&limit=100';
     if (category) {
-      // ✅ sub_category биш, category баганаар шүүх
       params += `&category=eq.${encodeURIComponent(category)}`;
     }
     const news = await supaFetch('news', params);
