@@ -82,7 +82,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .share-btn{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .share-btn:hover{border-color:var(--border2);color:var(--accent);}
 
-/* BACK BTN */
+/* BACK BTN — ӨМНӨХ ХУУДАС РУУ БУЦАХ */
 .back-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:28px;}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);}
 
@@ -176,7 +176,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <span id="bc-title" style="color:var(--text2);">...</span>
   </div>
 
-  <a href="news.html" class="back-btn">← Мэдээ рүү буцах</a>
+  <!-- ✅ ЗАССАН: ӨМНӨХ ХУУДАС РУУ БУЦАХ -->
+  <a href="javascript:history.back()" class="back-btn">← Буцах</a>
 
   <!-- SKELETON -->
   <div id="skeleton-wrap">
