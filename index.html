@@ -1064,7 +1064,6 @@ function showMoviesOnly(el) {
   setTimeout(() => goSection('movies'), 100);
 }
 
-// ✅ ЗАССАН MCAT_MENUS — БҮХ МЭДЭЭНИЙ АНГИЛАЛД "БҮГД" ЗӨВ БОЛСОН
 const MCAT_MENUS = {
   'Сургалт': [
     { label: 'Бүгд', cat: 'Сургалт' },
@@ -1274,6 +1273,32 @@ let allNews = [];
 let newsPage = 1;
 const NEWS_PER_PAGE = 8; // 2 эгнээ × 4
 
+// ✅ ЗАССАН FUNC — category БАГАНААР ШҮҮХ
+async function loadNewsByCategory(category) {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
+  
+  try {
+    let params = 'order=created_at.desc&limit=100';
+    if (category) {
+      // ✅ sub_category биш, category баганаар шүүх
+      params += `&category=eq.${encodeURIComponent(category)}`;
+    }
+    const news = await supaFetch('news', params);
+    if (!news || news.length === 0) {
+      list.innerHTML = `<div class="empty-state"><p>"${category}" ангилалд мэдээ байхгүй</p></div>`;
+      document.getElementById('news-pagination').innerHTML = '';
+      return;
+    }
+    allNews = news;
+    newsPage = 1;
+    renderNewsPage();
+  } catch (error) {
+    console.error('loadNewsByCategory error:', error);
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
+  }
+}
+
 async function loadNews() {
   const list = document.getElementById('news-list');
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
@@ -1289,30 +1314,6 @@ async function loadNews() {
     renderNewsPage();
   } catch (error) {
     console.error('loadNews error:', error);
-    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
-  }
-}
-
-async function loadNewsByCategory(category) {
-  const list = document.getElementById('news-list');
-  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
-  
-  try {
-    let params = 'order=created_at.desc&limit=100';
-    if (category) {
-      params += `&sub_category=eq.${encodeURIComponent(category)}`;
-    }
-    const news = await supaFetch('news', params);
-    if (!news || news.length === 0) {
-      list.innerHTML = `<div class="empty-state"><p>"${category}" ангилалд мэдээ байхгүй</p></div>`;
-      document.getElementById('news-pagination').innerHTML = '';
-      return;
-    }
-    allNews = news;
-    newsPage = 1;
-    renderNewsPage();
-  } catch (error) {
-    console.error('loadNewsByCategory error:', error);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
