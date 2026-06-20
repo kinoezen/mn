@@ -44,25 +44,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .date-text{font-size:11px;color:var(--text4);}
 
 /* LAYOUT */
-.container{max-width:820px;margin:0 auto;padding:32px 24px 48px;}
+.container{max-width:820px;margin:0 auto;padding:24px 24px 48px;}
 
-/* ===== BREADCRUMB — ЗӨВ АНГИЛАЛ ХАРУУЛАХ ===== */
-.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text4);margin-bottom:16px;flex-wrap:wrap;}
+/* ===== BACK BTN — ХАМГИЙН ДЭЭД ТАЛД ===== */
+.back-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:12px;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ===== BREADCRUMB — ТОВЧ, ЦЭВЭР ===== */
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text4);margin-bottom:20px;flex-wrap:wrap;}
 .breadcrumb a{color:var(--text4);text-decoration:none;transition:color 0.2s;}
 .breadcrumb a:hover{color:var(--accent);}
 .breadcrumb .current-cat{color:var(--accent);font-weight:600;}
-
-/* BACK BTN — ХАМГИЙН ДЭЭД ТАЛД */
-.back-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:20px;}
-.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+.breadcrumb .separator{color:var(--text4);}
 
 /* SKELETON */
 .skeleton{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;}
 
-/* ARTICLE — ГАНЦ ГАРЧИГ */
+/* ===== ARTICLE — ГАНЦ ГАРЧИГ, ДАВХАРДАХГҮЙ ===== */
 .article{animation:fadeUp 0.4s ease both;}
-.article-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(74,222,128,0.12);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:14px;}
-.article-title{font-family:var(--font-display);font-size:32px;letter-spacing:1px;line-height:1.15;margin-bottom:14px;}
+.article-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(74,222,128,0.12);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:12px;}
+.article-title{font-family:var(--font-display);font-size:32px;letter-spacing:1px;line-height:1.15;margin-bottom:14px;color:var(--text);}
 .article-meta{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap;}
 .meta-item{font-size:12px;color:var(--text4);display:flex;align-items:center;gap:4px;}
 .article-img{width:100%;max-height:420px;object-fit:cover;border-radius:var(--radius);margin-bottom:24px;border:1px solid var(--border);}
@@ -128,7 +129,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .nav-right.open{display:flex;}
   .nav-toggle{display:block;}
   .weather-bar{flex-direction:column;align-items:flex-start;gap:5px;padding:7px 16px;}
-  .container{padding:20px 16px 36px;}
+  .container{padding:16px 16px 36px;}
   .article-title{font-size:24px;}
   .related-grid{grid-template-columns:repeat(2,1fr);}
   .reactions-bar{gap:4px;}
@@ -175,12 +176,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   <!-- ===== BACK BTN — ХАМГИЙН ДЭЭД ТАЛД ===== -->
   <a href="javascript:history.back()" class="back-btn">← Буцах</a>
 
-  <!-- ===== BREADCRUMB — АНГИЛАЛЫН НЭРИЙГ ЗӨВ ХАРУУЛАХ ===== -->
+  <!-- ===== BREADCRUMB — ТОВЧ, ЦЭВЭР ===== -->
   <div class="breadcrumb">
-    <a href="index.html">Нүүр</a> ›
-    <a href="news.html">Мэдээ</a> ›
-    <span class="current-cat" id="bc-category">...</span> ›
-    <span id="bc-title" style="color:var(--text2);">...</span>
+    <a href="index.html">Нүүр</a>
+    <span class="separator">›</span>
+    <a href="news.html">Мэдээ</a>
+    <span class="separator">›</span>
+    <span class="current-cat" id="bc-category">...</span>
   </div>
 
   <!-- SKELETON -->
@@ -195,7 +197,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <div class="skeleton" style="height:14px;width:80%;"></div>
   </div>
 
-  <!-- ARTICLE -->
+  <!-- ===== ARTICLE — ГАНЦ ГАРЧИГ ===== -->
   <article id="article-wrap" style="display:none;" class="article"></article>
 
   <!-- ERROR -->
@@ -307,7 +309,7 @@ document.addEventListener('click', e => {
 const newsId = new URLSearchParams(window.location.search).get('id');
 
 // ============================================================
-// РЕАКЦ (Сэтгэл хөдлөл)
+// РЕАКЦ
 // ============================================================
 const reactionData = {
   '❤️': { id: 'react-love', count: 0 },
@@ -391,7 +393,7 @@ function checkSaved() {
 }
 
 // ============================================================
-// МЭДЭЭГДЭЛ (Toast)
+// МЭДЭЭГДЭЛ
 // ============================================================
 function showToast(msg) {
   const old = document.querySelector('.toast');
@@ -442,10 +444,9 @@ async function loadNews() {
 
     document.title = (n.title || 'Мэдээ') + ' — КиноЭзэн';
     
-    // ===== BREADCRUMB — АНГИЛАЛЫН НЭРИЙГ ЗӨВ ХАРУУЛАХ =====
+    // ===== BREADCRUMB — ЗӨВХӨН АНГИЛАЛ =====
     const categoryName = n.category || 'Мэдээ';
     document.getElementById('bc-category').textContent = categoryName;
-    document.getElementById('bc-title').textContent = n.title || '';
 
     const emoji = CAT_EMOJI[n.category] || '📰';
     const bg = CAT_BG[n.category] || 'linear-gradient(135deg,#1a1a2a,#2a2a4a)';
