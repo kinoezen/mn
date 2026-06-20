@@ -29,22 +29,21 @@
     --shadow-accent: 0 4px 24px rgba(74, 222, 128, 0.2);
   }
 
-  /* ===== WEATHER BAR ===== */
+  /* ===== WEATHER BAR — ХАЙРЦГААС ГАРГАСАН ===== */
   .weather-bar {
-    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-    border-radius: 12px;
-    padding: 12px 24px;
-    margin: 8px 16px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 8px;
+    padding: 4px 16px 8px;
+    margin: 0;
     color: #fff;
     font-family: 'Nunito', sans-serif;
     font-size: 15px;
-    box-shadow: 0 4px 16px rgba(74, 222, 128, 0.1);
+    background: transparent;
+    border: none;
+    box-shadow: none;
   }
   .weather-left {
     display: flex;
@@ -73,7 +72,104 @@
     letter-spacing: 0.5px;
   }
 
-  /* ===== LOGO — ӨМНӨХ ШИГЭЭ (ХӨНДӨХГҮЙ) ===== */
+  /* ===== AD — 728×90 ===== */
+  .ad-wrapper {
+    max-width: 728px;
+    margin: 8px auto;
+    padding: 0 16px;
+  }
+  .ad-slider-container {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
+    border: 1px solid rgba(74, 222, 128, 0.15);
+  }
+  .ad-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .ad-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    animation: adFade 0.6s ease;
+  }
+  .ad-slide.active {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    gap: 12px;
+  }
+  .ad-slide .ad-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .ad-slide .ad-banner img,
+  .ad-slide .ad-banner video {
+    max-height: 70px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  .ad-slide .ad-text {
+    flex: 1;
+    min-width: 120px;
+  }
+  .ad-slide .ad-text strong {
+    color: #4ade80;
+    font-size: 14px;
+  }
+  .ad-slide .ad-text div {
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+  }
+  .ad-btn {
+    background: linear-gradient(90deg, #4ade80, #fbbf24);
+    border: none;
+    color: #0a0a14;
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .ad-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .ad-dots {
+    display: none;
+  }
+  .ad-label {
+    display: none;
+  }
+  .ad-size-label {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.15);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes adFade {
+    0% { opacity: 0; transform: scale(0.96); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ===== LOGO ===== */
   .logo-text {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 30px;
@@ -86,7 +182,7 @@
   }
 
   /* ===== ТОВЧНУУД ===== */
-  .btn-primary, .form-btn, .watch-btn, .ad-btn {
+  .btn-primary, .form-btn, .watch-btn {
     background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
     border: none;
     color: #0a0a14;
@@ -96,7 +192,7 @@
     transform: translateY(-1px);
   }
 
-  /* ===== ЦЭСНҮҮД — ОЛОН ӨНГӨТЭЙ ===== */
+  /* ===== ЦЭСНҮҮД ===== */
   .mcat-card {
     border: 1px solid rgba(255,255,255,0.06);
     transition: all 0.3s ease;
@@ -259,87 +355,7 @@
     color: rgba(255, 255, 255, 0.7);
   }
 
-  /* ===== РЕКЛАМ СЛАЙДЕР ===== */
-  .ad-slider-container {
-    position: relative;
-    max-width: 900px;
-    margin: 0 auto;
-    overflow: hidden;
-    border-radius: 12px;
-  }
-  .ad-slider {
-    position: relative;
-    min-height: 80px;
-  }
-  .ad-slide {
-    display: none;
-    animation: adFade 0.6s ease;
-  }
-  .ad-slide.active {
-    display: block;
-  }
-  .ad-slide .ad-banner {
-    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-    border: 1px solid rgba(74, 222, 128, 0.15);
-    border-radius: 12px;
-    padding: 16px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    min-height: 80px;
-  }
-  .ad-slide .ad-banner img,
-  .ad-slide .ad-banner video {
-    max-height: 80px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  .ad-slide .ad-text {
-    flex: 1;
-    min-width: 150px;
-  }
-  .ad-slide .ad-text strong {
-    color: #4ade80;
-    font-size: 15px;
-  }
-  .ad-slide .ad-text div {
-    color: rgba(255,255,255,0.6);
-    font-size: 13px;
-  }
-  .ad-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 0 4px;
-  }
-  .ad-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-  }
-  .ad-dot.active {
-    background: #4ade80;
-    transform: scale(1.2);
-  }
-  @keyframes adFade {
-    0% { opacity: 0; transform: scale(0.96); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-  .ad-label {
-    text-align: center;
-    font-size: 10px;
-    color: rgba(255,255,255,0.15);
-    margin-top: 4px;
-    letter-spacing: 2px;
-  }
-
-  /* ===== 14 ЦЭС — 2 ЭГНЭЭ, 7 БАГАНА ===== */
+  /* ===== 14 ЦЭС ===== */
   .main-cats-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -347,7 +363,6 @@
     padding: 0 24px 8px;
   }
 
-  /* ===== RESPONSIVE ===== */
   @media(max-width: 900px) {
     .main-cats-grid {
       grid-template-columns: repeat(7, 1fr);
@@ -405,7 +420,6 @@
     font-size: 64px;
   }
 
-  /* ===== ЖАНР ===== */
   #movie-genre-section {
     display: block !important;
   }
@@ -414,6 +428,24 @@
   }
   .genre-toggle-btn {
     display: none !important;
+  }
+
+  /* ===== AD RESPONSIVE ===== */
+  @media(max-width: 600px) {
+    .ad-slide .ad-banner {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ad-slide .ad-text strong {
+      font-size: 12px;
+    }
+    .ad-slide .ad-text div {
+      font-size: 10px;
+    }
+    .ad-btn {
+      font-size: 10px;
+      padding: 4px 12px;
+    }
   }
 </style>
 </head>
@@ -469,7 +501,7 @@
   <div class="date-text">Кино Эзэн — Бүхнийг нэг дороос</div>
 </div>
 
-<!-- ===== AD ===== -->
+<!-- ===== AD — 728×90 ===== -->
 <div class="ad-wrapper">
   <div class="ad-slider-container">
     <div class="ad-slider" id="ad-slider">
@@ -484,6 +516,7 @@
       </div>
     </div>
     <div class="ad-dots" id="ad-dots"></div>
+    <div class="ad-size-label">728×90</div>
   </div>
 </div>
 
@@ -1256,11 +1289,11 @@ function renderAds() {
   slider.innerHTML = adsData.map((ad, index) => {
     let mediaHtml = '';
     if (ad.video_url) {
-      mediaHtml = `<video autoplay muted loop playsinline style="max-height:80px;border-radius:8px;object-fit:cover;">
+      mediaHtml = `<video autoplay muted loop playsinline style="max-height:70px;border-radius:8px;object-fit:cover;">
         <source src="${ad.video_url}" type="video/mp4">
       </video>`;
     } else if (ad.image_url) {
-      mediaHtml = `<img src="${ad.image_url}" style="max-height:80px;border-radius:8px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
+      mediaHtml = `<img src="${ad.image_url}" style="max-height:70px;border-radius:8px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
     }
     
     return `<div class="ad-slide${index === 0 ? ' active' : ''}" data-index="${index}">
