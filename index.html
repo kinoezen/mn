@@ -1162,16 +1162,18 @@ function closeMcatDropdown() {
   document.getElementById('news-filter-tabs').innerHTML = '';
 }
 
+// ✅ ЗАССАН FUNC — "БҮГД" ДЭЭР ТУХАЙ АНГИЛАЛЫН МЭДЭЭ ГАРАХ
 function handleMcatSub(cat, btn, mainKey) {
   document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const label = btn.textContent;
-  document.getElementById('news-category-label').textContent = label !== 'Бүгд' ? mainKey + ' › ' + label : mainKey;
   
-  if (cat) {
-    loadNewsByCategory(cat);
+  if (label === 'Бүгд') {
+    document.getElementById('news-category-label').textContent = mainKey;
+    loadNewsByCategory(mainKey);
   } else {
-    loadNews();
+    document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
+    loadNewsByCategory(cat);
   }
 }
 
