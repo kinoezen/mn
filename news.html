@@ -134,7 +134,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .section-title span{color:var(--accent);}
 .news-count{font-size:12px;color:var(--text4);font-weight:600;}
 
-/* NEWS GRID — 3 эгнээ */
+/* NEWS GRID — 2 ЭГНЭЭ (4 КАРТ) */
 .news-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 24px 24px;}
 .news-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);display:flex;flex-direction:column;transition:border-color 0.25s,transform 0.25s;animation:fadeUp 0.5s ease both;}
 .news-card:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:var(--shadow-accent);}
@@ -395,7 +395,7 @@ let currentCategory='';
 let currentSearch='';
 let currentSort='created_at';
 let newsPage=1;
-const NEWS_PER_PAGE=12; // 3 эгнээ × 4
+const NEWS_PER_PAGE=8; // 2 эгнээ × 4 карт
 
 // URL-ээс ангилал унших
 const urlParams=new URLSearchParams(window.location.search);
@@ -543,7 +543,7 @@ function renderNews(){
     featured.innerHTML=filtered.length>0?buildFeatured(filtered[0]):'';
   }
 
-  // Хуудаслалт
+  // Хуудаслалт - 2 эгнээ (8 карт)
   const totalPages=Math.ceil(filtered.length/NEWS_PER_PAGE)||1;
   const start=(newsPage-1)*NEWS_PER_PAGE;
   const end=start+NEWS_PER_PAGE;
@@ -554,7 +554,6 @@ function renderNews(){
   if(pageItems.length===0 && filtered.length<=1){
     list.innerHTML=`<div class="empty-state"><div class="icon">📭</div><p>Мэдээ олдсонгүй</p></div>`;
   } else if(pageItems.length===0 && filtered.length>1){
-    // Хэрэв хоосон хуудас байвал эхний хуудас руу
     newsPage=1;
     renderNews();
     return;
