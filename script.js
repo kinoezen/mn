@@ -320,7 +320,6 @@ const MCAT_MENUS = {
     { label: 'Сурвалжилга', cat: 'Сурвалжилга' }
   ]
 };
-
 let currentMainCategory = '';
 
 function openMcatDropdown(card, menuKey) {
