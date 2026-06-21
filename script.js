@@ -1,1553 +1,674 @@
-root {
-  --bg: #0e0e18;
-  --bg2: #161624;
-  --bg3: #1e1e32;
-  --bg4: #252540;
-  --accent: #4ade80;
-  --accent2: #f4a261;
-  --red: #e63946;
-  --border: rgba(255, 255, 255, 0.08);
-  --border2: rgba(74, 222, 128, 0.2);
-  --text: #fff;
-  --text2: rgba(255, 255, 255, 0.7);
-  --text3: rgba(255, 255, 255, 0.45);
-  --text4: rgba(255, 255, 255, 0.25);
-  --font-display: 'Bebas Neue', sans-serif;
-  --font-body: 'Nunito', sans-serif;
-  --radius: 14px;
-  --radius-sm: 8px;
-  --bottom-nav-h: 60px;
+// ============================================================
+// КИНО ЭЗЭН — ҮНДСЭН JAVASCRIPT
+// ============================================================
+
+const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+function sanitize(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
 }
 
-/* ===== RESET ===== */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font-body);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes autoProgress {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes adFade {
-  0% {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
+// ===== SUPABASE FETCH =====
+async function supaFetch(table, params = '') {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    return await res.json();
+  } catch (error) {
+    console.error('supaFetch error:', error);
+    return [];
   }
 }
 
-/* ===== NAVBAR ===== */
-.nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 24px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: rgba(14, 14, 24, 0.97);
-  backdrop-filter: blur(20px);
-  z-index: 1000;
-  gap: 12px;
-}
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-.logo-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  border: 2px solid rgba(74, 222, 128, 0.5);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #1a0a2e, #3b1f6b);
-  box-shadow: 0 0 14px rgba(74, 222, 128, 0.25);
-}
-.logo-icon svg {
-  width: 32px;
-  height: 32px;
-}
-.logo-text {
-  font-family: var(--font-display);
-  font-size: 30px;
-  letter-spacing: 2px;
-  background: linear-gradient(90deg, #4ade80, #a3f0c0, #f4a261);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
-}
-.nav-links {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-.nav-links a {
-  color: var(--text3);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 11px;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s;
-}
-.nav-links a:hover,
-.nav-links a.active {
-  color: var(--accent);
-  background: rgba(74, 222, 128, 0.08);
-}
-.nav-right {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-.nav-search {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--bg3);
-  border-radius: 10px;
-  padding: 7px 12px;
-  border: 1px solid var(--border);
-  transition: border-color 0.2s;
-}
-.nav-search:focus-within {
-  border-color: var(--accent);
-}
-.nav-search input {
-  background: transparent;
-  border: none;
-  color: var(--text);
-  font-size: 13px;
-  font-family: var(--font-body);
-  outline: none;
-  width: 140px;
-}
-.nav-search input::placeholder {
-  color: var(--text4);
-}
-.btn-login {
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--text2);
-  font-size: 12px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.btn-login:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-.btn-join {
-  padding: 7px 14px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, var(--red), var(--accent2));
-  border: none;
-  color: #fff;
-  font-size: 12px;
-  font-family: var(--font-body);
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
-}
-.btn-join:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-.nav-toggle {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--text);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-}
-.mobile-search-btn {
-  display: none;
-  background: none;
-  border: none;
-  color: var(--text2);
-  font-size: 20px;
-  cursor: pointer;
-  padding: 6px 8px;
-  border-radius: var(--radius-sm);
-  line-height: 1;
-  transition: color 0.2s;
-}
-.mobile-search-btn:hover {
-  color: var(--accent);
-}
-.mobile-search-bar {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: rgba(14, 14, 24, 0.98);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 16px;
-  z-index: 999;
-  backdrop-filter: blur(20px);
-}
-.mobile-search-bar.open {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: slideIn 0.2s ease;
-}
-.mobile-search-bar input {
-  flex: 1;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 9px 14px;
-  color: var(--text);
-  font-size: 14px;
-  font-family: var(--font-body);
-  outline: none;
-}
-.mobile-search-bar input:focus {
-  border-color: var(--accent);
-}
-.mobile-search-close {
-  background: none;
-  border: none;
-  color: var(--text3);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px;
-}
+// ===== GENRE COLORS & GRADIENTS =====
+const genreColors = {
+  'Фантастик': 'cp-sci',
+  'Экшн': 'cp-act',
+  'Драм': 'cp-drm',
+  'Аймаар': 'cp-act',
+  'Романтик': 'cp-drm',
+  'Аниме': 'cp-sci',
+  'Олон ангит': 'cp-drm'
+};
+const genreGradients = {
+  'Фантастик': 'linear-gradient(135deg,#1a0a2e,#3b1f6b)',
+  'Экшн': 'linear-gradient(135deg,#2a0a0a,#6b1f1f)',
+  'Драм': 'linear-gradient(135deg,#0a1a0a,#1a3a20)',
+  'Аймаар': 'linear-gradient(135deg,#1a0a1a,#3b1f3b)',
+  'Романтик': 'linear-gradient(135deg,#1a0a0a,#3b1010)',
+  'Аниме': 'linear-gradient(135deg,#0a0a2a,#1f1f6b)',
+  'Олон ангит': 'linear-gradient(135deg,#0a1a2a,#1a3050)'
+};
 
-/* ===== WEATHER ===== */
-.weather-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 7px 24px;
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-}
-.weather-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-.weather-item {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  color: var(--text3);
-  font-weight: 500;
-}
-.weather-temp {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--accent);
-}
-.date-text {
-  font-size: 11px;
-  color: var(--text4);
-}
-
-/* ===== AD ===== */
-.ad-wrapper {
-  margin: 12px 24px 0;
-}
-.ad-slider-container {
-  position: relative;
-  max-width: 728px;
-  height: 90px;
-  margin: 0 auto;
-  overflow: hidden;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-  border: 1px solid rgba(74, 222, 128, 0.15);
-}
-.ad-slider {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.ad-slide {
-  display: none;
-  width: 100%;
-  height: 100%;
-  animation: adFade 0.6s ease;
-}
-.ad-slide.active {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  gap: 10px;
-}
-.ad-slide .ad-banner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 10px;
-  flex-wrap: nowrap;
-}
-.ad-slide .ad-banner img,
-.ad-slide .ad-banner video {
-  max-height: 60px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-.ad-slide .ad-text {
-  flex: 1;
-  min-width: 80px;
-}
-.ad-slide .ad-text strong {
-  color: #4ade80;
-  font-size: 13px;
-  display: block;
-}
-.ad-slide .ad-text div {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 11px;
-}
-.ad-btn {
-  background: linear-gradient(90deg, #4ade80, #fbbf24);
-  border: none;
-  color: #0a0a14;
-  padding: 5px 14px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 11px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.ad-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-.ad-dots {
-  display: none;
-}
-.ad-size-label {
-  position: absolute;
-  bottom: 4px;
-  right: 8px;
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.12);
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ===== HERO ===== */
-.hero-section {
-  padding: 16px 24px 10px;
-}
-.hero-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.hero-label-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, var(--red), var(--accent2));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-}
-.hero-label-text {
-  font-family: var(--font-display);
-  font-size: 18px;
-  letter-spacing: 1px;
-  color: var(--accent);
-}
-.featured-carousel-wrapper {
-  position: relative;
-  overflow: hidden;
-}
-.featured-track {
-  display: flex;
-  gap: 12px;
-  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-.featured-card {
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: var(--bg3);
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  flex: 0 0 calc(25% - 9px);
-  min-width: calc(25% - 9px);
-}
-.featured-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(74, 222, 128, 0.15);
-}
-.featured-img {
-  width: 100%;
-  height: 180px;
-  background: linear-gradient(160deg, #0d0d25, #1a1050);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-}
-.featured-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 0.4s;
-}
-.featured-img .fallback-emoji {
-  font-size: 64px;
-  z-index: 1;
-  position: relative;
-}
-.featured-card:hover .featured-img img {
-  transform: scale(1.05);
-}
-.featured-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to top, var(--bg3), transparent);
-}
-.featured-tags {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  display: flex;
-  gap: 5px;
-  z-index: 2;
-}
-.ftag {
-  font-size: 9px;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-.ftag-top {
-  background: linear-gradient(90deg, var(--red), var(--accent2));
-  color: #fff;
-}
-.ftag-new {
-  background: var(--accent);
-  color: #0a2a0a;
-}
-.featured-body {
-  padding: 10px 12px 12px;
-}
-.featured-cats {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 6px;
-}
-.cpill {
-  font-size: 9px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-weight: 700;
-}
-.cp-act {
-  background: var(--red);
-  color: #fff;
-}
-.cp-sci {
-  background: #3b4fd4;
-  color: #fff;
-}
-.cp-drm {
-  background: #2d8a4e;
-  color: #fff;
-}
-.featured-title {
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 0.5px;
-  line-height: 1.2;
-  margin-bottom: 5px;
-}
-.featured-desc {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.5;
-  margin-bottom: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.featured-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-.author {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.ava {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 800;
-  color: #fff;
-  flex-shrink: 0;
-}
-.ava-name {
-  font-size: 10px;
-  color: var(--text3);
-  font-weight: 600;
-}
-.stats-row {
-  display: flex;
-  gap: 8px;
-}
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 10px;
-  color: var(--text3);
-}
-.watch-btn {
-  width: 100%;
-  padding: 9px;
-  border-radius: 8px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border: none;
-  color: #0a2a0a;
-  font-size: 12px;
-  font-family: var(--font-display);
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-.watch-btn:hover {
-  opacity: 0.9;
-}
-.carousel-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 14px;
-}
-.carousel-btn {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  color: var(--text2);
-  font-size: 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.carousel-btn:hover {
-  background: var(--accent);
-  color: #0a2a0a;
-  border-color: var(--accent);
-}
-.carousel-dots {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.2);
-  cursor: pointer;
-  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  flex-shrink: 0;
-}
-.dot.active {
-  width: 24px;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
-}
-.carousel-auto-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 1px;
-}
-.carousel-auto-bar.running {
-  animation: autoProgress 5s linear forwards;
-}
-
-/* ===== SECTIONS ===== */
-.section {
-  padding: 16px 24px 8px;
-}
-.section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-.section-title {
-  font-family: var(--font-display);
-  font-size: 19px;
-  letter-spacing: 1px;
-  color: var(--text2);
-}
-.section-title span {
-  color: var(--accent);
-}
-
-/* ===== MAIN CATEGORY GRID ===== */
-.main-cats-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 10px;
-  padding: 0 24px 8px;
-}
-.mcat-card {
-  background: var(--bg3);
-  border-radius: 12px;
-  padding: 12px 10px 10px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.mcat-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(255, 255, 255, 0.14);
-}
-.mcat-all.selected {
-  border-color: var(--accent);
-  background: rgba(74, 222, 128, 0.12);
-}
-.mcat-icon {
-  width: 42px;
-  height: 42px;
-  margin-bottom: 7px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
-  transition: transform 0.25s;
-  flex-shrink: 0;
-}
-.mcat-all .mcat-icon {
-  border-radius: 50%;
-}
-.mcat-card:hover .mcat-icon {
-  transform: scale(1.1) rotate(-3deg);
-}
-.mcat-icon svg {
-  width: 42px;
-  height: 42px;
-  display: block;
-}
-.mcat-label {
-  font-family: var(--font-display);
-  font-size: 13px;
-  letter-spacing: 0.4px;
-  color: var(--text);
-  margin-bottom: 2px;
-  line-height: 1.1;
-}
-.mcat-sub {
-  font-size: 9px;
-  color: var(--text4);
-  font-weight: 500;
-  margin-bottom: 5px;
-  line-height: 1.2;
-}
-.mcat-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text3);
-}
-
-/* ===== ЦЭСНҮҮДИЙН ӨНГӨ ===== */
-.mcat-all .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
-.mcat-movie .mcat-icon { background: linear-gradient(135deg, #e63946, #f4a261); }
-.mcat-news .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
-.mcat-travel .mcat-icon { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
-.mcat-science .mcat-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
-.mcat-ai .mcat-icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-.mcat-history .mcat-icon { background: linear-gradient(135deg, #f97316, #dc2626); }
-.mcat-knowledge .mcat-icon { background: linear-gradient(135deg, #10b981, #0891b2); }
-.mcat-product .mcat-icon { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
-.mcat-stars .mcat-icon { background: linear-gradient(135deg, #facc15, #fb923c); }
-.mcat-lesson .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
-.mcat-software .mcat-icon { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-.mcat-ads .mcat-icon { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-.mcat-shop .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
-
-/* ===== MOVIE GRID ===== */
-.grid-4 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 0 24px 20px;
-}
-.grid-card {
-  background: var(--bg3);
-  border-radius: var(--radius);
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
-  animation: fadeUp 0.4s ease both;
-}
-.grid-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-accent);
-}
-.grid-img {
-  width: 100%;
-  aspect-ratio: 16/9;
-  background: linear-gradient(135deg, #1a0a2e, #3b1f6b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  position: relative;
-  overflow: hidden;
-}
-.grid-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s;
-}
-.grid-card:hover .grid-img img {
-  transform: scale(1.05);
-}
-.grid-badge {
-  position: absolute;
-  top: 7px;
-  left: 7px;
-  font-size: 9px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-weight: 700;
-}
-.grid-body {
-  padding: 10px 12px 12px;
-}
-.grid-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
-  line-height: 1.35;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.grid-meta {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 8px;
-}
-.grid-stats {
-  display: flex;
-  gap: 10px;
-}
-.gstat {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  font-weight: 600;
-  transition: color 0.2s;
-  padding: 2px 0;
-  background: none;
-  border: none;
-  font-family: var(--font-body);
-}
-.gstat:hover {
-  color: var(--accent);
-}
-.gstat.liked {
-  color: var(--red);
-}
-
-/* ===== CAT ROW ===== */
-.cat-row {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 0 24px 8px;
-  scrollbar-width: none;
-}
-.cat-row::-webkit-scrollbar {
-  display: none;
-}
-.cat-btn {
-  padding: 7px 15px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--text3);
-  font-size: 12px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.2s;
-}
-.cat-btn:hover {
-  border-color: var(--border2);
-  color: var(--accent);
-}
-.cat-btn.on {
-  background: var(--accent);
-  color: #0a2a0a;
-  border-color: var(--accent);
-}
-
-/* ===== NEWS ===== */
-.news-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  padding: 0 24px 20px;
-}
-.news-card {
-  background: var(--bg3);
-  border-radius: var(--radius);
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  transition: border-color 0.25s, transform 0.25s;
-  animation: fadeUp 0.5s ease both;
-}
-.news-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-accent);
-}
-.news-img {
-  width: 100%;
-  height: 160px;
-  background: linear-gradient(135deg, #1a1a0a, #2a2a10);
-  overflow: hidden;
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.news-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: transform 0.4s;
-}
-.news-card:hover .news-img img {
-  transform: scale(1.04);
-}
-.news-img .n-emoji {
-  font-size: 44px;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
-  transition: transform 0.3s;
-  position: relative;
-  z-index: 1;
-}
-.news-card:hover .n-emoji {
-  transform: scale(1.12) rotate(-4deg);
-}
-.news-body {
-  padding: 10px 12px 12px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.news-cat {
-  font-size: 9px;
-  padding: 3px 8px;
-  border-radius: 20px;
-  font-weight: 700;
-  background: rgba(74, 222, 128, 0.12);
-  color: var(--accent);
-  display: inline-block;
-  margin-bottom: 5px;
-}
-.news-title {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.4;
-  margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.news-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.news-date {
-  font-size: 10px;
-  color: var(--text4);
-}
-.news-views {
-  font-size: 10px;
-  color: var(--text4);
-}
-
-/* ===== PAGINATION ===== */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 20px 0 10px;
-  flex-wrap: wrap;
-}
-.pagination button {
-  padding: 6px 14px;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #1e1e32;
-  color: #ccc;
-  font-size: 13px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.pagination button:hover {
-  border-color: #4ade80;
-  color: #4ade80;
-}
-.pagination button.active {
-  background: #4ade80;
-  border-color: #4ade80;
-  color: #0a0a14;
-}
-.pagination button:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-.pagination .page-num {
-  min-width: 36px;
-  text-align: center;
-}
-
-/* ===== NEWS CATEGORY LABEL — ТОМ, ТОД ===== */
-#news-category-label {
-  font-size: 24px !important;
-  font-weight: 700 !important;
-  color: #4ade80 !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 10px !important;
-  display: inline-block !important;
-  cursor: default;
-  pointer-events: none;
-  text-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
-}
-
-/* ===== NEWS FILTER — ЖИЖИГРҮҮЛСЭН ===== */
-.news-filter-btn {
-  font-size: 10px !important;
-  padding: 2px 8px !important;
-  border-radius: 12px !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: #ccc !important;
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-family: var(--font-body);
-  font-weight: 600;
-  white-space: nowrap;
-}
-.news-filter-btn:hover {
-  background: rgba(74, 222, 128, 0.08) !important;
-  color: #4ade80 !important;
-}
-.news-filter-btn.active {
-  background: rgba(74, 222, 128, 0.15) !important;
-  border-color: #4ade80 !important;
-  color: #4ade80 !important;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  background: #0a0a14;
-  padding: 28px 24px 18px;
-  border-top: 1px solid var(--border);
-  margin-top: 8px;
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 24px;
-}
-.footer-col h4 {
-  font-family: var(--font-display);
-  font-size: 15px;
-  letter-spacing: 1px;
-  color: var(--accent);
-  margin-bottom: 12px;
-}
-.footer-col p {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.7;
-}
-.footer-col a {
-  display: block;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  margin-bottom: 7px;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-.footer-col a:hover {
-  color: var(--accent);
-}
-.footer-social {
-  display: flex;
-  gap: 12px;
-  margin-top: 14px;
-  flex-wrap: wrap;
-}
-.social-btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  color: #fff;
-  transition: transform 0.2s, opacity 0.2s;
-  border: none;
-}
-.social-btn:hover {
-  transform: translateY(-3px);
-  opacity: 0.9;
-}
-.sb-fb {
-  background: linear-gradient(135deg, #1877f2, #0a5ab4);
-}
-.sb-ig {
-  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #bc1888);
-}
-.sb-yt {
-  background: linear-gradient(135deg, #ff0000, #cc0000);
-}
-.sb-x {
-  background: linear-gradient(135deg, #000000, #333333);
-}
-.social-btn svg {
-  width: 26px;
-  height: 26px;
-  fill: #fff;
-}
-.footer-phone {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 10px;
-  padding: 9px 12px;
-  background: rgba(74, 222, 128, 0.06);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: 700;
-}
-.footer-bottom {
-  border-top: 1px solid var(--border);
-  padding-top: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.footer-copy {
-  font-size: 11px;
-  color: var(--text4);
-}
-.footer-links {
-  display: flex;
-  gap: 14px;
-}
-.footer-links a {
-  font-size: 11px;
-  color: var(--text4);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-links a:hover {
-  color: var(--accent);
-}
-
-/* ===== MESSENGER FAB ===== */
-.messenger-fab {
-  position: fixed;
-  bottom: calc(var(--bottom-nav-h) + 14px);
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0084ff, #00c6ff);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 24px rgba(0, 132, 255, 0.4);
-  z-index: 998;
-  text-decoration: none;
-  font-size: 22px;
-  transition: transform 0.2s;
-}
-.messenger-fab:hover {
-  transform: scale(1.1);
-}
-
-/* ===== EMPTY / TOAST ===== */
-.empty-state {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 36px 20px;
-  color: var(--text3);
-}
-.empty-state .icon {
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-.empty-state p {
-  font-size: 14px;
-  font-weight: 600;
-}
-.toast {
-  position: fixed;
-  bottom: calc(var(--bottom-nav-h) + 12px);
-  right: 20px;
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  color: var(--text);
-  padding: 9px 14px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 600;
-  z-index: 2000;
-  animation: fadeUp 0.3s ease;
-  box-shadow: var(--shadow);
-}
-
-/* ===== MOBILE BOTTOM NAV ===== */
-.mobile-bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 68px;
-  background: rgba(12, 12, 22, 0.98);
-  backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(74, 222, 128, 0.15);
-  z-index: 1000;
-  padding: 0 8px;
-  padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
-}
-.mobile-bottom-nav .mbn-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 100%;
-  max-width: 400px;
-  margin: 0 auto;
-}
-.mbn-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 10px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-  background: none;
-  flex: 1;
-  min-width: 0;
-  max-width: 80px;
-  letter-spacing: 0.3px;
-}
-.mbn-item.active {
-  color: var(--accent);
-}
-.mbn-item svg {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: all 0.25s;
-}
-.mbn-item.active svg {
-  stroke: var(--accent);
-  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.5));
-}
-.mbn-item span {
-  font-size: 10px;
-  line-height: 1;
-  opacity: 0.8;
-}
-.mbn-item.active span {
-  opacity: 1;
-}
-.mbn-item .mbn-logo-icon {
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, #4ade80, #fbbf24);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 900;
-  color: #0a0a14;
-}
-
-/* ============================================================ */
-/* ===== УТАСНЫ ХАРАГДАЦ ===== */
-/* ============================================================ */
-
-@media(max-width: 768px) {
-  .nav {
-    padding: 10px 16px;
-    flex-wrap: wrap;
-    position: relative;
-  }
-  .nav-links {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px 0;
-    border-top: 1px solid var(--border);
-  }
-  .nav-links.open {
-    display: flex;
-  }
-  .nav-right {
-    display: none;
-    width: 100%;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .nav-right.open {
-    display: flex;
-  }
-  .nav-toggle {
-    display: block;
-  }
-  .mobile-search-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .nav-search {
-    width: 100%;
-  }
-  .nav-search input {
-    width: 100%;
-  }
-  .weather-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-    padding: 7px 16px;
-  }
-  .ad-wrapper {
-    margin: 10px 16px 0;
-  }
-  .ad-slider-container {
-    height: 70px;
-  }
-  .ad-slide .ad-text strong {
-    font-size: 11px;
-  }
-  .ad-slide .ad-text div {
-    font-size: 9px;
-  }
-  .ad-btn {
-    font-size: 9px;
-    padding: 4px 10px;
-  }
-  .hero-section {
-    padding: 12px 16px 8px;
-  }
-  .featured-card {
-    flex: 0 0 calc(50% - 6px);
-    min-width: calc(50% - 6px);
-  }
-  .featured-img {
-    height: 140px;
-  }
-  .section {
-    padding: 12px 16px 6px;
-  }
-  .main-cats-grid {
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    padding: 0 12px 8px;
-  }
-  .mcat-card {
-    padding: 9px 4px 8px;
-    border-radius: 10px;
-  }
-  .mcat-icon {
-    width: 28px;
-    height: 28px;
-  }
-  .mcat-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-  .mcat-label {
-    font-size: 9px;
-  }
-  .mcat-badge {
-    display: none;
-  }
-  .mcat-sub {
-    display: none;
-  }
-  .grid-4 {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 9px;
-    padding: 0 16px 14px;
-  }
-  .cat-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-    overflow-x: visible;
-    padding: 0 16px 8px;
-  }
-  .cat-btn {
-    white-space: normal;
-    text-align: center;
-    flex-shrink: unset;
-    padding: 8px 10px;
-  }
-  .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 16px 14px;
-  }
-  .news-img {
-    height: 120px;
-  }
-  #news-category-label {
-    font-size: 20px !important;
-  }
-  .news-filter-btn {
-    font-size: 9px !important;
-    padding: 2px 6px !important;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .footer {
-    padding: 20px 16px 14px;
-  }
-  .mobile-bottom-nav {
-    display: flex;
-  }
-  body {
-    padding-bottom: var(--bottom-nav-h);
-  }
-  .messenger-fab {
-    bottom: calc(var(--bottom-nav-h) + 14px);
-  }
-  .toast {
-    bottom: calc(var(--bottom-nav-h) + 12px);
+// ===== WEATHER =====
+async function loadWeather() {
+  try {
+    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.92&longitude=106.92&current_weather=true&timezone=Asia%2FShanghai');
+    const data = await res.json();
+    if (data.current_weather) {
+      const temp = data.current_weather.temperature;
+      const weatherEl = document.getElementById('weather-temp');
+      if (weatherEl) {
+        weatherEl.textContent = temp + '°C';
+      }
+    }
+  } catch (error) {
+    console.error('Weather error:', error);
   }
 }
 
-@media(max-width: 480px) {
-  .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .news-img {
-    height: 100px;
-  }
-  .news-title {
-    font-size: 11px;
-  }
-  .featured-card {
-    flex: 0 0 100%;
-    min-width: 100%;
-  }
-  .grid-4 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .logo-text {
-    font-size: 21px;
-  }
-  .featured-img {
-    height: 160px;
-  }
-  .main-cats-grid {
-    grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
-  }
-  .mcat-card {
-    padding: 6px 2px 6px;
-  }
-  .mcat-icon {
-    width: 22px;
-    height: 22px;
-  }
-  .mcat-icon svg {
-    width: 22px;
-    height: 22px;
-  }
-  .mcat-label {
-    font-size: 8px;
-  }
-  #news-category-label {
-    font-size: 18px !important;
-  }
-  .news-filter-btn {
-    font-size: 8px !important;
-    padding: 1px 5px !important;
+// ===== FEATURED CAROUSEL =====
+let carouselIndex = 0;
+let carouselAuto;
+const AUTO_INTERVAL = 5000;
+let featuredMoviesData = [];
+
+function getCardsVisible() {
+  return window.innerWidth <= 480 ? 1 : window.innerWidth <= 768 ? 2 : 4;
+}
+
+function buildFeaturedCardFromMovie(m) {
+  const g1 = genreColors[m.genre] || 'cp-sci';
+  const g2 = genreColors[m.genre2] || '';
+  const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+  const tags = m.featured ? `<span class="ftag ftag-top">✦ Онцлох</span>` : '';
+
+  const thumbHtml = m.thumbnail ?
+    `<img src="${sanitize(m.thumbnail)}" alt="${sanitize(m.title)}" loading="lazy" onerror="this.style.display='none'">` :
+    `<span class="fallback-emoji">🎬</span>`;
+
+  return `<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
+    <div class="featured-img" style="background:${bg}">
+      ${thumbHtml}
+      <div class="featured-overlay"></div>
+      <div class="featured-tags">${tags}</div>
+    </div>
+    <div class="featured-body">
+      <div class="featured-cats">
+        <span class="cpill ${g1}">${sanitize(m.genre)}</span>
+        ${m.genre2 ? `<span class="cpill ${g2}">${sanitize(m.genre2)}</span>` : ''}
+      </div>
+      <h2 class="featured-title">${sanitize(m.title)}</h2>
+      <p class="featured-desc">${sanitize(m.description || 'Киноны тухай...')}</p>
+      <div class="featured-foot">
+        <div class="author">
+          <div class="ava" style="background:linear-gradient(135deg,#4ade80,#fbbf24)">КЭ</div>
+          <div class="ava-name">Кино Эзэн</div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">👁 ${m.views || 0}</div>
+          <div class="stat-item">❤️ ${m.likes || 0}</div>
+        </div>
+      </div>
+      <button class="watch-btn" onclick="event.stopPropagation();location.href='movie.html?id=${sanitize(m.id)}'">▶ Үзэх</button>
+    </div>
+  </article>`;
+}
+
+async function loadFeaturedMovies() {
+  const track = document.getElementById('featured-track');
+  track.innerHTML = '<div class="loading" style="text-align:center;padding:40px;color:rgba(255,255,255,0.3);">🎬 Онцлох кино ачааллаж байна...</div>';
+
+  try {
+    const movies = await supaFetch('movies', 'featured=eq.true&order=created_at.desc&limit=10');
+
+    if (!movies || movies.length === 0) {
+      track.innerHTML = `
+        <div class="featured-card" style="text-align:center;padding:40px;background:#1a1a2e;border-radius:12px;">
+          <div style="font-size:48px;margin-bottom:12px;">🎬</div>
+          <h3 style="color:rgba(255,255,255,0.5);">Онцлох кино байхгүй байна</h3>
+          <p style="color:rgba(255,255,255,0.3);font-size:13px;">Админ хэсгээр онцлох кино нэмнэ үү</p>
+        </div>
+      `;
+      featuredMoviesData = [];
+      buildDots();
+      return;
+    }
+
+    featuredMoviesData = movies;
+    track.innerHTML = movies.map(m => buildFeaturedCardFromMovie(m)).join('');
+    buildDots();
+    carouselIndex = 0;
+    updateCarousel();
+
+  } catch (error) {
+    console.error('loadFeaturedMovies error:', error);
+    track.innerHTML = `
+      <div class="featured-card" style="text-align:center;padding:40px;background:#1a1a2e;border-radius:12px;">
+        <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
+        <h3 style="color:#e63946;">Алдаа гарлаа</h3>
+        <p style="color:rgba(255,255,255,0.3);font-size:13px;">Онцлох кино ачаалахад алдаа гарлаа</p>
+      </div>
+    `;
   }
 }
+
+function buildDots() {
+  const total = Math.ceil(featuredMoviesData.length / getCardsVisible()) || 1;
+  document.getElementById('carousel-dots').innerHTML = Array.from({ length: total }, (_, i) =>
+    `<div class="dot${i === 0 ? ' active' : ''}" onclick="goToPage(${i})"></div>`
+  ).join('');
+}
+
+function getCardWidth() {
+  const c = document.querySelector('.featured-card');
+  return c ? c.offsetWidth + 12 : 0;
+}
+
+function goToPage(p) {
+  const total = Math.ceil(featuredMoviesData.length / getCardsVisible()) || 1;
+  carouselIndex = Math.max(0, Math.min(p, total - 1));
+  updateCarousel();
+}
+
+function nextPage() {
+  const total = Math.ceil(featuredMoviesData.length / getCardsVisible()) || 1;
+  carouselIndex = (carouselIndex + 1) % total;
+  updateCarousel();
+}
+
+function prevPage() {
+  const total = Math.ceil(featuredMoviesData.length / getCardsVisible()) || 1;
+  carouselIndex = (carouselIndex - 1 + total) % total;
+  updateCarousel();
+}
+
+function updateCarousel() {
+  const cv = getCardsVisible();
+  const track = document.getElementById('featured-track');
+  const width = getCardWidth();
+  track.style.transform = `translateX(-${carouselIndex * cv * width}px)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === carouselIndex));
+  restartBar();
+}
+
+function restartBar() {
+  const b = document.getElementById('carousel-bar');
+  b.classList.remove('running');
+  void b.offsetWidth;
+  b.classList.add('running');
+}
+
+function startAuto() {
+  restartBar();
+  clearInterval(carouselAuto);
+  carouselAuto = setInterval(nextPage, AUTO_INTERVAL);
+}
+
+function resetAuto() {
+  clearInterval(carouselAuto);
+  startAuto();
+}
+
+function initCarousel() {
+  loadFeaturedMovies();
+
+  document.getElementById('carousel-prev').onclick = () => { prevPage();
+    resetAuto(); };
+  document.getElementById('carousel-next').onclick = () => { nextPage();
+    resetAuto(); };
+
+  let tx = 0;
+  const w = document.getElementById('featured-wrapper');
+  w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  w.addEventListener('touchend', e => {
+    const d = tx - e.changedTouches[0].clientX;
+    if (Math.abs(d) > 50) {
+      d > 0 ? nextPage() : prevPage();
+      resetAuto();
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    buildDots();
+    updateCarousel();
+  });
+}
+
+// ===== MCAT MENUS =====
+function setActiveMcat(el) {
+  document.querySelectorAll('.mcat-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function showAll(el) {
+  setActiveMcat(el);
+  closeMcatDropdown();
+  document.getElementById('news-category-label').textContent = 'Бүгд';
+  loadMovies('');
+  loadNews();
+  setTimeout(() => goSection('movies'), 100);
+}
+
+function showMoviesOnly(el) {
+  setActiveMcat(el);
+  closeMcatDropdown();
+  document.getElementById('news-category-label').textContent = 'Кино';
+  loadMovies('');
+  setTimeout(() => goSection('movies'), 100);
+}
+
+// ===== MCAT MENUS =====
+const MCAT_MENUS = {
+  'Сургалт': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'VN + Capcut сургалт', cat: 'VN Capcut' },
+    { label: 'AI Веб хөгжүүлэлт', cat: 'AI Веб' },
+    { label: 'YouTube суваг хэрхэн өсгөх вэ?', cat: 'YouTube' },
+    { label: 'Дата анализ үндэс', cat: 'Дата анализ' },
+    { label: 'AI агент бүтээх', cat: 'AI агент' },
+    { label: 'Олон улсын онлайн худалдаа', cat: 'Олон улсын худалдаа' }
+  ],
+  'Программ': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Татаж авах програм', cat: 'Татаж авах' },
+    { label: 'Онлайн програм', cat: 'Онлайн програм' },
+    { label: 'Mobile app', cat: 'Mobile app' }
+  ],
+  'Зар мэдээ': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Үл хөдлөх', cat: 'Үл хөдлөх' },
+    { label: 'Ажлын зар', cat: 'Ажлын зар' },
+    { label: 'Тээврийн хэрэгсэл', cat: 'Тээвэр' },
+    { label: 'Бараа', cat: 'Бараа' },
+    { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' }
+  ],
+  'Е-Худалдаа': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Цахим дэлгүүр', cat: 'Цахим дэлгүүр' },
+    { label: 'Бараа', cat: 'Бараа' },
+    { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' },
+    { label: 'Олон улсын худалдаа', cat: 'Олон улсын худалдаа' }
+  ],
+  'Аялал': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Миний аялал', cat: 'Миний аялал' },
+    { label: 'Монгол аялал', cat: 'Монгол аялал' },
+    { label: 'Гадаад аялал', cat: 'Гадаад аялал' }
+  ],
+  'Шинжлэх ухаан': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
+    { label: 'Ирээдүй', cat: 'Ирээдүй' },
+    { label: 'Туршилт', cat: 'Туршилт' }
+  ],
+  'AI мэдлэг': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
+    { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
+    { label: 'Сургалт', cat: 'Сургалт' }
+  ],
+  'Кино түүх': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
+    { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }
+  ],
+  'Танин мэдэхүй': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
+    { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
+    { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }
+  ],
+  'Одод ертөнц': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Харь гараг', cat: 'Харь гараг' },
+    { label: 'Манай ертөнц', cat: 'Манай ертөнц' }
+  ],
+  'Мэдээ': [
+    { label: 'Бүгд', cat: '' },
+    { label: 'Монгол мэдээ', cat: 'Монгол мэдээ' },
+    { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' },
+    { label: 'Улс төр', cat: 'Улс төр' },
+    { label: 'Сурвалжилга', cat: 'Сурвалжилга' }
+  ]
+};
+
+let currentMainCategory = '';
+
+// ✅ ЗАССАН OPENMCATDROPDOWN — ЦЭСИЙН НЭР ГАРЧИГ БОЛНО
+function openMcatDropdown(card, menuKey) {
+  setActiveMcat(card);
+  currentMainCategory = menuKey;
+
+  // ✅ ЦЭСИЙН НЭРИЙГ ГАРЧИГ БОЛГОХ
+  document.getElementById('news-category-label').textContent = menuKey;
+
+  const items = MCAT_MENUS[menuKey] || [];
+  document.getElementById('news-filter-tabs').innerHTML = items.map(item =>
+    `<button class="news-filter-btn${item.cat === '' ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
+  ).join('');
+
+  const firstBtn = document.querySelector('.news-filter-btn');
+  if (firstBtn) {
+    firstBtn.classList.add('active');
+    handleMcatSub('', firstBtn, menuKey);
+  } else {
+    loadNews();
+  }
+  setTimeout(() => goSection('news'), 150);
+}
+
+function closeMcatDropdown() {
+  document.getElementById('news-filter-tabs').innerHTML = '';
+}
+
+function handleMcatSub(cat, btn, mainKey) {
+  document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+
+  const label = btn ? btn.textContent : 'Бүгд';
+  if (label === 'Бүгд') {
+    document.getElementById('news-category-label').textContent = mainKey;
+    loadNewsByMainCategory(mainKey);
+  } else {
+    document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
+    loadNewsBySubCategory(cat);
+  }
+}
+
+async function loadNewsByMainCategory(mainCategory) {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
+  try {
+    const allNews = await supaFetch('news', 'order=created_at.desc&limit=100');
+    const subCats = MCAT_MENUS[mainCategory]?.map(item => item.cat).filter(c => c) || [];
+    const filtered = allNews.filter(n => subCats.includes(n.sub_category));
+
+    if (!filtered || filtered.length === 0) {
+      list.innerHTML = `<div class="empty-state"><p>"Бүгд" ангилалд мэдээ байхгүй</p></div>`;
+      document.getElementById('news-pagination').innerHTML = '';
+      return;
+    }
+    renderNewsList(filtered);
+  } catch (e) {
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
+  }
+}
+
+async function loadNewsBySubCategory(subCategory) {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
+  try {
+    const news = await supaFetch('news', `sub_category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
+    if (!news || news.length === 0) {
+      list.innerHTML = `<div class="empty-state"><p>"${subCategory}" ангилалд мэдээ байхгүй</p></div>`;
+      document.getElementById('news-pagination').innerHTML = '';
+      return;
+    }
+    renderNewsList(news);
+  } catch (e) {
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
+  }
+}
+
+function renderNewsList(news) {
+  const list = document.getElementById('news-list');
+  list.innerHTML = news.map(item => `
+    <div class="news-card" onclick="location.href='news-detail.html?id=${item.id}'">
+      <div class="news-img">${item.thumbnail ? `<img src="${item.thumbnail}" loading="lazy">` : '📰'}</div>
+      <div class="news-body">
+        <span class="news-cat">${item.category || 'Мэдээ'}</span>
+        <h3 class="news-title">${item.title}</h3>
+        <div class="news-foot">
+          <span class="news-date">${new Date(item.created_at).toLocaleDateString('mn-MN')}</span>
+          <span class="news-views">👁 ${item.views || 0}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function loadNews() {
+  const list = document.getElementById('news-list');
+  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
+  try {
+    const news = await supaFetch('news', 'order=created_at.desc&limit=100');
+    if (!news || news.length === 0) {
+      list.innerHTML = '<div class="empty-state"><p>Мэдээ байхгүй байна</p></div>';
+      return;
+    }
+    renderNewsList(news);
+  } catch (e) {
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
+  }
+}
+
+// ===== MOVIES =====
+let allMovies = [];
+let moviePage = 1;
+const MOVIES_PER_PAGE = 4;
+
+function buildSkeletons(n = 4) {
+  return Array(n).fill(0).map(() =>
+    `<div class="skel-card skeleton"><div class="skel-img skeleton"></div><div class="skel-body"><div class="skel-line skeleton"></div><div class="skel-line short skeleton"></div></div></div>`
+  ).join('');
+}
+
+let currentGenre = '';
+
+function selCat(el, genre) {
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.remove('on');
+    b.setAttribute('aria-selected', 'false');
+  });
+  el.classList.add('on');
+  el.setAttribute('aria-selected', 'true');
+  currentGenre = genre;
+  moviePage = 1;
+  loadMovies(genre);
+}
+
+async function loadMovies(genre = '') {
+  const list = document.getElementById('movies-list');
+  list.innerHTML = buildSkeletons(4);
+  try {
+    let params = 'order=created_at.desc&limit=100';
+    if (genre) params += `&genre=eq.${encodeURIComponent(genre)}`;
+    const movies = await supaFetch('movies', params);
+    if (!movies || movies.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">🎬</div><p>Кино байхгүй байна</p></div>`;
+      document.getElementById('movie-pagination').innerHTML = '';
+      return;
+    }
+    allMovies = movies;
+    renderMoviePage();
+  } catch (error) {
+    console.error('loadMovies error:', error);
+    list.innerHTML = `<div class="empty-state"><div class="icon">⚠️</div><p>Алдаа гарлаа</p></div>`;
+  }
+}
+
+function renderMoviePage() {
+  const list = document.getElementById('movies-list');
+  const totalPages = Math.ceil(allMovies.length / MOVIES_PER_PAGE) || 1;
+  const start = (moviePage - 1) * MOVIES_PER_PAGE;
+  const end = start + MOVIES_PER_PAGE;
+  const pageMovies = allMovies.slice(start, end);
+
+  if (pageMovies.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="icon">🎬</div><p>Кино байхгүй байна</p></div>`;
+  } else {
+    list.innerHTML = pageMovies.map(m => buildMovieCard(m)).join('');
+  }
+
+  renderMoviePagination(totalPages);
+}
+
+function buildMovieCard(m) {
+  const title = sanitize(m.title);
+  const g = sanitize(m.genre);
+  const id = encodeURIComponent(sanitize(m.id));
+  const likes = parseInt(m.likes) || 0;
+  const views = parseInt(m.views) || 0;
+  const cls = genreColors[m.genre] || 'cp-sci';
+  const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
+  const thumb = m.thumbnail ?
+    `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">` :
+    '🎬';
+  return `<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
+    <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g || 'Кино'}</span></div>
+    <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">Кино Эзэн</div>
+    <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div></article>`;
+}
+
+function renderMoviePagination(totalPages) {
+  const container = document.getElementById('movie-pagination');
+  if (totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+  let html = `<button onclick="moviePage=1;renderMoviePage()" ${moviePage===1?'disabled':''}>«</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-num ${i===moviePage?'active':''}" onclick="moviePage=${i};renderMoviePage()">${i}</button>`;
+  }
+  html += `<button onclick="moviePage=${totalPages};renderMoviePage()" ${moviePage===totalPages?'disabled':''}>»</button>`;
+  container.innerHTML = html;
+}
+
+// ===== SEARCH =====
+function searchMovies() {
+  const q = document.getElementById('search-input').value.trim();
+  if (!q) { loadMovies(currentGenre); return; }
+  const list = document.getElementById('movies-list');
+  list.innerHTML = buildSkeletons(4);
+  supaFetch('movies', `title=ilike.*${encodeURIComponent(q)}*&limit=100`).then(movies => {
+    if (!movies || movies.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">🔍</div><p>"${sanitize(q)}" олдсонгүй</p></div>`;
+      document.getElementById('movie-pagination').innerHTML = '';
+      return;
+    }
+    allMovies = movies;
+    moviePage = 1;
+    renderMoviePage();
+  }).catch(() => {
+    list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
+  });
+}
+
+// ===== TOGGLE LIKE =====
+function toggleLike(btn) {
+  const isLiked = btn.classList.toggle('liked');
+  const c = btn.querySelector('span');
+  const cur = parseInt(c.textContent) || 0;
+  c.textContent = isLiked ? cur + 1 : Math.max(0, cur - 1);
+  showToast(isLiked ? '❤️ Дуртай жагсаалтад нэмлээ' : '💔 Дуртай жагсаалтаас хаслаа');
+}
+
+function showToast(msg) {
+  const old = document.querySelector('.toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  t.setAttribute('role', 'status');
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+function goSection(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ===== SECRET ADMIN =====
+(function() {
+  let clickCount = 0;
+  let clickTimer = null;
+  const CLICK_TIMEOUT = 2000;
+  const SECRET_KEY = 'kinoezen2026';
+
+  document.addEventListener('click', function(e) {
+    const target = e.target;
+    if (!target.closest('#secret-admin-trigger')) return;
+
+    clickCount++;
+    clearTimeout(clickTimer);
+
+    clickTimer = setTimeout(() => {
+      clickCount = 0;
+    }, CLICK_TIMEOUT);
+
+    if (clickCount === 3) {
+      clickCount = 0;
+      clearTimeout(clickTimer);
+
+      showSecretToast('🔐 Админ руу шилжиж байна...');
+
+      setTimeout(() => {
+        const pass = prompt('🔑 Админ түлхүүр оруулна уу:');
+        if (pass === SECRET_KEY) {
+          window.location.href = 'admin.html';
+        } else if (pass !== null) {
+          showSecretToast('❌ Түлхүүр буруу байна!');
+        }
+      }, 500);
+    }
+  });
+
+  function showSecretToast(msg) {
+    const old = document.querySelector('.secret-toast');
+    if (old) old.remove();
+
+    const t = document.createElement('div');
+    t.className = 'secret-toast';
+    t.textContent = msg;
+    t.style.cssText = `
+      position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); color: #4ade80; padding: 12px 24px;
+      border-radius: 12px; font-size: 14px; font-weight: 600;
+      font-family: 'Nunito', sans-serif; z-index: 9999;
+      border: 1px solid rgba(74,222,128,0.3);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px); transition: all 0.3s; pointer-events: none;
+    `;
+    document.body.appendChild(t);
+
+    setTimeout(() => {
+      t.style.opacity = '0';
+      t.style.transform = 'translateX(-50%) translateY(20px)';
+      setTimeout(() => t.remove(), 400);
+    }, 1500);
+  }
+
+  console.log('%c🔐 Кино Эзэн — Footer дээр 3 товшиход админ нээгдэнэ', 'font-size:14px;color:#4ade80;font-weight:bold;');
+})();
+
+// ===== NAV TOGGLE =====
+function toggleNav() {
+  const nav = document.getElementById('nav-links');
+  const right = document.getElementById('nav-right');
+  if (nav) nav.classList.toggle('open');
+  if (right) right.classList.toggle('open');
+}
+
+function toggleMobileSearch() {
+  const bar = document.getElementById('mobile-search-bar');
+  if (bar) bar.classList.toggle('open');
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+  const now = new Date();
+  const dateEl = document.getElementById('today-date');
+  if (dateEl) {
+    dateEl.textContent = now.getFullYear() + '.' +
+      (now.getMonth() + 1).toString().padStart(2, '0') + '.' +
+      now.getDate().toString().padStart(2, '0');
+  }
+
+  initCarousel();
+  loadMovies();
+  loadNews();
+  loadAd();
+  loadWeather();
+});
