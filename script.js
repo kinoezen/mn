@@ -101,7 +101,6 @@ async function loadWeather() {
     }
   } catch (error) {
     console.error('Weather error:', error);
-    // API ажиллахгүй үед анхны утгыг хадгална
   }
 }
 
