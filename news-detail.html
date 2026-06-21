@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* БҮХ СТИЛЬ ӨМНӨХ ШИГЭЭ */
 :root{
   --bg:#0e0e18;--bg2:#161624;--bg3:#1e1e32;--bg4:#252540;
   --accent:#4ade80;--accent2:#f4a261;--red:#e63946;
@@ -255,10 +256,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 
 <div class="container">
 
-  <!-- ===== 1. БУЦАХ ТОВЧ ===== -->
   <a href="javascript:history.back()" class="back-btn">← Буцах</a>
 
-  <!-- SKELETON -->
   <div id="skeleton-wrap">
     <div class="skeleton" style="height:22px;width:80px;margin-bottom:16px;"></div>
     <div class="skeleton" style="height:36px;width:100%;margin-bottom:10px;"></div>
@@ -270,10 +269,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <div class="skeleton" style="height:14px;width:80%;"></div>
   </div>
 
-  <!-- ===== 2. АНГИЛАЛ + 3. ГАРЧИГ ===== -->
   <article id="article-wrap" style="display:none;" class="article"></article>
 
-  <!-- ERROR -->
   <div id="error-wrap" style="display:none;" class="error-box">
     <div class="icon">📭</div>
     <h2>Мэдээ олдсонгүй</h2>
@@ -282,7 +279,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 
   <hr class="divider" id="divider" style="display:none;">
 
-  <!-- RELATED -->
   <div id="related-wrap" style="display:none;">
     <div class="related-title">Холбоотой <span>мэдээнүүд</span></div>
     <div class="related-grid" id="related-grid"></div>
@@ -303,6 +299,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 </footer>
 
 <script>
+// ✅ ЗӨВ ТҮЛХҮҮР
 const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 
@@ -507,8 +504,9 @@ async function loadComments() {
         }
       }
     );
+    if (!res.ok) throw new Error('Comments fetch error');
     const data = await res.json();
-    comments = data || [];
+    comments = Array.isArray(data) ? data : [];
     renderComments();
   } catch (e) {
     console.error('loadComments error:', e);
@@ -544,12 +542,13 @@ async function postComment() {
   }
   
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
       method: 'POST',
       headers: {
         'apikey': SUPABASE_KEY,
         'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
       },
       body: JSON.stringify({
         news_id: newsId,
@@ -557,7 +556,13 @@ async function postComment() {
         author: 'Хэрэглэгч'
       })
     });
-    if (!res.ok) throw new Error('Comment post error');
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Comment post error:', response.status, errorText);
+      showToast('❌ Сэтгэгдэл илгээхэд алдаа гарлаа: ' + response.status);
+      return;
+    }
     
     textarea.value = '';
     showToast('✅ Сэтгэгдэл нэмэгдлээ!');
