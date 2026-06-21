@@ -363,11 +363,40 @@ function handleMcatSub(cat, btn, mainKey) {
     const label = btn.textContent;
 
     if (label === 'Бүгд') {
-        document.getElementById('news-category-label').textContent = mainKey;
-        loadNewsByCategory(mainKey);
+        document.getElementById('news-category-label').textContent = 'Бүгд';
+        // ✅ 'Бүгд' дээр дархад бүх дэд ангиллыг нэгтгэн харуулах
+        loadNewsByMainCategory(mainKey);
     } else {
         document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
         loadNewsBySubCategory(cat);
+    }
+}
+
+// ✅ ШИНЭ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
+async function loadNewsByMainCategory(mainCategory) {
+    const list = document.getElementById('news-list');
+    list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
+    try {
+        // Бүх мэдээг татах
+        const allNewsData = await supaFetch('news', 'order=created_at.desc&limit=100');
+        
+        // Тухайн ангиллын дэд ангиллуудыг цуглуулах
+        const subCategories = MCAT_MENUS[mainCategory]?.map(item => item.cat).filter(c => c && c !== mainCategory) || [];
+        
+        // Дэд ангилалаар шүүх
+        const filtered = allNewsData.filter(n => subCategories.includes(n.sub_category));
+        
+        if (!filtered || filtered.length === 0) {
+            list.innerHTML = `<div class="empty-state"><p>"${mainCategory}" ангилалд мэдээ байхгүй</p></div>`;
+            document.getElementById('news-pagination').innerHTML = '';
+            return;
+        }
+        allNews = filtered;
+        newsPage = 1;
+        renderNewsPage();
+    } catch (error) {
+        console.error('loadNewsByMainCategory error:', error);
+        list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
     }
 }
 
