@@ -29,7 +29,7 @@
     --shadow-accent: 0 4px 24px rgba(74, 222, 128, 0.2);
   }
 
-  /* ===== WEATHER BAR — ХАЙРЦГААС ГАРГАСАН ===== */
+  /* ===== WEATHER BAR ===== */
   .weather-bar {
     display: flex;
     justify-content: space-between;
@@ -72,7 +72,7 @@
     letter-spacing: 0.5px;
   }
 
-  /* ===== AD — 728×90 (ЗУРААСГҮЙ) ===== */
+  /* ===== AD — 728×90 ===== */
   .ad-wrapper {
     max-width: 728px;
     margin: 8px auto;
@@ -180,7 +180,6 @@
     filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
   }
 
-  /* ===== ТОВЧНУУД ===== */
   .btn-primary, .form-btn, .watch-btn {
     background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
     border: none;
@@ -191,7 +190,6 @@
     transform: translateY(-1px);
   }
 
-  /* ===== ЦЭСНҮҮД ===== */
   .mcat-card {
     border: 1px solid rgba(255,255,255,0.06);
     transition: all 0.3s ease;
@@ -231,7 +229,6 @@
   .mcat-ads .mcat-badge { background: rgba(59,130,246,0.2); color: #60a5fa; }
   .mcat-shop .mcat-badge { background: rgba(236,72,153,0.2); color: #f472b6; }
 
-  /* ===== HERO ===== */
   .hero-label-icon {
     background: linear-gradient(135deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
   }
@@ -243,7 +240,6 @@
     color: #0a0a14;
   }
 
-  /* ===== ДЭД ЦЭС ===== */
   .news-filter-btn {
     padding: 5px 12px;
     border-radius: 20px;
@@ -266,7 +262,6 @@
     color: #4ade80 !important;
   }
 
-  /* ===== ХАЙЛТ ===== */
   .nav-search {
     display: flex;
     align-items: center;
@@ -311,7 +306,6 @@
     background: rgba(74,222,128,0.12);
   }
 
-  /* ===== MOBILE BOTTOM NAV — 4 ЦЭС ===== */
   .mobile-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -366,7 +360,6 @@
     color: #0a0a14;
   }
 
-  /* ===== 14 ЦЭС ===== */
   .main-cats-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -374,7 +367,6 @@
     padding: 0 24px 8px;
   }
 
-  /* ===== PAGINATION — ХУУДАС ===== */
   .pagination {
     display: flex;
     justify-content: center;
@@ -413,44 +405,6 @@
     text-align: center;
   }
 
-  @media(max-width: 900px) {
-    .main-cats-grid {
-      grid-template-columns: repeat(7, 1fr);
-      gap: 7px;
-      padding: 0 16px 8px;
-    }
-    .mcat-icon { width: 36px; height: 36px; }
-    .mcat-icon svg { width: 36px; height: 36px; }
-    .mcat-label { font-size: 11px; }
-    .mcat-sub { display: none; }
-  }
-
-  @media(max-width: 600px) {
-    .main-cats-grid {
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      padding: 0 12px 8px;
-    }
-    .mcat-card { padding: 9px 4px 8px; border-radius: 10px; }
-    .mcat-icon { width: 28px; height: 28px; }
-    .mcat-icon svg { width: 28px; height: 28px; }
-    .mcat-label { font-size: 9px; }
-    .mcat-badge { display: none; }
-    .mcat-sub { display: none; }
-  }
-
-  @media(max-width: 400px) {
-    .main-cats-grid {
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-    }
-    .mcat-card { padding: 6px 2px 6px; }
-    .mcat-icon { width: 22px; height: 22px; }
-    .mcat-icon svg { width: 22px; height: 22px; }
-    .mcat-label { font-size: 8px; }
-  }
-
-  /* ===== ОНЦЛОХ КИНО ===== */
   .featured-img {
     width: 100%;
     height: 240px;
@@ -480,7 +434,6 @@
     display: none !important;
   }
 
-  /* ===== NEWS GRID — 2 ЭГНЭЭ (4 КАРТ) ===== */
   .news-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -488,8 +441,30 @@
     padding: 0 24px 24px;
   }
 
-  /* ===== RESPONSIVE AD ===== */
+  @media(max-width: 900px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 7px;
+      padding: 0 16px 8px;
+    }
+    .mcat-icon { width: 36px; height: 36px; }
+    .mcat-icon svg { width: 36px; height: 36px; }
+    .mcat-label { font-size: 11px; }
+    .mcat-sub { display: none; }
+  }
+
   @media(max-width: 600px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 0 12px 8px;
+    }
+    .mcat-card { padding: 9px 4px 8px; border-radius: 10px; }
+    .mcat-icon { width: 28px; height: 28px; }
+    .mcat-icon svg { width: 28px; height: 28px; }
+    .mcat-label { font-size: 9px; }
+    .mcat-badge { display: none; }
+    .mcat-sub { display: none; }
     .ad-slide .ad-banner {
       flex-wrap: wrap;
       justify-content: center;
@@ -507,8 +482,22 @@
     .ad-slider-container {
       height: 80px;
     }
+    .news-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 12px 16px;
+    }
   }
+
   @media(max-width: 400px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .mcat-card { padding: 6px 2px 6px; }
+    .mcat-icon { width: 22px; height: 22px; }
+    .mcat-icon svg { width: 22px; height: 22px; }
+    .mcat-label { font-size: 8px; }
     .ad-slider-container {
       height: 70px;
     }
@@ -731,7 +720,6 @@
   <div class="grid-4" id="movies-list" role="list">
     <!-- JavaScript-ээр дүүргэнэ -->
   </div>
-  <!-- ===== ХУУДАС (PAGINATION) ===== -->
   <div class="pagination" id="movie-pagination"></div>
 </section>
 
@@ -740,7 +728,6 @@
   <div class="section">
     <div class="section-header" style="flex-wrap:wrap;gap:8px;">
       <h2 class="section-title"><span>Мэдээ</span> мэдээлэл</h2>
-      <!-- ✅ ЗАССАН: style-гүй, зөвхөн id -->
       <span id="news-category-label">Бүгд</span>
       <div id="news-filter-tabs" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
     </div>
@@ -748,7 +735,6 @@
   <div class="news-grid" id="news-list" role="list">
     <!-- JavaScript-ээр дүүргэнэ -->
   </div>
-  <!-- ===== ХУУДАС (PAGINATION) ===== -->
   <div class="pagination" id="news-pagination"></div>
 </section>
 
