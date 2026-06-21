@@ -21,6 +21,506 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Кино Эзэн","url":"https://kinoezen.mn"}
 </script>
+<style>
+  /* ===== ROOT ===== */
+  :root {
+    --accent: #4ade80;
+    --accent2: #fbbf24;
+    --shadow-accent: 0 4px 24px rgba(74, 222, 128, 0.2);
+  }
+
+  /* ===== WEATHER BAR — ХАЙРЦГААС ГАРГАСАН ===== */
+  .weather-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 16px 8px;
+    margin: 0;
+    color: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+  .weather-left {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: center;
+  }
+  .weather-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    color: #e0e0e0;
+  }
+  .weather-item .weather-temp {
+    color: #4ade80;
+    font-weight: 700;
+  }
+  .date-text {
+    font-size: 14px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #4ade80, #fbbf24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== AD — 728×90 (ЗУРААСГҮЙ) ===== */
+  .ad-wrapper {
+    max-width: 728px;
+    margin: 8px auto;
+    padding: 0 16px;
+  }
+  .ad-slider-container {
+    position: relative;
+    width: 100%;
+    height: 90px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
+    border: none;
+    box-shadow: none;
+  }
+  .ad-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .ad-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    animation: adFade 0.6s ease;
+  }
+  .ad-slide.active {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    gap: 10px;
+  }
+  .ad-slide .ad-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .ad-slide .ad-banner img,
+  .ad-slide .ad-banner video {
+    max-height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+  }
+  .ad-slide .ad-text {
+    flex: 1;
+    min-width: 80px;
+  }
+  .ad-slide .ad-text strong {
+    color: #4ade80;
+    font-size: 13px;
+    display: block;
+  }
+  .ad-slide .ad-text div {
+    color: rgba(255,255,255,0.6);
+    font-size: 11px;
+  }
+  .ad-btn {
+    background: linear-gradient(90deg, #4ade80, #fbbf24);
+    border: none;
+    color: #0a0a14;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 11px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .ad-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .ad-dots {
+    display: none;
+  }
+  .ad-size-label {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    font-size: 9px;
+    color: rgba(255,255,255,0.12);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes adFade {
+    0% { opacity: 0; transform: scale(0.96); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* ===== LOGO ===== */
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #4ade80 0%, #86efac 25%, #fcd34d 55%, #fbbf24 80%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
+  }
+
+  /* ===== ТОВЧНУУД ===== */
+  .btn-primary, .form-btn, .watch-btn {
+    background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
+    border: none;
+    color: #0a0a14;
+  }
+  .btn-primary:hover, .form-btn:hover, .watch-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* ===== ЦЭСНҮҮД ===== */
+  .mcat-card {
+    border: 1px solid rgba(255,255,255,0.06);
+    transition: all 0.3s ease;
+  }
+  .mcat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .mcat-all .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
+  .mcat-product .mcat-icon { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+  .mcat-stars .mcat-icon { background: linear-gradient(135deg, #facc15, #fb923c); }
+  .mcat-movie .mcat-icon { background: linear-gradient(135deg, #e63946, #f4a261); }
+  .mcat-news .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
+  .mcat-travel .mcat-icon { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+  .mcat-science .mcat-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
+  .mcat-ai .mcat-icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .mcat-history .mcat-icon { background: linear-gradient(135deg, #f97316, #dc2626); }
+  .mcat-knowledge .mcat-icon { background: linear-gradient(135deg, #10b981, #0891b2); }
+  .mcat-lesson .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
+  .mcat-software .mcat-icon { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+  .mcat-ads .mcat-icon { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
+  .mcat-shop .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
+
+  .mcat-all .mcat-badge { background: rgba(74,222,128,0.2); color: #4ade80; }
+  .mcat-movie .mcat-badge { background: rgba(230,57,70,0.18); color: #ff6b7a; }
+  .mcat-news .mcat-badge { background: rgba(74,222,128,0.18); color: #4ade80; }
+  .mcat-travel .mcat-badge { background: rgba(6,182,212,0.18); color: #06b6d4; }
+  .mcat-science .mcat-badge { background: rgba(168,85,247,0.18); color: #c084fc; }
+  .mcat-ai .mcat-badge { background: rgba(245,158,11,0.18); color: #fbbf24; }
+  .mcat-history .mcat-badge { background: rgba(249,115,22,0.18); color: #fb923c; }
+  .mcat-knowledge .mcat-badge { background: rgba(16,185,129,0.18); color: #34d399; }
+  .mcat-product .mcat-badge { background: rgba(236,72,153,0.18); color: #f472b6; }
+  .mcat-stars .mcat-badge { background: rgba(250,204,21,0.2); color: #fbbf24; }
+  .mcat-lesson .mcat-badge { background: rgba(236,72,153,0.2); color: #f472b6; }
+  .mcat-software .mcat-badge { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  .mcat-ads .mcat-badge { background: rgba(59,130,246,0.2); color: #60a5fa; }
+  .mcat-shop .mcat-badge { background: rgba(236,72,153,0.2); color: #f472b6; }
+
+  /* ===== HERO ===== */
+  .hero-label-icon {
+    background: linear-gradient(135deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
+  }
+  .hero-label-text {
+    color: #4ade80;
+  }
+  .ftag-new {
+    background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
+    color: #0a0a14;
+  }
+
+  /* ===== ДЭД ЦЭС ===== */
+  .news-filter-btn {
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    background: rgba(74, 222, 128, 0.06);
+    color: #ccc !important;
+    font-size: 12px;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .news-filter-btn:hover {
+    background: rgba(74, 222, 128, 0.12);
+    color: #4ade80 !important;
+  }
+  .news-filter-btn.active {
+    background: rgba(74, 222, 128, 0.18);
+    border-color: #4ade80;
+    color: #4ade80 !important;
+  }
+
+  /* ===== ХАЙЛТ ===== */
+  .nav-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.06);
+    border-radius: 30px;
+    padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: border-color 0.3s;
+  }
+  .nav-search:focus-within {
+    border-color: #4ade80;
+  }
+  .nav-search span {
+    color: rgba(255,255,255,0.3);
+    font-size: 14px;
+    margin-right: 6px;
+  }
+  .nav-search input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 6px 4px;
+    font-size: 13px;
+    outline: none;
+    width: 140px;
+    font-family: 'Nunito', sans-serif;
+  }
+  .nav-search input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  .mobile-search-btn {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 6px 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .mobile-search-btn:hover {
+    background: rgba(74,222,128,0.12);
+  }
+
+  /* ===== MOBILE BOTTOM NAV — 4 ЦЭС ===== */
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #0a0a14;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 6px 0 env(safe-area-inset-bottom);
+    z-index: 1000;
+  }
+  .mbn-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .mbn-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 8px;
+    color: rgba(255, 255, 255, 0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-size: 9px;
+    font-weight: 600;
+  }
+  .mbn-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: currentColor;
+    fill: none;
+  }
+  .mbn-item.active {
+    color: #4ade80;
+  }
+  .mbn-item:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .mbn-item .mbn-logo-icon {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #4ade80, #fbbf24);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    color: #0a0a14;
+  }
+
+  /* ===== 14 ЦЭС ===== */
+  .main-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    padding: 0 24px 8px;
+  }
+
+  /* ===== PAGINATION — ХУУДАС ===== */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 0 10px;
+    flex-wrap: wrap;
+  }
+  .pagination button {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--bg3, #1e1e32);
+    color: #ccc;
+    font-size: 13px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .pagination button:hover {
+    border-color: #4ade80;
+    color: #4ade80;
+  }
+  .pagination button.active {
+    background: #4ade80;
+    border-color: #4ade80;
+    color: #0a0a14;
+  }
+  .pagination button:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  .pagination .page-num {
+    min-width: 36px;
+    text-align: center;
+  }
+
+  @media(max-width: 900px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 7px;
+      padding: 0 16px 8px;
+    }
+    .mcat-icon { width: 36px; height: 36px; }
+    .mcat-icon svg { width: 36px; height: 36px; }
+    .mcat-label { font-size: 11px; }
+    .mcat-sub { display: none; }
+  }
+
+  @media(max-width: 600px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      padding: 0 12px 8px;
+    }
+    .mcat-card { padding: 9px 4px 8px; border-radius: 10px; }
+    .mcat-icon { width: 28px; height: 28px; }
+    .mcat-icon svg { width: 28px; height: 28px; }
+    .mcat-label { font-size: 9px; }
+    .mcat-badge { display: none; }
+    .mcat-sub { display: none; }
+  }
+
+  @media(max-width: 400px) {
+    .main-cats-grid {
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .mcat-card { padding: 6px 2px 6px; }
+    .mcat-icon { width: 22px; height: 22px; }
+    .mcat-icon svg { width: 22px; height: 22px; }
+    .mcat-label { font-size: 8px; }
+  }
+
+  /* ===== ОНЦЛОХ КИНО ===== */
+  .featured-img {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px 12px 0 0;
+    overflow: hidden;
+    position: relative;
+  }
+  .featured-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .featured-img .fallback-emoji {
+    font-size: 64px;
+  }
+
+  #movie-genre-section {
+    display: block !important;
+  }
+  .see-all {
+    display: none !important;
+  }
+  .genre-toggle-btn {
+    display: none !important;
+  }
+
+  /* ===== NEWS GRID — 2 ЭГНЭЭ (4 КАРТ) ===== */
+  .news-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    padding: 0 24px 24px;
+  }
+
+  /* ===== RESPONSIVE AD ===== */
+  @media(max-width: 600px) {
+    .ad-slide .ad-banner {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ad-slide .ad-text strong {
+      font-size: 11px;
+    }
+    .ad-slide .ad-text div {
+      font-size: 9px;
+    }
+    .ad-btn {
+      font-size: 9px;
+      padding: 4px 10px;
+    }
+    .ad-slider-container {
+      height: 80px;
+    }
+  }
+  @media(max-width: 400px) {
+    .ad-slider-container {
+      height: 70px;
+    }
+    .ad-slide .ad-text strong {
+      font-size: 10px;
+    }
+    .ad-btn {
+      font-size: 8px;
+      padding: 3px 8px;
+    }
+  }
+</style>
 </head>
 <body>
 
