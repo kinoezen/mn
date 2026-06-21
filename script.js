@@ -1,5 +1,5 @@
 // ============================================================
-// КИНО ЭЗЭН — ҮНДСЭН JAVASCRIPT (Хуудаслалттай)
+// КИНО ЭЗЭН — ҮНДСЭН JAVASCRIPT (БҮРЭН ЗАССАН)
 // ============================================================
 
 const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -260,7 +260,7 @@ function showMoviesOnly(el) {
 
 const MCAT_MENUS = {
     'Сургалт': [
-        { label: 'Бүгд', cat: 'Сургалт' },
+        { label: 'Бүгд', cat: '' },
         { label: 'VN + Capcut сургалт', cat: 'VN Capcut' },
         { label: 'AI Веб хөгжүүлэлт', cat: 'AI Веб' },
         { label: 'YouTube суваг хэрхэн өсгөх вэ?', cat: 'YouTube' },
@@ -269,13 +269,13 @@ const MCAT_MENUS = {
         { label: 'Олон улсын онлайн худалдаа', cat: 'Олон улсын худалдаа' }
     ],
     'Программ': [
-        { label: 'Бүгд', cat: 'Программ' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Татаж авах програм', cat: 'Татаж авах' },
         { label: 'Онлайн програм', cat: 'Онлайн програм' },
         { label: 'Mobile app', cat: 'Mobile app' }
     ],
     'Зар мэдээ': [
-        { label: 'Бүгд', cat: 'Зар мэдээ' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Үл хөдлөх', cat: 'Үл хөдлөх' },
         { label: 'Ажлын зар', cat: 'Ажлын зар' },
         { label: 'Тээврийн хэрэгсэл', cat: 'Тээвэр' },
@@ -283,48 +283,48 @@ const MCAT_MENUS = {
         { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' }
     ],
     'Е-Худалдаа': [
-        { label: 'Бүгд', cat: 'Е-Худалдаа' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Цахим дэлгүүр', cat: 'Цахим дэлгүүр' },
         { label: 'Бараа', cat: 'Бараа' },
         { label: 'Үйлчилгээ', cat: 'Үйлчилгээ' },
         { label: 'Олон улсын худалдаа', cat: 'Олон улсын худалдаа' }
     ],
     'Аялал': [
-        { label: 'Бүгд', cat: 'Аялал' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Миний аялал', cat: 'Миний аялал' },
         { label: 'Монгол аялал', cat: 'Монгол аялал' },
         { label: 'Гадаад аялал', cat: 'Гадаад аялал' }
     ],
     'Шинжлэх ухаан': [
-        { label: 'Бүгд', cat: 'Шинжлэх ухаан' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Шинэ нээлт', cat: 'Шинэ нээлт' },
         { label: 'Ирээдүй', cat: 'Ирээдүй' },
         { label: 'Туршилт', cat: 'Туршилт' }
     ],
     'AI мэдлэг': [
-        { label: 'Бүгд', cat: 'AI мэдлэг' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Шинэ мэдээ', cat: 'Шинэ мэдээ' },
         { label: 'Хэрэгсэл', cat: 'Хэрэгсэл' },
         { label: 'Сургалт', cat: 'Сургалт' }
     ],
     'Кино түүх': [
-        { label: 'Бүгд', cat: 'Кино түүх' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Монгол кино түүх', cat: 'Монгол кино түүх' },
         { label: 'Гадаад кино түүх', cat: 'Гадаад кино түүх' }
     ],
     'Танин мэдэхүй': [
-        { label: 'Бүгд', cat: 'Танин мэдэхүй' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Дэлхийг танья', cat: 'Дэлхийг танья' },
         { label: 'Гайхамшиг', cat: 'Гайхамшиг' },
         { label: 'Зөвлөгөө', cat: 'Зөвлөгөө' }
     ],
     'Одод ертөнц': [
-        { label: 'Бүгд', cat: 'Одод ертөнц' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Харь гараг', cat: 'Харь гараг' },
         { label: 'Манай ертөнц', cat: 'Манай ертөнц' }
     ],
     'Мэдээ': [
-        { label: 'Бүгд', cat: 'Мэдээ' },
+        { label: 'Бүгд', cat: '' },
         { label: 'Монгол мэдээ', cat: 'Монгол мэдээ' },
         { label: 'Дэлхийн мэдээ', cat: 'Дэлхийн мэдээ' },
         { label: 'Улс төр', cat: 'Улс төр' },
@@ -337,17 +337,18 @@ let currentMainCategory = '';
 function openMcatDropdown(card, menuKey) {
     setActiveMcat(card);
     currentMainCategory = menuKey;
-    // ✅ Цэсийн нэрийг гарчиг болгон харуулах
     document.getElementById('news-category-label').textContent = menuKey;
-    
+
     const items = MCAT_MENUS[menuKey] || [];
     document.getElementById('news-filter-tabs').innerHTML = items.map(item =>
         `<button class="news-filter-btn${item.cat === '' ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
     ).join('');
-    
-    if (items.length > 0) {
-        const firstCat = items.find(i => i.cat !== '')?.cat || '';
-        loadNewsByCategory(firstCat);
+
+    // ✅ АНХНЫ УДАА "БҮГД" ИДЭВХТЭЙ БОЛГОХ
+    const firstBtn = document.querySelector('.news-filter-btn');
+    if (firstBtn) {
+        firstBtn.classList.add('active');
+        handleMcatSub('', firstBtn, menuKey);
     } else {
         loadNews();
     }
@@ -358,7 +359,7 @@ function closeMcatDropdown() {
     document.getElementById('news-filter-tabs').innerHTML = '';
 }
 
-// ✅ ЗАССАН FUNC — "БҮГД" БА "ДЭД АНГИЛАЛ" ТУСДАА ШҮҮХ
+// ✅ "БҮГД" БОЛОН ДЭД АНГИЛАЛД ЗОРИУЛСАН ГОЛ ФУНКЦ
 function handleMcatSub(cat, btn, mainKey) {
     document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -366,7 +367,7 @@ function handleMcatSub(cat, btn, mainKey) {
 
     if (label === 'Бүгд') {
         document.getElementById('news-category-label').textContent = 'Бүгд';
-        // ✅ 'Бүгд' дээр дархад бүх дэд ангиллыг нэгтгэн харуулах
+        // ✅ БҮХ ДЭД АНГИЛЛЫГ НЭГТГЭН ХАРУУЛАХ
         loadNewsByMainCategory(mainKey);
     } else {
         document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
@@ -374,20 +375,15 @@ function handleMcatSub(cat, btn, mainKey) {
     }
 }
 
-// ✅ ШИНЭ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
+// ✅ ҮНДСЭН АНГИЛАЛААР БҮХ ДЭД АНГИЛЛЫГ НЭГТГЭХ
 async function loadNewsByMainCategory(mainCategory) {
     const list = document.getElementById('news-list');
     list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
     try {
-        // Бүх мэдээг татах
         const allNewsData = await supaFetch('news', 'order=created_at.desc&limit=100');
-        
-        // Тухайн ангиллын дэд ангиллуудыг цуглуулах
         const subCategories = MCAT_MENUS[mainCategory]?.map(item => item.cat).filter(c => c && c !== mainCategory) || [];
-        
-        // Дэд ангилалаар шүүх
         const filtered = allNewsData.filter(n => subCategories.includes(n.sub_category));
-        
+
         if (!filtered || filtered.length === 0) {
             // ✅ "Аялал" биш "Бүгд" гэж харуулах
             list.innerHTML = `<div class="empty-state"><p>"Бүгд" ангилалд мэдээ байхгүй</p></div>`;
@@ -403,7 +399,7 @@ async function loadNewsByMainCategory(mainCategory) {
     }
 }
 
-// ✅ ШИНЭ FUNC — sub_category-аар шүүх
+// ✅ sub_category-аар шүүх
 async function loadNewsBySubCategory(subCategory) {
     const list = document.getElementById('news-list');
     list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
