@@ -1246,6 +1246,7 @@ body {
 }
 
 /* ===== MOBILE BOTTOM NAV ===== */
+/* ===== MOBILE BOTTOM NAVIGATION ===== */
 .mobile-bottom-nav {
   display: none;
   position: fixed;
@@ -1255,6 +1256,7 @@ body {
   height: 68px;
   background: rgba(12, 12, 22, 0.98);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-top: 1px solid rgba(74, 222, 128, 0.15);
   z-index: 1000;
   padding: 0 8px;
@@ -1266,21 +1268,23 @@ body {
   align-items: center;
   justify-content: space-around;
   height: 100%;
+  max-width: 400px;
+  margin: 0 auto;
 }
 .mbn-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: 8px 12px;
-  border-radius: 16px;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 12px;
   text-decoration: none;
   color: rgba(255, 255, 255, 0.35);
-  font-size: 11px;
+  font-size: 10px;
   font-family: var(--font-body);
-  font-weight: 700;
-  transition: all 0.2s;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   border: none;
   background: none;
@@ -1291,25 +1295,40 @@ body {
 }
 .mbn-item.active {
   color: var(--accent);
-  background: rgba(74, 222, 128, 0.12);
 }
 .mbn-item svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   stroke: currentColor;
   fill: none;
   stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: all 0.2s;
+  transition: all 0.25s;
 }
 .mbn-item.active svg {
   stroke: var(--accent);
-  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.5));
 }
 .mbn-item span {
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
+  opacity: 0.8;
+}
+.mbn-item.active span {
+  opacity: 1;
+}
+.mbn-item .mbn-logo-icon {
+  width: 28px;
+  height: 28px;
+  background: linear-gradient(135deg, #4ade80, #fbbf24);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  color: #0a0a14;
 }
 
 /* ============================================================ */
