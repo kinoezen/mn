@@ -1,3 +1,7 @@
+/* ============================================================ */
+/* КИНО ЭЗЭН — ЦЭВЭР STYLE.CSS (ЗАССАН)                    */
+/* ============================================================ */
+
 /* ===== ROOT ===== */
 :root {
   --bg: #0e0e18;
@@ -1308,37 +1312,11 @@ body {
   line-height: 1;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width: 1024px) {
-  .grid-4 {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .featured-card {
-    flex: 0 0 calc(33.333% - 8px);
-    min-width: calc(33.333% - 8px);
-  }
-  .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* ============================================================ */
+/* ===== УТАСНЫ ХАРАГДАЦ (ЗӨВ, ӨМНӨХ ШИГЭЭ) ===== */
+/* ============================================================ */
+
 @media(max-width: 768px) {
-  .mobile-bottom-nav {
-    display: flex;
-  }
-  body {
-    padding-bottom: var(--bottom-nav-h);
-  }
-  .messenger-fab {
-    bottom: calc(var(--bottom-nav-h) + 14px);
-  }
-  .toast {
-    bottom: calc(var(--bottom-nav-h) + 12px);
-  }
-  .mobile-search-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
   .nav {
     padding: 10px 16px;
     flex-wrap: wrap;
@@ -1367,6 +1345,11 @@ body {
   .nav-toggle {
     display: block;
   }
+  .mobile-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .nav-search {
     width: 100%;
   }
@@ -1382,6 +1365,19 @@ body {
   .ad-wrapper {
     margin: 10px 16px 0;
   }
+  .ad-slider-container {
+    height: 70px;
+  }
+  .ad-slide .ad-text strong {
+    font-size: 11px;
+  }
+  .ad-slide .ad-text div {
+    font-size: 9px;
+  }
+  .ad-btn {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
   .hero-section {
     padding: 12px 16px 8px;
   }
@@ -1395,25 +1391,36 @@ body {
   .section {
     padding: 12px 16px 6px;
   }
+  .main-cats-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    padding: 0 12px 8px;
+  }
+  .mcat-card {
+    padding: 9px 4px 8px;
+    border-radius: 10px;
+  }
+  .mcat-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .mcat-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+  .mcat-label {
+    font-size: 9px;
+  }
+  .mcat-badge {
+    display: none;
+  }
+  .mcat-sub {
+    display: none;
+  }
   .grid-4 {
     grid-template-columns: repeat(2, 1fr);
     gap: 9px;
     padding: 0 16px 14px;
-  }
-  .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 0 16px 14px;
-  }
-  .news-img {
-    height: 120px;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .footer {
-    padding: 20px 16px 14px;
   }
   .cat-row {
     display: grid;
@@ -1428,7 +1435,42 @@ body {
     flex-shrink: unset;
     padding: 8px 10px;
   }
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 16px 14px;
+  }
+  .news-img {
+    height: 120px;
+  }
+  .news-filter-btn {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+  }
+  #news-category-label {
+    font-size: 18px !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .footer {
+    padding: 20px 16px 14px;
+  }
+  .mobile-bottom-nav {
+    display: flex;
+  }
+  body {
+    padding-bottom: var(--bottom-nav-h);
+  }
+  .messenger-fab {
+    bottom: calc(var(--bottom-nav-h) + 14px);
+  }
+  .toast {
+    bottom: calc(var(--bottom-nav-h) + 12px);
+  }
 }
+
 @media(max-width: 480px) {
   .news-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1453,86 +1495,29 @@ body {
   .featured-img {
     height: 160px;
   }
-}
-
-/* ===== DROPDOWN NAV ===== */
-.nav-dropdown-wrap {
-  position: relative;
-  display: inline-flex;
-}
-.has-dropdown::after {
-  content: ' ▾';
-  font-size: 10px;
-  opacity: 0.6;
-}
-.nav-dropdown {
-  display: none;
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(20, 20, 36, 0.98);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(74, 222, 128, 0.15);
-  border-radius: 12px;
-  padding: 6px;
-  min-width: 180px;
-  z-index: 2000;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  animation: slideIn 0.18s ease;
-}
-.nav-dropdown.show {
-  display: block;
-}
-.nav-dropdown::before {
-  content: '';
-  position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 10px;
-  height: 10px;
-  background: rgba(20, 20, 36, 0.98);
-  border-left: 1px solid rgba(74, 222, 128, 0.15);
-  border-top: 1px solid rgba(74, 222, 128, 0.15);
-  rotate: 45deg;
-}
-.nav-dropdown-item {
-  display: block;
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.15s;
-  white-space: nowrap;
-}
-.nav-dropdown-item:hover {
-  background: rgba(74, 222, 128, 0.1);
-  color: #4ade80;
-}
-.nav-dropdown-item:first-child {
-  color: #4ade80;
-  font-weight: 700;
-}
-@media(max-width: 768px) {
-  .nav-dropdown {
-    position: static;
-    transform: none;
-    left: auto;
-    background: rgba(30, 30, 50, 0.95);
-    border-radius: 10px;
-    margin: 4px 0 6px 12px;
-    min-width: unset;
-    box-shadow: none;
-    border-color: rgba(74, 222, 128, 0.1);
+  .main-cats-grid {
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
   }
-  .nav-dropdown::before {
-    display: none;
+  .mcat-card {
+    padding: 6px 2px 6px;
   }
-  .nav-dropdown-item {
-    font-size: 12px;
-    padding: 7px 12px;
+  .mcat-icon {
+    width: 22px;
+    height: 22px;
+  }
+  .mcat-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .mcat-label {
+    font-size: 8px;
+  }
+  #news-category-label {
+    font-size: 16px !important;
+  }
+  .news-filter-btn {
+    font-size: 9px !important;
+    padding: 2px 6px !important;
   }
 }
