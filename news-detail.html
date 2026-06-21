@@ -50,7 +50,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .back-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-family:var(--font-body);font-weight:600;cursor:pointer;text-decoration:none;transition:all 0.2s;margin-bottom:12px;}
 .back-btn:hover{border-color:var(--accent);color:var(--accent);}
 
-/* ===== ARTICLE — ЗӨВХӨН АНГИЛАЛ + ГАРЧИГ ===== */
+/* ===== ARTICLE ===== */
 .article{animation:fadeUp 0.4s ease both;}
 .article-cat{font-size:13px;padding:4px 12px;border-radius:20px;background:rgba(74,222,128,0.12);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:8px;}
 .article-title{font-family:var(--font-display);font-size:32px;letter-spacing:1px;line-height:1.15;margin-bottom:14px;color:var(--text);}
@@ -63,23 +63,103 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 /* DIVIDER */
 .divider{border:none;border-top:1px solid var(--border);margin:32px 0;}
 
-/* ===== ACTIONS ROW ===== */
-.actions-row{margin:20px 0 10px;display:flex;flex-direction:column;gap:16px;}
-.reactions-bar{display:flex;gap:8px;flex-wrap:wrap;}
-.reaction-btn{display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:30px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:14px;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);}
-.reaction-btn:hover{border-color:var(--border2);background:rgba(74,222,128,0.08);transform:scale(1.05);}
-.reaction-btn.active{border-color:var(--accent);background:rgba(74,222,128,0.15);color:var(--accent);}
-.reaction-emoji{font-size:18px;}
-.reaction-count{font-size:12px;font-weight:700;color:var(--text4);min-width:18px;text-align:center;}
-.action-buttons{display:flex;gap:8px;flex-wrap:wrap;}
-.save-btn{padding:8px 18px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:13px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:opacity 0.2s;}
+/* ===== REACTIONS — 6 эможи нэг эгнээнд ===== */
+.reactions-bar{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:6px;
+  margin:16px 0 12px;
+}
+.reaction-btn{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  padding:8px 4px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text3);
+  font-size:12px;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-family:var(--font-body);
+  min-height:56px;
+}
+.reaction-btn:hover{
+  border-color:var(--border2);
+  background:rgba(74,222,128,0.08);
+  transform:scale(1.05);
+}
+.reaction-btn.active{
+  border-color:var(--accent);
+  background:rgba(74,222,128,0.15);
+  color:var(--accent);
+}
+.reaction-emoji{font-size:22px;line-height:1.2;}
+.reaction-count{font-size:11px;font-weight:700;color:var(--text4);}
+
+/* ===== ACTION BUTTONS — нэг эгнээнд ===== */
+.action-buttons{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:8px;
+  margin:8px 0 16px;
+}
+.action-buttons .save-btn,
+.action-buttons .share-btn{
+  flex:1;
+  text-align:center;
+  padding:10px 6px;
+  border-radius:var(--radius-sm);
+  font-size:12px;
+  font-family:var(--font-body);
+  font-weight:700;
+  cursor:pointer;
+  transition:all 0.2s;
+  white-space:nowrap;
+  border:none;
+}
+.save-btn{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#0a2a0a;
+}
 .save-btn:hover{opacity:0.85;}
-.save-btn.saved{background:var(--bg3);border:1px solid var(--accent);color:var(--accent);}
-.share-btn{padding:8px 16px;border-radius:var(--radius-sm);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
-.share-btn:hover{border-color:var(--border2);color:var(--accent);}
+.save-btn.saved{
+  background:var(--bg3);
+  border:1px solid var(--accent);
+  color:var(--accent);
+}
+.share-btn{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  color:var(--text2);
+}
+.share-btn:hover{
+  border-color:var(--border2);
+  color:var(--accent);
+}
+
+/* ===== COMMENTS — Сэтгэгдэл ===== */
+.comments-section{margin-top:24px;}
+.comments-title{font-family:var(--font-display);font-size:18px;letter-spacing:1px;color:var(--text2);margin-bottom:12px;}
+.comments-title span{color:var(--accent);}
+.comment-input-wrap{display:flex;gap:10px;margin-bottom:16px;}
+.comment-input-wrap textarea{flex:1;padding:10px 14px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font-body);font-size:13px;resize:vertical;min-height:60px;outline:none;transition:border-color 0.2s;}
+.comment-input-wrap textarea:focus{border-color:var(--accent);}
+.comment-input-wrap textarea::placeholder{color:var(--text4);}
+.comment-submit{padding:10px 20px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:13px;font-family:var(--font-body);font-weight:700;cursor:pointer;white-space:nowrap;height:fit-content;align-self:flex-end;}
+.comment-submit:hover{opacity:0.85;}
+.comment-list{display:flex;flex-direction:column;gap:10px;}
+.comment-item{background:var(--bg3);border-radius:var(--radius-sm);padding:12px 14px;border:1px solid var(--border);}
+.comment-item .comment-author{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px;}
+.comment-item .comment-text{font-size:13px;color:var(--text2);line-height:1.5;}
+.comment-item .comment-time{font-size:10px;color:var(--text4);margin-top:4px;display:block;}
+.comment-empty{text-align:center;padding:20px;color:var(--text4);font-size:13px;}
 
 /* RELATED */
-.related-title{font-family:var(--font-display);font-size:19px;letter-spacing:1px;color:var(--text2);margin-bottom:14px;}
+.related-title{font-family:var(--font-display);font-size:19px;letter-spacing:1px;color:var(--text2);margin-bottom:14px;margin-top:24px;}
 .related-title span{color:var(--accent);}
 .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .related-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:border-color 0.2s,transform 0.2s;}
@@ -122,12 +202,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   .container{padding:16px 16px 36px;}
   .article-title{font-size:24px;}
   .related-grid{grid-template-columns:repeat(2,1fr);}
-  .reactions-bar{gap:4px;}
-  .reaction-btn{padding:4px 10px;font-size:12px;}
-  .reaction-emoji{font-size:15px;}
+  .reactions-bar{grid-template-columns:repeat(6,1fr);gap:4px;}
+  .reaction-btn{min-height:48px;padding:6px 2px;}
+  .reaction-emoji{font-size:18px;}
+  .action-buttons{flex-wrap:nowrap;gap:6px;}
+  .action-buttons .save-btn,
+  .action-buttons .share-btn{font-size:10px;padding:8px 4px;}
+  .comment-input-wrap{flex-direction:column;}
+  .comment-submit{align-self:stretch;}
 }
 @media(max-width:480px){
   .related-grid{grid-template-columns:1fr;}
+  .reactions-bar{grid-template-columns:repeat(6,1fr);gap:3px;}
+  .reaction-btn{min-height:40px;padding:4px 2px;}
+  .reaction-emoji{font-size:15px;}
+  .reaction-count{font-size:9px;}
+  .action-buttons{flex-wrap:nowrap;gap:4px;}
+  .action-buttons .save-btn,
+  .action-buttons .share-btn{font-size:9px;padding:6px 2px;}
 }
 </style>
 </head>
@@ -400,6 +492,83 @@ function showToast(msg) {
 }
 
 // ============================================================
+// СЭТГЭГДЭЛ (COMMENTS)
+// ============================================================
+let comments = [];
+
+async function loadComments() {
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/comments?news_id=eq.${newsId}&order=created_at.desc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+    const data = await res.json();
+    comments = data || [];
+    renderComments();
+  } catch (e) {
+    console.error('loadComments error:', e);
+    comments = [];
+    renderComments();
+  }
+}
+
+function renderComments() {
+  const container = document.getElementById('comment-list');
+  if (!container) return;
+  
+  if (comments.length === 0) {
+    container.innerHTML = `<div class="comment-empty">💬 Энэ мэдээнд сэтгэгдэл байхгүй байна.</div>`;
+    return;
+  }
+  
+  container.innerHTML = comments.map(c => `
+    <div class="comment-item">
+      <div class="comment-author">${sanitize(c.author || 'Хэрэглэгч')}</div>
+      <div class="comment-text">${sanitize(c.content)}</div>
+      <span class="comment-time">${timeAgo(c.created_at)}</span>
+    </div>
+  `).join('');
+}
+
+async function postComment() {
+  const textarea = document.getElementById('comment-input');
+  const content = textarea.value.trim();
+  if (!content) {
+    showToast('✍️ Сэтгэгдэл бичнэ үү!');
+    return;
+  }
+  
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/comments`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        news_id: newsId,
+        content: content,
+        author: 'Хэрэглэгч'
+      })
+    });
+    if (!res.ok) throw new Error('Comment post error');
+    
+    textarea.value = '';
+    showToast('✅ Сэтгэгдэл нэмэгдлээ!');
+    loadComments();
+  } catch (e) {
+    console.error('postComment error:', e);
+    showToast('❌ Сэтгэгдэл илгээхэд алдаа гарлаа');
+  }
+}
+
+// ============================================================
 // ҮНДСЭН АЧААЛАЛТ
 // ============================================================
 async function loadNews() {
@@ -433,12 +602,8 @@ async function loadNews() {
 
     const isSaved = localStorage.getItem('saved_news_' + newsId) !== null;
 
-    // ===== ЗӨВХӨН 3 ЗҮЙЛ: АНГИЛАЛ + ГАРЧИГ + МЭДЭЭЛЭЛ =====
     document.getElementById('article-wrap').innerHTML = `
-      <!-- 2. АНГИЛАЛ -->
       <span class="article-cat">${sanitize(n.category || 'Мэдээ')}</span>
-      
-      <!-- 3. ГАРЧИГ -->
       <h1 class="article-title">${sanitize(n.title)}</h1>
       
       <div class="article-meta">
@@ -451,40 +616,50 @@ async function loadNews() {
       
       <hr class="divider">
       
-      <div class="actions-row">
-        <div class="reactions-bar">
-          <button class="reaction-btn" data-emoji="❤️" onclick="react('❤️')">
-            <span class="reaction-emoji">❤️</span>
-            <span class="reaction-count" id="react-love">0</span>
-          </button>
-          <button class="reaction-btn" data-emoji="😂" onclick="react('😂')">
-            <span class="reaction-emoji">😂</span>
-            <span class="reaction-count" id="react-haha">0</span>
-          </button>
-          <button class="reaction-btn" data-emoji="😮" onclick="react('😮')">
-            <span class="reaction-emoji">😮</span>
-            <span class="reaction-count" id="react-wow">0</span>
-          </button>
-          <button class="reaction-btn" data-emoji="😢" onclick="react('😢')">
-            <span class="reaction-emoji">😢</span>
-            <span class="reaction-count" id="react-sad">0</span>
-          </button>
-          <button class="reaction-btn" data-emoji="😡" onclick="react('😡')">
-            <span class="reaction-emoji">😡</span>
-            <span class="reaction-count" id="react-angry">0</span>
-          </button>
-          <button class="reaction-btn" data-emoji="🔥" onclick="react('🔥')">
-            <span class="reaction-emoji">🔥</span>
-            <span class="reaction-count" id="react-fire">0</span>
-          </button>
+      <div class="reactions-bar">
+        <button class="reaction-btn" data-emoji="❤️" onclick="react('❤️')">
+          <span class="reaction-emoji">❤️</span>
+          <span class="reaction-count" id="react-love">0</span>
+        </button>
+        <button class="reaction-btn" data-emoji="😂" onclick="react('😂')">
+          <span class="reaction-emoji">😂</span>
+          <span class="reaction-count" id="react-haha">0</span>
+        </button>
+        <button class="reaction-btn" data-emoji="😮" onclick="react('😮')">
+          <span class="reaction-emoji">😮</span>
+          <span class="reaction-count" id="react-wow">0</span>
+        </button>
+        <button class="reaction-btn" data-emoji="😢" onclick="react('😢')">
+          <span class="reaction-emoji">😢</span>
+          <span class="reaction-count" id="react-sad">0</span>
+        </button>
+        <button class="reaction-btn" data-emoji="😡" onclick="react('😡')">
+          <span class="reaction-emoji">😡</span>
+          <span class="reaction-count" id="react-angry">0</span>
+        </button>
+        <button class="reaction-btn" data-emoji="🔥" onclick="react('🔥')">
+          <span class="reaction-emoji">🔥</span>
+          <span class="reaction-count" id="react-fire">0</span>
+        </button>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="save-btn ${isSaved ? 'saved' : ''}" id="save-news-btn" onclick="toggleSaveNews()">
+          ${isSaved ? '🔖 Хадгалсан' : '💾 Хадгалах'}
+        </button>
+        <button class="share-btn" onclick="shareFB()">📤 Facebook</button>
+        <button class="share-btn" onclick="copyLink()">🔗 Холбоос хуулах</button>
+      </div>
+      
+      <!-- ===== СЭТГЭГДЭЛ ХЭСЭГ ===== -->
+      <div class="comments-section">
+        <div class="comments-title">💬 <span>Сэтгэгдлүүд</span></div>
+        <div class="comment-input-wrap">
+          <textarea id="comment-input" placeholder="Сэтгэгдэл бичих..." rows="2"></textarea>
+          <button class="comment-submit" onclick="postComment()">Илгээх</button>
         </div>
-        
-        <div class="action-buttons">
-          <button class="save-btn ${isSaved ? 'saved' : ''}" id="save-news-btn" onclick="toggleSaveNews()">
-            ${isSaved ? '🔖 Хадгалсан' : '💾 Хадгалах'}
-          </button>
-          <button class="share-btn" onclick="shareFB()">📤 Facebook</button>
-          <button class="share-btn" onclick="copyLink()">🔗 Холбоос хуулах</button>
+        <div id="comment-list" class="comment-list">
+          <div class="comment-empty">💬 Сэтгэгдэл ачааллаж байна...</div>
         </div>
       </div>
     `;
@@ -493,6 +668,7 @@ async function loadNews() {
     document.getElementById('article-wrap').style.display = 'block';
 
     loadReactions();
+    loadComments();
     loadRelated(n.category, newsId);
 
   } catch (e) {
