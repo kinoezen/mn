@@ -21,6 +21,53 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Кино Эзэн","url":"https://kinoezen.mn"}
 </script>
+
+<!-- ✅ НЭМСЭН: МЭДЭЭ ЦЭСИЙН СТИЛЬ -->
+<style>
+.news-menu-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+}
+.news-menu-tab {
+  padding: 5px 16px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+  user-select: none;
+  white-space: nowrap;
+}
+.news-menu-tab:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+.news-menu-tab.active {
+  background: linear-gradient(135deg, #4ade80, #22c55e);
+  color: #0a0a0a;
+  border-color: #4ade80;
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .news-menu-tabs {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .news-menu-tab {
+    font-size: 11px;
+    padding: 4px 12px;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -231,7 +278,6 @@
   <div class="grid-4" id="movies-list" role="list">
     <!-- JavaScript-ээр дүүргэнэ -->
   </div>
-  <!-- ===== ХУУДАС (PAGINATION) ===== -->
   <div class="pagination" id="movie-pagination"></div>
 </section>
 
@@ -240,15 +286,24 @@
   <div class="section">
     <div class="section-header" style="flex-wrap:wrap;gap:8px;">
       <h2 class="section-title"><span>Мэдээ</span> мэдээлэл</h2>
-      <!-- ✅ ЗАССАН: style-гүй, зөвхөн id -->
-      <span id="news-category-label">Бүгд</span>
+      
+      <!-- ✅ НЭМСЭН: Цэсүүд хажууд -->
+      <div class="news-menu-tabs">
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'all')">📋 Бүгд</span>
+        <span class="news-menu-tab active" onclick="selectNewsTab(this, 'travel')">🌍 Аялал</span>
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'knowledge')">🧠 Танин мэдэхүй</span>
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'stars')">✨ Одод ертөнц</span>
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'history')">🎞️ Кино түүх</span>
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'science')">🔬 Шинжлэх ухаан</span>
+        <span class="news-menu-tab" onclick="selectNewsTab(this, 'ai')">🤖 AI мэдлэг</span>
+      </div>
+      
       <div id="news-filter-tabs" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;"></div>
     </div>
   </div>
   <div class="news-grid" id="news-list" role="list">
     <!-- JavaScript-ээр дүүргэнэ -->
   </div>
-  <!-- ===== ХУУДАС (PAGINATION) ===== -->
   <div class="pagination" id="news-pagination"></div>
 </section>
 
@@ -316,5 +371,15 @@
 
 <script src="navbar.js"></script>
 <script src="script.js"></script>
+
+<!-- ✅ НЭМСЭН: ЦЭСИЙН JS -->
+<script>
+function selectNewsTab(element, category) {
+  document.querySelectorAll('.news-menu-tab').forEach(t => t.classList.remove('active'));
+  element.classList.add('active');
+  console.log('📌 Сонгосон цэс:', category);
+}
+</script>
+
 </body>
 </html>
