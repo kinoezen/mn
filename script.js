@@ -51,19 +51,57 @@ const genreGradients = {
 };
 
 // ===== WEATHER =====
+function translateWeatherCode(code) {
+  const map = {
+    0: 'Цэлмэг',
+    1: 'Хэсэгчилсэн үүлтэй',
+    2: 'Үүлэрхэг',
+    3: 'Бүрхэг',
+    45: 'Манантай',
+    48: 'Хяруутай манан',
+    51: 'Хөнгөн шиврээ бороо',
+    53: 'Дунд зэргийн шиврээ бороо',
+    55: 'Хүчтэй шиврээ бороо',
+    56: 'Хөнгөн мөстөлт бороо',
+    57: 'Хүчтэй мөстөлт бороо',
+    61: 'Хөнгөн бороо',
+    63: 'Дунд зэргийн бороо',
+    65: 'Хүчтэй бороо',
+    66: 'Хөнгөн мөстөлт бороо',
+    67: 'Хүчтэй мөстөлт бороо',
+    71: 'Хөнгөн цас',
+    73: 'Дунд зэргийн цас',
+    75: 'Хүчтэй цас',
+    77: 'Цасан ширхэг',
+    80: 'Хөнгөн аадар бороо',
+    81: 'Дунд зэргийн аадар бороо',
+    82: 'Хүчтэй аадар бороо',
+    85: 'Хөнгөн цасан шуурга',
+    86: 'Хүчтэй цасан шуурга',
+    95: 'Аянгатай бороо',
+    96: 'Аянгатай мөндөртэй бороо',
+    99: 'Хүчтэй аянгатай мөндөртэй бороо'
+  };
+  return map[code] || 'Улаанбаатар';
+}
+
 async function loadWeather() {
+  const weatherEl = document.getElementById('weather-temp');
+  if (!weatherEl) return;
+
   try {
     const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.92&longitude=106.92&current_weather=true&timezone=Asia%2FShanghai');
+    if (!res.ok) throw new Error('API хариу өгөхгүй байна');
     const data = await res.json();
     if (data.current_weather) {
       const temp = data.current_weather.temperature;
-      const weatherEl = document.getElementById('weather-temp');
-      if (weatherEl) {
-        weatherEl.textContent = temp + '°C · Улаанбаатар';
-      }
+      const code = data.current_weather.weathercode;
+      const description = translateWeatherCode(code);
+      weatherEl.textContent = temp + '°C · ' + description;
     }
   } catch (error) {
     console.error('Weather error:', error);
+    // API ажиллахгүй үед анхны утгыг хадгална
   }
 }
 
