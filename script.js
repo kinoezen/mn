@@ -258,7 +258,6 @@ function showMoviesOnly(el) {
     setTimeout(() => goSection('movies'), 100);
 }
 
-// ✅ ЗАССАН MCAT_MENUS — БҮХ АНГИЛАЛД "БҮГД" ЗӨВ БОЛСОН
 const MCAT_MENUS = {
     'Сургалт': [
         { label: 'Бүгд', cat: 'Сургалт' },
@@ -338,11 +337,14 @@ let currentMainCategory = '';
 function openMcatDropdown(card, menuKey) {
     setActiveMcat(card);
     currentMainCategory = menuKey;
+    // ✅ Цэсийн нэрийг гарчиг болгон харуулах
     document.getElementById('news-category-label').textContent = menuKey;
+    
     const items = MCAT_MENUS[menuKey] || [];
     document.getElementById('news-filter-tabs').innerHTML = items.map(item =>
         `<button class="news-filter-btn${item.cat === '' ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
     ).join('');
+    
     if (items.length > 0) {
         const firstCat = items.find(i => i.cat !== '')?.cat || '';
         loadNewsByCategory(firstCat);
@@ -372,7 +374,7 @@ function handleMcatSub(cat, btn, mainKey) {
     }
 }
 
-// ✅ ШИНЕ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
+// ✅ ШИНЭ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
 async function loadNewsByMainCategory(mainCategory) {
     const list = document.getElementById('news-list');
     list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
@@ -387,7 +389,7 @@ async function loadNewsByMainCategory(mainCategory) {
         const filtered = allNewsData.filter(n => subCategories.includes(n.sub_category));
         
         if (!filtered || filtered.length === 0) {
-            // ✅ "Кино түүх" биш "Бүгд" гэж харуулах
+            // ✅ "Аялал" биш "Бүгд" гэж харуулах
             list.innerHTML = `<div class="empty-state"><p>"Бүгд" ангилалд мэдээ байхгүй</p></div>`;
             document.getElementById('news-pagination').innerHTML = '';
             return;
