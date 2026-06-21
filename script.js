@@ -372,7 +372,7 @@ function handleMcatSub(cat, btn, mainKey) {
     }
 }
 
-// ✅ ШИНЭ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
+// ✅ ШИНЕ FUNC — Үндсэн ангилалаар бүх дэд ангиллыг нэгтгэх
 async function loadNewsByMainCategory(mainCategory) {
     const list = document.getElementById('news-list');
     list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
@@ -387,7 +387,8 @@ async function loadNewsByMainCategory(mainCategory) {
         const filtered = allNewsData.filter(n => subCategories.includes(n.sub_category));
         
         if (!filtered || filtered.length === 0) {
-            list.innerHTML = `<div class="empty-state"><p>"${mainCategory}" ангилалд мэдээ байхгүй</p></div>`;
+            // ✅ "Кино түүх" биш "Бүгд" гэж харуулах
+            list.innerHTML = `<div class="empty-state"><p>"Бүгд" ангилалд мэдээ байхгүй</p></div>`;
             document.getElementById('news-pagination').innerHTML = '';
             return;
         }
