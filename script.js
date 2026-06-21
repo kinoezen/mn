@@ -335,10 +335,12 @@ const MCAT_MENUS = {
 
 let currentMainCategory = '';
 
+// ✅ ЗАССАН OPENMCATDROPDOWN — ЦЭСИЙН НЭР ГАРЧИГ БОЛНО
 function openMcatDropdown(card, menuKey) {
   setActiveMcat(card);
   currentMainCategory = menuKey;
 
+  // ✅ ЦЭСИЙН НЭРИЙГ ГАРЧИГ БОЛГОХ
   document.getElementById('news-category-label').textContent = menuKey;
 
   const items = MCAT_MENUS[menuKey] || [];
@@ -360,7 +362,6 @@ function closeMcatDropdown() {
   document.getElementById('news-filter-tabs').innerHTML = '';
 }
 
-// ✅ ЗАССАН — ДЭД АНГИЛАЛ ДЭЭР ЗӨВХӨН ДЭД АНГИЛАЛЫН НЭР
 function handleMcatSub(cat, btn, mainKey) {
   document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
@@ -370,8 +371,7 @@ function handleMcatSub(cat, btn, mainKey) {
     document.getElementById('news-category-label').textContent = mainKey;
     loadNewsByMainCategory(mainKey);
   } else {
-    // ✅ ЗӨВХӨН ДЭД АНГИЛАЛЫН НЭР
-    document.getElementById('news-category-label').textContent = label;
+    document.getElementById('news-category-label').textContent = mainKey + ' › ' + label;
     loadNewsBySubCategory(cat);
   }
 }
@@ -441,102 +441,6 @@ async function loadNews() {
   } catch (e) {
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
-}
-
-// ===== AD =====
-let adInterval = null;
-let adIndex = 0;
-let adsData = [];
-
-async function loadAd() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/ads?active=eq.true&order=created_at.desc`, {
-      headers: {
-        'apikey': SUPABASE_KEY,
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      }
-    });
-    adsData = await res.json();
-
-    if (adsData && adsData.length > 0) {
-      renderAds();
-      startAdSlider();
-    } else {
-      showDefaultAd();
-    }
-  } catch (error) {
-    console.error('loadAd error:', error);
-    showDefaultAd();
-  }
-}
-
-function renderAds() {
-  const slider = document.getElementById('ad-slider');
-  const dots = document.getElementById('ad-dots');
-
-  slider.innerHTML = adsData.map((ad, index) => {
-    let mediaHtml = '';
-    if (ad.video_url) {
-      mediaHtml = `<video autoplay muted loop playsinline style="max-height:60px;border-radius:6px;object-fit:cover;">
-        <source src="${ad.video_url}" type="video/mp4">
-      </video>`;
-    } else if (ad.image_url) {
-      mediaHtml = `<img src="${ad.image_url}" style="max-height:60px;border-radius:6px;object-fit:cover;" alt="${sanitize(ad.title)}">`;
-    }
-
-    return `<div class="ad-slide${index === 0 ? ' active' : ''}" data-index="${index}">
-      <div class="ad-banner">
-        ${mediaHtml}
-        <div class="ad-text">
-          <strong>${sanitize(ad.title)}</strong>
-          <div>${sanitize(ad.description || '')}</div>
-        </div>
-        <button class="ad-btn" onclick="location.href='#contact'">${sanitize(ad.button_text || 'Холбоо барих')}</button>
-      </div>
-    </div>`;
-  }).join('');
-
-  dots.innerHTML = adsData.map((_, i) =>
-    `<button class="ad-dot${i === 0 ? ' active' : ''}" onclick="goToAd(${i})"></button>`
-  ).join('');
-}
-
-function showDefaultAd() {
-  const slider = document.getElementById('ad-slider');
-  slider.innerHTML = `
-    <div class="ad-slide active">
-      <div class="ad-banner">
-        <div class="ad-text">
-          <strong>🏢 Таны компанийн реклам энд</strong>
-          <div>Сарын 50,000₮-өөс эхлэн рекламаа байршуул</div>
-        </div>
-        <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
-      </div>
-    </div>
-  `;
-}
-
-function startAdSlider() {
-  if (adInterval) clearInterval(adInterval);
-  if (adsData.length <= 1) return;
-
-  adInterval = setInterval(() => {
-    const nextIndex = (adIndex + 1) % adsData.length;
-    goToAd(nextIndex);
-  }, 5000);
-}
-
-function goToAd(index) {
-  if (index === adIndex) return;
-  adIndex = index;
-
-  document.querySelectorAll('.ad-slide').forEach((el, i) => {
-    el.classList.toggle('active', i === index);
-  });
-
-  document.querySelectorAll('.ad-dot').forEach((el, i) => {
-    el.classList.toggle('active', i === index);
-  });
 }
 
 // ===== MOVIES =====
