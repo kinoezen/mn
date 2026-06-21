@@ -59,7 +59,7 @@ async function loadWeather() {
       const temp = data.current_weather.temperature;
       const weatherEl = document.getElementById('weather-temp');
       if (weatherEl) {
-        weatherEl.textContent = temp + '°C';
+        weatherEl.textContent = temp + '°C · Улаанбаатар';
       }
     }
   } catch (error) {
@@ -335,12 +335,10 @@ const MCAT_MENUS = {
 
 let currentMainCategory = '';
 
-// ✅ ЗАССАН OPENMCATDROPDOWN — ЦЭСИЙН НЭР ГАРЧИГ БОЛНО
 function openMcatDropdown(card, menuKey) {
   setActiveMcat(card);
   currentMainCategory = menuKey;
 
-  // ✅ ЦЭСИЙН НЭРИЙГ ГАРЧИГ БОЛГОХ
   document.getElementById('news-category-label').textContent = menuKey;
 
   const items = MCAT_MENUS[menuKey] || [];
