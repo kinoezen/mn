@@ -47,8 +47,34 @@
     }
   }
 
-  function zarIsLoggedIn() {
-    return !!(zarGetToken() && zarGetUser());
+  // Зөвхөн localStorage-д утга байгаа эсэхийг шалгаад зогсохгүй,
+  // token-ийг Supabase Auth руу илгээж бодит хүчинтэй эсэхийг шалгана.
+  // Хуучин/хүчингүй болсон token localStorage-д үлдсэн тохиолдолд
+  // хуурамчаар "нэвтэрсэн" гэж тооцохоос сэргийлнэ.
+  async function zarIsLoggedIn() {
+    const token = zarGetToken();
+    const user = zarGetUser();
+    if (!token || !user) return false;
+    try {
+      const res = await fetch(ZAR_SUPABASE_URL + '/auth/v1/user', {
+        headers: {
+          apikey: ZAR_SUPABASE_KEY,
+          Authorization: 'Bearer ' + token
+        }
+      });
+      if (!res.ok) {
+        zarClearStaleSession();
+        return false;
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function zarClearStaleSession() {
+    localStorage.removeItem('sb_token');
+    localStorage.removeItem('sb_user');
   }
 
   function zarFormatPrice(listing) {
@@ -117,12 +143,11 @@
     const overlay = document.getElementById('zar-overlay');
     if (!overlay) return;
     overlay.classList.add('zar-open');
+    // "Зар мэдээ" товч дарах бүрд ҲРГҲЛЖ жагсаалт харуулна — өмнө нь
+    // форм/дэлгэрэнгүй нээгдсэн байсан ч сэргээж жагсаалт руу буцаана.
     zarShowListView();
-    if (zarCategories.length === 0) {
-      zarLoadCategories();
-    } else {
-      zarLoadListings();
-    }
+    zarActiveCategoryId = '';
+    zarLoadCategories();
   }
 
   function zarCloseModal() {
@@ -136,8 +161,9 @@
     document.getElementById('zar-detail-wrap').classList.remove('zar-open');
   }
 
-  function zarShowFormView() {
-    if (!zarIsLoggedIn()) {
+  async function zarShowFormView() {
+    const loggedIn = await zarIsLoggedIn();
+    if (!loggedIn) {
       zarShowLoginPrompt();
       return;
     }
@@ -466,7 +492,8 @@
   // ---------- Form submit ----------
   async function zarHandleSubmit(e) {
     e.preventDefault();
-    if (!zarIsLoggedIn()) {
+    const loggedIn = await zarIsLoggedIn();
+    if (!loggedIn) {
       zarShowLoginPrompt();
       return;
     }
