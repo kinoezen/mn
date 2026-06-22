@@ -1377,11 +1377,11 @@ body {
   .nav-search input {
     width: 100%;
   }
-  /* ===== УТСАН ДЭЭРХ ЦАГ АГААРЫН ХЭСЭГ ===== */
+ /* ===== УТСАН ДЭЭРХ ЦАГ АГААРЫН ХЭСЭГ ===== */
 @media(max-width: 768px) {
   .weather-bar {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;  /* ✅ ГОЛЛУУЛСАН */
     gap: 4px;
     padding: 6px 16px 8px;
   }
@@ -1390,6 +1390,7 @@ body {
     flex-wrap: wrap;
     gap: 10px;
     align-items: center;
+    justify-content: center;  /* ✅ ГОЛЛУУЛСАН */
   }
   .weather-item {
     font-size: 13px;
@@ -1400,8 +1401,8 @@ body {
   .date-text {
     font-size: 13px;
     margin-top: 2px;
-    text-align: center;
-    width: 100%;
+    text-align: center !important;
+    width: 100% !important;
   }
 }
   }
