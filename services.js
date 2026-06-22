@@ -547,46 +547,70 @@ async function runAiDetect() {
 // ============================================================
 // CHATBOT
 // ============================================================
+// ============================================================
+// ШИНЭ runChatbot() — /api/chatbot руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runChatbot() функцийг ҲНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ. (Доороос "CHATBOT" гэж хайж олоод тэр
+// бүхэл функцийг устгаад оронд нь үүнийг тавина.)
+// ============================================================
+
+// Chat history-г санах (browser session-доо, page refresh хүртэл)
+let chatbotHistory = [];
+
 async function runChatbot() {
     const input = document.getElementById('chatbot-input');
     if (!input) { showToast('⚠️ Chatbot олдсонгүй', 'error'); return; }
     const question = input.value.trim();
     if (!question) { showToast('⚠️ Асуулт бичнэ үү!', 'error'); return; }
+
     const btn = event?.target || document.querySelector('#chatbot-box .run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Бодож байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+    const messages = document.getElementById('chatbot-messages');
+
+    // Хэрэглэгчийн мессежийг дэлгэцэнд харуулна
+    if (messages) {
+        const userMsg = document.createElement('div');
+        userMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;justify-content:flex-end;';
+        userMsg.innerHTML = `<div style="background:rgba(74,222,128,0.12);border-radius:10px 0 10px 10px;padding:10px 12px;font-size:13px;color:rgba(255,255,255,0.9);line-height:1.6;max-width:80%;">${question}</div>
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(74,222,128,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">👤</div>`;
+        messages.appendChild(userMsg);
+        messages.scrollTop = messages.scrollHeight;
+    }
+    if (input) input.value = '';
+
     try {
-        const messages = document.getElementById('chatbot-messages');
-        if (messages) {
-            const userMsg = document.createElement('div');
-            userMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;justify-content:flex-end;';
-            userMsg.innerHTML = `<div style="background:rgba(74,222,128,0.12);border-radius:10px 0 10px 10px;padding:10px 12px;font-size:13px;color:rgba(255,255,255,0.9);line-height:1.6;max-width:80%;">${question}</div>
-            <div style="width:28px;height:28px;border-radius:50%;background:rgba(74,222,128,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">👤</div>`;
-            messages.appendChild(userMsg);
-            messages.scrollTop = messages.scrollHeight;
-        }
-        if (input) input.value = '';
-        const responses = [
-            `🎬 "${question}" тухай асууж байна уу? КиноЭзэн дээр олон мэдээлэл байгаа.`,
-            `📰 "${question}" — энэ сэдвээр бидэнд сонирхолтой мэдээнүүд бий.`,
-            `💡 "${question}" — маш сайн асуулт! КиноЭзэн танд үргэлж туслахад бэлэн.`
-        ];
-        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+        const response = await fetch('/api/chatbot', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: question, history: chatbotHistory })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Chatbot алдаа гарлаа');
+
+        const reply = data.reply;
+
+        // History-д хадгална (дараагийн асуултад context болгож ашиглана)
+        chatbotHistory.push({ role: 'user', content: question });
+        chatbotHistory.push({ role: 'assistant', content: reply });
+
         if (messages) {
             const botMsg = document.createElement('div');
             botMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;';
             botMsg.innerHTML = `<div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#059669,#4ade80);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">🤖</div>
-            <div style="background:rgba(74,222,128,0.06);border-radius:0 10px 10px 10px;padding:10px 12px;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;max-width:80%;">${randomResponse}</div>`;
+            <div style="background:rgba(74,222,128,0.06);border-radius:0 10px 10px 10px;padding:10px 12px;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.6;max-width:80%;white-space:pre-wrap;">${reply}</div>`;
             messages.appendChild(botMsg);
             messages.scrollTop = messages.scrollHeight;
         }
         showToast('✅ Хариу амжилттай!', 'success');
     } catch (error) {
         console.error('Chatbot error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
+
     if (btn) { btn.disabled = false; btn.textContent = '➤'; }
 }
-
 // ============================================================
 // НЭМЭЛТ ТҮЛХҮҮР ФУНКЦУУД
 // ============================================================
