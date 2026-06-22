@@ -556,12 +556,21 @@
 
 <!-- ===== WEATHER ===== -->
 <div class="weather-bar" role="complementary" aria-label="Цаг агаар">
-  <div class="weather-left">
-    <div class="weather-item">📅 <time id="today-date"></time></div>
-    <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
-    <div class="weather-item">📍 Улаанбаатар</div>
+  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 16px 8px;color:#fff;font-family:'Nunito',sans-serif;font-size:15px;width:100%;">
+    <!-- 1-р мөр: Огноо -->
+    <div style="display:flex;justify-content:flex-start;">
+      <span>📅 <time id="today-date"></time></span>
+    </div>
+    <!-- 2-р мөр: Температур -->
+    <div style="display:flex;justify-content:flex-start;">
+      <span>🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></span>
+    </div>
+    <!-- 3-р мөр: Улаанбаатар (зүүн) + Кино Эзэн (баруун) жижгэрсэн -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px 12px;">
+      <span style="font-weight:600;color:#e0e0e0;">📍 Улаанбаатар</span>
+      <span style="font-size:12px;font-weight:700;background:linear-gradient(90deg,#4ade80,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;">Кино Эзэн — Бүхнийг нэг дороос</span>
+    </div>
   </div>
-  <div class="date-text">Кино Эзэн — Бүхнийг нэг дороос</div>
 </div>
 
 <!-- ===== AD — 728×90 ===== -->
