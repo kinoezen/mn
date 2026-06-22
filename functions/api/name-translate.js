@@ -1,46 +1,20 @@
 export async function onRequestPost({ request, env }) {
   try {
-    const { transcript, language } = await request.json();
-    if (!transcript) {
-      return new Response(JSON.stringify({ error: "Транскрипт оруулна уу" }), {
+    const { name, direction } = await request.json();
+    if (!name) {
+      return new Response(JSON.stringify({ error: "Нэр оруулна уу" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });
     }
 
     const apiKey = env.GEMINI_API_KEY;
-    const lang = language || "mn"; // mn | en
+    const dir = direction || "mn-to-en";
 
     const prompt =
-      lang === "mn"
-        ? `Дараах Монгол хэлний автомат транскриптийг цэвэрлэж, засаж тохиол. Дуу таних алдаа, давтагдсан үг, утгагүй хэсгийг засна уу.
-
-Транскрипт:
-"""
-${transcript}
-"""
-
-Зөвхөн JSON форматаар хариул:
-{
-  "cleaned": "цэвэрлэсэн бүрэн текст",
-  "summary": "агуулгын товч тайлбар",
-  "corrections": <засварын тоо>,
-  "key_points": ["үндсэн санаа 1", "үндсэн санаа 2"]
-}`
-        : `Clean and fix the following auto-generated transcript. Fix recognition errors, remove filler words, and improve readability.
-
-Transcript:
-"""
-${transcript}
-"""
-
-Reply in JSON only:
-{
-  "cleaned": "full cleaned text",
-  "summary": "brief content summary",
-  "corrections": <number of corrections>,
-  "key_points": ["key point 1", "key point 2"]
-}`;
+      dir === "mn-to-en"
+        ? `Дараах Монгол кирилл нэрийг латин үсгээр бич мөн Англи утгыг орчуул.\n\nНэр: ${name}\n\nЗөвхөн JSON форматаар хариул, өөр юм бичихгүй:\n{"transliteration": "латин үсгээр", "translation": "англи утга", "alternatives": ["өөр хувилбар"]}`
+        : `Дараах латин/англи нэрийг ЗААВАЛ Монгол КИРИЛЛ үсгээр бич. Латин үсгээр бичихийг ХОРИГЛОНО.\n\nНэр: ${name}\n\nЗөвхөн JSON форматаар хариул, өөр юм бичихгүй:\n{"mongolian": "кирилл үсгээр бичсэн нэр", "alternatives": ["өөр кирилл хувилбар"]}`;
 
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
@@ -49,7 +23,7 @@ Reply in JSON only:
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.2 },
+          generationConfig: { temperature: 0.3 },
         }),
       }
     );
