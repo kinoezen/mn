@@ -1,37 +1,85 @@
 // ============================================================
-// ШИНЭ runMovieReview() — /api/movie-review руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runMovieReview() функцийг ҲНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ.
+// functions/api/movie-review.js
+// URL: POST /api/movie-review
+// Body: { title: string, length: "short" | "medium" | "long" }
+//
+// ҲНЭГҲ хувилбар — Anthropic Claude-ийн оронд GEMINI ашиглана.
 // ============================================================
 
-async function runMovieReview() {
-    const movieName = document.getElementById('movie-review-input')?.value.trim();
-    if (!movieName) { showToast('⚠️ Кино нэр оруулна уу!', 'error'); return; }
+export async function onRequestOptions() {
+  return new Response(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    }
+  });
+}
 
-    const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Тойм бичиж байна...'; }
+export async function onRequestPost({ request, env }) {
+  const corsHeaders = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  };
 
-    try {
-        const response = await fetch('/api/movie-review', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: movieName, length: 'medium' })
-        });
+  try {
+    const { title, length } = await request.json();
 
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Тойм бичих үед алдаа гарлаа');
-
-        const resultDiv = document.getElementById('movie-review-result');
-        if (resultDiv) {
-            resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">🎬 Тойм</div>
-            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.review}</div>`;
-        }
-        showToast('✅ Тойм амжилттай!', 'success');
-    } catch (error) {
-        console.error('MovieReview error:', error);
-        showToast('❌ ' + error.message, 'error');
+    if (!title) {
+      return new Response(JSON.stringify({ error: 'Кино нэр оруулна уу' }), {
+        status: 400,
+        headers: corsHeaders
+      });
     }
 
-    if (btn) { btn.disabled = false; btn.textContent = '🎬 Тойм бичих'; }
+    if (!env.GEMINI_API_KEY) {
+      return new Response(JSON.stringify({ error: 'Серверийн тохиргоо дутуу (GEMINI_API_KEY алга)' }), {
+        status: 500,
+        headers: corsHeaders
+      });
+    }
+
+    const lengthMap = { short: '150-200 үг', medium: '300-400 үг', long: '500-700 үг' };
+    const wordCount = lengthMap[length] || '300-400 үг';
+
+    const prompt = `"${title}" киноны монгол тойм бич. Урт: ${wordCount}.
+Дараах бүтцээр бич:
+- Товч танилцуулга
+- Үйл явдал (spoiler-гүй)
+- Найруулагч болон жүжигчид
+- Онцлог тал
+- Үнэлгээ (10-аас)
+Монгол хэлээр, уншихад сонирхолтой байдлаар бич.`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.8, maxOutputTokens: 1500 }
+        })
+      }
+    );
+
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Gemini API error (${response.status}): ${errText}`);
+    }
+
+    const data = await response.json();
+    const review = data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Тойм үүсгэхэд алдаа гарлаа.';
+
+    return new Response(JSON.stringify({ review }), {
+      status: 200,
+      headers: corsHeaders
+    });
+  } catch (err) {
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: corsHeaders
+    });
+  }
 }
