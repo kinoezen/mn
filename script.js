@@ -130,8 +130,12 @@ async function loadAd() {
   if (!slider) return;
 
   try {
-    // Supabase-ийн 'ads' хүснэгтээс татна (is_active=true байгаа рекламуудыг)
-    const ads = await supaFetch('ads', 'is_active=eq.true&order=created_at.desc&limit=5');
+    // Supabase-ийн 'ads' хүснэгтээс татна
+    // is_active багана байхгүй тул шүүлтгүйгээр бүгдийг татна
+    const ads = await supaFetch('ads', 'order=created_at.desc&limit=5');
+    if (ads && ads.length > 0) {
+      console.log('📢 ads баганууд:', Object.keys(ads[0]));
+    }
 
     if (!ads || ads.length === 0) {
       // Supabase-д реклам байхгүй бол default реклам харуулна
