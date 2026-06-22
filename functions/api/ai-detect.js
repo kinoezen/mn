@@ -3,14 +3,8 @@
 // URL: POST /api/ai-detect
 // Body: { text: string }
 //
-// Энэ файл нь GitHub дээрх netlify/functions/ai-detect.js-ийн
-// Cloudflare Pages хувилбар. Логик яг хэвээрээ, зөвхөн:
-//   - exports.handler = async (event) => {...}
-//     болсон
-//   - onRequestPost({ request, env }) => {...}
-//   - event.body -> await request.json()
-//   - process.env.ANTHROPIC_API_KEY -> env.ANTHROPIC_API_KEY
-//   - { statusCode, body } буцаах -> Response объект буцаах
+// ҮНЭГҲ хувилбар — Anthropic Claude-ийн оронд GEMINI ашиглана.
+// Gemini API нь чөлөөт (free) tier-тэй — billing АСААГҺ л бол.
 // ============================================================
 
 export async function onRequestOptions() {
@@ -40,42 +34,39 @@ export async function onRequestPost({ request, env }) {
       });
     }
 
-    if (!env.ANTHROPIC_API_KEY) {
-      return new Response(JSON.stringify({ error: 'Серверийн тохиргоо дутуу (ANTHROPIC_API_KEY алга)' }), {
+    if (!env.GEMINI_API_KEY) {
+      return new Response(JSON.stringify({ error: 'Серверийн тохиргоо дутуу (GEMINI_API_KEY алга)' }), {
         status: 500,
         headers: corsHeaders
       });
     }
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5',
-        max_tokens: 1024,
-        messages: [{
-          role: 'user',
-          content: `Дараах монгол текстийг AI-р бичигдсэн эсэхийг шинжил. Үг сонголт, өгүүлбэрийн бүтэц, давталт, "хиймэл" хэллэг зэргийг харгал.
+    const prompt = `Дараах монгол текстийг AI-р бичигдсэн эсэхийг шинжил. Үг сонголт, өгүүлбэрийн бүтэц, давталт, "хиймэл" хэллэг зэргийг харгал.
 
 Текст: ${text}
 
 Зөвхөн JSON форматаар хариул, нэмэлт тайлбар бичих хэрэггүй:
-{"score": <0-100 тоо, AI-р бичигдсэн магадлал>, "verdict": "AI-р бичигдсэн / Хүн бичсэн", "reasons": ["шалтгаан 1", "шалтгаан 2"]}`
-        }]
-      })
-    });
+{"score": <0-100 тоо, AI-р бичигдсэн магадлал>, "verdict": "AI-р бичигдсэн / Хүн бичсэн", "reasons": ["шалтгаан 1", "шалтгаан 2"]}`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.3, maxOutputTokens: 1024 }
+        })
+      }
+    );
 
     if (!response.ok) {
       const errText = await response.text();
-      throw new Error(`Anthropic API error (${response.status}): ${errText}`);
+      throw new Error(`Gemini API error (${response.status}): ${errText}`);
     }
 
     const data = await response.json();
-    const rawText = data.content[0].text;
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
     let result;
     try {
