@@ -556,13 +556,16 @@
 
 <!-- ===== WEATHER ===== -->
 <div class="weather-bar" role="complementary" aria-label="Цаг агаар">
-  <div class="weather-left">
-    <div class="weather-item">📅 <time id="today-date"></time></div>
-    <div class="weather-item">🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></div>
-    <div class="weather-item" style="display:flex;align-items:center;gap:12px;">
-      <span>📍 Улаанбаатар</span>
-      <span style="color:rgba(255,255,255,0.15);">|</span>
-      <span class="date-text" style="font-size:13px;font-weight:700;background:linear-gradient(90deg,#4ade80,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Кино Эзэн — Бүхнийг нэг дороос</span>
+  <div style="display:flex;flex-direction:column;gap:2px;padding:4px 16px 8px;color:#fff;font-family:'Nunito',sans-serif;font-size:15px;width:100%;">
+    <!-- 1-р мөр: Зөвхөн огноо + температур -->
+    <div style="display:flex;flex-wrap:wrap;gap:8px 16px;">
+      <span>📅 <time id="today-date"></time></span>
+      <span>🌤️ <span class="weather-temp" id="weather-temp">Ачааллаж байна...</span></span>
+    </div>
+    <!-- 2-р мөр: · Улаанбаатар (зүүн) — зай — Кино Эзэн (баруун) -->
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px 16px;">
+      <span style="font-weight:600;color:#e0e0e0;">· Улаанбаатар</span>
+      <span style="font-size:14px;font-weight:700;background:linear-gradient(90deg,#4ade80,#fbbf24);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;">Кино Эзэн — Бүхнийг нэг дороос</span>
     </div>
   </div>
 </div>
