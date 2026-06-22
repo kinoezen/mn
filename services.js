@@ -330,20 +330,34 @@ async function runNameTranslate() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
     try {
+        const srcLang = document.getElementById('name-translate-lang')?.value || 'en-to-mn';
         const names = text.split('\n').filter(n => n.trim());
-        const translations = names.map(name => `${name.trim()} → ${name.trim().substring(0, 8)} (монгол)`);
+        const results = [];
+        for (const name of names) {
+            const response = await fetch('/api/name-translate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name.trim(), direction: srcLang })
+            });
+            const data = await response.json();
+            if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
+            const translated = srcLang === 'en-to-mn'
+                ? (data.mongolian || data.result || name)
+                : (data.transliteration || data.result || name);
+            results.push(`${name.trim()} → ${translated}`);
+        }
         const resultDiv = document.getElementById('name-translate-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🎭 Орчуулга</div>
             <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.8);">
-                ${translations.map(t => `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">${t}</div>`).join('')}
+                ${results.map(t => `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">${t}</div>`).join('')}
             </div>`;
         }
         showToast('✅ Нэрс амжилттай орчуулагдлаа!', 'success');
     } catch (error) {
         console.error('NameTranslate error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎭 Орчуулах'; }
 }
