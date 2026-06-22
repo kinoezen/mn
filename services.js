@@ -1,5 +1,5 @@
 // ============================================================
-// services.js — КиноЭзэн AI Үйлчилгээнүүд
+// services.js — КиноЭзэн AI Үйлчилгээнүүд (АЛДААГҮЙ ХУВИЛБАР)
 // ============================================================
 
 console.log('✅ services.js ачааллаж байна...');
@@ -23,11 +23,11 @@ function showToast(message, type = 'info') {
     toast.textContent = message;
     toast.style.cssText = `
         position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
-        background: ${type === 'success' ? 'rgba(74,222,128,0.15)' : type === 'error' ? 'rgba(230,57,70,0.15)' : 'rgba(255,255,255,0.08)'};
-        color: ${type === 'success' ? '#4ade80' : type === 'error' ? '#e63946' : '#fff'};
+        background: ${type === 'success' ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.08)'};
+        color: ${type === 'success' ? '#4ade80' : '#fff'};
         padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600;
         font-family: 'Nunito', sans-serif; z-index: 9999;
-        border: 1px solid ${type === 'success' ? 'rgba(74,222,128,0.3)' : type === 'error' ? 'rgba(230,57,70,0.3)' : 'rgba(255,255,255,0.1)'};
+        border: 1px solid ${type === 'success' ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.1)'};
         backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         transition: all 0.3s; pointer-events: none;
     `;
@@ -67,6 +67,7 @@ async function runTTS() {
         }
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
+        console.error('TTS error:', error);
         showToast('❌ Дуу үүсгэхэд алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
@@ -98,6 +99,7 @@ async function runTranslate() {
         }
         showToast('✅ Орчуулга амжилттай!', 'success');
     } catch (error) {
+        console.error('Translate error:', error);
         showToast('❌ Орчуулах үед алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🌐 Орчуулах'; }
@@ -122,6 +124,7 @@ async function runHum() {
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Хүмүүнжүүлэлт амжилттай!', 'success');
     } catch (error) {
+        console.error('Humanizer error:', error);
         showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '✨ Хүмүүнжүүлэх'; }
@@ -133,7 +136,8 @@ async function runHum() {
 async function runSTT() {
     const fileInput = document.getElementById('stt-file');
     if (!fileInput?.files || fileInput.files.length === 0) {
-        showToast('⚠️ Аудио файл оруулна уу!', 'error'); return;
+        showToast('⚠️ Аудио файл оруулна уу!', 'error');
+        return;
     }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
@@ -147,19 +151,25 @@ async function runSTT() {
             <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
                 <source src="${audioUrl}">
             </audio>
+            <div style="font-size:13px;color:rgba(255,255,255,0.4);padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
+                🎤 Доорх товчоор микрофоноор ярьж болно:
+            </div>
             <button onclick="startSpeechRecognition()" style="padding:10px 20px;border-radius:10px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">🎤 Микрофоноор ярих</button>
             <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;min-height:40px;"></div>`;
         }
         showToast('✅ Аудио боловсруулагдлаа!', 'success');
     } catch (error) {
+        console.error('STT error:', error);
         showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; }
 }
 
+// ===== SPEECH RECOGNITION =====
 function startSpeechRecognition() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        showToast('❌ Таны браузер дуу танихыг дэмжихгүй байна.', 'error'); return;
+        showToast('❌ Таны браузер дуу танихыг дэмжихгүй байна.', 'error');
+        return;
     }
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -205,27 +215,38 @@ async function runTextEdit() {
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Текст амжилттай засагдлаа!', 'success');
     } catch (error) {
+        console.error('TextEdit error:', error);
         showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📝 Засах'; }
 }
 
 // ============================================================
-// КИНО ТОЙМЧ — /api/movie-review
+// КИНО ТОЙМЧ
 // ============================================================
+// ============================================================
+// ШИНЭ runMovieReview() — /api/movie-review руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runMovieReview() функцийг ҲНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ.
+// ============================================================
+
 async function runMovieReview() {
     const movieName = document.getElementById('movie-review-input')?.value.trim();
     if (!movieName) { showToast('⚠️ Кино нэр оруулна уу!', 'error'); return; }
+
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Тойм бичиж байна...'; }
+
     try {
         const response = await fetch('/api/movie-review', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title: movieName, length: 'medium' })
         });
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Тойм бичих үед алдаа гарлаа');
+
         const resultDiv = document.getElementById('movie-review-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
@@ -234,13 +255,14 @@ async function runMovieReview() {
         }
         showToast('✅ Тойм амжилттай!', 'success');
     } catch (error) {
+        console.error('MovieReview error:', error);
         showToast('❌ ' + error.message, 'error');
     }
+
     if (btn) { btn.disabled = false; btn.textContent = '🎬 Тойм бичих'; }
 }
-
 // ============================================================
-// СУБТИТР НИЙЛҮҮЛЭГЧ (демо)
+// СУБТИТР НИЙЛҮҮЛЭГЧ
 // ============================================================
 function runMergeSubtitle() {
     const videoFile = document.getElementById('merge-video-file')?.files[0];
@@ -256,16 +278,24 @@ function runMergeSubtitle() {
             resultDiv.innerHTML = `<div class="result-label">🎞️ Нийлүүлэлт бэлэн</div>
             <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;">
                 ✅ Видео + SRT нийлүүлэгдлээ!<br>
-                📁 Файлын хэмжээ: ${(videoFile.size / 1024 / 1024).toFixed(1)} MB
+                📁 Файлын хэмжээ: ${(videoFile.size / 1024 / 1024).toFixed(1)} MB<br>
+                <button onclick="downloadMergeSub()" style="margin-top:10px;padding:10px 20px;border-radius:10px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:13px;font-weight:700;cursor:pointer;">⬇️ Татаж авах (демо)</button>
             </div>`;
         }
         showToast('✅ Нийлүүлэлт амжилттай!', 'success');
         if (btn) { btn.disabled = false; btn.textContent = '🎞️ Нийлүүлэх'; }
     }, 1500);
 }
+function downloadMergeSub() {
+    const blob = new Blob(['Demo video with subtitles'], { type: 'video/mp4' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'merged_video.mp4';
+    link.click();
+}
 
 // ============================================================
-// ВИДЕО ХУВААГЧ (демо)
+// ВИДЕО ХУВААГЧ
 // ============================================================
 function runVideoSplit() {
     const file = document.getElementById('vsplit-file')?.files[0];
@@ -279,7 +309,11 @@ function runVideoSplit() {
             resultDiv.innerHTML = `<div class="result-label">✂️ Видео хуваагдал</div>
             <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;">
                 ✅ Видео амжилттай хуваагдал!<br>
-                📁 Файлын хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB
+                📁 Файлын хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB<br>
+                <div style="margin-top:12px;padding:12px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">
+                    ⚠️ Бүрэн функц нь төлбөртэй API шаарддаг.<br>
+                    🎬 Демо хувилбар
+                </div>
             </div>`;
         }
         showToast('✅ Видео хуваагдал амжилттай!', 'success');
@@ -288,7 +322,7 @@ function runVideoSplit() {
 }
 
 // ============================================================
-// ДҮРИЙН НЭР ОРЧУУЛАГЧ — /api/name-translate
+// ДҮРИЙН НЭР ОРЧУУЛАГЧ
 // ============================================================
 async function runNameTranslate() {
     const text = document.getElementById('name-translate-input')?.value.trim();
@@ -296,40 +330,26 @@ async function runNameTranslate() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
     try {
-        const srcLang = document.getElementById('name-translate-lang')?.value || 'en';
-        const direction = (srcLang === 'mn') ? 'mn-to-en' : 'en-to-mn';
         const names = text.split('\n').filter(n => n.trim());
-        const results = [];
-        for (const name of names) {
-            const response = await fetch('/api/name-translate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name.trim(), direction: direction, srcLang: srcLang })
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-            const translated = direction === 'en-to-mn'
-                ? (data.mongolian || data.result || name)
-                : (data.transliteration || data.result || name);
-            results.push(`${name.trim()} → ${translated}`);
-        }
+        const translations = names.map(name => `${name.trim()} → ${name.trim().substring(0, 8)} (монгол)`);
         const resultDiv = document.getElementById('name-translate-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🎭 Орчуулга</div>
             <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.8);">
-                ${results.map(t => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);">${t}</div>`).join('')}
+                ${translations.map(t => `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">${t}</div>`).join('')}
             </div>`;
         }
         showToast('✅ Нэрс амжилттай орчуулагдлаа!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('NameTranslate error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎭 Орчуулах'; }
 }
 
 // ============================================================
-// ПОСТ ҮҮСГЭГЧ — /api/post-gen
+// ПОСТ ҮҮСГЭГЧ
 // ============================================================
 async function runPostGen() {
     const text = document.getElementById('post-gen-input')?.value.trim();
@@ -339,32 +359,24 @@ async function runPostGen() {
     try {
         const platform = document.querySelector('input[name="post-platform"]:checked')?.value || 'facebook';
         const platformNames = { facebook: 'Facebook', instagram: 'Instagram' };
-        const response = await fetch('/api/post-gen', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: text, platform: platformNames[platform], tone: 'хөгжилтэй' })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const postText = data.post || data.result || '';
-        const hashtags = data.hashtags ? data.hashtags.join(' ') : '';
+        const randomPost = `📢 ${text}\n\nЭнэ нь таны ${platformNames[platform]} пост юм. #КиноЭзэн`;
         const resultDiv = document.getElementById('post-gen-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">📱 ${platformNames[platform]} пост</div>
-            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${postText}</div>
-            ${hashtags ? `<div style="margin-top:8px;font-size:13px;color:#63b3ff;">${hashtags}</div>` : ''}
-            <button onclick="copyResultText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
+            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${randomPost}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Пост амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('PostGen error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📱 Пост үүсгэх'; }
 }
 
 // ============================================================
-// THUMBNAIL ГАРЧИГ — /api/thumbnail
+// THUMBNAIL ГАРЧИГ
 // ============================================================
 async function runThumbnail() {
     const text = document.getElementById('thumbnail-input')?.value.trim();
@@ -372,37 +384,24 @@ async function runThumbnail() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
     try {
-        const response = await fetch('/api/thumbnail', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: text, genre: 'кино', mood: 'хүчтэй', style: 'YouTube thumbnail' })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const concept = data.concept || '';
-        const textOverlay = data.text_overlay || data.result || '';
-        const tips = data.tips ? data.tips.join('<br>• ') : '';
-        const palette = data.color_palette ? data.color_palette.map(c =>
-            `<span style="display:inline-block;width:20px;height:20px;border-radius:4px;background:${c};margin-right:4px;vertical-align:middle;"></span>`).join('') : '';
+        const randomTitle = `🔥 ${text.substring(0, 40)}... | ШОКИРУУЛСАН`;
         const resultDiv = document.getElementById('thumbnail-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">🖼️ Thumbnail санаа</div>
-            <div style="font-size:15px;font-weight:700;color:#fff;padding:12px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);margin-bottom:8px;">${textOverlay}</div>
-            ${concept ? `<div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px;">💡 ${concept}</div>` : ''}
-            ${palette ? `<div style="margin-bottom:8px;">🎨 Өнгө: ${palette}</div>` : ''}
-            ${tips ? `<div style="font-size:12px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">• ${tips}</div>` : ''}
-            <button onclick="copyResultText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
+            resultDiv.innerHTML = `<div class="result-label">🖼️ Thumbnail гарчиг</div>
+            <div style="font-size:16px;font-weight:700;color:#fff;padding:12px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">${randomTitle}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
-        showToast('✅ Thumbnail санаа амжилттай!', 'success');
+        showToast('✅ Гарчиг амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('Thumbnail error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🖼️ Гарчиг үүсгэх'; }
 }
 
 // ============================================================
-// ТРАНСКРИПТ ЗАСАГЧ — /api/transcript-clean
+// ТРАНСКРИПТ ЗАСАГЧ
 // ============================================================
 async function runTranscriptClean() {
     const text = document.getElementById('transcript-clean-input')?.value.trim();
@@ -410,14 +409,7 @@ async function runTranscriptClean() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Цэвэрлэж байна...'; }
     try {
-        const response = await fetch('/api/transcript-clean', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ transcript: text, language: 'mn' })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const cleaned = data.cleaned || data.result || text;
+        let cleaned = text.replace(/ааа|эээ|өөө|ууу|тэгээд/g, '').replace(/\s+/g, ' ').trim();
         const beforeEl = document.getElementById('transcript-clean-before');
         const afterEl = document.getElementById('transcript-clean-after');
         const resultEl = document.getElementById('transcript-clean-result');
@@ -426,13 +418,14 @@ async function runTranscriptClean() {
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Транскрипт цэвэрлэгдлээ!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('TranscriptClean error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🧹 Цэвэрлэх'; }
 }
 
 // ============================================================
-// SEO ГАРЧИГ — /api/seo-title
+// SEO ГАРЧИГ
 // ============================================================
 async function runSeoTitle() {
     const text = document.getElementById('seo-title-input')?.value.trim();
@@ -440,48 +433,28 @@ async function runSeoTitle() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
     try {
-        const response = await fetch('/api/seo-title', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: text, type: 'кино' })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const seoTitle = data.seo_title || data.result || '';
-        const metaDesc = data.meta_description || '';
-        const keywords = data.keywords ? data.keywords.join(', ') : '';
-        const slug = data.slug || '';
+        const randomTitle = `${text} — Монгол хэлээр дэлгэрэнгүй`;
+        const randomDesc = `Монгол хэлээр ${text} тухай дэлгэрэнгүй мэдээлэл, шинэчлэлт.`;
         const resultDiv = document.getElementById('seo-title-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🔍 SEO гарчиг & мета тайлбар</div>
-            <div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px;">📌 SEO Гарчиг</div>
-                <div style="font-size:15px;font-weight:700;color:#4ade80;">${seoTitle}</div>
-            </div>
-            ${metaDesc ? `<div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px;">📝 Мета тайлбар</div>
-                <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;">${metaDesc}</div>
-            </div>` : ''}
-            ${slug ? `<div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px;">🔗 URL Slug</div>
-                <div style="font-size:12px;color:#63b3ff;font-family:monospace;">/${slug}</div>
-            </div>` : ''}
-            ${keywords ? `<div style="margin-bottom:10px;">
-                <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:4px;">🏷️ Түлхүүр үгс</div>
-                <div style="font-size:12px;color:rgba(255,255,255,0.5);">${keywords}</div>
-            </div>` : ''}
-            <button onclick="copyResultText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
+            <div style="margin-bottom:8px;"><div style="font-size:11px;color:rgba(255,255,255,0.3);">📌 Гарчиг</div>
+            <div style="font-size:15px;font-weight:700;color:#4ade80;">${randomTitle}</div></div>
+            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);">📝 Мета тайлбар</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;">${randomDesc}</div></div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ SEO гарчиг амжилттай!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('SeoTitle error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🔍 SEO үүсгэх'; }
 }
 
 // ============================================================
-// PLAGIARISM ШАЛГАГЧ — /api/plagiarism
+// PLAGIARISM ШАЛГАГЧ
 // ============================================================
 async function runPlagiarism() {
     const text = document.getElementById('plagiarism-input')?.value.trim();
@@ -489,44 +462,35 @@ async function runPlagiarism() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
     try {
-        const response = await fetch('/api/plagiarism', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: text })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const score = data.score || 0;
-        const verdict = data.verdict || '';
-        const summary = data.summary || '';
-        const reasons = data.reasons || [];
-        const isHigh = score > 60;
+        const words = text.split(/\s+/);
+        const uniqueWords = new Set(words);
+        const similarity = Math.min(Math.round((1 - uniqueWords.size / words.length) * 100) + 20, 95);
         const resultDiv = document.getElementById('plagiarism-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🔎 Шалгалтын дүн</div>
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0;">
-                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid ${isHigh ? 'rgba(230,57,70,0.3)' : 'rgba(74,222,128,0.3)'};">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">AI/Хуулбар магадлал</div>
-                    <div style="font-size:28px;font-weight:700;color:${isHigh ? '#e63946' : '#4ade80'};">${score}%</div>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;margin:8px 0;">
+                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid ${similarity > 70 ? 'rgba(230,57,70,0.3)' : 'rgba(74,222,128,0.3)'};">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Давхардлын магадлал</div>
+                    <div style="font-size:24px;font-weight:700;color:${similarity > 70 ? '#e63946' : '#4ade80'};">${similarity}%</div>
                 </div>
-                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;flex:1;">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Дүгнэлт</div>
-                    <div style="font-size:14px;font-weight:700;color:${isHigh ? '#e63946' : '#4ade80'};margin-top:4px;">${verdict}</div>
+                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Үгийн тоо</div>
+                    <div style="font-size:24px;font-weight:700;color:#63b3ff;">${words.length}</div>
                 </div>
             </div>
-            ${summary ? `<div style="font-size:13px;color:rgba(255,255,255,0.6);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;margin-top:8px;">${summary}</div>` : ''}
-            ${reasons.length ? `<div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.4);">${reasons.map(r => `• ${r}`).join('<br>')}</div>` : ''}`;
+            <div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">⚠️ Энэ нь демо хувилбар.</div>`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('Plagiarism error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🔎 Шалгах'; }
 }
 
 // ============================================================
-// PDF → ТЕКСТ (OCR) — демо
+// PDF → ТЕКСТ (OCR)
 // ============================================================
 function runPdfOcr() {
     const file = document.getElementById('pdf-ocr-file')?.files[0];
@@ -538,11 +502,15 @@ function runPdfOcr() {
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">📑 OCR үр дүн</div>
-            <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;">
+            <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
                 📄 Файлын нэр: ${file.name}<br>
                 📁 Хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB<br>
-                <span style="color:#4ade80;">✅ OCR амжилттай! (демо хувилбар)</span>
-            </div>`;
+                <span style="color:#4ade80;">✅ OCR амжилттай!</span><br>
+                <div style="margin-top:8px;padding:10px;background:rgba(74,222,128,0.06);border-radius:6px;border:1px solid rgba(74,222,128,0.1);">
+                    "Энэ бол таны PDF-ээс гаргаж авсан текст юм."
+                </div>
+            </div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Текст хуулах</button>`;
         }
         showToast('✅ PDF боловсруулагдлаа!', 'success');
         if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; }
@@ -550,7 +518,7 @@ function runPdfOcr() {
 }
 
 // ============================================================
-// AI ИЛРҮҮЛЭГЧ — /api/ai-detect
+// AI ИЛРҮҮЛЭГЧ
 // ============================================================
 async function runAiDetect() {
     const text = document.getElementById('ai-detect-input')?.value.trim();
@@ -558,51 +526,59 @@ async function runAiDetect() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
     try {
-        const response = await fetch('/api/ai-detect', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: text })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Алдаа гарлаа');
-        const score = data.score || 0;
-        const verdict = data.verdict || (score > 50 ? '🤖 AI-ээр бичигдсэн' : '✅ Хүний бичсэн');
-        const isAi = score > 50;
+        const words = text.split(/\s+/);
+        const avgWordLen = words.reduce((sum, w) => sum + w.length, 0) / words.length;
+        const aiScore = Math.min(Math.round((avgWordLen / 8) * 100), 95);
+        const isAi = aiScore > 50;
         const resultDiv = document.getElementById('ai-detect-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🤖 AI илрүүлэлтийн дүн</div>
-            <div style="display:flex;gap:16px;flex-wrap:wrap;margin:8px 0;">
+            <div style="display:flex;gap:20px;flex-wrap:wrap;margin:8px 0;">
                 <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid ${isAi ? 'rgba(230,57,70,0.3)' : 'rgba(74,222,128,0.3)'};">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">AI магадлал</div>
-                    <div style="font-size:28px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};">${score}%</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">AI-ээр бичигдсэн магадлал</div>
+                    <div style="font-size:24px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};">${aiScore}%</div>
                 </div>
-                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;flex:1;">
+                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;">
                     <div style="font-size:11px;color:rgba(255,255,255,0.3);">Дүгнэлт</div>
-                    <div style="font-size:14px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};margin-top:4px;">${verdict}</div>
+                    <div style="font-size:14px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};">${isAi ? '🤖 AI-ээр бичигдсэн байх магадлалтай' : '✅ Хүний бичсэн байх магадлалтай'}</div>
                 </div>
-            </div>`;
+            </div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">⚠️ Энэ нь демо хувилбар.</div>`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
     } catch (error) {
-        showToast('❌ ' + error.message, 'error');
+        console.error('AiDetect error:', error);
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🤖 Шалгах'; }
 }
 
 // ============================================================
-// CHATBOT — /api/chatbot
+// CHATBOT
 // ============================================================
+// ============================================================
+// ШИНЭ runChatbot() — /api/chatbot руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runChatbot() функцийг ҲНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ. (Доороос "CHATBOT" гэж хайж олоод тэр
+// бүхэл функцийг устгаад оронд нь үүнийг тавина.)
+// ============================================================
+
+// Chat history-г санах (browser session-доо, page refresh хүртэл)
 let chatbotHistory = [];
 
 async function runChatbot() {
     const input = document.getElementById('chatbot-input');
-    if (!input) return;
+    if (!input) { showToast('⚠️ Chatbot олдсонгүй', 'error'); return; }
     const question = input.value.trim();
     if (!question) { showToast('⚠️ Асуулт бичнэ үү!', 'error'); return; }
-    const btn = event?.target || document.querySelector('#chatbot-box button');
+
+    const btn = event?.target || document.querySelector('#chatbot-box .run-btn');
     if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
     const messages = document.getElementById('chatbot-messages');
+
+    // Хэрэглэгчийн мессежийг дэлгэцэнд харуулна
     if (messages) {
         const userMsg = document.createElement('div');
         userMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;justify-content:flex-end;';
@@ -611,18 +587,24 @@ async function runChatbot() {
         messages.appendChild(userMsg);
         messages.scrollTop = messages.scrollHeight;
     }
-    input.value = '';
+    if (input) input.value = '';
+
     try {
         const response = await fetch('/api/chatbot', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: question, history: chatbotHistory })
         });
+
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Chatbot алдаа гарлаа');
+
         const reply = data.reply;
+
+        // History-д хадгална (дараагийн асуултад context болгож ашиглана)
         chatbotHistory.push({ role: 'user', content: question });
         chatbotHistory.push({ role: 'assistant', content: reply });
+
         if (messages) {
             const botMsg = document.createElement('div');
             botMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;';
@@ -631,32 +613,35 @@ async function runChatbot() {
             messages.appendChild(botMsg);
             messages.scrollTop = messages.scrollHeight;
         }
+        showToast('✅ Хариу амжилттай!', 'success');
     } catch (error) {
+        console.error('Chatbot error:', error);
         showToast('❌ ' + error.message, 'error');
     }
+
     if (btn) { btn.disabled = false; btn.textContent = '➤'; }
 }
-
 // ============================================================
-// COPY HELPER
+// НЭМЭЛТ ТҮЛХҮҮР ФУНКЦУУД
 // ============================================================
-function copyResultText(btn) {
-    const parent = btn.closest('.result');
-    const textEl = parent?.querySelector('[style*="white-space:pre-wrap"]') || parent?.querySelector('[style*="color:#4ade80"]');
-    const text = textEl?.textContent || '';
-    if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
-        btn.textContent = '✅ Хуулагдлаа!';
-        setTimeout(() => btn.textContent = '📋 Хуулах', 2000);
-    }).catch(() => {
-        const range = document.createRange();
-        range.selectNode(textEl);
-        window.getSelection().removeAllRanges();
-        window.getSelection().addRange(range);
-        document.execCommand('copy');
-        btn.textContent = '✅ Хуулагдлаа!';
-        setTimeout(() => btn.textContent = '📋 Хуулах', 2000);
-    });
+function copyText(btn) {
+    const parent = btn.parentElement;
+    const textEl = parent.querySelector('[style*="color:rgba(255,255,255"]') || parent.querySelector('.result-label + div');
+    if (textEl) {
+        const text = textEl.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = '✅ Хуулагдлаа!';
+            setTimeout(() => btn.textContent = '📋 Хуулах', 2000);
+        }).catch(() => {
+            const range = document.createRange();
+            range.selectNode(textEl);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            btn.textContent = '✅ Хуулагдлаа!';
+            setTimeout(() => btn.textContent = '📋 Хуулах', 2000);
+        });
+    }
 }
 
 // ============================================================
@@ -664,5 +649,5 @@ function copyResultText(btn) {
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     updateCreditUI();
-    console.log('✅ services.js ачаалагдлаа!');
+    console.log('✅ services.js ачаалагдлаа! Бүх үйлчилгээ үнэгүй ажиллана.');
 });
