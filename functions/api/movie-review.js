@@ -35,7 +35,7 @@ export async function onRequestPost({ request, env }) {
 
     const { text } = await callAI(env, systemPrompt, userText, {
       temperature: 0.8,
-      maxOutputTokens: 1500
+      maxOutputTokens: 3000
     });
 
     return corsJson({ review: text });
