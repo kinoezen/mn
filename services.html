@@ -286,27 +286,57 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('tts-box',this)">▶ Турших</button>
-      <div class="svc-box" id="tts-box">
-        <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
-        <label class="form-label">Монгол текст <span id="char-count" style="color:#4ade80;float:right">0/500</span></label>
-        <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateTTSCount()"></textarea>
-        <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
-        <div class="voice-row">
-          <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа</div>
-          <div class="vbtn" onclick="selVoice(this)">🎤 Есүй</div>
-        </div>
-        <div style="margin:10px 0">
-          <label class="form-label">⚡ Хурд <span id="rate-val">+15%</span></label>
-          <input type="range" id="rate" min="-50" max="50" value="15" step="5" oninput="document.getElementById('rate-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
-          <label class="form-label" style="margin-top:8px">🎵 Бүдүүн/Нарийн <span id="pitch-val">-8Hz</span></label>
-          <input type="range" id="pitch" min="-50" max="50" value="-8" step="1" oninput="document.getElementById('pitch-val').textContent=(this.value>0?'+':'')+this.value+'Hz'" style="width:100%;accent-color:#4ade80">
-        </div>
-        <button class="run-btn" id="tts-run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
-        <div class="notice-box" id="tts-notice">💎 Кредит хүрэлцэхгүй — <a href="pricing.html">тариф сонгох →</a></div>
-        <div class="result" id="tts-result"></div>
-      </div>
-    </div>
+      <!-- ============================================================
+ШИНЭ TTS widget HTML — services.html доторх ХУУЧИН tts-box
+бүхэлд нь ЭНЭГЭЭР СОЛИХ.
+Олох арга: Ctrl+F → "tts-box" гэж хайвал олдоно.
+Хуучин <div class="svc-box" id="tts-box"> ...</div> бүхлийг
+бүхэлд нь устгаад, ЭНЭ ХЭСГИЙГ paste хийнэ.
+============================================================ -->
+<div class="svc-box" id="tts-box">
+  <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+  <label class="form-label">Монгол текст <span id="char-count" style="color:#4ade80;float:right">0/2000</span></label>
+  <textarea id="tts-text" placeholder="Энд монгол текстээ бичнэ үү..." oninput="updateTTSCount()"></textarea>
 
+  <label class="form-label" style="margin-top:10px">Дуу хөдөлгүүр</label>
+  <div class="voice-row">
+    <div class="vbtn on" id="engine-edge" onclick="selEngine('edge', this)">🎤 Edge TTS (Батаа/Есүй)</div>
+    <div class="vbtn" id="engine-gemini" onclick="selEngine('gemini', this)">✨ Gemini TTS (Байгалийн)</div>
+  </div>
+
+  <!-- Edge TTS-ийн дуу сонголт (Батаа/Есүй) -->
+  <div id="edge-voice-row">
+    <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
+    <div class="voice-row">
+      <div class="vbtn on" onclick="selVoice(this)">🎤 Батаа</div>
+      <div class="vbtn" onclick="selVoice(this)">🎤 Есүй</div>
+    </div>
+  </div>
+
+  <!-- Gemini TTS-ийн дуу сонголт (өөр дуунууд) -->
+  <div id="gemini-voice-row" style="display:none;">
+    <label class="form-label" style="margin-top:10px">Gemini дуу сонгох</label>
+    <select class="lang-select" id="gemini-voice-select" style="width:100%;">
+      <option value="Charon">Charon</option>
+      <option value="Fenrir">Fenrir</option>
+      <option value="Puck">Puck</option>
+      <option value="Orbit">Orbit</option>
+      <option value="Zephyr">Zephyr</option>
+      <option value="Schedar">Schedar</option>
+      <option value="Aoede">Aoede</option>
+    </select>
+  </div>
+
+  <div style="margin:10px 0">
+    <label class="form-label">⚡ Хурд <span id="rate-val">+15%</span></label>
+    <input type="range" id="rate" min="-50" max="50" value="15" step="5" oninput="document.getElementById('rate-val').textContent=(this.value>0?'+':'')+this.value+'%'" style="width:100%;accent-color:#4ade80">
+    <label class="form-label" style="margin-top:8px">🎵 Бүдүүн/Нарийн <span id="pitch-val">-8Hz</span></label>
+    <input type="range" id="pitch" min="-50" max="50" value="-8" step="1" oninput="document.getElementById('pitch-val').textContent=(this.value>0?'+':'')+this.value+'Hz'" style="width:100%;accent-color:#4ade80">
+  </div>
+  <button class="run-btn" id="tts-run-btn" onclick="runTTS()">▶ Дуу үүсгэх</button>
+  <div class="notice-box" id="tts-notice">💎 Кредит хүрэлцэхгүй — <a href="pricing.html">тариф сонгох →</a></div>
+  <div class="result" id="tts-result"></div>
+</div>
     <!-- 2. Humanizer -->
     <div class="svc-card" data-category="text">
       <div class="svc-head">
