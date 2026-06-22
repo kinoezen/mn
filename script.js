@@ -1,5 +1,5 @@
 // ============================================================
-// КИНО ЭЗЭН — ҮНДСЭН JAVASCRIPT
+// КИНО ЭЗЭН — ҮНДСЭН JAVASCRIPT (ЗАССАН)
 // ============================================================
 
 const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -19,10 +19,15 @@ async function supaFetch(table, params = '') {
       headers: {
         'apikey': SUPABASE_KEY,
         'Authorization': `Bearer ${SUPABASE_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
       }
     });
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    if (!res.ok) {
+      const errText = await res.text();
+      console.error(`supaFetch [${table}] HTTP ${res.status}:`, errText);
+      return [];
+    }
     return await res.json();
   } catch (error) {
     console.error('supaFetch error:', error);
@@ -50,39 +55,39 @@ const genreGradients = {
   'Олон ангит': 'linear-gradient(135deg,#0a1a2a,#1a3050)'
 };
 
-// ===== WEATHER =====
+// ===== ЦАГ АГААР — МОНГОЛ =====
 function translateWeatherCode(code) {
   const map = {
-    0: 'Цэлмэг',
-    1: 'Хэсэгчилсэн үүлтэй',
-    2: 'Үүлэрхэг',
-    3: 'Бүрхэг',
-    45: 'Манантай',
-    48: 'Хяруутай манан',
-    51: 'Хөнгөн шиврээ бороо',
-    53: 'Дунд зэргийн шиврээ бороо',
-    55: 'Хүчтэй шиврээ бороо',
-    56: 'Хөнгөн мөстөлт бороо',
-    57: 'Хүчтэй мөстөлт бороо',
-    61: 'Хөнгөн бороо',
-    63: 'Дунд зэргийн бороо',
-    65: 'Хүчтэй бороо',
-    66: 'Хөнгөн мөстөлт бороо',
-    67: 'Хүчтэй мөстөлт бороо',
-    71: 'Хөнгөн цас',
-    73: 'Дунд зэргийн цас',
-    75: 'Хүчтэй цас',
-    77: 'Цасан ширхэг',
-    80: 'Хөнгөн аадар бороо',
-    81: 'Дунд зэргийн аадар бороо',
-    82: 'Хүчтэй аадар бороо',
-    85: 'Хөнгөн цасан шуурга',
-    86: 'Хүчтэй цасан шуурга',
-    95: 'Аянгатай бороо',
-    96: 'Аянгатай мөндөртэй бороо',
-    99: 'Хүчтэй аянгатай мөндөртэй бороо'
+    0:  '☀️ Цэлмэг',
+    1:  '🌤️ Хэсэгчлэн үүлтэй',
+    2:  '⛅ Үүлэрхэг',
+    3:  '☁️ Бүрхэг',
+    45: '🌫️ Манантай',
+    48: '🌫️ Хяруутай манан',
+    51: '🌦️ Хөнгөн шиврэх бороо',
+    53: '🌦️ Шиврэх бороо',
+    55: '🌧️ Хүчтэй шиврэх бороо',
+    56: '🌧️ Хөнгөн мөстөлт бороо',
+    57: '🌧️ Мөстөлт бороо',
+    61: '🌦️ Хөнгөн бороо',
+    63: '🌧️ Дунд зэргийн бороо',
+    65: '⛈️ Хүчтэй бороо',
+    66: '🌧️ Хөнгөн мөсөн бороо',
+    67: '🌧️ Мөсөн бороо',
+    71: '🌨️ Хөнгөн цас',
+    73: '❄️ Дунд зэргийн цас',
+    75: '❄️ Хүчтэй цас',
+    77: '🌨️ Цасан ширхэг',
+    80: '🌦️ Хөнгөн аадар бороо',
+    81: '🌧️ Аадар бороо',
+    82: '⛈️ Хүчтэй аадар бороо',
+    85: '🌨️ Хөнгөн цасан шуурга',
+    86: '❄️ Хүчтэй цасан шуурга',
+    95: '⛈️ Аянгатай бороо',
+    96: '⛈️ Аянгатай мөндөртэй бороо',
+    99: '⛈️ Хүчтэй аянгатай мөндөртэй бороо'
   };
-  return map[code] || 'Улаанбаатар';
+  return map[code] || '🌡️ Улаанбаатар';
 }
 
 async function loadWeather() {
@@ -90,17 +95,88 @@ async function loadWeather() {
   if (!weatherEl) return;
 
   try {
-    const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.92&longitude=106.92&current_weather=true&timezone=Asia%2FShanghai');
-    if (!res.ok) throw new Error('API хариу өгөхгүй байна');
+    const res = await fetch(
+      'https://api.open-meteo.com/v1/forecast?latitude=47.92&longitude=106.92&current_weather=true&timezone=Asia%2FShanghai'
+    );
+    if (!res.ok) throw new Error('API хариу өгсөнгүй');
     const data = await res.json();
     if (data.current_weather) {
       const temp = data.current_weather.temperature;
       const code = data.current_weather.weathercode;
-      const description = translateWeatherCode(code);
-      weatherEl.textContent = temp + '°C · ' + description;
+      const desc = translateWeatherCode(code);
+      weatherEl.textContent = `${temp}°C · ${desc}`;
     }
-  } catch (error) {
-    console.error('Weather error:', error);
+  } catch (err) {
+    console.error('Weather error:', err);
+    weatherEl.textContent = '—°C';
+  }
+}
+
+// ===== ОГНОО МОНГОЛООР =====
+function setDate() {
+  const el = document.getElementById('today-date');
+  if (!el) return;
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const days = ['Ням', 'Даваа', 'Мягмар', 'Лхагва', 'Пүрэв', 'Баасан', 'Бямба'];
+  el.textContent = `${y}.${m}.${d} ${days[now.getDay()]}`;
+}
+
+// ===== РЕКЛАМ — SUPABASE-ААС ТАТАХ =====
+async function loadAd() {
+  const slider = document.getElementById('ad-slider');
+  if (!slider) return;
+
+  try {
+    // Supabase-ийн 'ads' хүснэгтээс татна (is_active=true байгаа рекламуудыг)
+    const ads = await supaFetch('ads', 'is_active=eq.true&order=created_at.desc&limit=5');
+
+    if (!ads || ads.length === 0) {
+      // Supabase-д реклам байхгүй бол default реклам харуулна
+      slider.innerHTML = `
+        <div class="ad-slide active">
+          <div class="ad-banner">
+            <div class="ad-text">
+              <strong>🏢 Таны компанийн реклам энд</strong>
+              <div>Сарын 50,000₮-өөс эхлэн рекламаа байршуул</div>
+            </div>
+            <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
+          </div>
+        </div>`;
+      return;
+    }
+
+    // Supabase-ийн рекламуудыг харуулна
+    slider.innerHTML = ads.map((ad, i) => `
+      <div class="ad-slide${i === 0 ? ' active' : ''}">
+        <div class="ad-banner">
+          ${ad.image_url ? `<img src="${sanitize(ad.image_url)}" alt="${sanitize(ad.title || 'Реклам')}" style="max-height:60px;border-radius:6px;">` : ''}
+          <div class="ad-text">
+            <strong>${sanitize(ad.title || '🏢 Реклам')}</strong>
+            <div>${sanitize(ad.description || '')}</div>
+          </div>
+          ${ad.link_url ? `<button class="ad-btn" onclick="window.open('${sanitize(ad.link_url)}','_blank')">
+            ${sanitize(ad.btn_text || 'Дэлгэрэнгүй')}
+          </button>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    // Олон реклам байвал автоматаар солино
+    if (ads.length > 1) {
+      let adIdx = 0;
+      setInterval(() => {
+        const slides = slider.querySelectorAll('.ad-slide');
+        slides[adIdx].classList.remove('active');
+        adIdx = (adIdx + 1) % slides.length;
+        slides[adIdx].classList.add('active');
+      }, 4000);
+    }
+
+  } catch (err) {
+    console.error('loadAd error:', err);
   }
 }
 
@@ -120,9 +196,9 @@ function buildFeaturedCardFromMovie(m) {
   const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
   const tags = m.featured ? `<span class="ftag ftag-top">✦ Онцлох</span>` : '';
 
-  const thumbHtml = m.thumbnail ?
-    `<img src="${sanitize(m.thumbnail)}" alt="${sanitize(m.title)}" loading="lazy" onerror="this.style.display='none'">` :
-    `<span class="fallback-emoji">🎬</span>`;
+  const thumbHtml = m.thumbnail
+    ? `<img src="${sanitize(m.thumbnail)}" alt="${sanitize(m.title)}" loading="lazy" onerror="this.style.display='none'">`
+    : `<span class="fallback-emoji">🎬</span>`;
 
   return `<article class="featured-card" tabindex="0" onclick="location.href='movie.html?id=${sanitize(m.id)}'" aria-label="${sanitize(m.title)}">
     <div class="featured-img" style="background:${bg}">
@@ -165,8 +241,7 @@ async function loadFeaturedMovies() {
           <div style="font-size:48px;margin-bottom:12px;">🎬</div>
           <h3 style="color:rgba(255,255,255,0.5);">Онцлох кино байхгүй байна</h3>
           <p style="color:rgba(255,255,255,0.3);font-size:13px;">Админ хэсгээр онцлох кино нэмнэ үү</p>
-        </div>
-      `;
+        </div>`;
       featuredMoviesData = [];
       buildDots();
       return;
@@ -177,6 +252,7 @@ async function loadFeaturedMovies() {
     buildDots();
     carouselIndex = 0;
     updateCarousel();
+    startAuto();
 
   } catch (error) {
     console.error('loadFeaturedMovies error:', error);
@@ -185,8 +261,7 @@ async function loadFeaturedMovies() {
         <div style="font-size:48px;margin-bottom:12px;">⚠️</div>
         <h3 style="color:#e63946;">Алдаа гарлаа</h3>
         <p style="color:rgba(255,255,255,0.3);font-size:13px;">Онцлох кино ачаалахад алдаа гарлаа</p>
-      </div>
-    `;
+      </div>`;
   }
 }
 
@@ -231,6 +306,7 @@ function updateCarousel() {
 
 function restartBar() {
   const b = document.getElementById('carousel-bar');
+  if (!b) return;
   b.classList.remove('running');
   void b.offsetWidth;
   b.classList.add('running');
@@ -250,29 +326,21 @@ function resetAuto() {
 function initCarousel() {
   loadFeaturedMovies();
 
-  document.getElementById('carousel-prev').onclick = () => { prevPage();
-    resetAuto(); };
-  document.getElementById('carousel-next').onclick = () => { nextPage();
-    resetAuto(); };
+  document.getElementById('carousel-prev').onclick = () => { prevPage(); resetAuto(); };
+  document.getElementById('carousel-next').onclick = () => { nextPage(); resetAuto(); };
 
   let tx = 0;
   const w = document.getElementById('featured-wrapper');
   w.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
   w.addEventListener('touchend', e => {
     const d = tx - e.changedTouches[0].clientX;
-    if (Math.abs(d) > 50) {
-      d > 0 ? nextPage() : prevPage();
-      resetAuto();
-    }
+    if (Math.abs(d) > 50) { d > 0 ? nextPage() : prevPage(); resetAuto(); }
   }, { passive: true });
 
-  window.addEventListener('resize', () => {
-    buildDots();
-    updateCarousel();
-  });
+  window.addEventListener('resize', () => { buildDots(); updateCarousel(); });
 }
 
-// ===== MCAT MENUS =====
+// ===== MCAT =====
 function setActiveMcat(el) {
   document.querySelectorAll('.mcat-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
@@ -375,21 +443,15 @@ let currentMainCategory = '';
 function openMcatDropdown(card, menuKey) {
   setActiveMcat(card);
   currentMainCategory = menuKey;
-
   document.getElementById('news-category-label').textContent = menuKey;
 
   const items = MCAT_MENUS[menuKey] || [];
-  document.getElementById('news-filter-tabs').innerHTML = items.map(item =>
-    `<button class="news-filter-btn${item.cat === '' ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
+  document.getElementById('news-filter-tabs').innerHTML = items.map((item, i) =>
+    `<button class="news-filter-btn${i === 0 ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
   ).join('');
 
-  const firstBtn = document.querySelector('.news-filter-btn');
-  if (firstBtn) {
-    firstBtn.classList.add('active');
-    handleMcatSub('', firstBtn, menuKey);
-  } else {
-    loadNews();
-  }
+  // Эхний "Бүгд" товчийг автоматаар дарах
+  handleMcatSub('', document.querySelector('.news-filter-btn'), menuKey);
   setTimeout(() => goSection('news'), 150);
 }
 
@@ -401,7 +463,7 @@ function handleMcatSub(cat, btn, mainKey) {
   document.querySelectorAll('.news-filter-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
 
-  const label = btn ? btn.textContent : 'Бүгд';
+  const label = btn ? btn.textContent.trim() : 'Бүгд';
   if (label === 'Бүгд') {
     document.getElementById('news-category-label').textContent = mainKey;
     loadNewsByMainCategory(mainKey);
@@ -411,51 +473,95 @@ function handleMcatSub(cat, btn, mainKey) {
   }
 }
 
+// ===== МЭДЭЭ — SUPABASE =====
+// Мэдээний хүснэгтийн баганыг шалгах: category болон sub_category
 async function loadNewsByMainCategory(mainCategory) {
   const list = document.getElementById('news-list');
-  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
-  try {
-    const allNews = await supaFetch('news', 'order=created_at.desc&limit=100');
-    const subCats = MCAT_MENUS[mainCategory]?.map(item => item.cat).filter(c => c) || [];
-    const filtered = allNews.filter(n => subCats.includes(n.sub_category));
+  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
 
-    if (!filtered || filtered.length === 0) {
-      list.innerHTML = `<div class="empty-state"><p>"Бүгд" ангилалд мэдээ байхгүй</p></div>`;
+  try {
+    const subCats = (MCAT_MENUS[mainCategory] || []).map(item => item.cat).filter(c => c);
+
+    let allNews = [];
+    if (subCats.length > 0) {
+      // sub_category-д тохирох мэдээнүүдийг татна
+      // Supabase-д OR filter ашиглана
+      const filterStr = subCats.map(c => `sub_category.eq.${encodeURIComponent(c)}`).join(',');
+      allNews = await supaFetch('news', `or=(${filterStr})&order=created_at.desc&limit=100`);
+
+      // Хэрэв sub_category байхгүй бол category баганаар хайна
+      if (!allNews || allNews.length === 0) {
+        const filterStr2 = subCats.map(c => `category.eq.${encodeURIComponent(c)}`).join(',');
+        allNews = await supaFetch('news', `or=(${filterStr2})&order=created_at.desc&limit=100`);
+      }
+    }
+
+    // Аль нэгэнд ч олдоогүй бол бүх мэдээнаас category-аар хайна
+    if (!allNews || allNews.length === 0) {
+      const raw = await supaFetch('news', 'order=created_at.desc&limit=100');
+      allNews = raw.filter(n =>
+        subCats.includes(n.sub_category) ||
+        subCats.includes(n.category) ||
+        n.category === mainCategory
+      );
+    }
+
+    if (!allNews || allNews.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">📰</div><p>"${mainCategory}" ангилалд мэдээ байхгүй байна</p></div>`;
       document.getElementById('news-pagination').innerHTML = '';
       return;
     }
-    renderNewsList(filtered);
+    renderNewsList(allNews);
   } catch (e) {
+    console.error('loadNewsByMainCategory error:', e);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
 
 async function loadNewsBySubCategory(subCategory) {
   const list = document.getElementById('news-list');
-  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
+  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
+
   try {
-    const news = await supaFetch('news', `sub_category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
+    // Эхлээд sub_category-аар хайна
+    let news = await supaFetch('news', `sub_category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
+
+    // Байхгүй бол category-аар хайна
     if (!news || news.length === 0) {
-      list.innerHTML = `<div class="empty-state"><p>"${subCategory}" ангилалд мэдээ байхгүй</p></div>`;
+      news = await supaFetch('news', `category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
+    }
+
+    if (!news || news.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">📰</div><p>"${subCategory}" ангилалд мэдээ байхгүй байна</p></div>`;
       document.getElementById('news-pagination').innerHTML = '';
       return;
     }
     renderNewsList(news);
   } catch (e) {
+    console.error('loadNewsBySubCategory error:', e);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
 
 function renderNewsList(news) {
   const list = document.getElementById('news-list');
+  if (!news || news.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="icon">📰</div><p>Мэдээ байхгүй байна</p></div>';
+    return;
+  }
   list.innerHTML = news.map(item => `
     <div class="news-card" onclick="location.href='news-detail.html?id=${item.id}'">
-      <div class="news-img">${item.thumbnail ? `<img src="${item.thumbnail}" loading="lazy">` : '📰'}</div>
+      <div class="news-img">
+        ${item.thumbnail
+          ? `<img src="${sanitize(item.thumbnail)}" alt="${sanitize(item.title || '')}" loading="lazy" onerror="this.style.display='none'">`
+          : '<span class="n-emoji">📰</span>'
+        }
+      </div>
       <div class="news-body">
-        <span class="news-cat">${item.category || 'Мэдээ'}</span>
-        <h3 class="news-title">${item.title}</h3>
+        <span class="news-cat">${sanitize(item.category || item.sub_category || 'Мэдээ')}</span>
+        <h3 class="news-title">${sanitize(item.title || '')}</h3>
         <div class="news-foot">
-          <span class="news-date">${new Date(item.created_at).toLocaleDateString('mn-MN')}</span>
+          <span class="news-date">${item.created_at ? new Date(item.created_at).toLocaleDateString('mn-MN') : ''}</span>
           <span class="news-views">👁 ${item.views || 0}</span>
         </div>
       </div>
@@ -465,15 +571,16 @@ function renderNewsList(news) {
 
 async function loadNews() {
   const list = document.getElementById('news-list');
-  list.innerHTML = '<div class="loading">📰 Ачааллаж байна...</div>';
+  list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
   try {
     const news = await supaFetch('news', 'order=created_at.desc&limit=100');
     if (!news || news.length === 0) {
-      list.innerHTML = '<div class="empty-state"><p>Мэдээ байхгүй байна</p></div>';
+      list.innerHTML = '<div class="empty-state"><div class="icon">📰</div><p>Мэдээ байхгүй байна</p></div>';
       return;
     }
     renderNewsList(news);
   } catch (e) {
+    console.error('loadNews error:', e);
     list.innerHTML = '<div class="empty-state"><p>Алдаа гарлаа</p></div>';
   }
 }
@@ -516,6 +623,7 @@ async function loadMovies(genre = '') {
       return;
     }
     allMovies = movies;
+    moviePage = 1;
     renderMoviePage();
   } catch (error) {
     console.error('loadMovies error:', error);
@@ -535,7 +643,6 @@ function renderMoviePage() {
   } else {
     list.innerHTML = pageMovies.map(m => buildMovieCard(m)).join('');
   }
-
   renderMoviePagination(totalPages);
 }
 
@@ -547,21 +654,25 @@ function buildMovieCard(m) {
   const views = parseInt(m.views) || 0;
   const cls = genreColors[m.genre] || 'cp-sci';
   const bg = genreGradients[m.genre] || 'linear-gradient(135deg,#1a0a2e,#3b1f6b)';
-  const thumb = m.thumbnail ?
-    `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">` :
-    '🎬';
+  const thumb = m.thumbnail
+    ? `<img src="${sanitize(m.thumbnail)}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`
+    : '🎬';
   return `<article class="grid-card" role="listitem" tabindex="0" onclick="location.href='movie.html?id=${id}'" aria-label="${title}">
     <div class="grid-img" style="background:${bg}">${thumb}<span class="grid-badge ${cls}">${g || 'Кино'}</span></div>
-    <div class="grid-body"><h3 class="grid-title">${title}</h3><div class="grid-meta">Кино Эзэн</div>
-    <div class="grid-stats"><button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button><span class="gstat">👁 <span>${views}</span></span></div></div></article>`;
+    <div class="grid-body">
+      <h3 class="grid-title">${title}</h3>
+      <div class="grid-meta">Кино Эзэн</div>
+      <div class="grid-stats">
+        <button class="gstat" onclick="event.stopPropagation();toggleLike(this)">❤️ <span>${likes}</span></button>
+        <span class="gstat">👁 <span>${views}</span></span>
+      </div>
+    </div>
+  </article>`;
 }
 
 function renderMoviePagination(totalPages) {
   const container = document.getElementById('movie-pagination');
-  if (totalPages <= 1) {
-    container.innerHTML = '';
-    return;
-  }
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
   let html = `<button onclick="moviePage=1;renderMoviePage()" ${moviePage===1?'disabled':''}>«</button>`;
   for (let i = 1; i <= totalPages; i++) {
     html += `<button class="page-num ${i===moviePage?'active':''}" onclick="moviePage=${i};renderMoviePage()">${i}</button>`;
@@ -616,29 +727,22 @@ function goSection(id) {
 }
 
 // ===== SECRET ADMIN =====
-(function() {
+(function () {
   let clickCount = 0;
   let clickTimer = null;
   const CLICK_TIMEOUT = 2000;
   const SECRET_KEY = 'kinoezen2026';
 
-  document.addEventListener('click', function(e) {
-    const target = e.target;
-    if (!target.closest('#secret-admin-trigger')) return;
-
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#secret-admin-trigger')) return;
     clickCount++;
     clearTimeout(clickTimer);
-
-    clickTimer = setTimeout(() => {
-      clickCount = 0;
-    }, CLICK_TIMEOUT);
+    clickTimer = setTimeout(() => { clickCount = 0; }, CLICK_TIMEOUT);
 
     if (clickCount === 3) {
       clickCount = 0;
       clearTimeout(clickTimer);
-
       showSecretToast('🔐 Админ руу шилжиж байна...');
-
       setTimeout(() => {
         const pass = prompt('🔑 Админ түлхүүр оруулна уу:');
         if (pass === SECRET_KEY) {
@@ -653,21 +757,19 @@ function goSection(id) {
   function showSecretToast(msg) {
     const old = document.querySelector('.secret-toast');
     if (old) old.remove();
-
     const t = document.createElement('div');
     t.className = 'secret-toast';
     t.textContent = msg;
     t.style.cssText = `
-      position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%);
-      background: rgba(0,0,0,0.85); color: #4ade80; padding: 12px 24px;
-      border-radius: 12px; font-size: 14px; font-weight: 600;
-      font-family: 'Nunito', sans-serif; z-index: 9999;
-      border: 1px solid rgba(74,222,128,0.3);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-      backdrop-filter: blur(12px); transition: all 0.3s; pointer-events: none;
+      position:fixed;bottom:120px;left:50%;transform:translateX(-50%);
+      background:rgba(0,0,0,0.85);color:#4ade80;padding:12px 24px;
+      border-radius:12px;font-size:14px;font-weight:600;
+      font-family:'Nunito',sans-serif;z-index:9999;
+      border:1px solid rgba(74,222,128,0.3);
+      box-shadow:0 8px 32px rgba(0,0,0,0.5);
+      backdrop-filter:blur(12px);transition:all 0.3s;pointer-events:none;
     `;
     document.body.appendChild(t);
-
     setTimeout(() => {
       t.style.opacity = '0';
       t.style.transform = 'translateX(-50%) translateY(20px)';
@@ -692,15 +794,8 @@ function toggleMobileSearch() {
 }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', function() {
-  const now = new Date();
-  const dateEl = document.getElementById('today-date');
-  if (dateEl) {
-    dateEl.textContent = now.getFullYear() + '.' +
-      (now.getMonth() + 1).toString().padStart(2, '0') + '.' +
-      now.getDate().toString().padStart(2, '0');
-  }
-
+document.addEventListener('DOMContentLoaded', function () {
+  setDate();
   initCarousel();
   loadMovies();
   loadNews();
