@@ -6,49 +6,122 @@
 <title>Профайл — КиноЭзэн</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
-.logo-text{font-size:16px;font-weight:700;color:#fff;}
-.nav-links{display:flex;gap:20px;}
-.nav-links a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:13px;}
+body{background:#0b0b14;color:#fff;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;transition:background 0.3s;}
+
+/* ===== NAV ===== */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(11,11,20,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:50;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #4ade80;padding:2px;}
+.logo-text{font-size:18px;font-weight:700;background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;font-weight:500;transition:0.3s;position:relative;}
+.nav-links a:hover{color:#fff;}
 .nav-links a.active{color:#4ade80;}
-.wrap{max-width:600px;margin:0 auto;padding:24px 18px;}
-.cover{height:100px;border-radius:16px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-40px;}
-.ava-row{display:flex;justify-content:space-between;align-items:flex-end;padding:0 10px;position:relative;z-index:2;}
-.ava{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#e63946,#f4a261);border:3px solid #12121e;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;}
-.edit-btn{padding:7px 16px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer;margin-bottom:6px;}
-.prof-info{padding:12px 10px 0;}
-.prof-name{font-size:18px;font-weight:600;}
-.prof-email{font-size:12px;color:rgba(255,255,255,0.4);margin-top:3px;}
-.stats{display:flex;gap:0;margin-top:16px;border-radius:12px;overflow:hidden;}
-.stat{flex:1;text-align:center;padding:14px 8px;background:#1e1e2e;border-right:1px solid rgba(255,255,255,0.06);}
-.stat:last-child{border-right:none;}
-.stat-val{font-size:18px;font-weight:600;color:#4ade80;}
-.stat-label{font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;}
-.menu{margin-top:16px;}
-.mitem{display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:12px;cursor:pointer;margin-bottom:6px;background:#1e1e2e;border:1px solid rgba(255,255,255,0.06);}
-.mitem:hover{border-color:rgba(74,222,128,0.2);}
-.mico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:2px;background:#4ade80;border-radius:2px;}
+
+/* ===== WRAP ===== */
+.wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px;}
+
+/* ===== COVER ===== */
+.cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
+.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,11,20,0.8));}
+
+/* ===== AVATAR ROW ===== */
+.ava-row{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px;position:relative;z-index:2;}
+.ava-wrap{position:relative;}
+.ava{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#4ade80,#22d3ee);border:4px solid #0b0b14;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:700;color:#fff;cursor:pointer;transition:0.3s;object-fit:cover;overflow:hidden;}
+.ava:hover{transform:scale(1.05);}
+.ava img{width:100%;height:100%;object-fit:cover;}
+.status-dot{position:absolute;bottom:4px;right:4px;width:16px;height:16px;background:#4ade80;border-radius:50%;border:3px solid #0b0b14;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:0.3s;cursor:pointer;}
+.ava-wrap:hover .upload-overlay{opacity:1;}
+.upload-overlay span{font-size:12px;color:#fff;font-weight:500;}
+.edit-btn{padding:8px 18px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer;transition:0.3s;margin-bottom:8px;}
+.edit-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;color:#4ade80;}
+
+/* ===== PROFILE INFO ===== */
+.prof-info{padding:14px 16px 0;display:flex;justify-content:space-between;align-items:flex-start;}
+.prof-left{flex:1;}
+.prof-name{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px;}
+.prof-name .badge{font-size:10px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#000;padding:2px 10px;border-radius:20px;font-weight:700;}
+.prof-email{font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px;}
+.prof-bio{font-size:13px;color:rgba(255,255,255,0.5);margin-top:6px;max-width:80%;}
+.prof-meta{display:flex;gap:16px;margin-top:6px;font-size:12px;color:rgba(255,255,255,0.35);}
+.prof-meta span{display:flex;align-items:center;gap:4px;}
+.prof-meta .icon{font-size:14px;}
+
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px;}
+.stat{background:#161621;padding:14px 8px;border-radius:14px;text-align:center;border:1px solid rgba(255,255,255,0.04);transition:0.3s;}
+.stat:hover{border-color:rgba(74,222,128,0.2);transform:translateY(-2px);}
+.stat-val{font-size:20px;font-weight:700;color:#4ade80;}
+.stat-label{font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ===== MENU ===== */
+.menu{margin-top:18px;}
+.mitem{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;cursor:pointer;margin-bottom:6px;background:#161621;border:1px solid rgba(255,255,255,0.04);transition:0.3s;}
+.mitem:hover{background:#1e1e2e;border-color:rgba(74,222,128,0.15);transform:translateX(4px);}
+.mico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .mico.g{background:rgba(74,222,128,0.12);}
-.mico.r{background:rgba(230,57,70,0.12);}
-.mico.b{background:rgba(107,127,247,0.15);}
-.mico.o{background:rgba(244,162,97,0.15);}
+.mico.r{background:rgba(239,68,68,0.12);}
+.mico.b{background:rgba(96,165,250,0.12);}
+.mico.o{background:rgba(251,191,36,0.12);}
 .mico.p{background:rgba(192,132,252,0.15);}
 .mtext{flex:1;}
 .mname{font-size:14px;font-weight:500;color:#fff;}
 .msub{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;}
-.marrow{color:rgba(255,255,255,0.2);font-size:18px;}
-.logout-btn{width:100%;padding:12px;border-radius:11px;background:rgba(230,57,70,0.1);border:1px solid rgba(230,57,70,0.25);color:#e63946;font-size:14px;font-weight:500;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
-.logout-btn:hover{background:rgba(230,57,70,0.2);}
-.premium-card{background:linear-gradient(135deg,#1a1050,#2d1b69);border-radius:14px;padding:16px;margin-top:16px;border:1px solid rgba(107,127,247,0.3);}
-.premium-title{font-size:14px;font-weight:600;color:#c084fc;margin-bottom:4px;}
-.premium-desc{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:12px;line-height:1.6;}
-.premium-btn{width:100%;padding:11px;border-radius:10px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;}
+.marrow{color:rgba(255,255,255,0.15);font-size:20px;transition:0.3s;}
+.mitem:hover .marrow{color:#4ade80;transform:translateX(4px);}
+.mcount{background:rgba(74,222,128,0.12);color:#4ade80;font-size:11px;padding:2px 10px;border-radius:20px;font-weight:600;}
+
+/* ===== MOVIE GRID ===== */
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:22px 0 12px;}
+.section-title h3{font-size:15px;font-weight:600;color:#fff;}
+.section-title a{font-size:12px;color:rgba(255,255,255,0.3);text-decoration:none;transition:0.3s;}
+.section-title a:hover{color:#4ade80;}
+.movie-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.movie-card{background:#161621;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,0.04);transition:0.3s;cursor:pointer;}
+.movie-card:hover{transform:translateY(-4px);border-color:rgba(74,222,128,0.2);}
+.movie-card img{width:100%;height:100px;object-fit:cover;background:#222;}
+.movie-card .info{padding:8px 10px 10px;}
+.movie-card .title{font-size:12px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.movie-card .date{font-size:10px;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+/* ===== PREMIUM ===== */
+.premium-card{background:linear-gradient(135deg,#1a1050,#2d1b69);border-radius:16px;padding:18px;margin-top:20px;border:1px solid rgba(107,127,247,0.2);position:relative;overflow:hidden;}
+.premium-card::before{content:'👑';position:absolute;right:16px;top:16px;font-size:28px;opacity:0.3;}
+.premium-title{font-size:15px;font-weight:600;color:#c084fc;margin-bottom:4px;}
+.premium-desc{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px;line-height:1.6;}
+.premium-btn{width:100%;padding:12px;border-radius:12px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:0.3s;}
+.premium-btn:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(124,58,237,0.3);}
+
+/* ===== LOGOUT ===== */
+.logout-btn{width:100%;padding:13px;border-radius:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#ef4444;font-size:14px;font-weight:500;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:0.3s;}
+.logout-btn:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:480px){
+.nav{padding:12px 14px;}
+.nav-links{gap:14px;}
+.logo-text{font-size:15px;}
+.logo img{width:28px;height:28px;}
+.ava{width:64px;height:64px;font-size:22px;}
+.prof-name{font-size:18px;}
+.stats{grid-template-columns:repeat(2,1fr);}
+.movie-grid{grid-template-columns:repeat(2,1fr);}
+.prof-bio{max-width:100%;}
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:#0b0b14;}
+::-webkit-scrollbar-thumb{background:#2d2d3d;border-radius:10px;}
+::-webkit-scrollbar-thumb:hover{background:#4ade80;}
 </style>
 </head>
 <body>
+
 <nav class="nav">
   <a href="index.html" class="logo">
     <img src="logo.png" alt="logo">
@@ -62,16 +135,42 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 </nav>
 
 <div class="wrap">
+  <!-- COVER -->
   <div class="cover"></div>
+
+  <!-- AVATAR + EDIT -->
   <div class="ava-row">
-    <div class="ava">Л</div>
-    <button class="edit-btn">✏️ Засах</button>
-  </div>
-  <div class="prof-info">
-    <div class="prof-name">Лхагваа</div>
-    <div class="prof-email">lkhagvaa@gmail.com</div>
+    <div class="ava-wrap">
+      <div class="ava" id="avatarDisplay">
+        <span id="avatarText">Л</span>
+        <img id="avatarImg" style="display:none;" alt="avatar">
+      </div>
+      <div class="status-dot"></div>
+      <div class="upload-overlay" onclick="document.getElementById('avatarInput').click()">
+        <span>📷 Өөрчлөх</span>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
+    </div>
+    <button class="edit-btn" onclick="openEditModal()">✏️ Профайл засах</button>
   </div>
 
+  <!-- PROFILE INFO -->
+  <div class="prof-info">
+    <div class="prof-left">
+      <div class="prof-name">
+        Лхагваа
+        <span class="badge">⭐ Алт</span>
+      </div>
+      <div class="prof-email">lkhagvaa@gmail.com</div>
+      <div class="prof-bio">🎬 Кино сонирхогч | TTS бүтээгч</div>
+      <div class="prof-meta">
+        <span><span class="icon">👥</span> 18 найз</span>
+        <span><span class="icon">⏱️</span> 2 цагийн өмнө</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
   <div class="stats">
     <div class="stat"><div class="stat-val">34</div><div class="stat-label">Үзсэн</div></div>
     <div class="stat"><div class="stat-val">12</div><div class="stat-label">Хадгалсан</div></div>
@@ -79,6 +178,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
     <div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
   </div>
 
+  <!-- MENU -->
   <div class="menu">
     <div class="mitem" onclick="location.href='services.html'">
       <div class="mico g">🎤</div>
@@ -90,26 +190,110 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
       <div class="mtext"><div class="mname">Humanizer</div><div class="msub">Текст хүмүүнжүүлэх</div></div>
       <div class="marrow">›</div>
     </div>
-    <div class="mitem">
+    <div class="mitem" onclick="openModal('favorites')">
       <div class="mico r">❤️</div>
       <div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub">12 кино хадгалсан</div></div>
+      <span class="mcount">12</span>
       <div class="marrow">›</div>
     </div>
-    <div class="mitem">
+    <div class="mitem" onclick="openModal('history')">
       <div class="mico b">📋</div>
       <div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub">34 кино үзсэн</div></div>
+      <span class="mcount">34</span>
       <div class="marrow">›</div>
     </div>
   </div>
 
+  <!-- MOVIE GRID (Жишээ) -->
+  <div class="section-title">
+    <h3>🔥 Сүүлийн үзсэн</h3>
+    <a href="#">Бүгдийг харах →</a>
+  </div>
+  <div class="movie-grid" id="recentMovies">
+    <div class="movie-card"><img src="https://picsum.photos/200/120?random=1" alt=""><div class="info"><div class="title">Аватар 2</div><div class="date">2025-06-20</div></div></div>
+    <div class="movie-card"><img src="https://picsum.photos/200/120?random=2" alt=""><div class="info"><div class="title">Дюн 2</div><div class="date">2025-06-19</div></div></div>
+    <div class="movie-card"><img src="https://picsum.photos/200/120?random=3" alt=""><div class="info"><div class="title">Оддын дайн</div><div class="date">2025-06-18</div></div></div>
+  </div>
+
+  <!-- PREMIUM -->
   <div class="premium-card">
     <div class="premium-title">👑 Премиум авах</div>
     <div class="premium-desc">SRT субтитр орчуулагч, Script бичигч болон бусад дэлгэрэнгүй функцүүдийг авах.</div>
     <button class="premium-btn">Премиум авах →</button>
   </div>
 
-  <button class="logout-btn" onclick="location.href='login.html'">🚪 Гарах</button>
+  <!-- LOGOUT -->
+  <button class="logout-btn" onclick="logout()">🚪 Гарах</button>
 </div>
+
+<!-- ===== MODAL (Засах форм) ===== -->
+<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;">
+  <div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
+    <h3 style="margin-bottom:16px;font-size:18px;">✏️ Профайл засах</h3>
+    <form id="editForm">
+      <input type="text" id="editName" placeholder="Нэр" value="Лхагваа" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+      <input type="email" id="editEmail" placeholder="Имэйл" value="lkhagvaa@gmail.com" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+      <input type="text" id="editBio" placeholder="Био" value="🎬 Кино сонирхогч | TTS бүтээгч" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
+      <div style="display:flex;gap:10px;">
+        <button type="button" onclick="closeEditModal()" style="flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);cursor:pointer;">Цуцлах</button>
+        <button type="submit" style="flex:2;padding:12px;border-radius:10px;background:#4ade80;border:none;color:#000;font-weight:600;cursor:pointer;">Хадгалах</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// ===== AVATAR UPLOAD =====
+function uploadAvatar(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('avatarText').style.display = 'none';
+    const img = document.getElementById('avatarImg');
+    img.style.display = 'block';
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ===== EDIT MODAL =====
+function openEditModal() {
+  document.getElementById('editModal').style.display = 'flex';
+}
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+document.getElementById('editForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('editName').value;
+  const email = document.getElementById('editEmail').value;
+  const bio = document.getElementById('editBio').value;
+  document.querySelector('.prof-name').innerHTML = name + ' <span class="badge">⭐ Алт</span>';
+  document.querySelector('.prof-email').textContent = email;
+  document.querySelector('.prof-bio').textContent = bio;
+  closeEditModal();
+});
+
+// ===== MODAL (Түүх / Дуртай) =====
+function openModal(type) {
+  const title = type === 'favorites' ? '❤️ Дуртай кинонууд' : '📋 Үзсэн түүх';
+  const count = type === 'favorites' ? 12 : 34;
+  alert(title + '\nНийт ' + count + ' кино байна.\n(Supabase-аас татах код холбох боломжтой)');
+}
+
+// ===== LOGOUT =====
+function logout() {
+  if(confirm('Та гарахдаа итгэлтэй байна уу?')) {
+    window.location.href = 'login.html';
+  }
+}
+
+// ===== CLOSE MODAL ON OUTSIDE CLICK =====
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if(e.target === this) closeEditModal();
+});
+</script>
 
 </body>
 </html>
