@@ -99,10 +99,19 @@
   async function zarRestGet(table, params) {
     const headers = {
       apikey: ZAR_SUPABASE_KEY,
-      Authorization: 'Bearer ' + (zarGetToken() || ZAR_SUPABASE_KEY)
+      Authorization: 'Bearer ' + ZAR_SUPABASE_KEY
     };
     const res = await fetch(ZAR_SUPABASE_URL + '/rest/v1/' + table + '?' + params, { headers });
-    if (!res.ok) throw new Error('Хүсэлт амжилтгүй (' + res.status + ')');
+    if (!res.ok) {
+      let detail = '';
+      try {
+        const errJson = await res.json();
+        detail = errJson.message || errJson.hint || errJson.error || JSON.stringify(errJson);
+      } catch (parseErr) {
+        detail = await res.text().catch(function () { return ''; });
+      }
+      throw new Error('(' + res.status + ') ' + detail);
+    }
     return res.json();
   }
 
@@ -209,7 +218,10 @@
       zarRenderCategoryPills();
       zarLoadListings();
     } catch (e) {
-      catsEl.innerHTML = '';
+      catsEl.innerHTML =
+        '<span style="font-size:11px;color:#f87171;">Ангилал ачааллахад алдаа: ' +
+        zarSanitize(e && e.message ? e.message : String(e)) +
+        '</span>';
       zarLoadListings();
     }
   }
@@ -263,7 +275,10 @@
       const listings = await zarRestGet('listings', params);
       zarRenderGrid(listings || []);
     } catch (e) {
-      grid.innerHTML = '<div class="zar-empty">Зар ачааллахад алдаа гарлаа. Дахин оролдоно уу.</div>';
+      grid.innerHTML =
+        '<div class="zar-empty">Зар ачааллахад алдаа гарлаа.<br><span style="font-size:11px;opacity:0.6;word-break:break-all;">' +
+        zarSanitize(e && e.message ? e.message : String(e)) +
+        '</span></div>';
     }
   }
 
