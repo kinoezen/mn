@@ -10,6 +10,27 @@
   padding: 16px;
 }
 
+/* ---------- Нүүр хуудас руу буцах товч ---------- */
+.zar-home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 16px;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.zar-home-btn:hover {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.06);
+}
+
 /* ---------- Body ---------- */
 .zar-body {
   width: 100%;
