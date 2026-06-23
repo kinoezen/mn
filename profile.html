@@ -4,20 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Профайл — КиноЭзэн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0b0b14;color:#fff;font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;transition:background 0.3s;}
+:root{
+  --accent:#4ade80;--accent2:#f4a261;
+  --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
+}
+body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial,sans-serif;min-height:100vh;transition:background 0.3s;padding-bottom:0;}
 
-/* ===== NAV ===== */
+/* ===== NAV (index.html-тэй ижил лого) ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:rgba(11,11,20,0.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06);position:sticky;top:0;z-index:50;}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
-.logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #4ade80;padding:2px;}
-.logo-text{font-size:18px;font-weight:700;background:linear-gradient(135deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
+.logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .nav-links{display:flex;gap:24px;align-items:center;}
-.nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;font-weight:500;transition:0.3s;position:relative;}
+.nav-links a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:13px;font-weight:600;transition:0.3s;position:relative;padding:6px 11px;border-radius:8px;}
 .nav-links a:hover{color:#fff;}
-.nav-links a.active{color:#4ade80;}
-.nav-links a.active::after{content:'';position:absolute;bottom:-4px;left:0;width:100%;height:2px;background:#4ade80;border-radius:2px;}
+.nav-links a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 
 /* ===== WRAP ===== */
 .wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px;}
@@ -100,17 +106,48 @@ body{background:#0b0b14;color:#fff;font-family:'Segoe UI',Arial,sans-serif;min-h
 .logout-btn{width:100%;padding:13px;border-radius:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#ef4444;font-size:14px;font-weight:500;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:0.3s;}
 .logout-btn:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;}
 
+/* ===== BOTTOM NAV (mobile only, index.html-тай ижил 5 товч) ===== */
+.bottom-nav{display:none;}
+@media(max-width:768px){
+  body{padding-bottom:86px;}
+  .bottom-nav{
+    display:flex;
+    position:fixed;left:0;right:0;bottom:0;z-index:200;
+    background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding:8px 4px 10px;
+    justify-content:space-between;
+  }
+  .bnav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    text-decoration:none;cursor:pointer;background:none;border:none;
+    padding:4px 2px;
+  }
+  .bnav-icon{
+    width:38px;height:38px;border-radius:12px;
+    background:linear-gradient(135deg,#4ade80,#f4a261);
+    display:flex;align-items:center;justify-content:center;
+    font-size:19px;
+    box-shadow:0 3px 10px rgba(74,222,128,0.25);
+    transition:transform 0.2s;
+  }
+  .bnav-item:active .bnav-icon{transform:scale(0.92);}
+  .bnav-label{font-size:10.5px;font-weight:600;color:rgba(255,255,255,0.45);font-family:var(--font-body);}
+  .bnav-item.active .bnav-label{color:#4ade80;}
+  .bnav-item.active .bnav-icon{box-shadow:0 0 0 2px rgba(74,222,128,0.4),0 3px 10px rgba(74,222,128,0.35);}
+}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:480px){
-.nav{padding:12px 14px;}
-.nav-links{gap:14px;}
-.logo-text{font-size:15px;}
-.logo img{width:28px;height:28px;}
-.ava{width:64px;height:64px;font-size:22px;}
-.prof-name{font-size:18px;}
-.stats{grid-template-columns:repeat(2,1fr);}
-.movie-grid{grid-template-columns:repeat(2,1fr);}
-.prof-bio{max-width:100%;}
+  .nav{padding:12px 14px;}
+  .nav-links{gap:14px;}
+  .logo-text{font-size:15px;}
+  .logo img{width:28px;height:28px;}
+  .ava{width:64px;height:64px;font-size:22px;}
+  .prof-name{font-size:18px;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .movie-grid{grid-template-columns:repeat(2,1fr);}
+  .prof-bio{max-width:100%;}
 }
 
 /* ===== SCROLLBAR ===== */
@@ -122,178 +159,203 @@ body{background:#0b0b14;color:#fff;font-family:'Segoe UI',Arial,sans-serif;min-h
 </head>
 <body>
 
-<nav class="nav">
-  <a href="index.html" class="logo">
-    <img src="logo.png" alt="logo">
-    <div class="logo-text">КиноЭзэн</div>
-  </a>
-  <div class="nav-links">
-    <a href="index.html">Нүүр</a>
-    <a href="services.html">Үйлчилгээ</a>
-    <a href="profile.html" class="active">Профайл</a>
-  </div>
+<nav class="nav" role="navigation" aria-label="Үндсэн цэс">
+<a href="index.html" class="logo" aria-label="КиноЭзэн нүүр хуудас">
+<img src="logo.png" alt="КиноЭзэн лого" width="34" height="34" onerror="this.style.display='none'">
+<div class="logo-text">КиноЭзэн</div>
+</a>
+<div class="nav-links">
+<a href="index.html">Нүүр</a>
+<a href="services.html">Үйлчилгээ</a>
+<a href="profile.html" class="active">Профайл</a>
+</div>
 </nav>
 
 <div class="wrap">
-  <!-- COVER -->
-  <div class="cover"></div>
 
-  <!-- AVATAR + EDIT -->
-  <div class="ava-row">
-    <div class="ava-wrap">
-      <div class="ava" id="avatarDisplay">
-        <span id="avatarText">Л</span>
-        <img id="avatarImg" style="display:none;" alt="avatar">
-      </div>
-      <div class="status-dot"></div>
-      <div class="upload-overlay" onclick="document.getElementById('avatarInput').click()">
-        <span>📷 Өөрчлөх</span>
-      </div>
-      <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
-    </div>
-    <button class="edit-btn" onclick="openEditModal()">✏️ Профайл засах</button>
-  </div>
+<!-- COVER -->
+<div class="cover"></div>
 
-  <!-- PROFILE INFO -->
-  <div class="prof-info">
-    <div class="prof-left">
-      <div class="prof-name">
-        Лхагваа
-        <span class="badge">⭐ Алт</span>
-      </div>
-      <div class="prof-email">lkhagvaa@gmail.com</div>
-      <div class="prof-bio">🎬 Кино сонирхогч | TTS бүтээгч</div>
-      <div class="prof-meta">
-        <span><span class="icon">👥</span> 18 найз</span>
-        <span><span class="icon">⏱️</span> 2 цагийн өмнө</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat"><div class="stat-val">34</div><div class="stat-label">Үзсэн</div></div>
-    <div class="stat"><div class="stat-val">12</div><div class="stat-label">Хадгалсан</div></div>
-    <div class="stat"><div class="stat-val">8</div><div class="stat-label">TTS</div></div>
-    <div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
-  </div>
-
-  <!-- MENU -->
-  <div class="menu">
-    <div class="mitem" onclick="location.href='services.html'">
-      <div class="mico g">🎤</div>
-      <div class="mtext"><div class="mname">TTS үйлчилгээ</div><div class="msub">Монгол дуу үүсгэх</div></div>
-      <div class="marrow">›</div>
-    </div>
-    <div class="mitem" onclick="location.href='services.html'">
-      <div class="mico o">✨</div>
-      <div class="mtext"><div class="mname">Humanizer</div><div class="msub">Текст хүмүүнжүүлэх</div></div>
-      <div class="marrow">›</div>
-    </div>
-    <div class="mitem" onclick="openModal('favorites')">
-      <div class="mico r">❤️</div>
-      <div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub">12 кино хадгалсан</div></div>
-      <span class="mcount">12</span>
-      <div class="marrow">›</div>
-    </div>
-    <div class="mitem" onclick="openModal('history')">
-      <div class="mico b">📋</div>
-      <div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub">34 кино үзсэн</div></div>
-      <span class="mcount">34</span>
-      <div class="marrow">›</div>
-    </div>
-  </div>
-
-  <!-- MOVIE GRID (Жишээ) -->
-  <div class="section-title">
-    <h3>🔥 Сүүлийн үзсэн</h3>
-    <a href="#">Бүгдийг харах →</a>
-  </div>
-  <div class="movie-grid" id="recentMovies">
-    <div class="movie-card"><img src="https://picsum.photos/200/120?random=1" alt=""><div class="info"><div class="title">Аватар 2</div><div class="date">2025-06-20</div></div></div>
-    <div class="movie-card"><img src="https://picsum.photos/200/120?random=2" alt=""><div class="info"><div class="title">Дюн 2</div><div class="date">2025-06-19</div></div></div>
-    <div class="movie-card"><img src="https://picsum.photos/200/120?random=3" alt=""><div class="info"><div class="title">Оддын дайн</div><div class="date">2025-06-18</div></div></div>
-  </div>
-
-  <!-- PREMIUM -->
-  <div class="premium-card">
-    <div class="premium-title">👑 Премиум авах</div>
-    <div class="premium-desc">SRT субтитр орчуулагч, Script бичигч болон бусад дэлгэрэнгүй функцүүдийг авах.</div>
-    <button class="premium-btn">Премиум авах →</button>
-  </div>
-
-  <!-- LOGOUT -->
-  <button class="logout-btn" onclick="logout()">🚪 Гарах</button>
+<!-- AVATAR + EDIT -->
+<div class="ava-row">
+<div class="ava-wrap">
+<div class="ava" id="avatarDisplay">
+<span id="avatarText">Л</span>
+<img id="avatarImg" style="display:none;" alt="avatar">
+</div>
+<div class="status-dot"></div>
+<div class="upload-overlay" onclick="document.getElementById('avatarInput').click()">
+<span>📷 Өөрчлөх</span>
+</div>
+<input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
+</div>
+<button class="edit-btn" onclick="openEditModal()">✏️ Профайл засах</button>
 </div>
 
+<!-- PROFILE INFO -->
+<div class="prof-info">
+<div class="prof-left">
+<div class="prof-name">
+Лхагваа
+<span class="badge">⭐ Алт</span>
+</div>
+<div class="prof-email">lkhagvaa@gmail.com</div>
+<div class="prof-bio">🎬 Кино сонирхогч | TTS бүтээгч</div>
+<div class="prof-meta">
+<span><span class="icon">👥</span> 18 найз</span>
+<span><span class="icon">⏱️</span> 2 цагийн өмнө</span>
+</div>
+</div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+<div class="stat"><div class="stat-val">34</div><div class="stat-label">Үзсэн</div></div>
+<div class="stat"><div class="stat-val">12</div><div class="stat-label">Хадгалсан</div></div>
+<div class="stat"><div class="stat-val">8</div><div class="stat-label">TTS</div></div>
+<div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
+</div>
+
+<!-- MENU -->
+<div class="menu">
+<div class="mitem" onclick="location.href='services.html'">
+<div class="mico g">🎤</div>
+<div class="mtext"><div class="mname">TTS үйлчилгээ</div><div class="msub">Монгол дуу үүсгэх</div></div>
+<div class="marrow">›</div>
+</div>
+<div class="mitem" onclick="location.href='services.html'">
+<div class="mico o">✨</div>
+<div class="mtext"><div class="mname">Humanizer</div><div class="msub">Текст хүмүүнжүүлэх</div></div>
+<div class="marrow">›</div>
+</div>
+<div class="mitem" onclick="openModal('favorites')">
+<div class="mico r">❤️</div>
+<div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub">12 кино хадгалсан</div></div>
+<span class="mcount">12</span>
+<div class="marrow">›</div>
+</div>
+<div class="mitem" onclick="openModal('history')">
+<div class="mico b">📋</div>
+<div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub">34 кино үзсэн</div></div>
+<span class="mcount">34</span>
+<div class="marrow">›</div>
+</div>
+</div>
+
+<!-- MOVIE GRID (Жишээ) -->
+<div class="section-title">
+<h3>🔥 Сүүлийн үзсэн</h3>
+<a href="#">Бүгдийг харах →</a>
+</div>
+<div class="movie-grid" id="recentMovies">
+<div class="movie-card"><img src="https://picsum.photos/200/120?random=1" alt=""><div class="info"><div class="title">Аватар 2</div><div class="date">2025-06-20</div></div></div>
+<div class="movie-card"><img src="https://picsum.photos/200/120?random=2" alt=""><div class="info"><div class="title">Дюн 2</div><div class="date">2025-06-19</div></div></div>
+<div class="movie-card"><img src="https://picsum.photos/200/120?random=3" alt=""><div class="info"><div class="title">Оддын дайн</div><div class="date">2025-06-18</div></div></div>
+</div>
+
+<!-- PREMIUM -->
+<div class="premium-card">
+<div class="premium-title">👑 Премиум авах</div>
+<div class="premium-desc">SRT субтитр орчуулагч, Script бичигч болон бусад дэлгэрэнгүй функцүүдийг авах.</div>
+<button class="premium-btn">Премиум авах →</button>
+</div>
+
+<!-- LOGOUT -->
+<button class="logout-btn" onclick="logout()">🚪 Гарах</button>
+
+</div>
+
+<!-- ===== BOTTOM NAV — index.html-тэй ижил 5 товч (зөвхөн mobile) ===== -->
+<nav class="bottom-nav" role="navigation" aria-label="Доод цэс">
+<a href="index.html" class="bnav-item">
+<div class="bnav-icon">🏠</div>
+<div class="bnav-label">Нүүр</div>
+</a>
+<a href="#" class="bnav-item" onclick="location.href='services.html?tab=sургалт';return false;">
+<div class="bnav-icon">📚</div>
+<div class="bnav-label">Сургалт</div>
+</a>
+<a href="#" class="bnav-item" onclick="location.href='services.html?tab=программ';return false;">
+<div class="bnav-icon">💻</div>
+<div class="bnav-label">Программ</div>
+</a>
+<a href="services.html" class="bnav-item">
+<div class="bnav-icon">⚙️</div>
+<div class="bnav-label">Үйлчилгээ</div>
+</a>
+<a href="profile.html" class="bnav-item active">
+<div class="bnav-icon">👤</div>
+<div class="bnav-label">Профайл</div>
+</a>
+</nav>
+
 <!-- ===== MODAL (Засах форм) ===== -->
-<div id="editModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;display:none;align-items:center;justify-content:center;">
-  <div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
-    <h3 style="margin-bottom:16px;font-size:18px;">✏️ Профайл засах</h3>
-    <form id="editForm">
-      <input type="text" id="editName" placeholder="Нэр" value="Лхагваа" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
-      <input type="email" id="editEmail" placeholder="Имэйл" value="lkhagvaa@gmail.com" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
-      <input type="text" id="editBio" placeholder="Био" value="🎬 Кино сонирхогч | TTS бүтээгч" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
-      <div style="display:flex;gap:10px;">
-        <button type="button" onclick="closeEditModal()" style="flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);cursor:pointer;">Цуцлах</button>
-        <button type="submit" style="flex:2;padding:12px;border-radius:10px;background:#4ade80;border:none;color:#000;font-weight:600;cursor:pointer;">Хадгалах</button>
-      </div>
-    </form>
-  </div>
+<div id="editModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;">
+<div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
+<h3 style="margin-bottom:16px;font-size:18px;">✏️ Профайл засах</h3>
+<form id="editForm">
+<input type="text" id="editName" placeholder="Нэр" value="Лхагваа" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+<input type="email" id="editEmail" placeholder="Имэйл" value="lkhagvaa@gmail.com" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+<input type="text" id="editBio" placeholder="Био" value="🎬 Кино сонирхогч | TTS бүтээгч" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
+<div style="display:flex;gap:10px;">
+<button type="button" onclick="closeEditModal()" style="flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);cursor:pointer;">Цуцлах</button>
+<button type="submit" style="flex:2;padding:12px;border-radius:10px;background:#4ade80;border:none;color:#000;font-weight:600;cursor:pointer;">Хадгалах</button>
+</div>
+</form>
+</div>
 </div>
 
 <script>
 // ===== AVATAR UPLOAD =====
 function uploadAvatar(e) {
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    document.getElementById('avatarText').style.display = 'none';
-    const img = document.getElementById('avatarImg');
-    img.style.display = 'block';
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+const file = e.target.files[0];
+if(!file) return;
+const reader = new FileReader();
+reader.onload = function(ev) {
+document.getElementById('avatarText').style.display = 'none';
+const img = document.getElementById('avatarImg');
+img.style.display = 'block';
+img.src = ev.target.result;
+};
+reader.readAsDataURL(file);
 }
 
 // ===== EDIT MODAL =====
 function openEditModal() {
-  document.getElementById('editModal').style.display = 'flex';
+document.getElementById('editModal').style.display = 'flex';
 }
 function closeEditModal() {
-  document.getElementById('editModal').style.display = 'none';
+document.getElementById('editModal').style.display = 'none';
 }
 document.getElementById('editForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const name = document.getElementById('editName').value;
-  const email = document.getElementById('editEmail').value;
-  const bio = document.getElementById('editBio').value;
-  document.querySelector('.prof-name').innerHTML = name + ' <span class="badge">⭐ Алт</span>';
-  document.querySelector('.prof-email').textContent = email;
-  document.querySelector('.prof-bio').textContent = bio;
-  closeEditModal();
+e.preventDefault();
+const name = document.getElementById('editName').value;
+const email = document.getElementById('editEmail').value;
+const bio = document.getElementById('editBio').value;
+document.querySelector('.prof-name').innerHTML = name + ' <span class="badge">⭐ Алт</span>';
+document.querySelector('.prof-email').textContent = email;
+document.querySelector('.prof-bio').textContent = bio;
+closeEditModal();
 });
 
 // ===== MODAL (Түүх / Дуртай) =====
 function openModal(type) {
-  const title = type === 'favorites' ? '❤️ Дуртай кинонууд' : '📋 Үзсэн түүх';
-  const count = type === 'favorites' ? 12 : 34;
-  alert(title + '\nНийт ' + count + ' кино байна.\n(Supabase-аас татах код холбох боломжтой)');
+const title = type === 'favorites' ? '❤️ Дуртай кинонууд' : '📋 Үзсэн түүх';
+const count = type === 'favorites' ? 12 : 34;
+alert(title + '\nНийт ' + count + ' кино байна.\n(Supabase-аас татах код холбох боломжтой)');
 }
 
 // ===== LOGOUT =====
 function logout() {
-  if(confirm('Та гарахдаа итгэлтэй байна уу?')) {
-    window.location.href = 'login.html';
-  }
+if(confirm('Та гарахдаа итгэлтэй байна уу?')) {
+window.location.href = 'login.html';
+}
 }
 
 // ===== CLOSE MODAL ON OUTSIDE CLICK =====
 document.getElementById('editModal').addEventListener('click', function(e) {
-  if(e.target === this) closeEditModal();
+if(e.target === this) closeEditModal();
 });
 </script>
-
 </body>
 </html>
