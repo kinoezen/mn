@@ -9,7 +9,7 @@
 //     ҲНЭГҲ, ХУРДАН.
 //   - Gemini TTS: Google Gemini API-аар, GEMINI_API_KEY ашиглана.
 // ============================================================
-import { EdgeTTS } from 'edge-tts-universal';
+import { EdgeTTS } from 'edge-tts-universal/browser';
 import { corsJson, corsOptions } from '../_shared/ai.js';
 
 const GEMINI_VOICE_MAP = {
