@@ -40,36 +40,84 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// TTS — ДУУ ҮҮСГЭГЧ
-// ============================================================
-// ============================================================
-// ШИНЭ runTTS() — /api/tts руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runTTS() функцийг ҲНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ.
+// TTS — ДУУ ҮҮСГЭГЧ (2 хоолойтой: Edge / Gemini)
 // ============================================================
 
+// Одоогийн сонгосон engine ('edge' эсвэл 'gemini')
+let ttsEngine = 'edge';
+const TTS_CHAR_LIMITS = { edge: 2000, gemini: 1000 };
+
+// Engine солих (Edge <-> Gemini) — HTML дотор onclick="selEngine('edge', this)" гэж дуудагдана
+function selEngine(engine, el) {
+    ttsEngine = engine;
+    document.querySelectorAll('#engine-edge, #engine-gemini').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+
+    const edgeRow = document.getElementById('edge-voice-row');
+    const geminiRow = document.getElementById('gemini-voice-row');
+    if (edgeRow) edgeRow.style.display = engine === 'edge' ? 'block' : 'none';
+    if (geminiRow) geminiRow.style.display = engine === 'gemini' ? 'block' : 'none';
+
+    updateTTSCount();
+}
+
+// Тэмдэгтийн тоо харуулах (engine-ээс хамаарсан хязгаартай)
+function updateTTSCount() {
+    const textEl = document.getElementById('tts-text');
+    if (!textEl) return;
+    const len = textEl.value.length;
+    const limit = TTS_CHAR_LIMITS[ttsEngine];
+    const countEl = document.getElementById('char-count');
+    if (countEl) {
+        countEl.textContent = len + '/' + limit;
+        countEl.style.color = len > limit ? '#e63946' : '#4ade80';
+    }
+}
+
+// Едж TTS-ийн дуу сонгох (Батаа/Есүй)
+function selVoice(el) {
+    document.querySelectorAll('#edge-voice-row .vbtn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+}
+
+// Дуу үүсгэх — /api/tts руу fetch хийнэ
 async function runTTS() {
     const text = document.getElementById('tts-text')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
+
+    const limit = TTS_CHAR_LIMITS[ttsEngine];
+    if (text.length > limit) {
+        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгүй байх ёстой)`, 'error');
+        return;
+    }
+
     const btn = document.getElementById('tts-run-btn');
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
 
     try {
-        const voice = document.querySelector('.vbtn.on')?.textContent.trim() || 'Батаа';
         const rate = document.getElementById('rate')?.value || 15;
         const pitch = document.getElementById('pitch')?.value || -8;
 
-        const response = await fetch('/api/tts', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
+        let body;
+        if (ttsEngine === 'gemini') {
+            const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Charon';
+            body = { text, engine: 'gemini', geminiVoice, rate: Number(rate), pitch: Number(pitch), volume: 0 };
+        } else {
+            const voice = document.querySelector('#edge-voice-row .vbtn.on')?.textContent.trim() || 'Батаа';
+            body = {
                 text,
                 engine: 'edge',
                 voice: voice === 'Есүй' ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)',
                 rate: Number(rate),
                 pitch: Number(pitch),
                 volume: 0
-            })
+            };
+        }
+
+        const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
         });
 
         const data = await response.json();
@@ -92,6 +140,7 @@ async function runTTS() {
 
     if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
+
 // ============================================================
 // ОРЧУУЛАГЧ
 // ============================================================
@@ -243,12 +292,6 @@ async function runTextEdit() {
 // ============================================================
 // КИНО ТОЙМЧ
 // ============================================================
-// ============================================================
-// ШИНЭ runMovieReview() — /api/movie-review руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runMovieReview() функцийг ҲНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ.
-// ============================================================
-
 async function runMovieReview() {
     const movieName = document.getElementById('movie-review-input')?.value.trim();
     if (!movieName) { showToast('⚠️ Кино нэр оруулна уу!', 'error'); return; }
@@ -280,6 +323,7 @@ async function runMovieReview() {
 
     if (btn) { btn.disabled = false; btn.textContent = '🎬 Тойм бичих'; }
 }
+
 // ============================================================
 // СУБТИТР НИЙЛҮҮЛЭГЧ
 // ============================================================
@@ -545,9 +589,15 @@ async function runAiDetect() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
     try {
-        const words = text.split(/\s+/);
-        const avgWordLen = words.reduce((sum, w) => sum + w.length, 0) / words.length;
-        const aiScore = Math.min(Math.round((avgWordLen / 8) * 100), 95);
+        const response = await fetch('/api/ai-detect', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Шалгах үед алдаа гарлаа');
+
+        const aiScore = data.score ?? 50;
         const isAi = aiScore > 50;
         const resultDiv = document.getElementById('ai-detect-result');
         if (resultDiv) {
@@ -560,27 +610,21 @@ async function runAiDetect() {
                 </div>
                 <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;">
                     <div style="font-size:11px;color:rgba(255,255,255,0.3);">Дүгнэлт</div>
-                    <div style="font-size:14px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};">${isAi ? '🤖 AI-ээр бичигдсэн байх магадлалтай' : '✅ Хүний бичсэн байх магадлалтай'}</div>
+                    <div style="font-size:14px;font-weight:700;color:${isAi ? '#e63946' : '#4ade80'};">${data.verdict || (isAi ? '🤖 AI-ээр бичигдсэн байх магадлалтай' : '✅ Хүний бичсэн байх магадлалтай')}</div>
                 </div>
             </div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">⚠️ Энэ нь демо хувилбар.</div>`;
+            ${data.reasons ? `<div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">${data.reasons.join('<br>')}</div>` : ''}`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
     } catch (error) {
         console.error('AiDetect error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🤖 Шалгах'; }
 }
 
 // ============================================================
 // CHATBOT
-// ============================================================
-// ============================================================
-// ШИНЭ runChatbot() — /api/chatbot руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runChatbot() функцийг ҲНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ. (Доороос "CHATBOT" гэж хайж олоод тэр
-// бүхэл функцийг устгаад оронд нь үүнийг тавина.)
 // ============================================================
 
 // Chat history-г санах (browser session-доо, page refresh хүртэл)
@@ -597,7 +641,6 @@ async function runChatbot() {
 
     const messages = document.getElementById('chatbot-messages');
 
-    // Хэрэглэгчийн мессежийг дэлгэцэнд харуулна
     if (messages) {
         const userMsg = document.createElement('div');
         userMsg.style.cssText = 'display:flex;gap:8px;margin-bottom:10px;justify-content:flex-end;';
@@ -620,7 +663,6 @@ async function runChatbot() {
 
         const reply = data.reply;
 
-        // History-д хадгална (дараагийн асуултад context болгож ашиглана)
         chatbotHistory.push({ role: 'user', content: question });
         chatbotHistory.push({ role: 'assistant', content: reply });
 
@@ -640,6 +682,7 @@ async function runChatbot() {
 
     if (btn) { btn.disabled = false; btn.textContent = '➤'; }
 }
+
 // ============================================================
 // НЭМЭЛТ ТҮЛХҮҮР ФУНКЦУУД
 // ============================================================
