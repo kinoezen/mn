@@ -1,6 +1,3 @@
-bash
-
-cat > /home/claude/cf-functions/functions/api/tts.js << 'EOF'
 // ============================================================
 // functions/api/tts.js
 // URL: POST /api/tts
@@ -171,8 +168,3 @@ function writeString(view, offset, str) {
     view.setUint8(offset + i, str.charCodeAt(i));
   }
 }
-EOF
-cp /home/claude/cf-functions/functions/api/tts.js /mnt/user-data/outputs/functions/api/tts.js
-Output
-
-exit code 0
