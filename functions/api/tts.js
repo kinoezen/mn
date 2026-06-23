@@ -1,6 +1,3 @@
-// ============================================================
-// functions/api/tts.js
-// URL: POST /api/tts
 // Body: { text, engine: 'gemini'|'edge', voice, geminiVoice, rate, pitch, volume }
 //
 // 2 ХООЛОЙ ДЭМЖИГДДЭГ:
