@@ -29,15 +29,13 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px;}
 
 /* ===== COVER ===== */
-.cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;cursor:pointer;}
+.cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
 .cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,11,20,0.8));pointer-events:none;z-index:1;}
-.cover-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:0.3s;z-index:2;}
-.cover:hover .cover-overlay{opacity:1;}
-.cover-overlay span{font-size:13px;color:#fff;font-weight:600;}
-.cover-actions{display:flex;gap:8px;justify-content:flex-end;margin:6px 16px 0;position:relative;z-index:3;}
-.cover-action-btn{padding:6px 12px;border-radius:8px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:11px;cursor:pointer;transition:0.2s;}
-.cover-action-btn:hover{background:rgba(74,222,128,0.2);border-color:#4ade80;}
-.cover-action-btn.danger:hover{background:rgba(239,68,68,0.2);border-color:#ef4444;color:#ef4444;}
+.cover-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;gap:10px;opacity:0;transition:0.3s;z-index:2;pointer-events:none;}
+.cover:hover .cover-overlay{opacity:1;pointer-events:auto;}
+.cover-action-btn{padding:7px 14px;border-radius:8px;background:rgba(20,20,30,0.75);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;transition:0.2s;}
+.cover-action-btn:hover{background:rgba(74,222,128,0.25);border-color:#4ade80;}
+.cover-action-btn.danger:hover{background:rgba(239,68,68,0.25);border-color:#ef4444;color:#ff8a8a;}
 
 /* ===== AVATAR ROW ===== */
 .ava-row{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px;position:relative;z-index:2;}
@@ -182,17 +180,14 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="wrap">
 
 <!-- COVER -->
-<div class="cover" id="coverDisplay" onclick="document.getElementById('coverInput').click()">
+<div class="cover" id="coverDisplay">
 <img id="coverImg" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" alt="cover">
 <div class="cover-overlay" id="coverOverlay">
-<span>📷 Ковер зураг солих</span>
+<span class="cover-action-btn" onclick="document.getElementById('coverInput').click()" id="coverChangeBtn">✏️ Солих</span>
+<span class="cover-action-btn danger" onclick="deleteCover()" id="coverDelBtn" style="display:none;">🗑️ Устгах</span>
 </div>
 </div>
 <input type="file" id="coverInput" accept="image/*" style="display:none;" onchange="uploadCover(event)">
-<div class="cover-actions" id="coverActions" style="display:none;">
-<button class="cover-action-btn" onclick="event.stopPropagation();document.getElementById('coverInput').click()">✏️ Солих</button>
-<button class="cover-action-btn danger" onclick="event.stopPropagation();deleteCover()">🗑️ Устгах</button>
-</div>
 
 <!-- AVATAR + EDIT -->
 <div class="ava-row">
@@ -386,7 +381,7 @@ async function loadSession(){
     const cimg = document.getElementById('coverImg');
     cimg.style.display='block';
     cimg.src = user.user_metadata.cover_url;
-    document.getElementById('coverActions').style.display='flex';
+    document.getElementById('coverDelBtn').style.display='inline';
   }
 }
 loadSession();
@@ -501,7 +496,7 @@ async function uploadCover(e){
     const url = await uploadToStorage('covers', file);
     await updateUserMetadata({ cover_url: url });
     img.src = url;
-    document.getElementById('coverActions').style.display='flex';
+    document.getElementById('coverDelBtn').style.display='inline';
 
     if(oldCover) deleteFromStorage('covers', oldCover);
   }catch(err){
@@ -519,7 +514,7 @@ async function deleteCover(){
     if(oldCover) await deleteFromStorage('covers', oldCover);
     document.getElementById('coverImg').style.display='none';
     document.getElementById('coverImg').src='';
-    document.getElementById('coverActions').style.display='none';
+    document.getElementById('coverDelBtn').style.display='none';
   }catch(err){
     alert('Устгахад алдаа гарлаа: ' + err.message);
   }
