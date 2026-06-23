@@ -1,24 +1,42 @@
+bash
+
+cat > /home/claude/cf-functions/functions/api/tts.js << 'EOF'
 // ============================================================
 // functions/api/tts.js
 // URL: POST /api/tts
 // Body: { text, engine: 'gemini'|'edge', voice, geminiVoice, rate, pitch, volume }
 //
-// Hugging Face Gradio Space (Kinoezen/mn) -тэй ЗӨВ Gradio HTTP API
-// замаар холбогддог: /gradio_api/call/<endpoint>
+// 2 ХООЛОЙ ДЭМЖИГДДЭГ:
+//   - Edge TTS (Батаа/Есуй): edge-tts-universal npm package-аар,
+//     Microsoft Edge-ийн WebSocket service руу шууд холбогддог.
+//     ҲНЭГҲ, ХУРДАН.
+//   - Gemini TTS: Google Gemini API-аар, GEMINI_API_KEY ашиглана.
 // ============================================================
+import { EdgeTTS } from 'edge-tts-universal';
 import { corsJson, corsOptions } from '../_shared/ai.js';
 
-const HF_SPACE = 'kinoezen-mn.hf.space';
-const VALID_VOICES = ['Charon', 'Fenrir', 'Puck', 'Orbit', 'Zephyr', 'Schedar', 'Aoede'];
+const GEMINI_VOICE_MAP = {
+  'Лхагваа (эрэгтэй)': 'Charon',
+  'Доржоо (эрэгтэй)': 'Fenrir',
+  'Батбаяр (эрэгтэй)': 'Puck',
+  'Мөнхбат (эрэгтэй)': 'Orbit',
+  'Энхбаяр (эрэгтэй)': 'Zephyr',
+  'Ганбаатар (эрэгтэй)': 'Schedar',
+  'Дулмаа (эмэгтэй)': 'Aoede',
+  'Номин (эмэгтэй)': 'Kale',
+  'Нарантуяа (эмэгтэй)': 'Leda'
+};
 
-// Engine тус бүрийн тэмдэгтийн хязгаар (HF Space-ийн UI-д харагдсан)
-const CHAR_LIMITS = { edge: 2000, gemini: 1000 };
+const EDGE_VOICE_MAP = {
+  'Батаа (эрэгтэй)': 'mn-MN-BataaNeural',
+  'Есүй (эмэгтэй)': 'mn-MN-YesuiNeural'
+};
 
 export async function onRequestOptions() {
   return corsOptions();
 }
 
-export async function onRequestPost({ request }) {
+export async function onRequestPost({ request, env }) {
   try {
     const { text, engine, voice, geminiVoice, rate, pitch, volume } = await request.json();
 
@@ -26,71 +44,135 @@ export async function onRequestPost({ request }) {
       return corsJson({ error: 'Текст оруулна уу' }, 400);
     }
 
-    const isGemini = engine === 'gemini';
-    const limit = isGemini ? CHAR_LIMITS.gemini : CHAR_LIMITS.edge;
-    if (text.length > limit) {
-      return corsJson({ error: `Текст хэт урт байна (${limit} тэмдэгтээс ихгүй байх ёстой)` }, 400);
+    if (engine === 'edge') {
+      return await handleEdgeTTS(text, voice, rate, pitch, volume);
+    } else {
+      return await handleGeminiTTS(env, text, geminiVoice);
     }
-
-    const cleanVoice = (geminiVoice || 'Charon').trim();
-    const hfVoice = VALID_VOICES.includes(cleanVoice) ? cleanVoice : 'Charon';
-
-    const payload = {
-      data: [
-        text,
-        isGemini ? 'Gemini TTS (хамгийн байгалийн)' : 'Edge TTS (Батаа / Есүй)',
-        voice || 'Батаа (эрэгтэй)',
-        hfVoice,
-        rate ?? 15,
-        pitch ?? -8,
-        volume ?? 0
-      ]
-    };
-
-    // 1-р алхам: ажил эхлүүлэх хүсэлт явуулна (ЗӨВ зам: /gradio_api/call/)
-    const startRes = await fetch(`https://${HF_SPACE}/gradio_api/call/generate_audio`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    if (!startRes.ok) {
-      const errText = await startRes.text();
-      throw new Error(`HF Space эхлэх алдаа (${startRes.status}): ${errText}`);
-    }
-
-    const { event_id } = await startRes.json();
-    if (!event_id) throw new Error('HF Space event_id буцаасангуй');
-
-    // 2-р алхам: үр дүнг хүлээж авна (SSE урсгал, ЗӨВ зам)
-    const resultRes = await fetch(`https://${HF_SPACE}/gradio_api/call/generate_audio/${event_id}`);
-    const resultText = await resultRes.text();
-
-    const dataLine = resultText
-      .split('\n')
-      .find(line => line.startsWith('data:'));
-
-    if (!dataLine) throw new Error('HF Space-ээс үр дүн ирсэнгүй: ' + resultText.slice(0, 200));
-
-    const resultData = JSON.parse(dataLine.replace('data:', '').trim());
-    const htmlStr = resultData[0];
-
-    let audioUrl = null;
-    if (typeof htmlStr === 'string') {
-      const srcMatch = htmlStr.match(/src="([^"]+)"/);
-      if (srcMatch) audioUrl = srcMatch[1];
-      const b64Match = htmlStr.match(/(data:audio\/mpeg;base64,[^"]+)/);
-      if (b64Match) audioUrl = b64Match[1];
-    } else if (htmlStr?.url) {
-      audioUrl = htmlStr.url;
-    } else if (htmlStr?.path) {
-      audioUrl = `https://${HF_SPACE}/file=` + htmlStr.path;
-    }
-
-    if (!audioUrl) throw new Error('Дуу URL олдсонгүй: ' + JSON.stringify(resultData).slice(0, 200));
-
-    return corsJson({ audioUrl });
   } catch (err) {
     return corsJson({ error: err.message }, 500);
   }
 }
+
+// ---- EDGE TTS (Батаа / Есүй) ----
+async function handleEdgeTTS(text, voiceName, rate, pitch, volume) {
+  if (text.length > 2000) {
+    return corsJson({ error: 'Edge TTS-д текст 2000 тэмдэгтээс ихгуй байх ёстой' }, 400);
+  }
+
+  const voice = EDGE_VOICE_MAP[voiceName] || 'mn-MN-BataaNeural';
+  const rateStr = `${rate >= 0 ? '+' : ''}${rate ?? 0}%`;
+  const pitchStr = `${pitch >= 0 ? '+' : ''}${pitch ?? 0}Hz`;
+  const volumeStr = `${volume >= 0 ? '+' : ''}${volume ?? 0}%`;
+
+  const tts = new EdgeTTS(text, voice, {
+    rate: rateStr,
+    pitch: pitchStr,
+    volume: volumeStr
+  });
+
+  const result = await tts.synthesize();
+  const audioBuffer = await result.audio.arrayBuffer();
+  const audioBase64 = arrayBufferToBase64(audioBuffer);
+
+  return corsJson({ audioUrl: `data:audio/mpeg;base64,${audioBase64}` });
+}
+
+// ---- GEMINI TTS (Лхагваа, Доржоо, ...) ----
+async function handleGeminiTTS(env, text, geminiVoiceName) {
+  if (!env.GEMINI_API_KEY) {
+    return corsJson({ error: 'Серверийн тохиргоо дутуу (GEMINI_API_KEY алга)' }, 500);
+  }
+  if (text.length > 1000) {
+    return corsJson({ error: 'Gemini TTS-д текст 1000 тэмдэгтээс ихгуй байх ёстой' }, 400);
+  }
+
+  const voiceName = GEMINI_VOICE_MAP[geminiVoiceName] || 'Charon';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${env.GEMINI_API_KEY}`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text }] }],
+      generationConfig: {
+        responseModalities: ['AUDIO'],
+        speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } }
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Gemini TTS алдаа (${response.status}): ${errText}`);
+  }
+
+  const result = await response.json();
+  const audioB64 = result?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  if (!audioB64) throw new Error('Gemini-ээс аудио өгөгдөл ирсэнгуй');
+
+  const pcmBytes = base64ToUint8Array(audioB64);
+  const wavBytes = pcmToWav(pcmBytes, 24000, 1, 16);
+  const wavBase64 = uint8ArrayToBase64(wavBytes);
+
+  return corsJson({ audioUrl: `data:audio/wav;base64,${wavBase64}` });
+}
+
+// ---- Туслах функцууд ----
+
+function arrayBufferToBase64(buffer) {
+  return uint8ArrayToBase64(new Uint8Array(buffer));
+}
+
+function base64ToUint8Array(base64) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
+}
+
+function uint8ArrayToBase64(bytes) {
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function pcmToWav(pcmBytes, sampleRate, channels, bitsPerSample) {
+  const dataSize = pcmBytes.length;
+  const byteRate = (sampleRate * channels * bitsPerSample) / 8;
+  const blockAlign = (channels * bitsPerSample) / 8;
+  const buffer = new ArrayBuffer(44 + dataSize);
+  const view = new DataView(buffer);
+
+  writeString(view, 0, 'RIFF');
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, 'WAVE');
+  writeString(view, 12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, channels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+  writeString(view, 36, 'data');
+  view.setUint32(40, dataSize, true);
+
+  const wavBytes = new Uint8Array(buffer);
+  wavBytes.set(pcmBytes, 44);
+  return wavBytes;
+}
+
+function writeString(view, offset, str) {
+  for (let i = 0; i < str.length; i++) {
+    view.setUint8(offset + i, str.charCodeAt(i));
+  }
+}
+EOF
+cp /home/claude/cf-functions/functions/api/tts.js /mnt/user-data/outputs/functions/api/tts.js
+Output
+
+exit code 0
