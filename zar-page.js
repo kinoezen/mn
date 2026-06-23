@@ -23,6 +23,7 @@
 
   let zarCategories = [];
   let zarActiveCategoryId = '';
+  let zarActiveSubCategoryId = '';
   let zarCurrentPage = 0;
   let zarSelectedFiles = []; // { file: Blob, dataUrl: string }[]
   let zarCurrentListing = null;
@@ -151,6 +152,7 @@
   function zarOpenModal() {
     zarShowListView();
     zarActiveCategoryId = '';
+    zarActiveSubCategoryId = '';
     zarLoadCategories();
   }
 
@@ -208,7 +210,7 @@
     try {
       const data = await zarRestGet(
         'zar_categories',
-        'is_active=eq.true&order=sort_order.asc&select=id,name,slug,icon'
+        'is_active=eq.true&order=sort_order.asc&select=id,name,slug,icon,parent_id'
       );
       zarCategories = data || [];
       zarRenderCategoryPills();
@@ -222,25 +224,82 @@
     }
   }
 
+  function zarGetTopCategories() {
+    return zarCategories.filter(function (c) { return !c.parent_id; });
+  }
+
+  function zarGetSubCategories(parentId) {
+    return zarCategories.filter(function (c) { return c.parent_id === parentId; });
+  }
+
   function zarRenderCategoryPills() {
     const catsEl = document.getElementById('zar-cats');
-    let html = '<button type="button" class="zar-cat-pill zar-active" data-cat-id="">Бүгд</button>';
-    zarCategories.forEach(function (c) {
+    const topCats = zarGetTopCategories();
+    let html = '<button type="button" class="zar-cat-pill zar-active" data-cat-id="" data-level="top">Бүгд</button>';
+    topCats.forEach(function (c) {
       html +=
         '<button type="button" class="zar-cat-pill" data-cat-id="' +
         zarSanitize(c.id) +
-        '">' +
+        '" data-level="top">' +
         zarSanitize(c.name) +
         '</button>';
     });
     catsEl.innerHTML = html;
-    catsEl.querySelectorAll('.zar-cat-pill').forEach(function (btn) {
+
+    // Дэд ангилалын мөр (анхдагч хоосон, эх ангилал сонгоход л харагдана)
+    let subRow = document.getElementById('zar-subcats');
+    if (!subRow) {
+      subRow = document.createElement('div');
+      subRow.id = 'zar-subcats';
+      subRow.className = 'zar-subcats';
+      catsEl.insertAdjacentElement('afterend', subRow);
+    }
+    subRow.innerHTML = '';
+    subRow.style.display = 'none';
+
+    catsEl.querySelectorAll('.zar-cat-pill[data-level="top"]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         catsEl.querySelectorAll('.zar-cat-pill').forEach(function (b) {
           b.classList.remove('zar-active');
         });
         btn.classList.add('zar-active');
-        zarActiveCategoryId = btn.getAttribute('data-cat-id') || '';
+        const topId = btn.getAttribute('data-cat-id') || '';
+        zarActiveCategoryId = topId;
+        zarActiveSubCategoryId = '';
+        zarCurrentPage = 0;
+        zarRenderSubCategoryPills(topId);
+        zarLoadListings();
+      });
+    });
+  }
+
+  function zarRenderSubCategoryPills(parentId) {
+    const subRow = document.getElementById('zar-subcats');
+    if (!subRow) return;
+    const subs = parentId ? zarGetSubCategories(parentId) : [];
+    if (!subs.length) {
+      subRow.innerHTML = '';
+      subRow.style.display = 'none';
+      return;
+    }
+    let html = '<button type="button" class="zar-subcat-pill zar-active" data-subcat-id="">Бүгд</button>';
+    subs.forEach(function (s) {
+      html +=
+        '<button type="button" class="zar-subcat-pill" data-subcat-id="' +
+        zarSanitize(s.id) +
+        '">' +
+        zarSanitize(s.name) +
+        '</button>';
+    });
+    subRow.innerHTML = html;
+    subRow.style.display = 'flex';
+    subRow.querySelectorAll('.zar-subcat-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        subRow.querySelectorAll('.zar-subcat-pill').forEach(function (b) {
+          b.classList.remove('zar-active');
+        });
+        btn.classList.add('zar-active');
+        zarActiveSubCategoryId = btn.getAttribute('data-subcat-id') || '';
         zarCurrentPage = 0;
         zarLoadListings();
       });
@@ -249,11 +308,21 @@
 
   function zarPopulateCategorySelect() {
     const sel = document.getElementById('zar-f-category');
-    sel.innerHTML = zarCategories
-      .map(function (c) {
-        return '<option value="' + zarSanitize(c.id) + '">' + zarSanitize(c.name) + '</option>';
-      })
-      .join('');
+    const topCats = zarGetTopCategories();
+    let html = '';
+    topCats.forEach(function (top) {
+      const subs = zarGetSubCategories(top.id);
+      if (subs.length) {
+        html += '<optgroup label="' + zarSanitize(top.name) + '">';
+        subs.forEach(function (s) {
+          html += '<option value="' + zarSanitize(s.id) + '">' + zarSanitize(s.name) + '</option>';
+        });
+        html += '</optgroup>';
+      } else {
+        html += '<option value="' + zarSanitize(top.id) + '">' + zarSanitize(top.name) + '</option>';
+      }
+    });
+    sel.innerHTML = html;
   }
 
   // ---------- Listings ----------
@@ -262,12 +331,21 @@
     grid.innerHTML = '<div class="zar-loading">Ачааллаж байна...</div>';
     try {
       let params =
-        'status=eq.active&order=is_featured.desc,created_at.desc&limit=' +
+        'status=eq.active&expires_at=gt.' + encodeURIComponent(new Date().toISOString()) +
+        '&order=is_featured.desc,created_at.desc&limit=' +
         ZAR_PAGE_SIZE +
-        '&select=id,title,price,price_type,images,location,created_at,is_featured,category_id,zar_categories(name)';
-      if (zarActiveCategoryId) {
-        params += '&category_id=eq.' + encodeURIComponent(zarActiveCategoryId);
+        '&select=id,title,price,price_type,images,location,created_at,is_featured,category_id,zar_categories(name,parent_id)';
+
+      // Дэд ангилал сонгосон бол түүгээр шүүнэ; үгүй бол эх ангилалаар
+      // (эх ангилалын бүх дэд ангилалын зарыг харуулна).
+      if (zarActiveSubCategoryId) {
+        params += '&category_id=eq.' + encodeURIComponent(zarActiveSubCategoryId);
+      } else if (zarActiveCategoryId) {
+        const subIds = zarGetSubCategories(zarActiveCategoryId).map(function (s) { return s.id; });
+        const idsToMatch = subIds.length ? subIds.concat([zarActiveCategoryId]) : [zarActiveCategoryId];
+        params += '&category_id=in.(' + idsToMatch.map(encodeURIComponent).join(',') + ')';
       }
+
       const listings = await zarRestGet('listings', params);
       zarRenderGrid(listings || []);
     } catch (e) {
@@ -277,6 +355,7 @@
         '</span></div>';
     }
   }
+
 
   function zarRenderGrid(listings) {
     const grid = document.getElementById('zar-grid');
