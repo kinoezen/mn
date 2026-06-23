@@ -18,7 +18,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="navbar.css">
-<link rel="stylesheet" href="zar.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"WebSite","name":"Кино Эзэн","url":"https://kinoezen.mn"}
 </script>
@@ -618,7 +617,7 @@
     </div>
     
     <!-- 5. Зар мэдээ -->
-    <div class="mcat-card mcat-ads" id="mcat-ads" onclick="zarOpenModal()" tabindex="0" role="button" aria-label="Зар мэдээ">
+    <div class="mcat-card mcat-ads" id="mcat-ads" onclick="location.href='zar.html'" tabindex="0" role="button" aria-label="Зар мэдээ">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgAds)"/><defs><linearGradient id="mgAds" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient></defs><rect x="8" y="14" width="26" height="16" rx="2" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="12" y1="18" x2="30" y2="18" stroke="white" stroke-width="1.5"/><line x1="12" y1="22" x2="26" y2="22" stroke="white" stroke-width="1.5"/><line x1="12" y1="26" x2="22" y2="26" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Зар мэдээ</div><div class="mcat-sub">Үл хөдлөх, ажил</div><div class="mcat-badge">📢</div>
     </div>
@@ -803,9 +802,5 @@
 
 <script src="navbar.js"></script>
 <script src="script.js"></script>
-
-<!-- ===== ЗАР МЭДЭЭ МОДУЛЬ (бие даасан, script.js/style.css-д хүрэхгүй) ===== -->
-<div id="zar-modal-root"></div>
-<script src="zar.js"></script>
 </body>
 </html>
