@@ -29,8 +29,15 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px;}
 
 /* ===== COVER ===== */
-.cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
-.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,11,20,0.8));}
+.cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;cursor:pointer;}
+.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,11,20,0.8));pointer-events:none;z-index:1;}
+.cover-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:0.3s;z-index:2;}
+.cover:hover .cover-overlay{opacity:1;}
+.cover-overlay span{font-size:13px;color:#fff;font-weight:600;}
+.cover-actions{display:flex;gap:8px;justify-content:flex-end;margin:6px 16px 0;position:relative;z-index:3;}
+.cover-action-btn{padding:6px 12px;border-radius:8px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:11px;cursor:pointer;transition:0.2s;}
+.cover-action-btn:hover{background:rgba(74,222,128,0.2);border-color:#4ade80;}
+.cover-action-btn.danger:hover{background:rgba(239,68,68,0.2);border-color:#ef4444;color:#ef4444;}
 
 /* ===== AVATAR ROW ===== */
 .ava-row{display:flex;justify-content:space-between;align-items:flex-end;padding:0 16px;position:relative;z-index:2;}
@@ -40,9 +47,10 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .ava img{width:100%;height:100%;object-fit:cover;}
 .status-dot{position:absolute;bottom:4px;right:4px;width:16px;height:16px;background:#4ade80;border-radius:50%;border:3px solid #0b0b14;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
-.upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:0.3s;cursor:pointer;}
+.upload-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;opacity:0;transition:0.3s;cursor:pointer;}
 .ava-wrap:hover .upload-overlay{opacity:1;}
-.upload-overlay span{font-size:12px;color:#fff;font-weight:500;}
+.upload-overlay span{font-size:11px;color:#fff;font-weight:500;}
+.upload-overlay .ava-del{font-size:13px;cursor:pointer;}
 .edit-btn{padding:8px 18px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:12px;cursor:pointer;transition:0.3s;margin-bottom:8px;}
 .edit-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;color:#4ade80;}
 
@@ -174,7 +182,17 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="wrap">
 
 <!-- COVER -->
-<div class="cover"></div>
+<div class="cover" id="coverDisplay" onclick="document.getElementById('coverInput').click()">
+<img id="coverImg" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" alt="cover">
+<div class="cover-overlay" id="coverOverlay">
+<span>📷 Ковер зураг солих</span>
+</div>
+</div>
+<input type="file" id="coverInput" accept="image/*" style="display:none;" onchange="uploadCover(event)">
+<div class="cover-actions" id="coverActions" style="display:none;">
+<button class="cover-action-btn" onclick="event.stopPropagation();document.getElementById('coverInput').click()">✏️ Солих</button>
+<button class="cover-action-btn danger" onclick="event.stopPropagation();deleteCover()">🗑️ Устгах</button>
+</div>
 
 <!-- AVATAR + EDIT -->
 <div class="ava-row">
@@ -184,8 +202,9 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <img id="avatarImg" style="display:none;" alt="avatar">
 </div>
 <div class="status-dot"></div>
-<div class="upload-overlay" onclick="document.getElementById('avatarInput').click()">
-<span>📷 Өөрчлөх</span>
+<div class="upload-overlay">
+<span onclick="document.getElementById('avatarInput').click()">📷 Солих</span>
+<span class="ava-del" onclick="deleteAvatar()" id="avaDelBtn" style="display:none;">🗑️</span>
 </div>
 <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
 </div>
@@ -353,28 +372,157 @@ async function loadSession(){
   document.getElementById('editName').value = name;
   document.getElementById('editEmail').value = email;
 
-  // Аватар зураг хадгалагдсан бол харуулах (Storage холбосны дараа идэвхжинэ)
+  // Аватар зураг хадгалагдсан бол харуулах
   if(user.user_metadata && user.user_metadata.avatar_url){
     document.getElementById('avatarText').style.display='none';
     const img = document.getElementById('avatarImg');
     img.style.display='block';
     img.src = user.user_metadata.avatar_url;
+    document.getElementById('avaDelBtn').style.display='inline';
+  }
+
+  // Ковер зураг хадгалагдсан бол харуулах
+  if(user.user_metadata && user.user_metadata.cover_url){
+    const cimg = document.getElementById('coverImg');
+    cimg.style.display='block';
+    cimg.src = user.user_metadata.cover_url;
+    document.getElementById('coverActions').style.display='flex';
   }
 }
 loadSession();
 
-// ===== AVATAR UPLOAD =====
-function uploadAvatar(e) {
-const file = e.target.files[0];
-if(!file) return;
-const reader = new FileReader();
-reader.onload = function(ev) {
-document.getElementById('avatarText').style.display = 'none';
-const img = document.getElementById('avatarImg');
-img.style.display = 'block';
-img.src = ev.target.result;
-};
-reader.readAsDataURL(file);
+// ===== AVATAR & COVER — Supabase Storage =====
+function getUserId(){
+  try{ return JSON.parse(localStorage.getItem('sb_user')||'{}').id; }catch(e){ return null; }
+}
+
+async function uploadToStorage(bucket, file){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  if(!token || !userId){ alert('Та нэвтрээгүй байна.'); location.href='login.html'; return null; }
+  const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+  const path = `${userId}/${Date.now()}.${ext}`;
+  const r = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`,{
+    method:'POST',
+    headers:{
+      'apikey':SUPABASE_KEY,
+      'Authorization':`Bearer ${token}`,
+      'Content-Type': file.type || 'image/jpeg'
+    },
+    body: file
+  });
+  if(!r.ok){
+    const err = await r.json().catch(()=>({}));
+    throw new Error(err.message || 'Storage руу хадгалж чадсангүй');
+  }
+  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+}
+
+async function deleteFromStorage(bucket, publicUrl){
+  if(!publicUrl) return;
+  const token = localStorage.getItem('sb_token');
+  if(!token) return;
+  const marker = `/storage/v1/object/public/${bucket}/`;
+  const idx = publicUrl.indexOf(marker);
+  if(idx === -1) return;
+  const path = publicUrl.slice(idx + marker.length);
+  await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${path}`,{
+    method:'DELETE',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+  }).catch(()=>{});
+}
+
+async function updateUserMetadata(patch){
+  const token = localStorage.getItem('sb_token');
+  const r = await fetch(`${SUPABASE_URL}/auth/v1/user`,{
+    method:'PUT',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+    body: JSON.stringify({ data: patch })
+  });
+  const data = await r.json();
+  if(!r.ok) throw new Error(data.error_description || data.msg || 'Хадгалж чадсангүй');
+  localStorage.setItem('sb_user', JSON.stringify(data));
+  return data;
+}
+
+async function uploadAvatar(e) {
+  const file = e.target.files[0];
+  if(!file) return;
+  const img = document.getElementById('avatarImg');
+  const textEl = document.getElementById('avatarText');
+  try{
+    textEl.style.display='none';
+    img.style.display='block';
+    img.src = URL.createObjectURL(file); // шуурхай preview
+
+    const oldUser = JSON.parse(localStorage.getItem('sb_user')||'{}');
+    const oldAvatar = oldUser.user_metadata && oldUser.user_metadata.avatar_url;
+
+    const url = await uploadToStorage('avatars', file);
+    await updateUserMetadata({ avatar_url: url });
+    img.src = url;
+    document.getElementById('avaDelBtn').style.display='inline';
+
+    if(oldAvatar) deleteFromStorage('avatars', oldAvatar);
+  }catch(err){
+    alert('Автар хадгалахад алдаа гарлаа: ' + err.message);
+    img.style.display='none';
+    textEl.style.display='block';
+  }
+}
+
+async function deleteAvatar(){
+  if(!confirm('Профайл зургийг устгах уу?')) return;
+  try{
+    const user = JSON.parse(localStorage.getItem('sb_user')||'{}');
+    const oldAvatar = user.user_metadata && user.user_metadata.avatar_url;
+    await updateUserMetadata({ avatar_url: null });
+    if(oldAvatar) await deleteFromStorage('avatars', oldAvatar);
+    document.getElementById('avatarImg').style.display='none';
+    document.getElementById('avatarImg').src='';
+    document.getElementById('avatarText').style.display='block';
+    document.getElementById('avaDelBtn').style.display='none';
+  }catch(err){
+    alert('Устгахад алдаа гарлаа: ' + err.message);
+  }
+}
+
+async function uploadCover(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const img = document.getElementById('coverImg');
+  try{
+    img.style.display='block';
+    img.src = URL.createObjectURL(file);
+
+    const oldUser = JSON.parse(localStorage.getItem('sb_user')||'{}');
+    const oldCover = oldUser.user_metadata && oldUser.user_metadata.cover_url;
+
+    const url = await uploadToStorage('covers', file);
+    await updateUserMetadata({ cover_url: url });
+    img.src = url;
+    document.getElementById('coverActions').style.display='flex';
+
+    if(oldCover) deleteFromStorage('covers', oldCover);
+  }catch(err){
+    alert('Ковер зураг хадгалахад алдаа гарлаа: ' + err.message);
+    img.style.display='none';
+  }
+}
+
+async function deleteCover(){
+  if(!confirm('Ковер зургийг устгах уу?')) return;
+  try{
+    const user = JSON.parse(localStorage.getItem('sb_user')||'{}');
+    const oldCover = user.user_metadata && user.user_metadata.cover_url;
+    await updateUserMetadata({ cover_url: null });
+    if(oldCover) await deleteFromStorage('covers', oldCover);
+    document.getElementById('coverImg').style.display='none';
+    document.getElementById('coverImg').src='';
+    document.getElementById('coverActions').style.display='none';
+  }catch(err){
+    alert('Устгахад алдаа гарлаа: ' + err.message);
+  }
 }
 
 // ===== EDIT MODAL =====
