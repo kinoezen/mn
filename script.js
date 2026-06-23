@@ -547,13 +547,32 @@ async function loadNewsBySubCategory(subCategory) {
   }
 }
 
+// ===== МЭДЭЭ PAGINATION =====
+const NEWS_PER_PAGE = 4;
+let allNewsData = [];
+let newsPage = 1;
+
 function renderNewsList(news) {
   const list = document.getElementById('news-list');
   if (!news || news.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="icon">📰</div><p>Мэдээ байхгүй байна</p></div>';
+    document.getElementById('news-pagination').innerHTML = '';
     return;
   }
-  list.innerHTML = news.map(item => `
+
+  // Бүх мэдээг хадгалж pagination хийнэ
+  allNewsData = news;
+  newsPage = 1;
+  renderNewsPage();
+}
+
+function renderNewsPage() {
+  const list = document.getElementById('news-list');
+  const totalPages = Math.ceil(allNewsData.length / NEWS_PER_PAGE) || 1;
+  const start = (newsPage - 1) * NEWS_PER_PAGE;
+  const pageNews = allNewsData.slice(start, start + NEWS_PER_PAGE);
+
+  list.innerHTML = pageNews.map(item => `
     <div class="news-card" onclick="location.href='news-detail.html?id=${item.id}'">
       <div class="news-img">
         ${item.thumbnail
@@ -571,6 +590,27 @@ function renderNewsList(news) {
       </div>
     </div>
   `).join('');
+
+  // Pagination товчнууд
+  renderNewsPagination(totalPages);
+
+  // Хуудас солих үед дээш гүйлгэнэ
+  const newsSection = document.getElementById('news');
+  if (newsSection && newsPage > 1) {
+    newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function renderNewsPagination(totalPages) {
+  const container = document.getElementById('news-pagination');
+  if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+  let html = `<button onclick="newsPage=1;renderNewsPage()" ${newsPage===1?'disabled':''}>«</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-num ${i===newsPage?'active':''}" onclick="newsPage=${i};renderNewsPage()">${i}</button>`;
+  }
+  html += `<button onclick="newsPage=${totalPages};renderNewsPage()" ${newsPage===totalPages?'disabled':''}>»</button>`;
+  container.innerHTML = html;
 }
 
 async function loadNews() {
