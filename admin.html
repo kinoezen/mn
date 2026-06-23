@@ -109,6 +109,17 @@ tr:last-child td{border-bottom:none;}
 .back-to-dash:hover{background:rgba(74,222,128,0.08);}
 .back-to-dash svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;}
 .page-title-text{font-size:20px;font-weight:700;}
+/* ===== ПРОГРАММ УДИРДЛАГА ===== */
+.prog-toggle-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
+.prog-toggle{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#12121e;border-radius:8px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;user-select:none;flex:1;min-width:130px;}
+.pt-track{width:36px;height:20px;background:rgba(255,255,255,0.12);border-radius:10px;position:relative;transition:background 0.2s;flex-shrink:0;}
+.pt-track.on{background:#4ade80;}
+.pt-thumb{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform 0.2s;}
+.pt-track.on .pt-thumb{transform:translateX(16px);}
+.pt-label{font-size:12px;color:rgba(255,255,255,0.6);font-weight:600;}
+.pt-badge{font-size:10px;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.35);font-weight:700;margin-left:auto;}
+.badge-orange{background:rgba(249,115,22,0.15)!important;color:#fb923c!important;}
+.badge-purple{background:rgba(168,85,247,0.15)!important;color:#c084fc!important;}
 </style>
 </head>
 <body>
@@ -137,6 +148,8 @@ tr:last-child td{border-bottom:none;}
     <div class="nav-item" onclick="showPage('list-movies',this)"><span>📋</span> Кино жагсаалт</div>
     <div class="nav-item" onclick="showPage('list-news',this)"><span>📋</span> Мэдээ жагсаалт</div>
     <div class="nav-item" onclick="showPage('list-ads',this)"><span>📋</span> Реклам жагсаалт</div>
+    <div class="nav-item" onclick="showPage('programs',this)"><span>💻</span> Программ нэмэх</div>
+    <div class="nav-item" onclick="showPage('list-programs',this)"><span>📋</span> Программ жагсаалт</div>
     <div class="sidebar-bottom">
       <button class="back-btn" onclick="history.back()">🔙 Буцах</button>
       <a class="view-site-btn" href="index.html" target="_blank">🌐 Сайт руу харах</a>
@@ -157,6 +170,7 @@ tr:last-child td{border-bottom:none;}
         <div class="stat-card"><div class="stat-icon">❤️</div><div class="stat-label">Нийт like</div><div class="stat-val" id="st-likes">...</div></div>
         <div class="stat-card"><div class="stat-icon">🗓</div><div class="stat-label">Өнөөдрийн огноо</div><div class="stat-val" id="st-date" style="font-size:13px;margin-top:4px;">...</div></div>
         <div class="stat-card"><div class="stat-icon">🌐</div><div class="stat-label">Нийт агуулга</div><div class="stat-val" id="st-total">...</div></div>
+        <div class="stat-card"><div class="stat-icon">💻</div><div class="stat-label">Нийт программ</div><div class="stat-val" id="st-programs">...</div></div>
       </div>
       <div class="form-card">
         <div class="form-title">🚀 Хурдан холбоосууд</div>
@@ -167,6 +181,8 @@ tr:last-child td{border-bottom:none;}
           <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#f472b6,#ec4899)" onclick="showPage('lessons',null)">+ Сургалт нэмэх</button>
           <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#e63946,#f4a261)" onclick="showPage('list-movies',null)">📋 Кино жагсаалт</button>
           <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#06b6d4,#3b82f6)" onclick="showPage('list-news',null)">📋 Мэдээ жагсаалт</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#a855f7,#ec4899)" onclick="showPage('programs',null)">+ Программ нэмэх</button>
+          <button class="form-btn" style="margin-top:0;background:linear-gradient(90deg,#0891b2,#6366f1)" onclick="showPage('list-programs',null)">📋 Программ жагсаалт</button>
         </div>
       </div>
       <div class="form-card">
@@ -546,6 +562,119 @@ tr:last-child td{border-bottom:none;}
         <div id="ads-table"><div class="loading">Ачааллаж байна...</div></div>
       </div>
     </div>
+
+    <!-- ==================== ПРОГРАММ НЭМЭХ ==================== -->
+    <div class="page" id="page-programs">
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">💻 Программ нэмэх</span>
+      </div>
+      <div class="form-card">
+        <div class="form-title">➕ Шинэ программ</div>
+        <div class="form-grid">
+          <div class="form-group full"><label class="form-label">Программын нэр *</label><input class="form-inp" id="pr-title" placeholder="жш: КиноЭзэн Плеер"></div>
+          <div class="form-group"><label class="form-label">Ангилал</label>
+            <select class="form-inp" id="pr-cat">
+              <option>Кино</option><option>Хэрэгсэл</option><option>AI</option><option>Тоглоом</option><option>Бусад</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Үнэ ₮ (0 бол үнэгүй)</label>
+            <input class="form-inp" id="pr-price" type="number" min="0" placeholder="0" value="0">
+          </div>
+          <div class="form-group"><label class="form-label">Анхны үнэ ₮ (хямдрал харуулах)</label>
+            <input class="form-inp" id="pr-orig-price" type="number" min="0" placeholder="жш: 25000">
+          </div>
+          <div class="form-group"><label class="form-label">Татах URL (үнэгүй бол)</label>
+            <input class="form-inp" id="pr-download-url" placeholder="https://...">
+          </div>
+          <div class="form-group"><label class="form-label">Худалдах URL (төлбөртэй бол)</label>
+            <input class="form-inp" id="pr-buy-url" placeholder="https://...">
+          </div>
+          <div class="form-group full"><label class="form-label">Тайлбар</label>
+            <textarea class="form-inp" id="pr-desc" placeholder="Программын дэлгэрэнгүй тайлбар..." style="min-height:90px;"></textarea>
+          </div>
+          <div class="form-group full"><label class="form-label">Онцлог функцүүд (мөр бүр нэг функц)</label>
+            <textarea class="form-inp" id="pr-features" placeholder="Монгол хадмал дэмжлэг&#10;Бүх видео формат&#10;Даркмод горим" style="min-height:80px;"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Постер зураг</label>
+            <div class="upload-tabs">
+              <div class="upload-tab on" onclick="switchTab('pr-img','upload',this)">📁 Файл оруулах</div>
+              <div class="upload-tab" onclick="switchTab('pr-img','url',this)">🔗 URL</div>
+            </div>
+            <div id="pr-img-upload">
+              <div class="upload-area" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'pr-img-file','pr-img-preview')">
+                <input type="file" id="pr-img-file" accept="image/*" onchange="previewFile(this,'pr-img-preview','image')">
+                <div class="upload-icon">🖼️</div>
+                <div class="upload-text">Зураг сонгох эсвэл чирж оруулах</div>
+                <div class="upload-hint">JPG, PNG, WEBP — 5MB хүртэл</div>
+              </div>
+              <div class="upload-preview" id="pr-img-preview">
+                <img id="pr-img-preview-img" src="" alt="preview">
+                <div class="upload-preview-name" id="pr-img-preview-name"></div>
+              </div>
+              <div class="upload-progress" id="pr-img-progress">
+                <div class="progress-bar"><div class="progress-fill" id="pr-img-fill"></div></div>
+                <div class="progress-text" id="pr-img-ptext">Ачааллаж байна...</div>
+              </div>
+            </div>
+            <div id="pr-img-url" style="display:none;">
+              <input class="form-inp" id="pr-thumb-url" placeholder="https://...jpg">
+            </div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Тэмдэглэгээ</label>
+            <div class="prog-toggle-row">
+              <label class="prog-toggle" onclick="toggleProg('pr-is-new')">
+                <div class="pt-track on" id="track-pr-is-new"><div class="pt-thumb"></div></div>
+                <span class="pt-label">Шинэ</span>
+                <span class="pt-badge" id="badge-pr-is-new" style="background:rgba(74,222,128,0.18);color:#4ade80;">Идэвхтэй</span>
+                <input type="hidden" id="pr-is-new" value="true">
+              </label>
+              <label class="prog-toggle" onclick="toggleProg('pr-is-hot')">
+                <div class="pt-track" id="track-pr-is-hot"><div class="pt-thumb"></div></div>
+                <span class="pt-label">🔥 Хит</span>
+                <span class="pt-badge" id="badge-pr-is-hot">Идэвхгүй</span>
+                <input type="hidden" id="pr-is-hot" value="false">
+              </label>
+              <label class="prog-toggle" onclick="toggleProg('pr-is-sale')">
+                <div class="pt-track" id="track-pr-is-sale"><div class="pt-thumb"></div></div>
+                <span class="pt-label">Хямдрал</span>
+                <span class="pt-badge" id="badge-pr-is-sale">Идэвхгүй</span>
+                <input type="hidden" id="pr-is-sale" value="false">
+              </label>
+              <label class="prog-toggle" onclick="toggleProg('pr-is-active')">
+                <div class="pt-track on" id="track-pr-is-active"><div class="pt-thumb"></div></div>
+                <span class="pt-label">Нийтэлсэн</span>
+                <span class="pt-badge" id="badge-pr-is-active" style="background:rgba(74,222,128,0.18);color:#4ade80;">Идэвхтэй</span>
+                <input type="hidden" id="pr-is-active" value="true">
+              </label>
+            </div>
+          </div>
+        </div>
+        <button class="form-btn" onclick="addProgram()">💾 Программ нэмэх</button>
+        <div class="success-msg" id="pr-ok">✅ Программ амжилттай нэмэгдлээ!</div>
+        <div class="error-msg2" id="pr-err">❌ Алдаа гарлаа.</div>
+      </div>
+    </div>
+
+    <!-- ==================== ПРОГРАММ ЖАГСААЛТ ==================== -->
+    <div class="page" id="page-list-programs">
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📋 Программ жагсаалт</span>
+      </div>
+      <div class="table-card">
+        <div class="table-head"><div class="table-head-title">Бүх программууд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadProgramList()">🔄 Шинэчлэх</button></div>
+        <div id="program-table"><div class="loading">Ачааллаж байна...</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -796,6 +925,7 @@ function showPage(name,el){
   if(name==='list-movies')loadMovieList();
   if(name==='list-news')loadNewsList();
   if(name==='list-ads')loadAdList();
+  if(name==='list-programs')loadProgramList();
   if(name==='dashboard'){loadStats();loadDashPreviews();}
 }
 function openModal(id){document.getElementById(id).classList.add('open');}
@@ -829,12 +959,13 @@ async function loadStats(){
   try{
     const now=new Date();
     document.getElementById('st-date').textContent=now.getFullYear()+'.'+(now.getMonth()+1).toString().padStart(2,'0')+'.'+now.getDate().toString().padStart(2,'0');
-    const[movies,news,ads,lessons,allMovies]=await Promise.all([
+    const[movies,news,ads,lessons,allMovies,programs]=await Promise.all([
       supaFetch('movies','select=id'),
       supaFetch('news','select=id'),
       supaFetch('ads','active=eq.true&select=id'),
       supaFetch('lessons','select=id'),
-      supaFetch('movies','select=views,likes,featured')
+      supaFetch('movies','select=views,likes,featured'),
+      supaFetch('programs','select=id&is_active=eq.true')
     ]);
     const mc=Array.isArray(movies)?movies.length:0;
     const nc=Array.isArray(news)?news.length:0;
@@ -852,6 +983,7 @@ async function loadStats(){
     document.getElementById('st-likes').textContent=totalLikes;
     document.getElementById('st-featured').textContent=featuredCount;
     document.getElementById('st-total').textContent=mc+nc+lc;
+    document.getElementById('st-programs').textContent=Array.isArray(programs)?programs.length:0;
   }catch(e){console.error('Stats error:',e);}
 }
 
@@ -1183,6 +1315,213 @@ async function saveAd(){
   if(ok){document.getElementById('edit-a-ok').style.display='block';setTimeout(()=>{closeModal('modal-ad');loadAdList();loadStats();},1200);}
   else{document.getElementById('edit-a-err').style.display='block';}
 }
+
+// ============================================================
+// ПРОГРАММ — TOGGLE
+// ============================================================
+function toggleProg(id){
+  const hidden=document.getElementById(id);
+  const next=hidden.value!=='true';
+  hidden.value=String(next);
+  const track=document.getElementById('track-'+id);
+  const badge=document.getElementById('badge-'+id);
+  if(track)track.classList.toggle('on',next);
+  if(badge){badge.textContent=next?'Идэвхтэй':'Идэвхгүй';badge.style.background=next?'rgba(74,222,128,0.18)':'';badge.style.color=next?'#4ade80':'';}
+}
+function setProgToggle(id,val){
+  const hidden=document.getElementById(id);if(!hidden)return;
+  hidden.value=String(val);
+  const track=document.getElementById('track-'+id);
+  const badge=document.getElementById('badge-'+id);
+  if(track)track.classList.toggle('on',val);
+  if(badge){badge.textContent=val?'Идэвхтэй':'Идэвхгүй';badge.style.background=val?'rgba(74,222,128,0.18)':'';badge.style.color=val?'#4ade80':'';}
+}
+
+// ============================================================
+// ПРОГРАММ НЭМЭХ
+// ============================================================
+async function addProgram(){
+  const title=document.getElementById('pr-title').value.trim();
+  if(!title){alert('Программын нэрийг оруулна уу!');return;}
+  const btn=event.target;btn.textContent='⏳ Хадгалаж байна...';btn.disabled=true;
+  try{
+    let thumbUrl=null;
+    const prImgUpload=document.getElementById('pr-img-upload');
+    if(prImgUpload&&prImgUpload.style.display!=='none'){
+      const imgFile=document.getElementById('pr-img-file');
+      if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'programs','pr-img');
+    }else{thumbUrl=document.getElementById('pr-thumb-url').value.trim()||null;}
+    const ok=await supaInsert('programs',{
+      title,
+      category:document.getElementById('pr-cat').value,
+      description:document.getElementById('pr-desc').value,
+      features:document.getElementById('pr-features').value,
+      thumbnail:thumbUrl,
+      download_url:document.getElementById('pr-download-url').value.trim()||null,
+      buy_url:document.getElementById('pr-buy-url').value.trim()||null,
+      price:parseInt(document.getElementById('pr-price').value)||0,
+      original_price:parseInt(document.getElementById('pr-orig-price').value)||null,
+      is_new:document.getElementById('pr-is-new').value==='true',
+      is_hot:document.getElementById('pr-is-hot').value==='true',
+      is_sale:document.getElementById('pr-is-sale').value==='true',
+      is_active:document.getElementById('pr-is-active').value==='true'
+    });
+    if(ok){
+      document.getElementById('pr-ok').style.display='block';
+      ['pr-title','pr-desc','pr-features','pr-download-url','pr-buy-url','pr-thumb-url','pr-orig-price'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+      document.getElementById('pr-price').value='0';
+      const pp=document.getElementById('pr-img-preview');if(pp)pp.style.display='none';
+      setProgToggle('pr-is-new',true);setProgToggle('pr-is-hot',false);setProgToggle('pr-is-sale',false);setProgToggle('pr-is-active',true);
+      setTimeout(()=>document.getElementById('pr-ok').style.display='none',3000);
+      loadStats();
+    }else{document.getElementById('pr-err').style.display='block';}
+  }catch(e){document.getElementById('pr-err').textContent='❌ Алдаа: '+e.message;document.getElementById('pr-err').style.display='block';}
+  btn.textContent='💾 Программ нэмэх';btn.disabled=false;
+}
+
+// ============================================================
+// ПРОГРАММ ЖАГСААЛТ
+// ============================================================
+async function loadProgramList(){
+  const el=document.getElementById('program-table');if(!el)return;
+  el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
+  try{
+    const programs=await supaFetch('programs','order=created_at.desc');
+    if(!Array.isArray(programs)||programs.length===0){el.innerHTML='<div class="loading">Программ байхгүй байна</div>';return;}
+    el.innerHTML=`<table><thead><tr><th>Нэр</th><th>Ангилал</th><th>Зураг</th><th>Үнэ</th><th>Тэмдэглэгээ</th><th>Үзэлт</th><th>Таталт</th><th>Нийтлэл</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${programs.map(p=>`<tr>
+      <td style="font-weight:600;">${p.title}</td>
+      <td><span class="badge badge-blue">${p.category||'—'}</span></td>
+      <td>${p.thumbnail?`<img src="${p.thumbnail}" style="width:50px;height:32px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+      <td style="font-weight:700;color:${(!p.price||p.price==0)?'#60a5fa':'#4ade80'};">${(!p.price||p.price==0)?'ҮНЭГҮЙ':parseInt(p.price).toLocaleString()+'₮'}</td>
+      <td style="white-space:nowrap;">${p.is_new?'<span class="badge badge-green" style="margin-right:3px;">Шинэ</span>':''}${p.is_hot?'<span class="badge badge-orange" style="margin-right:3px;">🔥</span>':''}${p.is_sale?'<span class="badge badge-purple">Хямд</span>':''}</td>
+      <td>👁 ${p.views||0}</td>
+      <td>↓ ${p.downloads||0}</td>
+      <td>${p.is_active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
+      <td>${new Date(p.created_at).toLocaleDateString('mn-MN')}</td>
+      <td style="white-space:nowrap;">
+        <button class="action-btn edit-btn" onclick="openEditProgram(${JSON.stringify(p).replace(/"/g,'&quot;')})">✏️ Засах</button>
+        <button class="action-btn del-btn" onclick="deleteProgram('${p.id}')">🗑 Устгах</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
+}
+async function deleteProgram(id){if(!confirm('Программыг устгах уу?'))return;await supaDelete('programs',id);loadProgramList();loadStats();}
+
+function openEditProgram(p){
+  document.getElementById('edit-pr-id').value=p.id;
+  document.getElementById('edit-pr-title').value=p.title||'';
+  document.getElementById('edit-pr-cat').value=p.category||'Бусад';
+  document.getElementById('edit-pr-price').value=p.price||0;
+  document.getElementById('edit-pr-orig-price').value=p.original_price||'';
+  document.getElementById('edit-pr-download-url').value=p.download_url||'';
+  document.getElementById('edit-pr-buy-url').value=p.buy_url||'';
+  document.getElementById('edit-pr-thumb').value=p.thumbnail||'';
+  document.getElementById('edit-pr-desc').value=p.description||'';
+  document.getElementById('edit-pr-features').value=p.features||'';
+  setProgToggle('edit-pr-is-new',!!p.is_new);
+  setProgToggle('edit-pr-is-hot',!!p.is_hot);
+  setProgToggle('edit-pr-is-sale',!!p.is_sale);
+  setProgToggle('edit-pr-is-active',p.is_active!==false);
+  document.getElementById('edit-pr-ok').style.display='none';
+  document.getElementById('edit-pr-err').style.display='none';
+  openModal('modal-program');
+}
+async function saveProgram(){
+  const id=document.getElementById('edit-pr-id').value;
+  const title=document.getElementById('edit-pr-title').value.trim();
+  if(!title){alert('Нэр оруулна уу!');return;}
+  let thumbUrl=document.getElementById('edit-pr-thumb').value.trim()||null;
+  const imgFile=document.getElementById('edit-pr-img-file');
+  if(imgFile&&imgFile.files.length>0)thumbUrl=await uploadFile(imgFile.files[0],'programs','edit-pr-img');
+  const ok=await supaUpdate('programs',id,{
+    title,
+    category:document.getElementById('edit-pr-cat').value,
+    price:parseInt(document.getElementById('edit-pr-price').value)||0,
+    original_price:parseInt(document.getElementById('edit-pr-orig-price').value)||null,
+    download_url:document.getElementById('edit-pr-download-url').value.trim()||null,
+    buy_url:document.getElementById('edit-pr-buy-url').value.trim()||null,
+    thumbnail:thumbUrl,
+    description:document.getElementById('edit-pr-desc').value,
+    features:document.getElementById('edit-pr-features').value,
+    is_new:document.getElementById('edit-pr-is-new').value==='true',
+    is_hot:document.getElementById('edit-pr-is-hot').value==='true',
+    is_sale:document.getElementById('edit-pr-is-sale').value==='true',
+    is_active:document.getElementById('edit-pr-is-active').value==='true'
+  });
+  if(ok){document.getElementById('edit-pr-ok').style.display='block';setTimeout(()=>{closeModal('modal-program');loadProgramList();loadStats();},1200);}
+  else{document.getElementById('edit-pr-err').style.display='block';}
+}
 </script>
+
+<!-- ==================== ПРОГРАММ EDIT MODAL ==================== -->
+<div class="modal-overlay" id="modal-program">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Программ засах<button class="modal-close" onclick="closeModal('modal-program')">✕</button></div>
+    <input type="hidden" id="edit-pr-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-pr-title"></div>
+      <div class="form-group"><label class="form-label">Ангилал</label>
+        <select class="form-inp" id="edit-pr-cat"><option>Кино</option><option>Хэрэгсэл</option><option>AI</option><option>Тоглоом</option><option>Бусад</option></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label class="form-label">Үнэ ₮</label><input class="form-inp" id="edit-pr-price" type="number" min="0"></div>
+        <div class="form-group"><label class="form-label">Анхны үнэ ₮</label><input class="form-inp" id="edit-pr-orig-price" type="number" min="0"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Татах URL</label><input class="form-inp" id="edit-pr-download-url"></div>
+      <div class="form-group"><label class="form-label">Худалдах URL</label><input class="form-inp" id="edit-pr-buy-url"></div>
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-pr-img-file','edit-pr-img-preview')">
+          <input type="file" id="edit-pr-img-file" accept="image/*" onchange="previewFile(this,'edit-pr-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-pr-img-preview">
+            <img id="edit-pr-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-pr-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-pr-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-pr-desc" style="min-height:70px;"></textarea></div>
+      <div class="form-group"><label class="form-label">Функцүүд (мөр бүр нэг)</label><textarea class="form-inp" id="edit-pr-features" style="min-height:70px;"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Тэмдэглэгээ</label>
+        <div class="prog-toggle-row">
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-new')">
+            <div class="pt-track" id="track-edit-pr-is-new"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Шинэ</span>
+            <span class="pt-badge" id="badge-edit-pr-is-new">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-new" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-hot')">
+            <div class="pt-track" id="track-edit-pr-is-hot"><div class="pt-thumb"></div></div>
+            <span class="pt-label">🔥 Хит</span>
+            <span class="pt-badge" id="badge-edit-pr-is-hot">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-hot" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-sale')">
+            <div class="pt-track" id="track-edit-pr-is-sale"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Хямдрал</span>
+            <span class="pt-badge" id="badge-edit-pr-is-sale">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-sale" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-active')">
+            <div class="pt-track on" id="track-edit-pr-is-active"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Нийтэлсэн</span>
+            <span class="pt-badge" id="badge-edit-pr-is-active" style="background:rgba(74,222,128,0.18);color:#4ade80;">Идэвхтэй</span>
+            <input type="hidden" id="edit-pr-is-active" value="true">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-program')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveProgram()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-pr-ok" style="margin-top:8px;">✅ Амжилттай!</div>
+    <div class="error-msg2" id="edit-pr-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
+  </div>
+</div>
 </body>
 </html>
