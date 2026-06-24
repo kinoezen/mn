@@ -246,9 +246,72 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-heigh
 
 @media(max-width:1024px){.programs-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){
-  .nav-links{display:none;}.hero{min-height:260px;padding:32px 16px 24px;}.hero-title{font-size:38px;}
-  .float-wrap{display:none;}.filter-search{display:none;}.programs-grid{grid-template-columns:1fr;}
-  .modal-feats{grid-template-columns:1fr;}.sale-banner{gap:10px;}
+  /* NAV */
+  .nav{padding:8px 14px;}
+  .nav-links{display:none;}
+  .nav-right{display:none;}
+  .nav-mobile-menu{display:flex;align-items:center;gap:8px;margin-left:auto;}
+  .btn-hamburger{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer;padding:6px 10px;line-height:1;}
+  .btn-back-mobile{padding:6px 12px;border-radius:8px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--accent);font-size:11px;font-family:var(--font-b);font-weight:700;cursor:pointer;white-space:nowrap;}
+
+  /* MOBILE MENU DRAWER */
+  .mobile-drawer{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.6);}
+  .mobile-drawer.open{display:block;}
+  .mobile-drawer-inner{position:absolute;top:0;right:0;width:240px;height:100%;background:var(--bg2);border-left:1px solid var(--border);padding:20px 16px;display:flex;flex-direction:column;gap:6px;}
+  .mobile-drawer-close{align-self:flex-end;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;margin-bottom:8px;}
+  .mobile-drawer a{display:block;padding:10px 12px;color:var(--text2);text-decoration:none;font-size:14px;font-weight:600;border-radius:8px;transition:all 0.2s;}
+  .mobile-drawer a:hover,.mobile-drawer a.active{color:var(--accent);background:rgba(74,222,128,0.08);}
+  .mobile-drawer-login{margin-top:10px;padding:10px;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:13px;font-family:var(--font-b);font-weight:700;cursor:pointer;width:100%;}
+
+  /* HERO */
+  .hero{min-height:auto;padding:28px 16px 20px;}
+  .hero-title{font-size:34px;}
+  .hero-sub{font-size:13px;margin-bottom:16px;}
+  .float-wrap{display:block;}
+  .float-code{top:5%;left:1%;opacity:0.12;transform:scale(0.65);transform-origin:top left;}
+  .float-chart{bottom:5%;right:1%;opacity:0.12;transform:scale(0.6);transform-origin:bottom right;}
+  .float-shield{display:none;}
+  .float-gear{display:none;}
+  .particle{display:none;}
+  .hero-stats{gap:14px;flex-wrap:wrap;justify-content:center;}
+  .hero-stat-val{font-size:22px;}
+  .hero-stat-label{font-size:10px;}
+
+  /* SALE BANNER */
+  .sale-banner{padding:10px 14px;gap:8px;}
+  .sale-text{font-size:12px;}
+  .cd-num{font-size:16px;}
+  .cd-block{min-width:36px;padding:3px 7px;}
+
+  /* FILTER */
+  .filter-bar{padding:10px 14px;gap:8px;}
+  .filter-search{display:none;}
+  .filter-pills{gap:6px;}
+  .fpill{padding:5px 11px;font-size:11px;}
+
+  /* SORT */
+  .sort-bar{padding:8px 14px;gap:6px;overflow-x:auto;flex-wrap:nowrap;}
+  .sort-btn{font-size:10px;padding:4px 10px;white-space:nowrap;}
+
+  /* PROGRAMS */
+  .programs-section{padding:14px 14px 28px;}
+  .programs-grid{grid-template-columns:1fr;gap:14px;}
+
+  /* MODAL */
+  .modal-feats{grid-template-columns:1fr;}
+  .modal-box{border-radius:14px;}
+
+  /* BOTTOM NAV — нүүр хуудасных шиг */
+  .bottom-nav-mobile{display:flex;}
+
+  /* FOOTER */
+  .footer{padding:14px 16px;}
+  body{padding-bottom:70px;}
+}
+@media(min-width:769px){
+  .nav-mobile-menu{display:none;}
+  .mobile-drawer{display:none!important;}
+  .bottom-nav-mobile{display:none;}
 }
 </style>
 </head>
@@ -284,7 +347,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-heigh
     <button class="btn-back" onclick="location.href='index.html'">← Нүүр хуудас</button>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
   </div>
+  <!-- Mobile -->
+  <div class="nav-mobile-menu">
+    <button class="btn-back-mobile" onclick="location.href='index.html'">← Нүүр</button>
+    <button class="btn-hamburger" onclick="openDrawer()">☰</button>
+  </div>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobile-drawer" onclick="closeDrawer()">
+  <div class="mobile-drawer-inner" onclick="event.stopPropagation()">
+    <button class="mobile-drawer-close" onclick="closeDrawer()">✕</button>
+    <a href="index.html">🏠 Нүүр</a>
+    <a href="movies.html">🎬 Кинонууд</a>
+    <a href="lessons.html">📚 Сургалт</a>
+    <a href="programs.html" class="active">💻 Программ</a>
+    <a href="services.html">⚙️ Үйлчилгээ</a>
+    <a href="profile.html">👤 Профайл</a>
+    <button class="mobile-drawer-login" onclick="location.href='login.html'">Нэвтрэх</button>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -706,7 +788,35 @@ async function loadPrograms(){
   if(hasSale)startCountdown();
 }
 
-loadPrograms();
+<!-- BOTTOM NAV — нүүр хуудасных шиг яг ижил -->
+<nav class="bottom-nav-mobile" style="position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;">
+  <div style="display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;">
+    <a href="index.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:9px;font-weight:600;font-family:var(--font-b);">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;">🏠</div>
+      <span>Нүүр</span>
+    </a>
+    <a href="lessons.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:9px;font-weight:600;font-family:var(--font-b);">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;">📚</div>
+      <span>Сургалт</span>
+    </a>
+    <a href="programs.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:#4ade80;text-decoration:none;font-size:9px;font-weight:600;font-family:var(--font-b);">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;">💻</div>
+      <span>Программ</span>
+    </a>
+    <a href="services.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:9px;font-weight:600;font-family:var(--font-b);">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;">⚙️</div>
+      <span>Үйлчилгээ</span>
+    </a>
+    <a href="profile.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:9px;font-weight:600;font-family:var(--font-b);">
+      <div style="width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;">👤</div>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+function openDrawer(){document.getElementById('mobile-drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('mobile-drawer').classList.remove('open');document.body.style.overflow='';}
 </script>
 </body>
 </html>
