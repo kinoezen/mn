@@ -1,51 +1,54 @@
+// ============================================================
+// functions/api/name-translate.js
+// URL: POST /api/name-translate
+// Body: { names: string, sourceLang: string }
+// (names - мөр тус бүрт нэг нэр)
+//
+// _shared/ai.js-ийн callAI()-г ашигладаг: Gemini->Groq fallback.
+// ============================================================
+import { callAI, corsJson, corsOptions } from '../_shared/ai.js';
+
+const LANG_NAMES = { en: 'Англи', ru: 'Орос', zh: 'Хятад', ja: 'Япон' };
+
+export async function onRequestOptions() {
+  return corsOptions();
+}
+
 export async function onRequestPost({ request, env }) {
   try {
-    const { name, direction } = await request.json();
-    if (!name) {
-      return new Response(JSON.stringify({ error: "Нэр оруулна уу" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
+    const { names, sourceLang } = await request.json();
+
+    if (!names || !names.trim()) {
+      return corsJson({ error: 'Нэрс оруулна уу' }, 400);
     }
 
-    const apiKey = env.GEMINI_API_KEY;
-    const dir = direction || "mn-to-en";
+    const nameList = names.split('\n').map(n => n.trim()).filter(Boolean);
+    if (nameList.length === 0) {
+      return corsJson({ error: 'Хэвийн нэр олдсонгуй' }, 400);
+    }
 
-    const prompt =
-      dir === "mn-to-en"
-        ? `Дараах Монгол кирилл нэрийг латин үсгээр бич мөн Англи утгыг орчуул.\n\nНэр: ${name}\n\nЗөвхөн JSON форматаар хариул, өөр юм бичихгүй:\n{"transliteration": "латин үсгээр", "translation": "англи утга", "alternatives": ["өөр хувилбар"]}`
-        : `Дараах латин/англи нэрийг ЗААВАЛ Монгол КИРИЛЛ үсгээр бич. Латин үсгээр бичихийг ХОРИГЛОНО.\n\nНэр: ${name}\n\nЗөвхөн JSON форматаар хариул, өөр юм бичихгүй:\n{"mongolian": "кирилл үсгээр бичсэн нэр", "alternatives": ["өөр кирилл хувилбар"]}`;
+    const langName = LANG_NAMES[sourceLang] || sourceLang || 'Англи';
 
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.3 },
-        }),
-      }
-    );
+    const systemPrompt = `Чи кино/телевизийн дүрийн нэр орчуулагч. Доорх ${langName} хэлний хувь хүний нэрсийг Монгол хэлний стандарт дуудлагын дүрмээр (кириллээр) орчуул. Бодит дуудлагад ойртуулж бич, шууд үсэг хөрвүүлэлт хийхгуй.
 
-    const data = await res.json();
-    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
-    const clean = raw.replace(/```json|```/g, "").trim();
+Зөвхөн JSON форматаар хариул, markdown code fence ашиглах хэрэггуй:
+{"translations": [{"original": "эх нэр", "translated": "монгол орчуулга"}, ...]}`;
+
+    const { text: rawText } = await callAI(env, systemPrompt, nameList.join('\n'), {
+      temperature: 0.3,
+      maxOutputTokens: 2000
+    });
 
     let result;
     try {
+      const clean = rawText.replace(/```json|```/g, '').trim();
       result = JSON.parse(clean);
     } catch {
-      result = { result: clean };
+      result = { translations: nameList.map(n => ({ original: n, translated: '(алдаа)' })) };
     }
 
-    return new Response(JSON.stringify(result), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return corsJson(result);
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return corsJson({ error: err.message }, 500);
   }
 }
