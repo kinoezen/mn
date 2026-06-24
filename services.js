@@ -387,30 +387,41 @@ function runVideoSplit() {
 // ============================================================
 // ДҮРИЙН НЭР ОРЧУУЛАГЧ
 // ============================================================
+// ШИНЭ runNameTranslate() — /api/name-translate руу бодитоор
+// fetch хийнэ. services.js доторх ХУУЧИН runNameTranslate()
+// функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ============================================================
 async function runNameTranslate() {
     const text = document.getElementById('name-translate-input')?.value.trim();
     if (!text) { showToast('⚠️ Нэрс оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
     try {
-        const names = text.split('\n').filter(n => n.trim());
-        const translations = names.map(name => `${name.trim()} → ${name.trim().substring(0, 8)} (монгол)`);
+        const sourceLang = document.getElementById('name-translate-lang')?.value || 'en';
+
+        const response = await fetch('/api/name-translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ names: text, sourceLang })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
+
         const resultDiv = document.getElementById('name-translate-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🎭 Орчуулга</div>
             <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.8);">
-                ${translations.map(t => `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">${t}</div>`).join('')}
+                ${data.translations.map(t => `<div style="padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);">${t.original} → ${t.translated}</div>`).join('')}
             </div>`;
         }
         showToast('✅ Нэрс амжилттай орчуулагдлаа!', 'success');
     } catch (error) {
         console.error('NameTranslate error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎭 Орчуулах'; }
 }
-
 // ============================================================
 // ПОСТ ҮҮСГЭГЧ
 // ============================================================
