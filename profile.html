@@ -103,6 +103,39 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 /* ===== PREMIUM ===== */
 .premium-card{background:linear-gradient(135deg,#1a1050,#2d1b69);border-radius:16px;padding:18px;margin-top:20px;border:1px solid rgba(107,127,247,0.2);position:relative;overflow:hidden;}
 .premium-card::before{content:'👑';position:absolute;right:16px;top:16px;font-size:28px;opacity:0.3;}
+
+/* ===== WALLET (кредит хэтэвч) ===== */
+.wallet-card{background:#161621;border-radius:16px;padding:18px;margin-top:18px;border:1px solid rgba(255,255,255,0.05);}
+.wallet-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+.wallet-label{font-size:12px;color:rgba(255,255,255,0.45);}
+.wallet-icon{font-size:16px;opacity:0.4;}
+.wallet-amount{font-size:30px;font-weight:700;margin-bottom:2px;color:#fff;}
+.wallet-amount .unit{font-size:14px;color:rgba(255,255,255,0.4);font-weight:500;}
+.wallet-mnt{font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+.wallet-actions{display:flex;gap:8px;}
+.wallet-btn{flex:1;padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:0.2s;}
+.wallet-btn.primary{background:#4ade80;color:#0a2a0a;}
+.wallet-btn.primary:hover{background:#3fc771;}
+.wallet-btn.secondary{background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.1);}
+.wallet-btn.secondary:hover{background:rgba(255,255,255,0.1);}
+
+.wallet-history{margin-top:14px;}
+.wallet-history-title{font-size:11px;color:rgba(255,255,255,0.35);margin-bottom:8px;padding:0 2px;text-transform:uppercase;letter-spacing:0.5px;}
+.wallet-tx{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.wallet-tx:last-child{border-bottom:none;}
+.wallet-tx-left{display:flex;align-items:center;gap:10px;}
+.wallet-tx-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.wallet-tx-icon.topup{background:rgba(74,222,128,0.15);}
+.wallet-tx-icon.usage{background:rgba(96,165,250,0.15);}
+.wallet-tx-desc{font-size:13px;font-weight:500;color:#fff;}
+.wallet-tx-date{font-size:11px;color:rgba(255,255,255,0.3);margin-top:1px;}
+.wallet-tx-amt{font-size:13px;font-weight:600;}
+.wallet-tx-amt.pos{color:#4ade80;}
+.wallet-tx-amt.neg{color:#f87171;}
+.wallet-empty{text-align:center;padding:16px 0;font-size:12px;color:rgba(255,255,255,0.3);}
+.topup-amt-btn{padding:12px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:0.2s;}
+.topup-amt-btn:hover{background:rgba(74,222,128,0.15);border-color:#4ade80;}
+.topup-amt-btn.selected{background:rgba(74,222,128,0.2);border-color:#4ade80;color:#4ade80;}
 .premium-title{font-size:15px;font-weight:600;color:#c084fc;margin-bottom:4px;}
 .premium-desc{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px;line-height:1.6;}
 .premium-btn{width:100%;padding:12px;border-radius:12px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:0.3s;}
@@ -230,6 +263,26 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
 </div>
 
+<!-- WALLET (кредит хэтэвч) -->
+<div class="wallet-card">
+<div class="wallet-top">
+<div class="wallet-label">Кредит баланс</div>
+<span class="wallet-icon">💰</span>
+</div>
+<div class="wallet-amount" id="walletBalance">—<span class="unit"> кр.</span></div>
+<div class="wallet-mnt" id="walletBalanceMnt">≈ —₮</div>
+<div class="wallet-actions">
+<button class="wallet-btn primary" onclick="openTopupModal()">➕ Цэнэглэх</button>
+<button class="wallet-btn secondary" onclick="toggleHistory()">📋 Түүх</button>
+</div>
+<div class="wallet-history" id="walletHistory" style="display:none;">
+<div class="wallet-history-title">Сүүлийн гүйлгээ</div>
+<div id="walletTxList">
+<div class="wallet-empty">Ачааллаж байна...</div>
+</div>
+</div>
+</div>
+
 <!-- MENU -->
 <div class="menu">
 <div class="mitem" onclick="location.href='services.html'">
@@ -319,6 +372,26 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 </div>
 </div>
 
+<!-- ===== MODAL (Кредит цэнэглэх) ===== -->
+<div id="topupModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;">
+<div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
+<h3 style="margin-bottom:6px;font-size:18px;">💰 Кредит цэнэглэх</h3>
+<p style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:18px;">1₮ = 1 кредит</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+<button type="button" class="topup-amt-btn" onclick="selectTopupAmount(5000)">5,000₮</button>
+<button type="button" class="topup-amt-btn" onclick="selectTopupAmount(10000)">10,000₮</button>
+<button type="button" class="topup-amt-btn" onclick="selectTopupAmount(20000)">20,000₮</button>
+<button type="button" class="topup-amt-btn" onclick="selectTopupAmount(50000)">50,000₮</button>
+</div>
+<input type="number" id="topupCustomAmount" placeholder="Эсвэл өөрөө дүн оруулна уу" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
+<div style="display:flex;gap:10px;">
+<button type="button" onclick="closeTopupModal()" style="flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);cursor:pointer;">Цуцлах</button>
+<button type="button" id="topupConfirmBtn" onclick="confirmTopup()" style="flex:2;padding:12px;border-radius:10px;background:#4ade80;border:none;color:#000;font-weight:600;cursor:pointer;">Цэнэглэх →</button>
+</div>
+<div id="topupMsg" style="display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:12px;"></div>
+</div>
+</div>
+
 <script>
 // ===== SUPABASE AUTH SESSION =====
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -383,8 +456,122 @@ async function loadSession(){
     cimg.src = user.user_metadata.cover_url;
     document.getElementById('coverDelBtn').style.display='inline';
   }
+
+  loadWallet();
 }
 loadSession();
+
+// ===== WALLET (кредит хэтэвч) =====
+async function loadWallet(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  if(!token || !userId) return;
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=credit_balance`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    const rows = await r.json();
+    const balance = (rows && rows[0] && typeof rows[0].credit_balance === 'number') ? rows[0].credit_balance : 0;
+    document.getElementById('walletBalance').innerHTML = balance.toLocaleString('mn-MN') + '<span class="unit"> кр.</span>';
+    document.getElementById('walletBalanceMnt').textContent = '≈ ' + balance.toLocaleString('mn-MN') + '₮';
+  }catch(e){
+    document.getElementById('walletBalance').innerHTML = '0<span class="unit"> кр.</span>';
+    document.getElementById('walletBalanceMnt').textContent = '≈ 0₮';
+  }
+}
+
+let historyLoaded = false;
+async function toggleHistory(){
+  const box = document.getElementById('walletHistory');
+  const isOpen = box.style.display === 'block';
+  box.style.display = isOpen ? 'none' : 'block';
+  if(!isOpen && !historyLoaded){
+    await loadTransactionHistory();
+    historyLoaded = true;
+  }
+}
+
+async function loadTransactionHistory(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  const listEl = document.getElementById('walletTxList');
+  if(!token || !userId){ listEl.innerHTML = '<div class="wallet-empty">Нэвтрэх шаардлагатай</div>'; return; }
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/credit_transactions?user_id=eq.${userId}&select=*&order=created_at.desc&limit=10`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    const txs = await r.json();
+    if(!Array.isArray(txs) || txs.length === 0){
+      listEl.innerHTML = '<div class="wallet-empty">Гүйлгээ хараахан байхгүй байна</div>';
+      return;
+    }
+    listEl.innerHTML = txs.map(tx => {
+      const isPositive = tx.amount > 0;
+      const iconClass = isPositive ? 'topup' : 'usage';
+      const icon = isPositive ? '💳' : (tx.service === 'tts' ? '🎤' : (tx.service === 'humanizer' ? '✨' : '🛒'));
+      const desc = tx.description || (isPositive ? 'Цэнэглэлт' : 'Зарцуулалт');
+      const date = new Date(tx.created_at).toLocaleString('mn-MN', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+      const amtText = (isPositive ? '+' : '') + tx.amount.toLocaleString('mn-MN');
+      return `<div class="wallet-tx">
+        <div class="wallet-tx-left">
+          <div class="wallet-tx-icon ${iconClass}">${icon}</div>
+          <div><div class="wallet-tx-desc">${escapeHtml(desc)}</div><div class="wallet-tx-date">${date}</div></div>
+        </div>
+        <div class="wallet-tx-amt ${isPositive?'pos':'neg'}">${amtText}</div>
+      </div>`;
+    }).join('');
+  }catch(e){
+    listEl.innerHTML = '<div class="wallet-empty">Ачаалахад алдаа гарлаа</div>';
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+let selectedTopupAmount = null;
+function openTopupModal(){
+  selectedTopupAmount = null;
+  document.querySelectorAll('.topup-amt-btn').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('topupCustomAmount').value = '';
+  document.getElementById('topupMsg').style.display = 'none';
+  document.getElementById('topupModal').style.display = 'flex';
+}
+function closeTopupModal(){
+  document.getElementById('topupModal').style.display = 'none';
+}
+function selectTopupAmount(amount){
+  selectedTopupAmount = amount;
+  document.getElementById('topupCustomAmount').value = '';
+  document.querySelectorAll('.topup-amt-btn').forEach(b=>{
+    b.classList.toggle('selected', parseInt(b.textContent.replace(/[^\d]/g,'')) === amount);
+  });
+}
+document.getElementById('topupCustomAmount').addEventListener('input', function(){
+  selectedTopupAmount = null;
+  document.querySelectorAll('.topup-amt-btn').forEach(b=>b.classList.remove('selected'));
+});
+
+async function confirmTopup(){
+  const customVal = parseInt(document.getElementById('topupCustomAmount').value, 10);
+  const amount = selectedTopupAmount || (customVal > 0 ? customVal : null);
+  const msgEl = document.getElementById('topupMsg');
+  if(!amount || amount <= 0){
+    msgEl.style.display='block';
+    msgEl.style.background='rgba(239,68,68,0.15)';
+    msgEl.style.color='#ef4444';
+    msgEl.textContent = 'Цэнэглэх дүнгээ сонгох эсвэл оруулна уу.';
+    return;
+  }
+  // ЗАСВАРЛАХ ШААРДЛАГАТАЙ: энд бодит төлбөрийн систем (QPay/Card) холбогдох ёстой.
+  // Одоогоор энэ зөвхөн интерфэйсийн mockup — төлбөр баталгаажуулалт хийгээгүй.
+  msgEl.style.display='block';
+  msgEl.style.background='rgba(251,191,36,0.15)';
+  msgEl.style.color='#fbbf24';
+  msgEl.textContent = `⚠️ ${amount.toLocaleString('mn-MN')}₮ цэнэглэх хүсэлт — төлбөрийн систем холбогдоогүй байна. Удахгүй нэмэгдэнэ.`;
+}
 
 // ===== AVATAR & COVER — Supabase Storage =====
 function getUserId(){
@@ -596,6 +783,9 @@ window.location.href = 'login.html';
 // ===== CLOSE MODAL ON OUTSIDE CLICK =====
 document.getElementById('editModal').addEventListener('click', function(e) {
 if(e.target === this) closeEditModal();
+});
+document.getElementById('topupModal').addEventListener('click', function(e) {
+if(e.target === this) closeTopupModal();
 });
 </script>
 </body>
