@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>КиноЭзэн — Программ дэлгүүр</title>
-<meta name="description" content="КиноЭзэн-ий бүтээсэн программууд — татаж авах, худалдан авах.">
+<title>Кино Эзэн — Программ дэлгүүр</title>
+<meta name="description" content="Кино Эзэн багийн бүтээсэн программууд — татаж авах, худалдан авах.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,35 +22,79 @@
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden;}
 
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes floatY{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(2deg)}}
+@keyframes floatX{0%,100%{transform:translateX(0) rotate(0deg)}50%{transform:translateX(10px) rotate(-2deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes typewriter{from{width:0}to{width:100%}}
+@keyframes glow{0%,100%{box-shadow:0 0 12px rgba(74,222,128,0.3)}50%{box-shadow:0 0 32px rgba(74,222,128,0.7)}}
+@keyframes particle{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
 
 /* ===== NAVBAR ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
-.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
-.logo-text{font-family:var(--font-display);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+.logo-icon{width:36px;height:36px;flex-shrink:0;}
+.logo-text{font-family:var(--font-display);font-size:26px;letter-spacing:2px;background:linear-gradient(90deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));}
 .nav-links{display:flex;gap:4px;align-items:center;}
 .nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--radius-sm);transition:all 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(74,222,128,0.08);}
 .nav-right{display:flex;gap:8px;align-items:center;}
+.btn-back{padding:7px 16px;border-radius:var(--radius-sm);background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--accent);font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-back:hover{background:rgba(74,222,128,0.18);transform:translateX(-2px);}
 .btn-login{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-login:hover{border-color:var(--accent);color:var(--accent);}
 .nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;}
 
 /* ===== HERO ===== */
-.hero{padding:48px 24px 36px;text-align:center;position:relative;overflow:hidden;}
-.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(74,222,128,0.06) 0%,transparent 70%);pointer-events:none;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);font-size:12px;font-weight:700;color:var(--accent);margin-bottom:18px;animation:fadeUp 0.5s ease both;}
+.hero{padding:56px 24px 44px;text-align:center;position:relative;overflow:hidden;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(74,222,128,0.07) 0%,transparent 65%);animation:pulse 4s ease-in-out infinite;}
+
+/* ===== FLOATING ELEMENTS ===== */
+.float-wrap{position:absolute;inset:0;pointer-events:none;}
+.float-el{position:absolute;opacity:0.18;}
+
+/* Код цонх — зүүн */
+.float-code{top:18%;left:3%;animation:floatY 5s ease-in-out infinite;}
+.code-window{background:rgba(30,30,50,0.9);border:1px solid rgba(74,222,128,0.25);border-radius:10px;padding:12px;width:160px;backdrop-filter:blur(10px);}
+.code-bar{display:flex;gap:5px;margin-bottom:8px;}
+.code-dot{width:8px;height:8px;border-radius:50%;}
+.code-line{height:6px;border-radius:3px;margin-bottom:5px;background:rgba(255,255,255,0.15);}
+.code-line.green{background:rgba(74,222,128,0.5);width:70%;}
+.code-line.blue{background:rgba(59,130,246,0.5);width:90%;}
+.code-line.purple{background:rgba(168,85,247,0.5);width:55%;}
+.code-line.short{width:40%;}
+
+/* Gear — баруун дээд */
+.float-gear{top:12%;right:4%;animation:floatY 6s ease-in-out infinite 1s;}
+.gear-svg{width:70px;height:70px;}
+
+/* Chart — баруун доод */
+.float-chart{bottom:20%;right:3%;animation:floatX 7s ease-in-out infinite 0.5s;}
+.chart-window{background:rgba(30,30,50,0.9);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:12px;width:140px;}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:50px;}
+.chart-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,#4ade80,#22c55e);}
+
+/* Shield — зүүн доод */
+.float-shield{bottom:22%;left:3%;animation:floatY 8s ease-in-out infinite 2s;}
+.shield-svg{width:60px;height:60px;}
+
+/* Particles */
+.particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--accent);animation:particle 3s ease-out infinite;}
+
+/* ===== HERO CONTENT ===== */
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);font-size:12px;font-weight:700;color:var(--accent);margin-bottom:18px;animation:fadeUp 0.5s ease both;position:relative;z-index:1;}
 .hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
-.hero-title{font-family:var(--font-display);font-size:52px;letter-spacing:2px;line-height:1;margin-bottom:14px;animation:fadeUp 0.5s ease 0.1s both;}
+.hero-title{font-family:var(--font-display);font-size:56px;letter-spacing:2px;line-height:1;margin-bottom:14px;animation:fadeUp 0.5s ease 0.1s both;position:relative;z-index:1;}
 .hero-title span{background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.hero-sub{font-size:15px;color:var(--text3);max-width:480px;margin:0 auto 28px;animation:fadeUp 0.5s ease 0.2s both;}
-.hero-stats{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.3s both;}
+.hero-sub{font-size:15px;color:var(--text3);max-width:480px;margin:0 auto 28px;animation:fadeUp 0.5s ease 0.2s both;position:relative;z-index:1;}
+.hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.3s both;position:relative;z-index:1;}
 .hero-stat{text-align:center;}
-.hero-stat-val{font-family:var(--font-display);font-size:26px;letter-spacing:1px;color:var(--accent);}
+.hero-stat-val{font-family:var(--font-display);font-size:28px;letter-spacing:1px;color:var(--accent);}
 .hero-stat-label{font-size:11px;color:var(--text4);font-weight:600;}
 
 /* ===== FILTER ===== */
@@ -71,41 +115,34 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .section-title{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--text2);}
 .section-title span{color:var(--accent);}
 .result-count{font-size:12px;color:var(--text4);font-weight:600;}
-
 .programs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 
 /* ===== PROGRAM CARD ===== */
 .prog-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;}
 .prog-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--shadow-accent);}
-
 .prog-img{width:100%;height:200px;background:linear-gradient(135deg,#1a0a2e,#2d1b69);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
 .prog-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;transition:transform 0.4s;}
 .prog-card:hover .prog-img img{transform:scale(1.05);}
 .prog-img-placeholder{font-size:52px;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.5));position:relative;z-index:1;}
-
 .prog-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;z-index:2;}
 .pbadge{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:0.5px;}
 .pbadge-new{background:var(--accent);color:#0a2a0a;}
 .pbadge-hot{background:linear-gradient(90deg,var(--red),var(--accent2));color:#fff;}
 .pbadge-free{background:rgba(59,130,246,0.85);color:#fff;}
 .pbadge-sale{background:rgba(168,85,247,0.85);color:#fff;}
-
 .prog-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;}
 .prog-cat{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.1);color:var(--accent);display:inline-block;margin-bottom:8px;align-self:flex-start;}
 .prog-title{font-family:var(--font-display);font-size:18px;letter-spacing:0.5px;line-height:1.2;margin-bottom:7px;}
 .prog-desc{font-size:12px;color:var(--text3);line-height:1.55;margin-bottom:12px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-
 .prog-features{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
 .prog-feat{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);}
 .prog-feat::before{content:'✓';color:var(--accent);font-weight:800;flex-shrink:0;}
-
 .prog-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
 .prog-price-wrap{display:flex;flex-direction:column;gap:2px;}
 .prog-price{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--accent);}
 .prog-price.free{color:var(--blue);}
 .prog-price-old{font-size:11px;color:var(--text4);text-decoration:line-through;}
 .prog-price-label{font-size:10px;color:var(--text4);}
-
 .prog-actions{display:flex;gap:7px;}
 .btn-demo{padding:8px 14px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:all 0.2s;}
 .btn-demo:hover{border-color:var(--accent);color:var(--accent);}
@@ -113,7 +150,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .btn-buy:hover{opacity:0.9;transform:translateY(-1px);}
 .btn-buy.free{background:linear-gradient(90deg,var(--blue),#60a5fa);}
 
-/* ===== MODAL (дэлгэрэнгүй) ===== */
+/* ===== MODAL ===== */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal-box{background:var(--bg2);border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);animation:fadeUp 0.3s ease;}
@@ -135,12 +172,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .modal-buy-btn:hover{opacity:0.9;}
 .modal-buy-btn.free{background:linear-gradient(90deg,var(--blue),#60a5fa);}
 
-/* ===== EMPTY ===== */
+/* ===== EMPTY / SKELETON ===== */
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text4);}
-.empty-state .icon{font-size:48px;margin-bottom:14px;animation:float 3s ease-in-out infinite;}
+.empty-state .icon{font-size:48px;margin-bottom:14px;animation:floatY 3s ease-in-out infinite;}
 .empty-state p{font-size:14px;font-weight:600;}
-
-/* ===== SKELETON ===== */
 .skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius);border:1px solid var(--border);}
 
 /* ===== CTA ===== */
@@ -157,7 +192,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .footer-copy{font-size:11px;color:var(--text4);}
 .footer-back{font-size:12px;color:var(--accent);text-decoration:none;font-weight:700;}
 
-/* ===== STAGGER ===== */
+/* stagger */
 .prog-card:nth-child(1){animation-delay:.04s}
 .prog-card:nth-child(2){animation-delay:.08s}
 .prog-card:nth-child(3){animation-delay:.12s}
@@ -165,13 +200,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 .prog-card:nth-child(5){animation-delay:.20s}
 .prog-card:nth-child(6){animation-delay:.24s}
 
-/* ===== RESPONSIVE ===== */
 @media(max-width:1024px){.programs-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){
   .nav{padding:10px 16px;}
   .nav-links{display:none;}
-  .hero{padding:32px 16px 24px;}
+  .hero{padding:32px 16px 24px;min-height:260px;}
   .hero-title{font-size:38px;}
+  .float-wrap{display:none;}
   .filter-bar{padding:12px 16px;}
   .filter-search{display:none;}
   .programs-section{padding:16px 16px 32px;}
@@ -189,31 +224,111 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <!-- NAVBAR -->
 <nav class="nav">
   <a href="index.html" class="logo">
-    <img src="logo.png" alt="КиноЭзэн" onerror="this.style.display='none'">
-    <div class="logo-text">КиноЭзэн</div>
+    <div class="logo-icon">
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="8" width="32" height="20" rx="4" fill="none" stroke="#4ade80" stroke-width="2"/>
+        <line x1="10" y1="8" x2="10" y2="28" stroke="#4ade80" stroke-width="1.6"/>
+        <line x1="26" y1="8" x2="26" y2="28" stroke="#4ade80" stroke-width="1.6"/>
+        <line x1="2" y1="18" x2="34" y2="18" stroke="#4ade80" stroke-width="1.4"/>
+        <circle cx="6" cy="12" r="1.4" fill="#fbbf24"/>
+        <circle cx="6" cy="24" r="1.4" fill="#fbbf24"/>
+        <circle cx="30" cy="12" r="1.4" fill="#fbbf24"/>
+        <circle cx="30" cy="24" r="1.4" fill="#fbbf24"/>
+        <path d="M15 14l7 4-7 4V14z" fill="#4ade80"/>
+      </svg>
+    </div>
+    <div class="logo-text">Кино Эзэн</div>
   </a>
   <div class="nav-links">
     <a href="index.html">Нүүр</a>
     <a href="movies.html">Кинонууд</a>
-    <a href="news.html">Мэдээ</a>
+    <a href="lessons.html">Сургалт</a>
     <a href="programs.html" class="active">Программ</a>
     <a href="services.html">Үйлчилгээ</a>
     <a href="profile.html">Профайл</a>
   </div>
   <div class="nav-right">
+    <button class="btn-back" onclick="location.href='index.html'">← Нүүр хуудас</button>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
   </div>
-  <button class="nav-toggle" onclick="toggleNav()">☰</button>
+  <button class="nav-toggle" onclick="this.closest('nav').querySelector('.nav-links').style.display='flex'">☰</button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge">
+  <div class="hero-bg">
+    <div class="hero-glow"></div>
+  </div>
+
+  <!-- FLOATING ELEMENTS -->
+  <div class="float-wrap">
+
+    <!-- Зүүн: Код цонх -->
+    <div class="float-el float-code" style="opacity:0.22;">
+      <div class="code-window">
+        <div class="code-bar">
+          <div class="code-dot" style="background:#e63946;"></div>
+          <div class="code-dot" style="background:#fbbf24;"></div>
+          <div class="code-dot" style="background:#4ade80;"></div>
+        </div>
+        <div class="code-line green"></div>
+        <div class="code-line blue"></div>
+        <div class="code-line short"></div>
+        <div class="code-line purple"></div>
+        <div class="code-line blue" style="width:60%;"></div>
+        <div class="code-line green" style="width:45%;"></div>
+        <div class="code-line short" style="width:75%;"></div>
+      </div>
+    </div>
+
+    <!-- Зүүн доод: Shield -->
+    <div class="float-el float-shield" style="opacity:0.2;">
+      <svg class="shield-svg" viewBox="0 0 60 60" fill="none">
+        <path d="M30 5L8 14v16c0 13 9.5 24.5 22 28 12.5-3.5 22-15 22-28V14L30 5z" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="2"/>
+        <path d="M22 30l5 5 11-11" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Баруун дээд: Gear -->
+    <div class="float-el float-gear" style="opacity:0.18;">
+      <svg class="gear-svg" viewBox="0 0 70 70" fill="none" style="animation:spinSlow 12s linear infinite;">
+        <circle cx="35" cy="35" r="12" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="2"/>
+        <circle cx="35" cy="35" r="5" fill="rgba(168,85,247,0.4)"/>
+        <path d="M35 15v6M35 49v6M15 35h6M49 35h6M21.5 21.5l4.2 4.2M44.3 44.3l4.2 4.2M21.5 48.5l4.2-4.2M44.3 25.7l4.2-4.2" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- Баруун доод: Chart -->
+    <div class="float-el float-chart" style="opacity:0.22;">
+      <div class="chart-window">
+        <div style="font-size:9px;color:rgba(74,222,128,0.7);font-weight:700;margin-bottom:6px;font-family:'Nunito',sans-serif;">Таталт 📈</div>
+        <div class="chart-bars">
+          <div class="chart-bar" style="height:30%;background:linear-gradient(180deg,#60a5fa,#3b82f6);"></div>
+          <div class="chart-bar" style="height:55%;"></div>
+          <div class="chart-bar" style="height:40%;background:linear-gradient(180deg,#a78bfa,#7c3aed);"></div>
+          <div class="chart-bar" style="height:75%;"></div>
+          <div class="chart-bar" style="height:60%;background:linear-gradient(180deg,#60a5fa,#3b82f6);"></div>
+          <div class="chart-bar" style="height:90%;animation:glow 2s infinite;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particle" style="left:20%;bottom:30%;animation-delay:0s;"></div>
+    <div class="particle" style="left:75%;bottom:25%;animation-delay:1s;background:#a855f7;"></div>
+    <div class="particle" style="left:45%;bottom:20%;animation-delay:2s;background:#fbbf24;"></div>
+    <div class="particle" style="left:60%;bottom:35%;animation-delay:0.5s;"></div>
+    <div class="particle" style="left:30%;bottom:40%;animation-delay:1.5s;background:#60a5fa;"></div>
+
+  </div>
+
+  <!-- Hero content -->
+  <div class="hero-badge" style="position:relative;z-index:2;">
     <div class="hero-badge-dot"></div>
-    КиноЭзэн Программ дэлгүүр
+    Кино Эзэн Программ дэлгүүр
   </div>
   <h1 class="hero-title">Манай <span>Программууд</span></h1>
-  <p class="hero-sub">КиноЭзэн багийн бүтээсэн программ, хэрэгслүүдийг татаж авч, таны ажлыг хялбарчлаарай.</p>
+  <p class="hero-sub">Кино Эзэн багийн бүтээсэн программ, хэрэгслүүдийг татаж авч, таны ажлыг хялбарчлаарай.</p>
   <div class="hero-stats">
     <div class="hero-stat">
       <div class="hero-stat-val" id="stat-total">—</div>
@@ -235,11 +350,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   <span class="filter-label">Ангилал:</span>
   <div class="filter-pills" id="filter-pills">
     <button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>
-    <button class="fpill" onclick="filterCat(this,'Кино')">🎬 Кино</button>
-    <button class="fpill" onclick="filterCat(this,'Хэрэгсэл')">🔧 Хэрэгсэл</button>
-    <button class="fpill" onclick="filterCat(this,'AI')">🤖 AI</button>
-    <button class="fpill" onclick="filterCat(this,'Тоглоом')">🎮 Тоглоом</button>
-    <button class="fpill" onclick="filterCat(this,'Бусад')">📦 Бусад</button>
   </div>
   <div class="filter-search">
     <span>🔍</span>
@@ -254,7 +364,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <span class="result-count" id="result-count"></span>
   </div>
   <div class="programs-grid" id="programs-grid">
-    <!-- Skeleton -->
     <div class="skel" style="height:380px"></div>
     <div class="skel" style="height:380px"></div>
     <div class="skel" style="height:380px"></div>
@@ -264,274 +373,177 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 <!-- CTA -->
 <section class="cta-section">
   <h2 class="cta-title">Санал болгох <span style="color:var(--accent)">Программ</span> байна уу?</h2>
-  <p class="cta-sub">Бидэнтэй холбоо барьж, хамтарч ажиллаарай.</p>
+  <p class="cta-sub">Кино Эзэн багтай холбоо барьж, хамтарч ажиллаарай.</p>
   <button class="cta-btn" onclick="location.href='mailto:kinoezen@gmail.com?subject=Программ хамтын ажиллагаа'">Холбоо барих →</button>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-copy">© 2026 КиноЭзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
+  <div class="footer-copy">© 2026 Кино Эзэн. Бүх эрх хуулиар хамгаалагдсан.</div>
   <a href="index.html" class="footer-back">← Нүүр хуудас руу буцах</a>
 </footer>
 
 <!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detail-modal">
-  <div class="modal-box" id="modal-inner">
-    <!-- JS-ээр дүүргэнэ -->
-  </div>
+  <div class="modal-box" id="modal-inner"></div>
 </div>
 
 <script>
-const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+let allPrograms=[];
+let activeCat='';
+let searchVal='';
 
-let allPrograms = [];
-let activeCat = '';
-let searchVal = '';
+function sanitize(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 
-function sanitize(s) {
-  if (!s) return '';
-  const d = document.createElement('div');
-  d.textContent = String(s);
-  return d.innerHTML;
+async function supaFetch(table,params=''){
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+  if(!r.ok)throw new Error('Supabase '+r.status);
+  return r.json();
 }
 
-async function supaFetch(table, params = '') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-  });
-  if (!res.ok) throw new Error('Supabase error ' + res.status);
-  return res.json();
+async function supaIncrement(id,field){
+  const p=allPrograms.find(x=>x.id==id);if(!p)return;
+  const v=(p[field]||0)+1;
+  await fetch(`${SUPABASE_URL}/rest/v1/programs?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({[field]:v})});
+  p[field]=v;
 }
 
-// Update view/download count
-async function supaIncrement(id, field) {
-  const prog = allPrograms.find(p => p.id === id);
-  if (!prog) return;
-  const newVal = (prog[field] || 0) + 1;
-  await fetch(`${SUPABASE_URL}/rest/v1/programs?id=eq.${id}`, {
-    method: 'PATCH',
-    headers: {
-      'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json', 'Prefer': 'return=minimal'
-    },
-    body: JSON.stringify({ [field]: newVal })
-  });
-  prog[field] = newVal;
+function getEmoji(cat){return{'Кино':'🎬','Хэрэгсэл':'🔧','AI':'🤖','Тоглоом':'🎮','Бусад':'📦'}[cat]||'💻';}
+
+function formatPrice(p){
+  if(!p||p==0)return'<span class="prog-price free">ҮНЭГҮЙ</span>';
+  return`<span class="prog-price">${parseInt(p).toLocaleString()}₮</span>`;
 }
 
-function getEmojiForCat(cat) {
-  const map = { 'Кино': '🎬', 'Хэрэгсэл': '🔧', 'AI': '🤖', 'Тоглоом': '🎮', 'Бусад': '📦' };
-  return map[cat] || '💻';
+function getBadges(p){
+  let t='';
+  if(p.is_new)t+='<span class="pbadge pbadge-new">Шинэ</span>';
+  if(p.is_hot)t+='<span class="pbadge pbadge-hot">🔥 Хит</span>';
+  if(!p.price||p.price==0)t+='<span class="pbadge pbadge-free">Үнэгүй</span>';
+  if(p.is_sale)t+='<span class="pbadge pbadge-sale">Хямдрал</span>';
+  return t;
 }
 
-function formatPrice(p) {
-  if (!p || p === 0 || p === '0') return '<span class="prog-price free">ҮНЭГҮЙ</span>';
-  const num = parseInt(p);
-  return `<span class="prog-price">${num.toLocaleString()}₮</span>`;
-}
-
-function getBadges(prog) {
-  const tags = [];
-  if (prog.is_new) tags.push('<span class="pbadge pbadge-new">Шинэ</span>');
-  if (prog.is_hot) tags.push('<span class="pbadge pbadge-hot">🔥 Хит</span>');
-  if (!prog.price || prog.price == 0) tags.push('<span class="pbadge pbadge-free">Үнэгүй</span>');
-  if (prog.is_sale) tags.push('<span class="pbadge pbadge-sale">Хямдрал</span>');
-  return tags.join('');
-}
-
-function buildCard(prog) {
-  const price = (!prog.price || prog.price == 0) ? 0 : parseInt(prog.price);
-  const isFree = price === 0;
-  const features = (prog.features || '').split('\n').filter(Boolean).slice(0, 3);
-  const featHtml = features.map(f => `<div class="prog-feat">${sanitize(f)}</div>`).join('');
-  const imgHtml = prog.thumbnail
-    ? `<img src="${sanitize(prog.thumbnail)}" alt="${sanitize(prog.title)}" loading="lazy">`
-    : `<div class="prog-img-placeholder">${getEmojiForCat(prog.category)}</div>`;
-
-  return `
-  <article class="prog-card" data-id="${prog.id}" data-cat="${sanitize(prog.category || '')}" data-title="${sanitize(prog.title || '')}">
-    <div class="prog-img">
-      ${imgHtml}
-      <div class="prog-badges">${getBadges(prog)}</div>
-    </div>
+function buildCard(p){
+  const isFree=!p.price||p.price==0;
+  const feats=(p.features||'').split('\n').filter(Boolean).slice(0,3).map(f=>`<div class="prog-feat">${sanitize(f)}</div>`).join('');
+  const imgHtml=p.thumbnail?`<img src="${sanitize(p.thumbnail)}" alt="${sanitize(p.title)}" loading="lazy">`:`<div class="prog-img-placeholder">${getEmoji(p.category)}</div>`;
+  return`<article class="prog-card">
+    <div class="prog-img">${imgHtml}<div class="prog-badges">${getBadges(p)}</div></div>
     <div class="prog-body">
-      <span class="prog-cat">${sanitize(prog.category || 'Бусад')}</span>
-      <div class="prog-title">${sanitize(prog.title)}</div>
-      <div class="prog-desc">${sanitize(prog.description || '')}</div>
-      ${featHtml ? `<div class="prog-features">${featHtml}</div>` : ''}
+      <span class="prog-cat">${sanitize(p.category||'Бусад')}</span>
+      <div class="prog-title">${sanitize(p.title)}</div>
+      <div class="prog-desc">${sanitize(p.description||'')}</div>
+      ${feats?`<div class="prog-features">${feats}</div>`:''}
       <div class="prog-footer">
         <div class="prog-price-wrap">
-          ${prog.original_price && prog.original_price != prog.price ? `<div class="prog-price-old">${parseInt(prog.original_price).toLocaleString()}₮</div>` : ''}
-          ${formatPrice(prog.price)}
-          <div class="prog-price-label">${isFree ? 'Татаж авах' : 'Нэг удаагийн'}</div>
+          ${p.original_price&&p.original_price!=p.price?`<div class="prog-price-old">${parseInt(p.original_price).toLocaleString()}₮</div>`:''}
+          ${formatPrice(p.price)}
+          <div class="prog-price-label">${isFree?'Татаж авах':'Нэг удаагийн'}</div>
         </div>
         <div class="prog-actions">
-          <button class="btn-demo" onclick="openDetail('${prog.id}')">Дэлгэрэнгүй</button>
-          <button class="btn-buy ${isFree ? 'free' : ''}" onclick="handleBuy(event,'${prog.id}','${isFree}')">
-            ${isFree ? '↓ Татах' : '🛒 Авах'}
-          </button>
+          <button class="btn-demo" onclick="openDetail('${p.id}')">Дэлгэрэнгүй</button>
+          <button class="btn-buy ${isFree?'free':''}" onclick="handleBuy(event,'${p.id}',${isFree})">${isFree?'↓ Татах':'🛒 Авах'}</button>
         </div>
       </div>
     </div>
   </article>`;
 }
 
-function renderPrograms(list) {
-  const grid = document.getElementById('programs-grid');
-  document.getElementById('result-count').textContent = list.length + ' программ';
-  if (list.length === 0) {
-    grid.innerHTML = `<div class="empty-state">
-      <div class="icon">🔍</div>
-      <p>Илэрц олдсонгүй. Өөр хайлт хийнэ үү.</p>
-    </div>`;
-    return;
-  }
-  grid.innerHTML = list.map(buildCard).join('');
+function renderPrograms(list){
+  const g=document.getElementById('programs-grid');
+  document.getElementById('result-count').textContent=list.length+' программ';
+  if(!list.length){g.innerHTML=`<div class="empty-state"><div class="icon">🔍</div><p>Илэрц олдсонгүй.</p></div>`;return;}
+  g.innerHTML=list.map(buildCard).join('');
 }
 
-function filterPrograms() {
-  let list = allPrograms;
-  if (activeCat) list = list.filter(p => p.category === activeCat);
-  if (searchVal) list = list.filter(p => (p.title || '').toLowerCase().includes(searchVal));
+function filterPrograms(){
+  let list=allPrograms;
+  if(activeCat)list=list.filter(p=>p.category===activeCat);
+  if(searchVal)list=list.filter(p=>(p.title||'').toLowerCase().includes(searchVal));
   renderPrograms(list);
 }
 
-function filterCat(el, cat) {
-  document.querySelectorAll('.fpill').forEach(b => b.classList.remove('on'));
-  el.classList.add('on');
-  activeCat = cat;
-  filterPrograms();
+function filterCat(el,cat){
+  document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');activeCat=cat;filterPrograms();
 }
 
-function filterSearch() {
-  searchVal = document.getElementById('search-inp').value.toLowerCase().trim();
-  filterPrograms();
-}
+function filterSearch(){searchVal=document.getElementById('search-inp').value.toLowerCase().trim();filterPrograms();}
 
-function openDetail(id) {
-  const prog = allPrograms.find(p => p.id == id);
-  if (!prog) return;
-  const price = (!prog.price || prog.price == 0) ? 0 : parseInt(prog.price);
-  const isFree = price === 0;
-  const features = (prog.features || '').split('\n').filter(Boolean);
-  const featHtml = features.map(f => `<div class="modal-feat">${sanitize(f)}</div>`).join('');
-  const imgEl = prog.thumbnail
-    ? `<img src="${sanitize(prog.thumbnail)}" alt="${sanitize(prog.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">`
-    : `<span style="font-size:72px">${getEmojiForCat(prog.category)}</span>`;
-
-  document.getElementById('modal-inner').innerHTML = `
+function openDetail(id){
+  const p=allPrograms.find(x=>x.id==id);if(!p)return;
+  const isFree=!p.price||p.price==0;
+  const feats=(p.features||'').split('\n').filter(Boolean).map(f=>`<div class="modal-feat">${sanitize(f)}</div>`).join('');
+  const imgEl=p.thumbnail?`<img src="${sanitize(p.thumbnail)}" alt="${sanitize(p.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">`:`<span style="font-size:72px">${getEmoji(p.category)}</span>`;
+  document.getElementById('modal-inner').innerHTML=`
     <div class="modal-img" style="display:flex;align-items:center;justify-content:center;position:relative;">
       ${imgEl}
       <button class="modal-close-btn" onclick="closeDetail()">✕</button>
     </div>
     <div class="modal-body">
-      <span class="modal-cat">${sanitize(prog.category || 'Бусад')}</span>
-      <div class="modal-title">${sanitize(prog.title)}</div>
-      <div class="modal-desc">${sanitize(prog.description || '')}</div>
-      ${featHtml ? `<div class="modal-features-title">Онцлог функцүүд</div><div class="modal-features">${featHtml}</div>` : ''}
+      <span class="modal-cat">${sanitize(p.category||'Бусад')}</span>
+      <div class="modal-title">${sanitize(p.title)}</div>
+      <div class="modal-desc">${sanitize(p.description||'')}</div>
+      ${feats?`<div class="modal-features-title">Онцлог функцүүд</div><div class="modal-features">${feats}</div>`:''}
       <div class="modal-footer">
-        <div class="modal-price-big ${isFree ? 'free' : ''}">${isFree ? 'ҮНЭГҮЙ' : parseInt(prog.price).toLocaleString() + '₮'}</div>
-        <button class="modal-buy-btn ${isFree ? 'free' : ''}" onclick="handleBuy(event,'${prog.id}','${isFree}')">
-          ${isFree ? '↓ Татаж авах' : '🛒 Худалдан авах'}
-        </button>
+        <div class="modal-price-big ${isFree?'free':''}">${isFree?'ҮНЭГҮЙ':parseInt(p.price).toLocaleString()+'₮'}</div>
+        <button class="modal-buy-btn ${isFree?'free':''}" onclick="handleBuy(event,'${p.id}',${isFree})">${isFree?'↓ Татаж авах':'🛒 Худалдан авах'}</button>
       </div>
     </div>`;
-
   document.getElementById('detail-modal').classList.add('open');
-  supaIncrement(id, 'views');
+  supaIncrement(id,'views');
 }
 
-function closeDetail() {
-  document.getElementById('detail-modal').classList.remove('open');
-}
+function closeDetail(){document.getElementById('detail-modal').classList.remove('open');}
+document.getElementById('detail-modal').addEventListener('click',e=>{if(e.target===document.getElementById('detail-modal'))closeDetail();});
 
-document.getElementById('detail-modal').addEventListener('click', e => {
-  if (e.target === document.getElementById('detail-modal')) closeDetail();
-});
-
-function handleBuy(e, id, isFree) {
+function handleBuy(e,id,isFree){
   e.stopPropagation();
-  const prog = allPrograms.find(p => p.id == id);
-  if (!prog) return;
-  if (isFree === true || isFree === 'true') {
-    if (prog.download_url) {
-      supaIncrement(id, 'downloads');
-      window.open(prog.download_url, '_blank');
-    } else {
-      showToast('📦 Удахгүй боломжтой болно!');
-    }
-  } else {
-    if (prog.buy_url) {
-      window.open(prog.buy_url, '_blank');
-    } else {
-      showToast('💬 Худалдан авахын тулд бидэнтэй холбоо барина уу!');
-    }
+  const p=allPrograms.find(x=>x.id==id);if(!p)return;
+  if(isFree){
+    if(p.download_url){supaIncrement(id,'downloads');window.open(p.download_url,'_blank');}
+    else showToast('📦 Удахгүй боломжтой болно!');
+  }else{
+    if(p.buy_url)window.open(p.buy_url,'_blank');
+    else showToast('💬 Бидэнтэй холбоо барина уу!');
   }
 }
 
-function showToast(msg) {
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
+function showToast(msg){
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
 
-function toggleNav() {
-  const links = document.querySelector('.nav-links');
-  links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
-}
-
-// ===== LOAD =====
-async function loadPrograms() {
-  const grid = document.getElementById('programs-grid');
-  try {
-    const data = await supaFetch('programs', 'order=created_at.desc&is_active=eq.true');
-    allPrograms = data || [];
-
-    // Stats
-    const freeCount = allPrograms.filter(p => !p.price || p.price == 0).length;
-    const totalDownloads = allPrograms.reduce((s, p) => s + (p.downloads || 0), 0);
-    document.getElementById('stat-total').textContent = allPrograms.length;
-    document.getElementById('stat-free').textContent = freeCount;
-    document.getElementById('stat-downloads').textContent =
-      totalDownloads > 999 ? (totalDownloads / 1000).toFixed(1) + 'к' : totalDownloads;
-
-    // Render
+async function loadPrograms(){
+  try{
+    const data=await supaFetch('programs','order=created_at.desc&is_active=eq.true');
+    allPrograms=data||[];
+    const freeCount=allPrograms.filter(p=>!p.price||p.price==0).length;
+    const totalDl=allPrograms.reduce((s,p)=>s+(p.downloads||0),0);
+    document.getElementById('stat-total').textContent=allPrograms.length;
+    document.getElementById('stat-free').textContent=freeCount;
+    document.getElementById('stat-downloads').textContent=totalDl>999?(totalDl/1000).toFixed(1)+'к':totalDl;
+    const cats=[...new Set(allPrograms.map(p=>p.category).filter(Boolean))];
+    const pills=document.getElementById('filter-pills');
+    pills.innerHTML=`<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>`+
+      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${getEmoji(c)} ${c}</button>`).join('');
     renderPrograms(allPrograms);
-
-    // Dynamic category pills
-    const cats = [...new Set(allPrograms.map(p => p.category).filter(Boolean))];
-    const pillsContainer = document.getElementById('filter-pills');
-    pillsContainer.innerHTML = `<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>` +
-      cats.map(c => `<button class="fpill" onclick="filterCat(this,'${c}')">${getEmojiForCat(c)} ${c}</button>`).join('');
-
-  } catch (err) {
-    // Supabase-д programs хүснэгт байхгүй бол demo өгөгдөл харуул
-    allPrograms = [
-      {
-        id: 'demo1', title: 'КиноЭзэн Плеер', category: 'Кино',
-        description: 'Монгол кино үзэх зориулалттай хөнгөн, хурдан плеер. Бүх форматыг дэмждэг.',
-        features: 'Монгол хадмал дэмжлэг\nБүх видео формат\nДаркмод горим\nОнлайн стриминг',
-        price: 0, is_new: true, thumbnail: null, downloads: 124, views: 567
-      },
-      {
-        id: 'demo2', title: 'Subtitle AI Орчуулагч', category: 'AI',
-        description: 'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг хэрэгсэл.',
-        features: 'GPT-4 хэрэглэдэг\nSRT форматтай ажилладаг\nБатч боловсруулалт\nОрчуулгын засварлагч',
-        price: 15000, original_price: 25000, is_hot: true, is_sale: true, thumbnail: null, downloads: 89, views: 432
-      },
-      {
-        id: 'demo3', title: 'Трейлер Татагч', category: 'Хэрэгсэл',
-        description: 'YouTube болон бусад сайтуудаас трейлер, видео татаж авах хэрэгсэл.',
-        features: '4K чанартай татах\n50+ сайт дэмжих\nМП3 хөрвүүлэгч\nДараалал татах',
-        price: 0, thumbnail: null, downloads: 312, views: 891
-      }
+  }catch(err){
+    allPrograms=[
+      {id:'d1',title:'Кино Эзэн Плеер',category:'Кино',description:'Монгол кино үзэх зориулалттай хөнгөн, хурдан плеер. Бүх форматыг дэмждэг.',features:'Монгол хадмал дэмжлэг\nБүх видео формат\nДаркмод горим',price:0,is_new:true,thumbnail:null,downloads:124,views:567},
+      {id:'d2',title:'Subtitle AI Орчуулагч',category:'AI',description:'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг.',features:'GPT-4 хэрэглэдэг\nSRT форматтай ажилладаг\nБатч боловсруулалт',price:15000,original_price:25000,is_hot:true,is_sale:true,thumbnail:null,downloads:89,views:432},
+      {id:'d3',title:'Трейлер Татагч',category:'Хэрэгсэл',description:'YouTube болон бусад сайтуудаас трейлер, видео татаж авах хэрэгсэл.',features:'4K чанартай татах\n50+ сайт дэмжих\nМП3 хөрвүүлэгч',price:0,thumbnail:null,downloads:312,views:891}
     ];
-    document.getElementById('stat-total').textContent = allPrograms.length;
-    document.getElementById('stat-free').textContent = allPrograms.filter(p => !p.price || p.price == 0).length;
-    document.getElementById('stat-downloads').textContent = allPrograms.reduce((s,p)=>s+(p.downloads||0),0);
+    document.getElementById('stat-total').textContent=allPrograms.length;
+    document.getElementById('stat-free').textContent=allPrograms.filter(p=>!p.price||p.price==0).length;
+    document.getElementById('stat-downloads').textContent=allPrograms.reduce((s,p)=>s+(p.downloads||0),0);
+    const cats=[...new Set(allPrograms.map(p=>p.category))];
+    const pills=document.getElementById('filter-pills');
+    pills.innerHTML=`<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>`+
+      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${getEmoji(c)} ${c}</button>`).join('');
     renderPrograms(allPrograms);
   }
 }
