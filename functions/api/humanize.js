@@ -1,34 +1,32 @@
 // ============================================================
-// functions/api/humanize.js
-// URL: POST /api/humanize
-// Body: { text: string }
-//
-// Энэ хувилбар @gradio/client-ийг ОРХИЖ, _shared/ai.js-ийн
-// callAI()-г ашигладаг: ЭХЛЭЭД Gemini, амжилтгуй бол Groq.
+// ШИНЭ runHum() — /api/humanize руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runHum() функцийг ЭНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ.
 // ============================================================
-import { callAI, corsJson, corsOptions } from '../_shared/ai.js';
+async function runHum() {
+    const text = document.getElementById('hum-input')?.value.trim();
+    if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
+    const btn = event.target;
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Хүмүүнжүүлж байна...'; }
+    try {
+        const response = await fetch('/api/humanize', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Хүмүүнжүүлэх үед алдаа гарлаа');
 
-export async function onRequestOptions() {
-  return corsOptions();
-}
-
-export async function onRequestPost({ request, env }) {
-  try {
-    const { text } = await request.json();
-
-    if (!text || !text.trim()) {
-      return corsJson({ error: 'Текст оруулна уу' }, 400);
+        const beforeEl = document.getElementById('hum-before');
+        const afterEl = document.getElementById('hum-after');
+        const resultEl = document.getElementById('hum-result');
+        if (beforeEl) beforeEl.textContent = data.original;
+        if (afterEl) afterEl.textContent = data.humanized;
+        if (resultEl) resultEl.style.display = 'grid';
+        showToast('✅ Хүмүүнжүүлэлт амжилттай!', 'success');
+    } catch (error) {
+        console.error('Humanizer error:', error);
+        showToast('❌ ' + error.message, 'error');
     }
-
-    const systemPrompt = `Чи монгол хэлний редактор. AI-ээр орчуулсан эсвэл хатуу, "машин" мэт сонсогдох монгол текстийг байгалийн, амьд, хүний бичсэн мэт болгож хувиргана. Утга өөрчлөгдөхгуй, зөвхөн өгүүлбэрийн зохион байгуулалт, үг сонголтыг сайжруул. Зөвхөн хувиргасан текстийг буцаа, нэмэлт тайлбар бичих хэрэггуй.`;
-
-    const { text: humanized } = await callAI(env, systemPrompt, text, {
-      temperature: 0.7,
-      maxOutputTokens: 2048
-    });
-
-    return corsJson({ original: text, humanized });
-  } catch (err) {
-    return corsJson({ error: err.message }, 500);
-  }
+    if (btn) { btn.disabled = false; btn.textContent = '✨ Хүмүүнжүүлэх'; }
 }
