@@ -328,7 +328,11 @@
   // ---------- Listings ----------
   async function zarLoadListings() {
     const grid = document.getElementById('zar-grid');
-    grid.innerHTML = '<div class="zar-loading">Ачааллаж байна...</div>';
+    grid.innerHTML =
+      '<div class="zar-loading">' +
+      '<div class="zar-skel-card"></div><div class="zar-skel-card"></div>' +
+      '<div class="zar-skel-card"></div><div class="zar-skel-card"></div>' +
+      '</div>';
     try {
       let params =
         'status=eq.active&expires_at=gt.' + encodeURIComponent(new Date().toISOString()) +
@@ -360,7 +364,7 @@
   function zarRenderGrid(listings) {
     const grid = document.getElementById('zar-grid');
     if (!listings || listings.length === 0) {
-      grid.innerHTML = '<div class="zar-empty">Энэ ангилалд одоогоор зар байхгүй байна.<br>Хамгийн түрүүнд та нийтлээрэй!</div>';
+      grid.innerHTML = '<div class="zar-empty"><span class="zar-empty-icon">📭</span>Энэ ангилалд одоогоор зар байхгүй байна.<br>Хамгийн түрүүнд та нийтлээрэй!</div>';
       return;
     }
     grid.innerHTML = listings.map(zarBuildCardHtml).join('');
