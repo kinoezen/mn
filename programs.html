@@ -13,215 +13,248 @@
   --bg:#0e0e18;--bg2:#161624;--bg3:#1e1e32;--bg4:#252540;
   --accent:#4ade80;--accent2:#f4a261;--red:#e63946;--purple:#a855f7;--blue:#3b82f6;
   --border:rgba(255,255,255,0.08);--border2:rgba(74,222,128,0.2);
-  --text:#ffffff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
-  --font-display:'Bebas Neue',sans-serif;--font-body:'Nunito',sans-serif;
-  --radius:14px;--radius-sm:8px;
-  --shadow:0 8px 32px rgba(0,0,0,0.4);--shadow-accent:0 4px 24px rgba(74,222,128,0.2);
+  --text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
+  --font-d:'Bebas Neue',sans-serif;--font-b:'Nunito',sans-serif;
+  --r:14px;--rs:8px;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);--sg:0 4px 24px rgba(74,222,128,0.2);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;overflow-x:hidden;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-height:1.6;overflow-x:hidden;}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-@keyframes floatY{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-12px) rotate(2deg)}}
-@keyframes floatX{0%,100%{transform:translateX(0) rotate(0deg)}50%{transform:translateX(10px) rotate(-2deg)}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes floatX{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.45}}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-@keyframes typewriter{from{width:0}to{width:100%}}
 @keyframes glow{0%,100%{box-shadow:0 0 12px rgba(74,222,128,0.3)}50%{box-shadow:0 0 32px rgba(74,222,128,0.7)}}
 @keyframes particle{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:1}100%{opacity:0;transform:translateY(-80px) scale(1.5)}}
+@keyframes countDown{from{stroke-dashoffset:0}to{stroke-dashoffset:283}}
+@keyframes socialPop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
 
-/* ===== NAVBAR ===== */
+/* NAV */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
 .logo-icon{width:36px;height:36px;flex-shrink:0;}
-.logo-text{font-family:var(--font-display);font-size:26px;letter-spacing:2px;background:linear-gradient(90deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));}
+.logo-text{font-family:var(--font-d);font-size:26px;letter-spacing:2px;background:linear-gradient(90deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));}
 .nav-links{display:flex;gap:4px;align-items:center;}
-.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--radius-sm);transition:all 0.2s;}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--rs);transition:all 0.2s;}
 .nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(74,222,128,0.08);}
 .nav-right{display:flex;gap:8px;align-items:center;}
-.btn-back{padding:7px 16px;border-radius:var(--radius-sm);background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--accent);font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-back{padding:7px 16px;border-radius:var(--rs);background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.3);color:var(--accent);font-size:12px;font-family:var(--font-b);font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
 .btn-back:hover{background:rgba(74,222,128,0.18);transform:translateX(-2px);}
-.btn-login{padding:7px 14px;border-radius:var(--radius-sm);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-login{padding:7px 14px;border-radius:var(--rs);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-b);font-weight:600;cursor:pointer;transition:all 0.2s;}
 .btn-login:hover{border-color:var(--accent);color:var(--accent);}
-.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;}
 
-/* ===== HERO ===== */
-.hero{padding:56px 24px 44px;text-align:center;position:relative;overflow:hidden;min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.hero-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+/* HERO */
+.hero{padding:56px 24px 44px;text-align:center;position:relative;overflow:hidden;min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;}
 .hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(74,222,128,0.07) 0%,transparent 65%);animation:pulse 4s ease-in-out infinite;}
 
-/* ===== FLOATING ELEMENTS ===== */
+/* FLOATING */
 .float-wrap{position:absolute;inset:0;pointer-events:none;}
-.float-el{position:absolute;opacity:0.18;}
-
-/* Код цонх — зүүн */
-.float-code{top:18%;left:3%;animation:floatY 5s ease-in-out infinite;}
-.code-window{background:rgba(30,30,50,0.9);border:1px solid rgba(74,222,128,0.25);border-radius:10px;padding:12px;width:160px;backdrop-filter:blur(10px);}
+.float-el{position:absolute;}
+.float-code{top:14%;left:2%;opacity:0.22;animation:floatY 5s ease-in-out infinite;}
+.code-window{background:rgba(22,22,36,0.95);border:1px solid rgba(74,222,128,0.25);border-radius:10px;padding:12px;width:165px;backdrop-filter:blur(10px);}
 .code-bar{display:flex;gap:5px;margin-bottom:8px;}
 .code-dot{width:8px;height:8px;border-radius:50%;}
-.code-line{height:6px;border-radius:3px;margin-bottom:5px;background:rgba(255,255,255,0.15);}
-.code-line.green{background:rgba(74,222,128,0.5);width:70%;}
-.code-line.blue{background:rgba(59,130,246,0.5);width:90%;}
-.code-line.purple{background:rgba(168,85,247,0.5);width:55%;}
-.code-line.short{width:40%;}
-
-/* Gear — баруун дээд */
-.float-gear{top:12%;right:4%;animation:floatY 6s ease-in-out infinite 1s;}
-.gear-svg{width:70px;height:70px;}
-
-/* Chart — баруун доод */
-.float-chart{bottom:20%;right:3%;animation:floatX 7s ease-in-out infinite 0.5s;}
-.chart-window{background:rgba(30,30,50,0.9);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:12px;width:140px;}
-.chart-bars{display:flex;align-items:flex-end;gap:6px;height:50px;}
-.chart-bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(180deg,#4ade80,#22c55e);}
-
-/* Shield — зүүн доод */
-.float-shield{bottom:22%;left:3%;animation:floatY 8s ease-in-out infinite 2s;}
-.shield-svg{width:60px;height:60px;}
-
-/* Particles */
+.code-line{height:6px;border-radius:3px;margin-bottom:5px;background:rgba(255,255,255,0.1);}
+.float-shield{bottom:18%;left:2%;opacity:0.2;animation:floatY 8s ease-in-out infinite 2s;}
+.float-gear{top:10%;right:3%;opacity:0.18;animation:floatY 6s ease-in-out infinite 1s;}
+.float-chart{bottom:16%;right:2%;opacity:0.22;animation:floatX 7s ease-in-out infinite 0.5s;}
+.chart-window{background:rgba(22,22,36,0.95);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:12px;width:145px;}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:50px;margin-top:6px;}
+.chart-bar{flex:1;border-radius:3px 3px 0 0;}
 .particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--accent);animation:particle 3s ease-out infinite;}
 
-/* ===== HERO CONTENT ===== */
+/* HERO CONTENT */
 .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);font-size:12px;font-weight:700;color:var(--accent);margin-bottom:18px;animation:fadeUp 0.5s ease both;position:relative;z-index:1;}
 .hero-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
-.hero-title{font-family:var(--font-display);font-size:56px;letter-spacing:2px;line-height:1;margin-bottom:14px;animation:fadeUp 0.5s ease 0.1s both;position:relative;z-index:1;}
+.hero-title{font-family:var(--font-d);font-size:56px;letter-spacing:2px;line-height:1;margin-bottom:14px;animation:fadeUp 0.5s ease 0.1s both;position:relative;z-index:1;}
 .hero-title span{background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .hero-sub{font-size:15px;color:var(--text3);max-width:480px;margin:0 auto 28px;animation:fadeUp 0.5s ease 0.2s both;position:relative;z-index:1;}
 .hero-stats{display:flex;gap:32px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.5s ease 0.3s both;position:relative;z-index:1;}
-.hero-stat{text-align:center;}
-.hero-stat-val{font-family:var(--font-display);font-size:28px;letter-spacing:1px;color:var(--accent);}
+.hero-stat-val{font-family:var(--font-d);font-size:28px;letter-spacing:1px;color:var(--accent);}
 .hero-stat-label{font-size:11px;color:var(--text4);font-weight:600;}
 
-/* ===== FILTER ===== */
+/* SALE BANNER */
+.sale-banner{background:linear-gradient(90deg,rgba(230,57,70,0.15),rgba(168,85,247,0.15));border-top:1px solid rgba(230,57,70,0.2);border-bottom:1px solid rgba(168,85,247,0.2);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
+.sale-text{font-size:13px;font-weight:700;color:var(--text2);}
+.sale-text span{color:#f87171;}
+.countdown{display:flex;gap:8px;align-items:center;}
+.cd-block{text-align:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;min-width:44px;}
+.cd-num{font-family:var(--font-d);font-size:20px;letter-spacing:1px;color:#f87171;display:block;}
+.cd-label{font-size:9px;color:var(--text4);font-weight:600;}
+.cd-sep{font-family:var(--font-d);font-size:18px;color:#f87171;margin-top:-4px;}
+
+/* FILTER */
 .filter-bar{padding:16px 24px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--border);}
 .filter-label{font-size:12px;color:var(--text4);font-weight:600;flex-shrink:0;}
 .filter-pills{display:flex;gap:7px;flex-wrap:wrap;}
-.fpill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-body);font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.fpill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.04);color:var(--text3);font-size:12px;font-family:var(--font-b);font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
 .fpill:hover{border-color:var(--border2);color:var(--accent);}
 .fpill.on{background:var(--accent);color:#0a2a0a;border-color:var(--accent);}
 .filter-search{margin-left:auto;display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:7px 12px;border:1px solid var(--border);transition:border-color 0.2s;}
 .filter-search:focus-within{border-color:var(--accent);}
-.filter-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;width:160px;}
+.filter-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-b);outline:none;width:160px;}
 .filter-search input::placeholder{color:var(--text4);}
 
-/* ===== PROGRAMS GRID ===== */
+/* SORT */
+.sort-bar{padding:10px 24px;display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--border);}
+.sort-label{font-size:11px;color:var(--text4);font-weight:600;}
+.sort-btn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:11px;font-family:var(--font-b);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.sort-btn:hover{color:var(--accent);}
+.sort-btn.on{border-color:var(--accent);color:var(--accent);background:rgba(74,222,128,0.06);}
+
+/* PROGRAMS GRID */
 .programs-section{padding:20px 24px 40px;}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-.section-title{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--text2);}
+.section-title{font-family:var(--font-d);font-size:22px;letter-spacing:1px;color:var(--text2);}
 .section-title span{color:var(--accent);}
 .result-count{font-size:12px;color:var(--text4);font-weight:600;}
 .programs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
 
-/* ===== PROGRAM CARD ===== */
-.prog-card{background:var(--bg3);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;}
-.prog-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--shadow-accent);}
-.prog-img{width:100%;height:200px;background:linear-gradient(135deg,#1a0a2e,#2d1b69);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
-.prog-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;transition:transform 0.4s;}
+/* PROGRAM CARD */
+.prog-card{background:var(--bg3);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);transition:border-color 0.25s,transform 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;position:relative;}
+.prog-card:hover{border-color:var(--border2);transform:translateY(-4px);box-shadow:var(--sg);}
+.prog-img{width:100%;height:190px;background:linear-gradient(135deg,#1a0a2e,#2d1b69);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;flex-shrink:0;}
+.prog-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform 0.4s;}
 .prog-card:hover .prog-img img{transform:scale(1.05);}
 .prog-img-placeholder{font-size:52px;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.5));position:relative;z-index:1;}
-.prog-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;z-index:2;}
-.pbadge{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;letter-spacing:0.5px;}
+.prog-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;z-index:2;flex-wrap:wrap;}
+.pbadge{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;}
 .pbadge-new{background:var(--accent);color:#0a2a0a;}
 .pbadge-hot{background:linear-gradient(90deg,var(--red),var(--accent2));color:#fff;}
 .pbadge-free{background:rgba(59,130,246,0.85);color:#fff;}
 .pbadge-sale{background:rgba(168,85,247,0.85);color:#fff;}
+
+/* SOCIAL PROOF */
+.social-proof{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.7);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--accent);z-index:2;backdrop-filter:blur(4px);animation:socialPop 3s ease-in-out infinite;}
+
 .prog-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;}
 .prog-cat{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.1);color:var(--accent);display:inline-block;margin-bottom:8px;align-self:flex-start;}
-.prog-title{font-family:var(--font-display);font-size:18px;letter-spacing:0.5px;line-height:1.2;margin-bottom:7px;}
-.prog-desc{font-size:12px;color:var(--text3);line-height:1.55;margin-bottom:12px;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.prog-features{display:flex;flex-direction:column;gap:4px;margin-bottom:14px;}
+.prog-title{font-family:var(--font-d);font-size:18px;letter-spacing:0.5px;line-height:1.2;margin-bottom:6px;}
+.prog-desc{font-size:12px;color:var(--text3);line-height:1.55;margin-bottom:10px;flex:1;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* STARS */
+.prog-rating{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.stars{display:flex;gap:2px;}
+.star{font-size:12px;color:rgba(255,255,255,0.15);}
+.star.on{color:#fbbf24;}
+.star.half{position:relative;color:rgba(255,255,255,0.15);}
+.star.half::before{content:'★';position:absolute;left:0;top:0;color:#fbbf24;width:50%;overflow:hidden;}
+.rating-num{font-size:12px;font-weight:700;color:#fbbf24;}
+.rating-cnt{font-size:10px;color:var(--text4);}
+
+.prog-features{display:flex;flex-direction:column;gap:3px;margin-bottom:10px;}
 .prog-feat{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);}
 .prog-feat::before{content:'✓';color:var(--accent);font-weight:800;flex-shrink:0;}
-.prog-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border);}
-.prog-price-wrap{display:flex;flex-direction:column;gap:2px;}
-.prog-price{font-family:var(--font-display);font-size:22px;letter-spacing:1px;color:var(--accent);}
+
+/* TRIAL */
+.trial-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);font-size:10px;font-weight:700;color:#34d399;margin-bottom:10px;align-self:flex-start;}
+
+.prog-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);}
+.prog-price-wrap{display:flex;flex-direction:column;gap:1px;}
+.prog-price{font-family:var(--font-d);font-size:22px;letter-spacing:1px;color:var(--accent);}
 .prog-price.free{color:var(--blue);}
 .prog-price-old{font-size:11px;color:var(--text4);text-decoration:line-through;}
 .prog-price-label{font-size:10px;color:var(--text4);}
-.prog-actions{display:flex;gap:7px;}
-.btn-demo{padding:8px 14px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);font-size:12px;font-family:var(--font-body);font-weight:700;cursor:pointer;transition:all 0.2s;}
+.prog-actions{display:flex;gap:6px;}
+.btn-demo{padding:7px 12px;border-radius:var(--rs);background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--text2);font-size:11px;font-family:var(--font-b);font-weight:700;cursor:pointer;transition:all 0.2s;}
 .btn-demo:hover{border-color:var(--accent);color:var(--accent);}
-.btn-buy{padding:8px 18px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-body);font-weight:800;cursor:pointer;transition:opacity 0.2s,transform 0.2s;}
+.btn-buy{padding:7px 14px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:11px;font-family:var(--font-b);font-weight:800;cursor:pointer;transition:all 0.2s;}
 .btn-buy:hover{opacity:0.9;transform:translateY(-1px);}
-.btn-buy.free{background:linear-gradient(90deg,var(--blue),#60a5fa);}
+.btn-buy.free{background:linear-gradient(90deg,var(--blue),#60a5fa);color:#fff;}
 
-/* ===== MODAL ===== */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
-.modal-box{background:var(--bg2);border-radius:18px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);animation:fadeUp 0.3s ease;}
-.modal-img{width:100%;height:240px;object-fit:cover;border-radius:18px 18px 0 0;background:linear-gradient(135deg,#1a0a2e,#2d1b69);display:flex;align-items:center;justify-content:center;font-size:72px;overflow:hidden;flex-shrink:0;position:relative;}
-.modal-img img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;}
+.modal-box{background:var(--bg2);border-radius:18px;width:100%;max-width:660px;max-height:92vh;overflow-y:auto;border:1px solid var(--border);animation:fadeUp 0.3s ease;}
+.modal-img-wrap{width:100%;height:240px;background:linear-gradient(135deg,#1a0a2e,#2d1b69);border-radius:18px 18px 0 0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.modal-img-wrap img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
 .modal-close-btn{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;}
 .modal-body{padding:22px 24px 28px;}
-.modal-cat{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(74,222,128,0.1);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:10px;}
-.modal-title{font-family:var(--font-display);font-size:26px;letter-spacing:1px;margin-bottom:10px;}
-.modal-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:18px;}
-.modal-features-title{font-size:12px;font-weight:700;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
-.modal-features{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:22px;}
-.modal-feat{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2);}
+.modal-cat{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(74,222,128,0.1);color:var(--accent);font-weight:700;display:inline-block;margin-bottom:8px;}
+.modal-title{font-family:var(--font-d);font-size:28px;letter-spacing:1px;margin-bottom:6px;}
+.modal-rating{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.modal-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px;}
+.modal-feats-title{font-size:11px;font-weight:700;color:var(--text3);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
+.modal-feats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;}
+.modal-feat{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);}
 .modal-feat::before{content:'✓';color:var(--accent);font-weight:800;}
-.modal-footer{display:flex;align-items:center;gap:14px;padding-top:16px;border-top:1px solid var(--border);}
-.modal-price-big{font-family:var(--font-display);font-size:32px;letter-spacing:1px;color:var(--accent);}
-.modal-price-big.free{color:var(--blue);}
-.modal-buy-btn{flex:1;padding:13px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:14px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;transition:opacity 0.2s;}
-.modal-buy-btn:hover{opacity:0.9;}
-.modal-buy-btn.free{background:linear-gradient(90deg,var(--blue),#60a5fa);}
 
-/* ===== EMPTY / SKELETON ===== */
+/* TRIAL SECTION IN MODAL */
+.trial-section{background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.trial-icon{font-size:24px;}
+.trial-text strong{display:block;font-size:13px;color:#34d399;font-weight:700;}
+.trial-text span{font-size:11px;color:var(--text3);}
+.btn-trial{padding:8px 18px;border-radius:var(--rs);background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#34d399;font-size:12px;font-family:var(--font-b);font-weight:700;cursor:pointer;white-space:nowrap;transition:all 0.2s;margin-left:auto;}
+.btn-trial:hover{background:rgba(16,185,129,0.25);}
+
+.modal-footer{display:flex;align-items:center;gap:12px;padding-top:14px;border-top:1px solid var(--border);}
+.modal-price{font-family:var(--font-d);font-size:32px;letter-spacing:1px;color:var(--accent);}
+.modal-price.free{color:var(--blue);}
+.modal-price-old{font-size:13px;color:var(--text4);text-decoration:line-through;align-self:flex-end;margin-bottom:4px;}
+.modal-buy-btn{flex:1;padding:13px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:15px;font-family:var(--font-d);letter-spacing:1px;cursor:pointer;transition:opacity 0.2s;}
+.modal-buy-btn:hover{opacity:0.9;}
+.modal-buy-btn.free{background:linear-gradient(90deg,var(--blue),#60a5fa);color:#fff;}
+
+/* REVIEWS */
+.reviews-section{padding:20px 24px 0;border-top:1px solid var(--border);margin-top:16px;}
+.reviews-title{font-family:var(--font-d);font-size:18px;letter-spacing:1px;margin-bottom:14px;}
+.review-form{background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:16px;border:1px solid var(--border);}
+.review-form-title{font-size:12px;font-weight:700;color:var(--text3);margin-bottom:10px;}
+.star-picker{display:flex;gap:6px;margin-bottom:10px;cursor:pointer;}
+.star-pick{font-size:22px;color:rgba(255,255,255,0.15);transition:color 0.15s;cursor:pointer;}
+.star-pick:hover,.star-pick.sel{color:#fbbf24;}
+.review-inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:12px;font-family:var(--font-b);outline:none;resize:none;min-height:70px;transition:border-color 0.2s;}
+.review-inp:focus{border-color:var(--accent);}
+.btn-review{margin-top:8px;padding:8px 20px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-b);font-weight:700;cursor:pointer;}
+.review-list{display:flex;flex-direction:column;gap:10px;max-height:280px;overflow-y:auto;padding-right:4px;}
+.review-item{background:var(--bg3);border-radius:10px;padding:12px 14px;border:1px solid var(--border);}
+.review-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.review-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0a2a0a;flex-shrink:0;}
+.review-name{font-size:12px;font-weight:700;}
+.review-date{font-size:10px;color:var(--text4);margin-left:auto;}
+.review-comment{font-size:12px;color:var(--text3);line-height:1.55;}
+.no-reviews{text-align:center;padding:20px;color:var(--text4);font-size:12px;}
+.login-to-review{text-align:center;padding:12px;background:rgba(74,222,128,0.05);border-radius:8px;border:1px dashed rgba(74,222,128,0.2);font-size:12px;color:var(--text3);}
+.login-to-review a{color:var(--accent);font-weight:700;text-decoration:none;}
+
+/* EMPTY / SKEL */
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text4);}
 .empty-state .icon{font-size:48px;margin-bottom:14px;animation:floatY 3s ease-in-out infinite;}
-.empty-state p{font-size:14px;font-weight:600;}
-.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--radius);border:1px solid var(--border);}
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:var(--r);border:1px solid var(--border);}
 
-/* ===== CTA ===== */
+/* CTA */
 .cta-section{padding:40px 24px;text-align:center;border-top:1px solid var(--border);}
-.cta-title{font-family:var(--font-display);font-size:30px;letter-spacing:1px;margin-bottom:10px;}
+.cta-title{font-family:var(--font-d);font-size:30px;letter-spacing:1px;margin-bottom:10px;}
 .cta-sub{font-size:13px;color:var(--text3);margin-bottom:20px;}
-.cta-btn{padding:12px 28px;border-radius:var(--radius-sm);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:14px;font-family:var(--font-display);letter-spacing:1px;cursor:pointer;}
+.cta-btn{padding:12px 28px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:14px;font-family:var(--font-d);letter-spacing:1px;cursor:pointer;}
 
-/* ===== TOAST ===== */
+/* TOAST */
 .toast{position:fixed;bottom:24px;right:20px;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;z-index:3000;animation:fadeUp 0.3s ease;box-shadow:var(--shadow);}
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .footer{background:#0a0a14;padding:20px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .footer-copy{font-size:11px;color:var(--text4);}
 .footer-back{font-size:12px;color:var(--accent);text-decoration:none;font-weight:700;}
 
 /* stagger */
-.prog-card:nth-child(1){animation-delay:.04s}
-.prog-card:nth-child(2){animation-delay:.08s}
-.prog-card:nth-child(3){animation-delay:.12s}
-.prog-card:nth-child(4){animation-delay:.16s}
-.prog-card:nth-child(5){animation-delay:.20s}
-.prog-card:nth-child(6){animation-delay:.24s}
+.prog-card:nth-child(1){animation-delay:.04s}.prog-card:nth-child(2){animation-delay:.08s}.prog-card:nth-child(3){animation-delay:.12s}.prog-card:nth-child(4){animation-delay:.16s}.prog-card:nth-child(5){animation-delay:.2s}.prog-card:nth-child(6){animation-delay:.24s}
 
 @media(max-width:1024px){.programs-grid{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:768px){
-  .nav{padding:10px 16px;}
-  .nav-links{display:none;}
-  .hero{padding:32px 16px 24px;min-height:260px;}
-  .hero-title{font-size:38px;}
-  .float-wrap{display:none;}
-  .filter-bar{padding:12px 16px;}
-  .filter-search{display:none;}
-  .programs-section{padding:16px 16px 32px;}
-  .programs-grid{grid-template-columns:1fr;gap:14px;}
-  .modal-features{grid-template-columns:1fr;}
-}
-@media(max-width:480px){
-  .hero-stats{gap:16px;}
-  .nav-toggle{display:block;}
+  .nav-links{display:none;}.hero{min-height:260px;padding:32px 16px 24px;}.hero-title{font-size:38px;}
+  .float-wrap{display:none;}.filter-search{display:none;}.programs-grid{grid-template-columns:1fr;}
+  .modal-feats{grid-template-columns:1fr;}.sale-banner{gap:10px;}
 }
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- NAV -->
 <nav class="nav">
   <a href="index.html" class="logo">
     <div class="logo-icon">
@@ -251,99 +284,77 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <button class="btn-back" onclick="location.href='index.html'">← Нүүр хуудас</button>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
   </div>
-  <button class="nav-toggle" onclick="this.closest('nav').querySelector('.nav-links').style.display='flex'">☰</button>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg">
-    <div class="hero-glow"></div>
-  </div>
-
-  <!-- FLOATING ELEMENTS -->
+  <div class="hero-bg"><div class="hero-glow"></div></div>
   <div class="float-wrap">
-
-    <!-- Зүүн: Код цонх -->
-    <div class="float-el float-code" style="opacity:0.22;">
+    <div class="float-el float-code">
       <div class="code-window">
-        <div class="code-bar">
-          <div class="code-dot" style="background:#e63946;"></div>
-          <div class="code-dot" style="background:#fbbf24;"></div>
-          <div class="code-dot" style="background:#4ade80;"></div>
-        </div>
-        <div class="code-line green"></div>
-        <div class="code-line blue"></div>
-        <div class="code-line short"></div>
-        <div class="code-line purple"></div>
-        <div class="code-line blue" style="width:60%;"></div>
-        <div class="code-line green" style="width:45%;"></div>
-        <div class="code-line short" style="width:75%;"></div>
+        <div class="code-bar"><div class="code-dot" style="background:#e63946"></div><div class="code-dot" style="background:#fbbf24"></div><div class="code-dot" style="background:#4ade80"></div></div>
+        <div class="code-line" style="background:rgba(74,222,128,0.5);width:70%"></div>
+        <div class="code-line" style="background:rgba(59,130,246,0.5);width:90%"></div>
+        <div class="code-line" style="width:40%"></div>
+        <div class="code-line" style="background:rgba(168,85,247,0.5);width:55%"></div>
+        <div class="code-line" style="background:rgba(59,130,246,0.4);width:60%"></div>
+        <div class="code-line" style="background:rgba(74,222,128,0.4);width:45%"></div>
       </div>
     </div>
-
-    <!-- Зүүн доод: Shield -->
-    <div class="float-el float-shield" style="opacity:0.2;">
-      <svg class="shield-svg" viewBox="0 0 60 60" fill="none">
+    <div class="float-el float-shield" style="opacity:0.2">
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
         <path d="M30 5L8 14v16c0 13 9.5 24.5 22 28 12.5-3.5 22-15 22-28V14L30 5z" fill="rgba(74,222,128,0.15)" stroke="#4ade80" stroke-width="2"/>
         <path d="M22 30l5 5 11-11" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-
-    <!-- Баруун дээд: Gear -->
-    <div class="float-el float-gear" style="opacity:0.18;">
-      <svg class="gear-svg" viewBox="0 0 70 70" fill="none" style="animation:spinSlow 12s linear infinite;">
+    <div class="float-el float-gear" style="opacity:0.18">
+      <svg width="70" height="70" viewBox="0 0 70 70" fill="none" style="animation:spinSlow 12s linear infinite">
         <circle cx="35" cy="35" r="12" fill="rgba(168,85,247,0.15)" stroke="#a855f7" stroke-width="2"/>
         <circle cx="35" cy="35" r="5" fill="rgba(168,85,247,0.4)"/>
         <path d="M35 15v6M35 49v6M15 35h6M49 35h6M21.5 21.5l4.2 4.2M44.3 44.3l4.2 4.2M21.5 48.5l4.2-4.2M44.3 25.7l4.2-4.2" stroke="#a855f7" stroke-width="2.5" stroke-linecap="round"/>
       </svg>
     </div>
-
-    <!-- Баруун доод: Chart -->
-    <div class="float-el float-chart" style="opacity:0.22;">
+    <div class="float-el float-chart">
       <div class="chart-window">
-        <div style="font-size:9px;color:rgba(74,222,128,0.7);font-weight:700;margin-bottom:6px;font-family:'Nunito',sans-serif;">Таталт 📈</div>
+        <div style="font-size:9px;color:rgba(74,222,128,0.7);font-weight:700;font-family:'Nunito',sans-serif;">Таталт 📈</div>
         <div class="chart-bars">
-          <div class="chart-bar" style="height:30%;background:linear-gradient(180deg,#60a5fa,#3b82f6);"></div>
-          <div class="chart-bar" style="height:55%;"></div>
-          <div class="chart-bar" style="height:40%;background:linear-gradient(180deg,#a78bfa,#7c3aed);"></div>
-          <div class="chart-bar" style="height:75%;"></div>
-          <div class="chart-bar" style="height:60%;background:linear-gradient(180deg,#60a5fa,#3b82f6);"></div>
-          <div class="chart-bar" style="height:90%;animation:glow 2s infinite;"></div>
+          <div class="chart-bar" style="height:30%;background:linear-gradient(180deg,#60a5fa,#3b82f6)"></div>
+          <div class="chart-bar" style="height:55%;background:linear-gradient(180deg,#4ade80,#22c55e)"></div>
+          <div class="chart-bar" style="height:40%;background:linear-gradient(180deg,#a78bfa,#7c3aed)"></div>
+          <div class="chart-bar" style="height:75%;background:linear-gradient(180deg,#4ade80,#22c55e)"></div>
+          <div class="chart-bar" style="height:60%;background:linear-gradient(180deg,#60a5fa,#3b82f6)"></div>
+          <div class="chart-bar" style="height:95%;background:linear-gradient(180deg,#4ade80,#22c55e);animation:glow 2s infinite"></div>
         </div>
       </div>
     </div>
-
-    <!-- Particles -->
-    <div class="particle" style="left:20%;bottom:30%;animation-delay:0s;"></div>
-    <div class="particle" style="left:75%;bottom:25%;animation-delay:1s;background:#a855f7;"></div>
-    <div class="particle" style="left:45%;bottom:20%;animation-delay:2s;background:#fbbf24;"></div>
-    <div class="particle" style="left:60%;bottom:35%;animation-delay:0.5s;"></div>
-    <div class="particle" style="left:30%;bottom:40%;animation-delay:1.5s;background:#60a5fa;"></div>
-
+    <div class="particle" style="left:20%;bottom:30%;animation-delay:0s"></div>
+    <div class="particle" style="left:75%;bottom:25%;animation-delay:1s;background:#a855f7"></div>
+    <div class="particle" style="left:45%;bottom:20%;animation-delay:2s;background:#fbbf24"></div>
+    <div class="particle" style="left:60%;bottom:35%;animation-delay:0.5s"></div>
+    <div class="particle" style="left:30%;bottom:40%;animation-delay:1.5s;background:#60a5fa"></div>
   </div>
-
-  <!-- Hero content -->
-  <div class="hero-badge" style="position:relative;z-index:2;">
-    <div class="hero-badge-dot"></div>
-    Кино Эзэн Программ дэлгүүр
-  </div>
-  <h1 class="hero-title">Манай <span>Программууд</span></h1>
-  <p class="hero-sub">Кино Эзэн багийн бүтээсэн программ, хэрэгслүүдийг татаж авч, таны ажлыг хялбарчлаарай.</p>
+  <div class="hero-badge" style="position:relative;z-index:2"><div class="hero-badge-dot"></div>Кино Эзэн Программ дэлгүүр</div>
+  <h1 class="hero-title" style="position:relative;z-index:2">Манай <span>Программууд</span></h1>
+  <p class="hero-sub" style="position:relative;z-index:2">Кино Эзэн багийн бүтээсэн программ, хэрэгслүүдийг татаж авч, таны ажлыг хялбарчлаарай.</p>
   <div class="hero-stats">
-    <div class="hero-stat">
-      <div class="hero-stat-val" id="stat-total">—</div>
-      <div class="hero-stat-label">Нийт программ</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val" id="stat-free">—</div>
-      <div class="hero-stat-label">Үнэгүй</div>
-    </div>
-    <div class="hero-stat">
-      <div class="hero-stat-val" id="stat-downloads">—</div>
-      <div class="hero-stat-label">Нийт таталт</div>
-    </div>
+    <div class="hero-stat"><div class="hero-stat-val" id="stat-total">—</div><div class="hero-stat-label">Нийт программ</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" id="stat-free">—</div><div class="hero-stat-label">Үнэгүй</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" id="stat-downloads">—</div><div class="hero-stat-label">Нийт таталт</div></div>
+    <div class="hero-stat"><div class="hero-stat-val" id="stat-rating">—</div><div class="hero-stat-label">Дундаж үнэлгээ</div></div>
   </div>
 </section>
+
+<!-- SALE COUNTDOWN -->
+<div class="sale-banner" id="sale-banner">
+  <div class="sale-text">🔥 <span>Онцгой хямдрал</span> — Хугацаа хязгаарлагдмал!</div>
+  <div class="countdown">
+    <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-label">ЦАГ</span></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-label">МИН</span></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-label">СЕК</span></div>
+  </div>
+</div>
 
 <!-- FILTER -->
 <div class="filter-bar">
@@ -357,6 +368,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
   </div>
 </div>
 
+<!-- SORT -->
+<div class="sort-bar">
+  <span class="sort-label">Эрэмбэ:</span>
+  <button class="sort-btn on" onclick="sortBy(this,'new')">🆕 Шинэ</button>
+  <button class="sort-btn" onclick="sortBy(this,'rating')">⭐ Үнэлгээ</button>
+  <button class="sort-btn" onclick="sortBy(this,'downloads')">↓ Таталт</button>
+  <button class="sort-btn" onclick="sortBy(this,'price-asc')">💰 Үнэ ↑</button>
+  <button class="sort-btn" onclick="sortBy(this,'free')">🆓 Үнэгүй</button>
+</div>
+
 <!-- PROGRAMS -->
 <section class="programs-section">
   <div class="section-header">
@@ -364,9 +385,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
     <span class="result-count" id="result-count"></span>
   </div>
   <div class="programs-grid" id="programs-grid">
-    <div class="skel" style="height:380px"></div>
-    <div class="skel" style="height:380px"></div>
-    <div class="skel" style="height:380px"></div>
+    <div class="skel" style="height:400px"></div>
+    <div class="skel" style="height:400px"></div>
+    <div class="skel" style="height:400px"></div>
   </div>
 </section>
 
@@ -389,32 +410,40 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-he
 </div>
 
 <script>
-const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
-const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-let allPrograms=[];
-let activeCat='';
-let searchVal='';
+const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 
-function sanitize(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+let allPrograms=[], activeCat='', searchVal='', sortMode='new';
+let currentUser=null;
 
-async function supaFetch(table,params=''){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
-  if(!r.ok)throw new Error('Supabase '+r.status);
-  return r.json();
+// ── Supabase helpers ──
+async function sbFetch(table,params=''){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}});
+  if(!r.ok)throw new Error(r.status);return r.json();
+}
+async function sbPost(table,data){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+  return r.ok;
+}
+async function sbPatch(table,filter,data){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${filter}`,{method:'PATCH',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+  return r.ok;
 }
 
-async function supaIncrement(id,field){
-  const p=allPrograms.find(x=>x.id==id);if(!p)return;
-  const v=(p[field]||0)+1;
-  await fetch(`${SUPABASE_URL}/rest/v1/programs?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({[field]:v})});
-  p[field]=v;
-}
+// ── Utilities ──
+function san(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+function emoji(cat){return{'Кино':'🎬','Хэрэгсэл':'🔧','AI':'🤖','Тоглоом':'🎮','Бусад':'📦'}[cat]||'💻';}
+function fmtPrice(p){return(!p||p==0)?'<span class="prog-price free">ҮНЭГҮЙ</span>':`<span class="prog-price">${parseInt(p).toLocaleString()}₮</span>`;}
 
-function getEmoji(cat){return{'Кино':'🎬','Хэрэгсэл':'🔧','AI':'🤖','Тоглоом':'🎮','Бусад':'📦'}[cat]||'💻';}
-
-function formatPrice(p){
-  if(!p||p==0)return'<span class="prog-price free">ҮНЭГҮЙ</span>';
-  return`<span class="prog-price">${parseInt(p).toLocaleString()}₮</span>`;
+function renderStars(avg,size=12){
+  avg=parseFloat(avg)||0;
+  let h='';
+  for(let i=1;i<=5;i++){
+    if(i<=Math.floor(avg))h+=`<span class="star on" style="font-size:${size}px">★</span>`;
+    else if(i-avg<1&&i-avg>0)h+=`<span class="star half" style="font-size:${size}px">★</span>`;
+    else h+=`<span class="star" style="font-size:${size}px">★</span>`;
+  }
+  return h;
 }
 
 function getBadges(p){
@@ -426,22 +455,38 @@ function getBadges(p){
   return t;
 }
 
+// ── Card builder ──
 function buildCard(p){
   const isFree=!p.price||p.price==0;
-  const feats=(p.features||'').split('\n').filter(Boolean).slice(0,3).map(f=>`<div class="prog-feat">${sanitize(f)}</div>`).join('');
-  const imgHtml=p.thumbnail?`<img src="${sanitize(p.thumbnail)}" alt="${sanitize(p.title)}" loading="lazy">`:`<div class="prog-img-placeholder">${getEmoji(p.category)}</div>`;
+  const feats=(p.features||'').split('\n').filter(Boolean).slice(0,3).map(f=>`<div class="prog-feat">${san(f)}</div>`).join('');
+  const img=p.thumbnail?`<img src="${san(p.thumbnail)}" alt="${san(p.title)}" loading="lazy">`:`<div class="prog-img-placeholder">${emoji(p.category)}</div>`;
+  const dl=p.downloads||0;
+  const socialTxt=dl>0?`🔥 ${dl>999?(dl/1000).toFixed(1)+'к':dl} таталт`:'';
+  const ratingHtml=p.rating_count>0?`
+    <div class="prog-rating">
+      <div class="stars">${renderStars(p.rating_avg)}</div>
+      <span class="rating-num">${parseFloat(p.rating_avg||0).toFixed(1)}</span>
+      <span class="rating-cnt">(${p.rating_count})</span>
+    </div>`:'';
+  const trialHtml=isFree?'':`<div class="trial-badge">🆓 7 хоног үнэгүй туршина</div>`;
   return`<article class="prog-card">
-    <div class="prog-img">${imgHtml}<div class="prog-badges">${getBadges(p)}</div></div>
+    <div class="prog-img">
+      ${img}
+      <div class="prog-badges">${getBadges(p)}</div>
+      ${socialTxt?`<div class="social-proof">${socialTxt}</div>`:''}
+    </div>
     <div class="prog-body">
-      <span class="prog-cat">${sanitize(p.category||'Бусад')}</span>
-      <div class="prog-title">${sanitize(p.title)}</div>
-      <div class="prog-desc">${sanitize(p.description||'')}</div>
+      <span class="prog-cat">${san(p.category||'Бусад')}</span>
+      <div class="prog-title">${san(p.title)}</div>
+      ${ratingHtml}
+      <div class="prog-desc">${san(p.description||'')}</div>
+      ${trialHtml}
       ${feats?`<div class="prog-features">${feats}</div>`:''}
       <div class="prog-footer">
         <div class="prog-price-wrap">
           ${p.original_price&&p.original_price!=p.price?`<div class="prog-price-old">${parseInt(p.original_price).toLocaleString()}₮</div>`:''}
-          ${formatPrice(p.price)}
-          <div class="prog-price-label">${isFree?'Татаж авах':'Нэг удаагийн'}</div>
+          ${fmtPrice(p.price)}
+          <div class="prog-price-label">${isFree?'Татаж авах':'Нэг удаагийн төлбөр'}</div>
         </div>
         <div class="prog-actions">
           <button class="btn-demo" onclick="openDetail('${p.id}')">Дэлгэрэнгүй</button>
@@ -452,6 +497,7 @@ function buildCard(p){
   </article>`;
 }
 
+// ── Render ──
 function renderPrograms(list){
   const g=document.getElementById('programs-grid');
   document.getElementById('result-count').textContent=list.length+' программ';
@@ -459,56 +505,143 @@ function renderPrograms(list){
   g.innerHTML=list.map(buildCard).join('');
 }
 
-function filterPrograms(){
-  let list=allPrograms;
+// ── Filter & Sort ──
+function applyAll(){
+  let list=[...allPrograms];
   if(activeCat)list=list.filter(p=>p.category===activeCat);
   if(searchVal)list=list.filter(p=>(p.title||'').toLowerCase().includes(searchVal));
+  if(sortMode==='rating')list.sort((a,b)=>(b.rating_avg||0)-(a.rating_avg||0));
+  else if(sortMode==='downloads')list.sort((a,b)=>(b.downloads||0)-(a.downloads||0));
+  else if(sortMode==='price-asc')list.sort((a,b)=>(a.price||0)-(b.price||0));
+  else if(sortMode==='free')list=list.filter(p=>!p.price||p.price==0);
+  else list.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   renderPrograms(list);
 }
 
-function filterCat(el,cat){
-  document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('on'));
-  el.classList.add('on');activeCat=cat;filterPrograms();
-}
+function filterCat(el,cat){document.querySelectorAll('.fpill').forEach(b=>b.classList.remove('on'));el.classList.add('on');activeCat=cat;applyAll();}
+function filterSearch(){searchVal=document.getElementById('search-inp').value.toLowerCase().trim();applyAll();}
+function sortBy(el,mode){document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');sortMode=mode;applyAll();}
 
-function filterSearch(){searchVal=document.getElementById('search-inp').value.toLowerCase().trim();filterPrograms();}
-
+// ── Detail Modal ──
 function openDetail(id){
   const p=allPrograms.find(x=>x.id==id);if(!p)return;
   const isFree=!p.price||p.price==0;
-  const feats=(p.features||'').split('\n').filter(Boolean).map(f=>`<div class="modal-feat">${sanitize(f)}</div>`).join('');
-  const imgEl=p.thumbnail?`<img src="${sanitize(p.thumbnail)}" alt="${sanitize(p.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;">`:`<span style="font-size:72px">${getEmoji(p.category)}</span>`;
+  const feats=(p.features||'').split('\n').filter(Boolean).map(f=>`<div class="modal-feat">${san(f)}</div>`).join('');
+  const img=p.thumbnail?`<img src="${san(p.thumbnail)}" alt="${san(p.title)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">`:`<span style="font-size:72px">${emoji(p.category)}</span>`;
+
   document.getElementById('modal-inner').innerHTML=`
-    <div class="modal-img" style="display:flex;align-items:center;justify-content:center;position:relative;">
-      ${imgEl}
+    <div class="modal-img-wrap" style="position:relative;">
+      ${img}
       <button class="modal-close-btn" onclick="closeDetail()">✕</button>
     </div>
     <div class="modal-body">
-      <span class="modal-cat">${sanitize(p.category||'Бусад')}</span>
-      <div class="modal-title">${sanitize(p.title)}</div>
-      <div class="modal-desc">${sanitize(p.description||'')}</div>
-      ${feats?`<div class="modal-features-title">Онцлог функцүүд</div><div class="modal-features">${feats}</div>`:''}
+      <span class="modal-cat">${san(p.category||'Бусад')}</span>
+      <div class="modal-title">${san(p.title)}</div>
+      <div class="modal-rating">
+        <div class="stars">${renderStars(p.rating_avg,16)}</div>
+        <span class="rating-num" style="font-size:14px;">${parseFloat(p.rating_avg||0).toFixed(1)}</span>
+        <span class="rating-cnt" style="font-size:12px;">(${p.rating_count||0} үнэлгээ)</span>
+      </div>
+      <div class="modal-desc">${san(p.description||'')}</div>
+      ${feats?`<div class="modal-feats-title">Онцлог функцүүд</div><div class="modal-feats">${feats}</div>`:''}
+      ${!isFree?`<div class="trial-section">
+        <div class="trial-icon">🆓</div>
+        <div class="trial-text"><strong>7 хоног үнэгүй туршаарай</strong><span>Картын мэдээлэл шаардахгүй</span></div>
+        <button class="btn-trial" onclick="showToast('📧 Туршилтын холбоос илгээгдлээ!')">Туршиж үзэх</button>
+      </div>`:''}
       <div class="modal-footer">
-        <div class="modal-price-big ${isFree?'free':''}">${isFree?'ҮНЭГҮЙ':parseInt(p.price).toLocaleString()+'₮'}</div>
+        ${p.original_price&&p.original_price!=p.price?`<div class="modal-price-old">${parseInt(p.original_price).toLocaleString()}₮</div>`:''}
+        <div class="modal-price ${isFree?'free':''}">${isFree?'ҮНЭГҮЙ':parseInt(p.price).toLocaleString()+'₮'}</div>
         <button class="modal-buy-btn ${isFree?'free':''}" onclick="handleBuy(event,'${p.id}',${isFree})">${isFree?'↓ Татаж авах':'🛒 Худалдан авах'}</button>
       </div>
+      <div class="reviews-section" id="reviews-${id}">
+        <div class="reviews-title">⭐ Үнэлгээ & Сэтгэгдэл</div>
+        <div id="review-form-wrap"></div>
+        <div class="review-list" id="review-list"></div>
+      </div>
     </div>`;
+
   document.getElementById('detail-modal').classList.add('open');
-  supaIncrement(id,'views');
+  loadReviews(id);
+  sbPatch('programs',`id=eq.${id}`,{views:(p.views||0)+1});
+  p.views=(p.views||0)+1;
 }
 
 function closeDetail(){document.getElementById('detail-modal').classList.remove('open');}
 document.getElementById('detail-modal').addEventListener('click',e=>{if(e.target===document.getElementById('detail-modal'))closeDetail();});
 
+// ── Reviews ──
+async function loadReviews(progId){
+  const wrap=document.getElementById('review-form-wrap');
+  const list=document.getElementById('review-list');
+  if(!wrap||!list)return;
+
+  // Form (зочин үнэлгээ өгч болохгүй)
+  const uid=localStorage.getItem('ke_user_id');
+  const uname=localStorage.getItem('ke_user_name')||'Хэрэглэгч';
+  if(uid){
+    wrap.innerHTML=`
+      <div class="review-form">
+        <div class="review-form-title">Таны үнэлгээ:</div>
+        <div class="star-picker" id="star-picker">
+          <span class="star-pick" data-v="1">★</span>
+          <span class="star-pick" data-v="2">★</span>
+          <span class="star-pick" data-v="3">★</span>
+          <span class="star-pick" data-v="4">★</span>
+          <span class="star-pick" data-v="5">★</span>
+        </div>
+        <textarea class="review-inp" id="review-text" placeholder="Сэтгэгдлээ бичнэ үү..."></textarea>
+        <button class="btn-review" onclick="submitReview('${progId}','${uid}','${uname}')">Үнэлгээ өгөх ✓</button>
+      </div>`;
+    document.querySelectorAll('.star-pick').forEach(s=>{
+      s.addEventListener('click',()=>{
+        const v=parseInt(s.dataset.v);
+        document.querySelectorAll('.star-pick').forEach((x,i)=>x.classList.toggle('sel',i<v));
+        s.closest('.review-form').dataset.rating=v;
+      });
+    });
+  }else{
+    wrap.innerHTML=`<div class="login-to-review">Үнэлгээ өгөхийн тулд <a href="login.html">нэвтэрнэ үү</a></div>`;
+  }
+
+  try{
+    const reviews=await sbFetch('reviews',`program_id=eq.${progId}&order=created_at.desc&limit=20`);
+    if(!reviews||!reviews.length){list.innerHTML='<div class="no-reviews">Одоохондоо үнэлгээ байхгүй байна</div>';return;}
+    list.innerHTML=reviews.map(r=>`
+      <div class="review-item">
+        <div class="review-header">
+          <div class="review-avatar">${(r.user_name||'Х')[0].toUpperCase()}</div>
+          <span class="review-name">${san(r.user_name)}</span>
+          <div class="stars">${renderStars(r.rating,11)}</div>
+          <span class="review-date">${new Date(r.created_at).toLocaleDateString('mn-MN')}</span>
+        </div>
+        ${r.comment?`<div class="review-comment">${san(r.comment)}</div>`:''}
+      </div>`).join('');
+  }catch(e){list.innerHTML='<div class="no-reviews">Үнэлгээ ачаалахад алдаа гарлаа</div>';}
+}
+
+async function submitReview(progId,userId,userName){
+  const form=document.querySelector('.review-form');
+  const rating=parseInt(form?.dataset.rating||0);
+  const comment=document.getElementById('review-text')?.value.trim()||'';
+  if(!rating){showToast('⭐ Одоо эхлэд үнэлгээ сонгоно уу!');return;}
+  const ok=await sbPost('reviews',{program_id:progId,user_id:userId,user_name:userName,rating,comment});
+  if(ok){showToast('✅ Үнэлгээ амжилттай илгээгдлээ!');loadReviews(progId);
+    const p=allPrograms.find(x=>x.id==progId);
+    if(p){const data=await sbFetch('programs',`id=eq.${progId}&select=rating_avg,rating_count`);if(data&&data[0]){p.rating_avg=data[0].rating_avg;p.rating_count=data[0].rating_count;}}
+  }else showToast('❌ Алдаа гарлаа. Та аль хэдийн үнэлсэн байж магадгүй.');
+}
+
+// ── Buy/Download ──
 function handleBuy(e,id,isFree){
   e.stopPropagation();
   const p=allPrograms.find(x=>x.id==id);if(!p)return;
   if(isFree){
-    if(p.download_url){supaIncrement(id,'downloads');window.open(p.download_url,'_blank');}
+    if(p.download_url){sbPatch('programs',`id=eq.${id}`,{downloads:(p.downloads||0)+1});p.downloads=(p.downloads||0)+1;window.open(p.download_url,'_blank');}
     else showToast('📦 Удахгүй боломжтой болно!');
   }else{
     if(p.buy_url)window.open(p.buy_url,'_blank');
-    else showToast('💬 Бидэнтэй холбоо барина уу!');
+    else showToast('💬 Холбоо барих: kinoezen@gmail.com');
   }
 }
 
@@ -517,35 +650,57 @@ function showToast(msg){
   document.body.appendChild(t);setTimeout(()=>t.remove(),3000);
 }
 
+// ── Countdown ──
+function startCountdown(){
+  let end=localStorage.getItem('ke_sale_end');
+  if(!end||new Date(end)<new Date()){
+    const d=new Date();d.setHours(d.getHours()+6);
+    end=d.toISOString();localStorage.setItem('ke_sale_end',end);
+  }
+  function tick(){
+    const diff=new Date(end)-new Date();
+    if(diff<=0){document.getElementById('sale-banner').style.display='none';return;}
+    const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+  }
+  tick();setInterval(tick,1000);
+}
+
+// ── Load ──
 async function loadPrograms(){
   try{
-    const data=await supaFetch('programs','order=created_at.desc&is_active=eq.true');
+    const data=await sbFetch('programs','order=created_at.desc&is_active=eq.true');
     allPrograms=data||[];
-    const freeCount=allPrograms.filter(p=>!p.price||p.price==0).length;
+    const freeC=allPrograms.filter(p=>!p.price||p.price==0).length;
     const totalDl=allPrograms.reduce((s,p)=>s+(p.downloads||0),0);
+    const avgR=allPrograms.filter(p=>p.rating_count>0).reduce((s,p,_,a)=>s+parseFloat(p.rating_avg||0)/a.length,0);
     document.getElementById('stat-total').textContent=allPrograms.length;
-    document.getElementById('stat-free').textContent=freeCount;
+    document.getElementById('stat-free').textContent=freeC;
     document.getElementById('stat-downloads').textContent=totalDl>999?(totalDl/1000).toFixed(1)+'к':totalDl;
+    document.getElementById('stat-rating').textContent=avgR>0?'★'+avgR.toFixed(1):'—';
     const cats=[...new Set(allPrograms.map(p=>p.category).filter(Boolean))];
     const pills=document.getElementById('filter-pills');
     pills.innerHTML=`<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>`+
-      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${getEmoji(c)} ${c}</button>`).join('');
-    renderPrograms(allPrograms);
-  }catch(err){
+      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${emoji(c)} ${c}</button>`).join('');
+    applyAll();
+  }catch(e){
     allPrograms=[
-      {id:'d1',title:'Кино Эзэн Плеер',category:'Кино',description:'Монгол кино үзэх зориулалттай хөнгөн, хурдан плеер. Бүх форматыг дэмждэг.',features:'Монгол хадмал дэмжлэг\nБүх видео формат\nДаркмод горим',price:0,is_new:true,thumbnail:null,downloads:124,views:567},
-      {id:'d2',title:'Subtitle AI Орчуулагч',category:'AI',description:'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг.',features:'GPT-4 хэрэглэдэг\nSRT форматтай ажилладаг\nБатч боловсруулалт',price:15000,original_price:25000,is_hot:true,is_sale:true,thumbnail:null,downloads:89,views:432},
-      {id:'d3',title:'Трейлер Татагч',category:'Хэрэгсэл',description:'YouTube болон бусад сайтуудаас трейлер, видео татаж авах хэрэгсэл.',features:'4K чанартай татах\n50+ сайт дэмжих\nМП3 хөрвүүлэгч',price:0,thumbnail:null,downloads:312,views:891}
+      {id:'d1',title:'Кино Эзэн Плеер',category:'Кино',description:'Монгол кино үзэх зориулалттай хөнгөн, хурдан плеер.',features:'Монгол хадмал дэмжлэг\nБүх видео формат\nДаркмод горим',price:0,is_new:true,downloads:124,views:567,rating_avg:4.8,rating_count:12},
+      {id:'d2',title:'Subtitle AI Орчуулагч',category:'AI',description:'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг.',features:'GPT-4 хэрэглэдэг\nSRT форматтай\nБатч боловсруулалт',price:15000,original_price:25000,is_hot:true,is_sale:true,downloads:89,views:432,rating_avg:4.5,rating_count:8},
+      {id:'d3',title:'Трейлер Татагч',category:'Хэрэгсэл',description:'YouTube болон бусад сайтуудаас видео татаж авах хэрэгсэл.',features:'4K чанартай татах\n50+ сайт дэмжих\nМП3 хөрвүүлэгч',price:0,downloads:312,views:891,rating_avg:4.2,rating_count:21}
     ];
+    const cats=[...new Set(allPrograms.map(p=>p.category))];
+    document.getElementById('filter-pills').innerHTML=`<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>`+
+      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${emoji(c)} ${c}</button>`).join('');
     document.getElementById('stat-total').textContent=allPrograms.length;
     document.getElementById('stat-free').textContent=allPrograms.filter(p=>!p.price||p.price==0).length;
-    document.getElementById('stat-downloads').textContent=allPrograms.reduce((s,p)=>s+(p.downloads||0),0);
-    const cats=[...new Set(allPrograms.map(p=>p.category))];
-    const pills=document.getElementById('filter-pills');
-    pills.innerHTML=`<button class="fpill on" onclick="filterCat(this,'')">Бүгд</button>`+
-      cats.map(c=>`<button class="fpill" onclick="filterCat(this,'${c}')">${getEmoji(c)} ${c}</button>`).join('');
-    renderPrograms(allPrograms);
+    document.getElementById('stat-downloads').textContent=535;
+    document.getElementById('stat-rating').textContent='★4.5';
+    applyAll();
   }
+  startCountdown();
 }
 
 loadPrograms();
