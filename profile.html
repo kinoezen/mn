@@ -1080,5 +1080,91 @@ document.getElementById('topupModal').addEventListener('click', function(e) {
 if(e.target === this) closeTopupModal();
 });
 </script>
-</body>
+</body><!--
+  ╔══════════════════════════════════════════════════════════
+  ║  КИНО ЭЗЭН — BOTTOM NAV TEMPLATE
+  ║  Хэрхэн ашиглах:
+  ║  1. Энэ кодыг </body> өмнө тавина
+  ║  2. Идэвхтэй хуудасны "active-color" өнгийг #4ade80 болгоно
+  ║     бусдыг нь rgba(255,255,255,0.4) байлгана
+  ╚══════════════════════════════════════════════════════════
+
+  ХУУДАС БҮР ДЭЭР СОЛИХ ЗҮЙЛ:
+  - index.html    → 🏠 Нүүр       активтай
+  - lessons.html  → 📚 Сургалт    активтай
+  - programs.html → 💻 Программ   активтай
+  - services.html → ⚙️ Үйлчилгээ  активтай
+  - profile.html  → 👤 Профайл    активтай
+-->
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav id="ke-bottom-nav" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:4px 0 env(safe-area-inset-bottom);z-index:1000;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:0 8px;max-width:480px;margin:0 auto;">
+
+    <!-- 1. НҮҮр -->
+    <a href="index.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;" id="bn-home">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">🏠</div>
+      <span>Нүүр</span>
+    </a>
+
+    <!-- 2. Сургалт -->
+    <a href="lessons.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;" id="bn-lessons">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">📚</div>
+      <span>Сургалт</span>
+    </a>
+
+    <!-- 3. Программ -->
+    <a href="programs.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;" id="bn-programs">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">💻</div>
+      <span>Программ</span>
+    </a>
+
+    <!-- 4. Үйлчилгээ -->
+    <a href="services.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;" id="bn-services">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">⚙️</div>
+      <span>Үйлчилгээ</span>
+    </a>
+
+    <!-- 5. Профайл -->
+    <a href="profile.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;" id="bn-profile">
+      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">👤</div>
+      <span>Профайл</span>
+    </a>
+
+  </div>
+</nav>
+
+<script>
+(function(){
+  var nav = document.getElementById('ke-bottom-nav');
+  function showNav(){
+    if(window.innerWidth <= 768){
+      nav.style.display = 'block';
+      document.body.style.paddingBottom = '64px';
+    } else {
+      nav.style.display = 'none';
+      document.body.style.paddingBottom = '0';
+    }
+  }
+  showNav();
+  window.addEventListener('resize', showNav);
+
+  // Одоогийн хуудасны цэсийг идэвхжүүлэх
+  var page = window.location.pathname.split('/').pop() || 'index.html';
+  var map = {
+    'index.html':    'bn-home',
+    '':              'bn-home',
+    'lessons.html':  'bn-lessons',
+    'programs.html': 'bn-programs',
+    'services.html': 'bn-services',
+    'profile.html':  'bn-profile'
+  };
+  var activeId = map[page];
+  if(activeId){
+    var el = document.getElementById(activeId);
+    if(el) el.style.color = '#4ade80';
+  }
+})();
+</script>
+<!-- ===== /BOTTOM NAV ===== -->
 </html>
