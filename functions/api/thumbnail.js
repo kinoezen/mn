@@ -23,7 +23,7 @@ export async function onRequestPost({ request, env }) {
 
     const { text } = await callAI(env, systemPrompt, content, {
       temperature: 0.9,
-      maxOutputTokens: 100
+      maxOutputTokens: 300
     });
 
     return corsJson({ title: text.trim() });
