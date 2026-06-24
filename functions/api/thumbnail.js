@@ -19,11 +19,11 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ error: 'Видеогийн агуулга оруулна уу' }, 400);
     }
 
-    const systemPrompt = `Чи YouTube thumbnail-д зориулсан гарчиг бичигч. Богино (5-8 үгтэй), сэтгэл татам, "clickbait" мэдрэмжтэй боловч ойлгомжтой монгол гарчиг бичнэ. Шаардлагатай бол 1 emoji ашиглаж болно. Зөвхөн гарчгийг буцаа, нэмэлт тайлбар, хашилт бичих хэрэггуй.`;
+    const systemPrompt = `Чи YouTube thumbnail-д зориулсан гарчиг бичигч. Сэтгэл татам, "clickbait" мэдрэмжтэй боловч ойлгомжтой, БҲТЭН өгүүлбэр хэлбэртэй монгол гарчиг бичнэ (10-15 үг орчим). Гарчиг тодорхой санаагаар төгссөн байх ёстой, дундаасаа тасрахгуй. Шаардлагатай бол 1 emoji ашиглаж болно. Зөвхөн гарчгийг буцаа, нэмэлт тайлбар, хашилт бичих хэрэггуй.`;
 
     const { text } = await callAI(env, systemPrompt, content, {
       temperature: 0.9,
-      maxOutputTokens: 300
+      maxOutputTokens: 500
     });
 
     return corsJson({ title: text.trim() });
