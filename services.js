@@ -414,6 +414,10 @@ async function runNameTranslate() {
 // ============================================================
 // ПОСТ ҮҮСГЭГЧ
 // ============================================================
+// ШИНЭ runPostGen() — /api/post-gen руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runPostGen() функцийг ЭНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ.
+// ============================================================
 async function runPostGen() {
     const text = document.getElementById('post-gen-input')?.value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
@@ -422,22 +426,29 @@ async function runPostGen() {
     try {
         const platform = document.querySelector('input[name="post-platform"]:checked')?.value || 'facebook';
         const platformNames = { facebook: 'Facebook', instagram: 'Instagram' };
-        const randomPost = `📢 ${text}\n\nЭнэ нь таны ${platformNames[platform]} пост юм. #КиноЭзэн`;
+
+        const response = await fetch('/api/post-gen', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: text, platform })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Пост үүсгэх үед алдаа гарлаа');
+
         const resultDiv = document.getElementById('post-gen-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">📱 ${platformNames[platform]} пост</div>
-            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${randomPost}</div>
+            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.post}</div>
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Пост амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
         console.error('PostGen error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📱 Пост үүсгэх'; }
 }
-
 // ============================================================
 // THUMBNAIL ГАРЧИГ
 // ============================================================
