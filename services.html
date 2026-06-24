@@ -661,8 +661,8 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       <button class="svc-btn" onclick="toggleBox('transcript-clean-box',this)">🧹 Турших</button>
       <div class="svc-box" id="transcript-clean-box">
         <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
-        <label class="form-label">Транскрипт текст</label>
-        <textarea id="transcript-clean-input" placeholder="STT гаралтыг энд оруулна уу..." style="height:120px;"></textarea>
+        <label class="form-label">Транскрипт текст <span id="transcript-clean-count" style="color:#4ade80;float:right">0/6000</span></label>
+       <textarea id="transcript-clean-input" placeholder="STT гаралтыг энд оруулна уу..." style="height:120px;" oninput="updateTranscriptCleanCount()"></textarea>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="checkbox" id="clean-fillers" checked style="accent-color:#4ade80;"> Дүүргэгч үг</label>
           <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="checkbox" id="clean-repeat" checked style="accent-color:#4ade80;"> Давталт</label>
