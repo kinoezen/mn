@@ -18,6 +18,9 @@ export async function onRequestPost({ request, env }) {
     if (!text || !text.trim()) {
       return corsJson({ error: 'Текст оруулна уу' }, 400);
     }
+    if (text.length > 6000) {
+      return corsJson({ error: 'Текст 6000 тэмдэгтээс ихгуй байх ёстой' }, 400);
+    }
 
     const tasks = [];
     if (removeFillers !== false) tasks.push('дүүргэгч үг (ааа, эээ, тэгээд, дээ гэх мэт) арилгах');
