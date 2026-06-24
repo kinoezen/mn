@@ -452,28 +452,38 @@ async function runPostGen() {
 // ============================================================
 // THUMBNAIL ГАРЧИГ
 // ============================================================
+// ШИНЭ runThumbnail() — /api/thumbnail руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runThumbnail() функцийг ЭНЭ ФУНКЦЭЭР
+// бүхэлд нь СОЛИХ.
+// ============================================================
 async function runThumbnail() {
     const text = document.getElementById('thumbnail-input')?.value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
     try {
-        const randomTitle = `🔥 ${text.substring(0, 40)}... | ШОКИРУУЛСАН`;
+        const response = await fetch('/api/thumbnail', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: text })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Гарчиг үүсгэх үед алдаа гарлаа');
+
         const resultDiv = document.getElementById('thumbnail-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🖼️ Thumbnail гарчиг</div>
-            <div style="font-size:16px;font-weight:700;color:#fff;padding:12px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">${randomTitle}</div>
+            <div style="font-size:16px;font-weight:700;color:#fff;padding:12px;background:rgba(74,222,128,0.08);border-radius:8px;border:1px solid rgba(74,222,128,0.15);">${data.title}</div>
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Гарчиг амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
         console.error('Thumbnail error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🖼️ Гарчиг үүсгэх'; }
 }
-
 // ============================================================
 // ТРАНСКРИПТ ЗАСАГЧ
 // ============================================================
