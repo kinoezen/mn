@@ -82,13 +82,26 @@
   border-radius: 999px;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
 }
 .zar-cat-pill:hover {
   background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+.zar-cat-pill:active {
+  transform: scale(0.95);
 }
 .zar-cat-pill.zar-active {
   background: #4ade80;
+  color: #0a2a0a;
+  font-weight: 700;
+  animation: zarPillPop 0.3s ease;
+}
+@keyframes zarPillPop {
+  0% { transform: scale(0.9); }
+  60% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
   color: #0a2a0a;
   font-weight: 700;
 }
@@ -98,6 +111,7 @@
   width: 100%;
   max-width: 280px;
   background: linear-gradient(90deg, #4ade80, #f4a261);
+  background-size: 200% 100%;
   border: none;
   color: #0a2a0a;
   font-size: 14px;
@@ -110,13 +124,25 @@
   justify-content: center;
   gap: 6px;
   margin-bottom: 22px;
+  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.5);
+  animation: zarPulseGlow 2.8s ease-in-out infinite;
+  transition: transform 0.15s, background-position 0.4s;
 }
 .zar-post-btn:hover {
-  opacity: 0.92;
+  transform: translateY(-1px) scale(1.015);
+  background-position: 100% 0;
+}
+.zar-post-btn:active {
+  transform: translateY(0) scale(0.99);
 }
 .zar-post-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  animation: none;
+}
+@keyframes zarPulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.35); }
+  50% { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0); }
 }
 
 /* ---------- Listing grid ---------- */
@@ -143,14 +169,34 @@
   overflow: hidden;
   cursor: pointer;
   position: relative;
-  transition: border-color 0.15s, transform 0.1s;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  animation: zarCardIn 0.45s ease both;
+}
+.zar-card:nth-child(1) { animation-delay: 0.02s; }
+.zar-card:nth-child(2) { animation-delay: 0.07s; }
+.zar-card:nth-child(3) { animation-delay: 0.12s; }
+.zar-card:nth-child(4) { animation-delay: 0.17s; }
+.zar-card:nth-child(5) { animation-delay: 0.22s; }
+.zar-card:nth-child(6) { animation-delay: 0.27s; }
+.zar-card:nth-child(7) { animation-delay: 0.32s; }
+.zar-card:nth-child(8) { animation-delay: 0.37s; }
+@keyframes zarCardIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 .zar-card:hover {
-  border-color: rgba(74, 222, 128, 0.4);
-  transform: translateY(-2px);
+  border-color: rgba(74, 222, 128, 0.5);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px -8px rgba(74, 222, 128, 0.25);
+}
+.zar-card:hover .zar-card-img img {
+  transform: scale(1.06);
 }
 .zar-card.zar-vip {
   border-color: rgba(244, 162, 97, 0.45);
+}
+.zar-card.zar-vip:hover {
+  box-shadow: 0 10px 24px -8px rgba(244, 162, 97, 0.3);
 }
 .zar-vip-badge {
   position: absolute;
@@ -163,6 +209,11 @@
   padding: 2px 7px;
   border-radius: 4px;
   z-index: 1;
+  animation: zarVipShine 2.2s ease-in-out infinite;
+}
+@keyframes zarVipShine {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 162, 97, 0.5); }
+  50% { box-shadow: 0 0 6px 2px rgba(244, 162, 97, 0.4); }
 }
 .zar-card-img {
   height: 140px;
@@ -176,6 +227,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
+  animation: zarImgFadeIn 0.4s ease;
+}
+@keyframes zarImgFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 .zar-card-img i {
   font-size: 28px;
@@ -224,16 +281,49 @@
 }
 
 .zar-empty {
+  grid-column: 1 / -1;
   text-align: center;
-  padding: 40px 16px;
+  padding: 48px 16px;
   color: rgba(255, 255, 255, 0.4);
   font-size: 14px;
+  animation: zarHeroIn 0.4s ease;
+}
+.zar-empty-icon {
+  font-size: 38px;
+  display: block;
+  margin-bottom: 10px;
+  animation: zarFloatBounce 2.4s ease-in-out infinite;
+}
+@keyframes zarFloatBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 .zar-loading {
-  text-align: center;
-  padding: 40px 16px;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 14px;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 540px) { .zar-loading { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 860px) { .zar-loading { grid-template-columns: repeat(4, 1fr); } }
+.zar-skel-card {
+  background: #1c1c2c;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 220px;
+  position: relative;
+}
+.zar-skel-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: zarShimmer 1.4s ease-in-out infinite;
+}
+@keyframes zarShimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
 }
 
 /* ---------- Login prompt (нэвтрэлгүй үед) ---------- */
