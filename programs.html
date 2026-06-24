@@ -700,7 +700,10 @@ async function loadPrograms(){
     document.getElementById('stat-rating').textContent='★4.5';
     applyAll();
   }
-  startCountdown();
+  // Хямдралтай программ байвал л banner харуулах
+  const hasSale=allPrograms.some(p=>p.is_sale&&p.original_price);
+  document.getElementById('sale-banner').style.display=hasSale?'flex':'none';
+  if(hasSale)startCountdown();
 }
 
 loadPrograms();
