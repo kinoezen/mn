@@ -591,10 +591,23 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
         <label class="form-label">Орчуулах нэрс (мөр тус бүрт нэг нэр)</label>
         <textarea id="name-translate-input" placeholder="John Smith&#10;Elizabeth Turner" style="height:120px;"></textarea>
         <label class="form-label" style="margin-top:10px;">Эх хэл</label>
-        <select class="lang-select" id="name-translate-lang" style="width:100%;margin-bottom:10px;">
-          <option value="en">🇺🇸 Англи</option><option value="ru">🇷🇺 Орос</option>
-          <option value="zh">🇨🇳 Хятад</option><option value="ja">🇯🇵 Япон</option>
-        </select>
+      <select class="lang-select" id="name-translate-lang" style="width:100%;margin-bottom:10px;" onchange="toggleNameTranslateTarget()">
+  <option value="en">🇺🇸 Англи</option>
+  <option value="ru">🇷🇺 Орос</option>
+  <option value="zh">🇨🇳 Хятад</option>
+  <option value="ja">🇯🇵 Япон</option>
+  <option value="mn">🇲🇳 Монгол</option>
+</select>
+
+<div id="name-translate-target-row" style="display:none;">
+  <label class="form-label">Орчуулах хэл</label>
+  <select class="lang-select" id="name-translate-target" style="width:100%;margin-bottom:10px;">
+    <option value="en">🇺🇸 Англи</option>
+    <option value="ru">🇷🇺 Орос</option>
+    <option value="zh">🇨🇳 Хятад</option>
+    <option value="ja">🇯🇵 Япон</option>
+  </select>
+</div>
         <button class="run-btn" onclick="runNameTranslate()">🎭 Орчуулах</button>
         <div class="notice-box" id="name-translate-notice">💎 Кредит хүрэлцэхгүй — <a href="pricing.html">тариф сонгох →</a></div>
         <div class="result" id="name-translate-result"></div>
