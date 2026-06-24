@@ -390,7 +390,21 @@ function runVideoSplit() {
 // ШИНЭ runNameTranslate() — /api/name-translate руу бодитоор
 // fetch хийнэ. services.js доторх ХУУЧИН runNameTranslate()
 // функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+//
+// АНХААР: HTML дотор "name-translate-lang" select-д "Монгол"
+// сонголт нэмэх, мөн "name-translate-target-row" гэдэг шинэ
+// div нэмэх ёстой (доорхи HTML snippet-ийг үз).
 // ============================================================
+
+// Эх хэл солих үед target хэлний сонголтыг харуулах/нуух
+function toggleNameTranslateTarget() {
+    const sourceLang = document.getElementById('name-translate-lang')?.value;
+    const targetRow = document.getElementById('name-translate-target-row');
+    if (targetRow) {
+        targetRow.style.display = sourceLang === 'mn' ? 'block' : 'none';
+    }
+}
+
 async function runNameTranslate() {
     const text = document.getElementById('name-translate-input')?.value.trim();
     if (!text) { showToast('⚠️ Нэрс оруулна уу!', 'error'); return; }
@@ -398,11 +412,12 @@ async function runNameTranslate() {
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
     try {
         const sourceLang = document.getElementById('name-translate-lang')?.value || 'en';
+        const targetLang = document.getElementById('name-translate-target')?.value || 'en';
 
         const response = await fetch('/api/name-translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ names: text, sourceLang })
+            body: JSON.stringify({ names: text, sourceLang, targetLang })
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
