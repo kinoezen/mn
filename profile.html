@@ -26,11 +26,15 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .nav-links a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 
 /* ===== WRAP ===== */
-.page-layout{max-width:980px;margin:0 auto;display:flex;gap:20px;align-items:flex-start;padding:20px 18px 40px;}
+.page-layout{max-width:1240px;margin:0 auto;display:flex;gap:20px;align-items:flex-start;padding:20px 18px 40px;}
 .wrap{flex:1;min-width:0;max-width:640px;margin:0 auto;padding:0;}
 .left-sidebar{display:none;}
+.right-sidebar{display:none;}
 @media(min-width:1000px){
   .left-sidebar{display:block;width:240px;flex-shrink:0;position:sticky;top:84px;}
+}
+@media(min-width:1280px){
+  .right-sidebar{display:block;width:260px;flex-shrink:0;position:sticky;top:84px;}
 }
 
 /* ===== LEFT SIDEBAR (зөвхөн computer) ===== */
@@ -44,6 +48,43 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .sb-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-sub{font-size:11px;color:rgba(255,255,255,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-empty{font-size:12px;color:rgba(255,255,255,0.3);padding:8px 6px;}
+
+/* ===== RIGHT SIDEBAR (зөвхөн computer, өргөн дэлгэц) ===== */
+.rsb-card{background:#161621;border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.04);}
+.rsb-title{font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+
+/* Streak card */
+.streak-card{background:linear-gradient(135deg,#2d1b0a,#1a1050);border-radius:16px;padding:18px;margin-bottom:14px;border:1px solid rgba(251,191,36,0.15);overflow:hidden;position:relative;}
+.streak-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.streak-flame{font-size:26px;display:inline-block;animation:flicker 1.6s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(251,146,60,0.5));}
+@keyframes flicker{
+  0%,100%{transform:scale(1) rotate(-2deg);}
+  50%{transform:scale(1.08) rotate(2deg);}
+}
+.streak-num{font-size:24px;font-weight:700;color:#fbbf24;}
+.streak-label{font-size:11px;color:rgba(255,255,255,0.4);}
+.streak-dots{display:flex;gap:5px;margin-bottom:10px;}
+.streak-dot{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,0.08);}
+.streak-dot.done{background:#fbbf24;}
+.streak-msg{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
+.streak-msg b{color:#fbbf24;}
+
+/* Notification list */
+.notif-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.notif-item:last-child{border-bottom:none;}
+.notif-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0;margin-top:5px;animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.notif-text{font-size:12.5px;color:#fff;line-height:1.4;}
+.notif-time{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+/* Trending list */
+.trend-item{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;border-radius:8px;transition:0.2s;}
+.trend-item:hover{background:rgba(255,255,255,0.04);}
+.trend-rank{font-size:15px;font-weight:700;color:rgba(255,255,255,0.25);width:18px;flex-shrink:0;}
+.trend-rank.hot{color:#f87171;}
+.trend-thumb{width:34px;height:34px;border-radius:8px;background:#222;object-fit:cover;flex-shrink:0;}
+.trend-name{font-size:12.5px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.trend-views{font-size:10.5px;color:rgba(255,255,255,0.3);}
 
 /* ===== COVER ===== */
 .cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
@@ -389,6 +430,44 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <button class="logout-btn" onclick="logout()">🚪 Гарах</button>
 
 </div>
+
+<!-- RIGHT SIDEBAR (зөвхөн computer, өргөн дэлгэц) -->
+<aside class="right-sidebar">
+
+<!-- STREAK (дараалсан өдрийн тоолуур) -->
+<div class="streak-card">
+<div class="streak-top">
+<span class="streak-flame">🔥</span>
+<div>
+<div class="streak-num" id="streakNum">0 өдөр</div>
+<div class="streak-label">дараалсан ашиглалт</div>
+</div>
+</div>
+<div class="streak-dots" id="streakDots">
+<div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div>
+<div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div>
+</div>
+<div class="streak-msg" id="streakMsg">Өнөөдөр нэвтэрвэл streak эхэлнэ. <b>7 өдөр дараалан</b> орвол bonus кредит!</div>
+</div>
+
+<!-- МЭДЭГДЭЛ -->
+<div class="rsb-card">
+<div class="rsb-title">🔔 Мэдэгдэл</div>
+<div id="rsbNotifs">
+<div class="sb-empty">Мэдэгдэл байхгүй байна</div>
+</div>
+</div>
+
+<!-- TRENDING -->
+<div class="rsb-card">
+<div class="rsb-title">📈 Их үзсэн кино</div>
+<div id="rsbTrending">
+<div class="sb-empty">Ачааллаж байна...</div>
+</div>
+</div>
+
+</aside>
+
 </div>
 
 <!-- ===== BOTTOM NAV — index.html-тэй ижил 5 товч (зөвхөн mobile) ===== -->
@@ -518,6 +597,8 @@ async function loadSession(){
 
   loadWallet();
   loadSidebar();
+  loadStreak();
+  loadRightSidebar();
 }
 loadSession();
 
@@ -571,6 +652,106 @@ function renderSidebarList(containerId, rows, titleField, thumbField, fallbackIc
       ? `<img class="sb-thumb" src="${escapeHtml(thumb)}" alt="">`
       : `<div class="sb-thumb icon">${fallbackIcon}</div>`;
     return `<div class="sb-item">${thumbHtml}<div class="sb-text"><div class="sb-name">${title}</div></div></div>`;
+  }).join('');
+}
+
+// ===== STREAK (дараалсан өдрийн ашиглалт) =====
+async function loadStreak(){
+  const token = localStorage.getItem('sb_token');
+  if(!token) return;
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/touch_streak`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    if(!r.ok){
+      document.getElementById('streakMsg').textContent = 'Streak систем тохируулагдаагүй байна.';
+      return;
+    }
+    const rows = await r.json();
+    const data = Array.isArray(rows) ? rows[0] : rows;
+    if(!data) return;
+    const count = data.streak_count || 0;
+    document.getElementById('streakNum').textContent = count + ' өдөр';
+
+    const dots = document.querySelectorAll('#streakDots .streak-dot');
+    const filled = count % 7 === 0 && count > 0 ? 7 : count % 7;
+    dots.forEach((d, i) => d.classList.toggle('done', i < filled));
+
+    const remaining = 7 - (count % 7 === 0 ? 0 : count % 7);
+    const msgEl = document.getElementById('streakMsg');
+    if(data.bonus_awarded){
+      msgEl.innerHTML = `🎉 <b>+200 кредит</b> bonus авлаа! ${count} өдрийн streak.`;
+    }else if(count === 0){
+      msgEl.innerHTML = 'Өнөөдөр нэвтэрвэл streak эхэлнэ. <b>7 өдөр дараалан</b> орвол bonus кредит!';
+    }else{
+      msgEl.innerHTML = `<b>${remaining} өдрийн дараа</b> bonus кредит авна. Streak-аа бүү тас!`;
+    }
+  }catch(e){
+    document.getElementById('streakMsg').textContent = 'Ачаалж чадсангүй.';
+  }
+}
+
+// ===== RIGHT SIDEBAR: мэдэгдэл + trending =====
+async function loadRightSidebar(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  if(!token || !userId) return;
+
+  // Мэдэгдэл (notifications хүснэгт байгаа тохиолдолд)
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/notifications?user_id=eq.${userId}&select=*&order=created_at.desc&limit=5`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    if(r.ok){
+      const rows = await r.json();
+      renderNotifications(rows);
+    }
+  }catch(e){}
+
+  // Trending (movies хүснэгт view_count-аар эрэмбэлэгдсэн тохиолдолд)
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/movies?select=title,view_count,thumbnail_url&order=view_count.desc&limit=5`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    if(r.ok){
+      const rows = await r.json();
+      renderTrending(rows);
+    }else{
+      document.getElementById('rsbTrending').innerHTML = '<div class="sb-empty">Хараахан өгөгдөл байхгүй</div>';
+    }
+  }catch(e){
+    document.getElementById('rsbTrending').innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
+  }
+}
+
+function renderNotifications(rows){
+  const el = document.getElementById('rsbNotifs');
+  if(!Array.isArray(rows) || rows.length === 0){
+    el.innerHTML = '<div class="sb-empty">Мэдэгдэл байхгүй байна</div>';
+    return;
+  }
+  el.innerHTML = rows.map(n => {
+    const text = escapeHtml(n.message || n.title || 'Шинэ мэдэгдэл');
+    const date = n.created_at ? new Date(n.created_at).toLocaleDateString('mn-MN', {month:'short', day:'numeric'}) : '';
+    return `<div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text">${text}</div><div class="notif-time">${date}</div></div></div>`;
+  }).join('');
+}
+
+function renderTrending(rows){
+  const el = document.getElementById('rsbTrending');
+  if(!Array.isArray(rows) || rows.length === 0){
+    el.innerHTML = '<div class="sb-empty">Хараахан өгөгдөл байхгүй</div>';
+    return;
+  }
+  el.innerHTML = rows.map((row, i) => {
+    const rankClass = i < 1 ? 'hot' : '';
+    const thumb = row.thumbnail_url
+      ? `<img class="trend-thumb" src="${escapeHtml(row.thumbnail_url)}" alt="">`
+      : `<div class="trend-thumb"></div>`;
+    const views = row.view_count ? row.view_count.toLocaleString('mn-MN') + ' үзсэн' : '';
+    return `<div class="trend-item"><div class="trend-rank ${rankClass}">${i+1}</div>${thumb}<div style="flex:1;min-width:0;"><div class="trend-name">${escapeHtml(row.title||'Нэргүй')}</div><div class="trend-views">${views}</div></div></div>`;
   }).join('');
 }
 async function loadWallet(){
