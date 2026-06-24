@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Зар мэдээ — КиноЭзэн</title>
+<title>Зар мэдээ — Кино Эзэн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="zar-page.css">
 <style>
@@ -52,13 +55,14 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .footer{margin-top:30px;padding:16px 18px 80px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;font-size:12px;color:rgba(255,255,255,0.25);}
 
 /* ===== MOBILE BOTTOM NAV ===== */
-.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:60px;background:rgba(18,18,30,0.97);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);z-index:1000;padding-bottom:env(safe-area-inset-bottom);}
-.mbn-inner{display:flex;align-items:center;justify-content:space-around;height:100%;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px 8px;border-radius:10px;text-decoration:none;color:rgba(255,255,255,0.35);font-size:9px;font-weight:600;transition:color 0.2s;border:none;background:none;flex:1;}
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
+.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;}
 .mbn-item.active{color:#4ade80;}
-.mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-.mbn-item.active svg{stroke:#4ade80;}
-@media(max-width:768px){.mobile-bottom-nav{display:flex;}body{padding-bottom:60px;}}
+.mbn-item:hover{color:rgba(255,255,255,0.7);}
+.mbn-item .mbn-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.mbn-item .mbn-emoji{font-size:22px;line-height:1;}
+@media(max-width:768px){.mobile-bottom-nav{display:block;}body{padding-bottom:64px;}}
 
 @media(max-width:600px){
   .hero h1{font-size:20px;}
@@ -76,14 +80,14 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
         <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
         <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
         <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
-        <circle cx="4.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="4.5" cy="17.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="8.5" r="1.1" fill="#f4a261"/>
-        <circle cx="21.5" cy="17.5" r="1.1" fill="#f4a261"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#fbbf24"/>
         <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
       </svg>
     </div>
-    <div class="logo-text">КиноЭзэн</div>
+    <div class="logo-text">Кино Эзэн</div>
   </a>
   <div class="nav-links-desktop">
     <a href="index.html">Нүүр</a>
@@ -126,16 +130,31 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 </div>
 
 <!-- ===== FOOTER ===== -->
-<div class="footer">© 2026 КиноЭзэн — Монгол хэлний кино платформ</div>
+<div class="footer">© 2026 Кино Эзэн — Монгол хэлний кино платформ</div>
 
 <!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav">
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
-    <a class="mbn-item" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H5a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg><span>Нүүр</span></a>
-    <a class="mbn-item" href="movies.html"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 2l-4 5M8 2l4 5"/></svg><span>Кино</span></a>
-    <a class="mbn-item" href="news.html"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10"/><rect x="2" y="3" width="20" height="18" rx="2"/></svg><span>Мэдээ</span></a>
-    <a class="mbn-item active" href="zar.html"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg><span>Зар</span></a>
-    <a class="mbn-item" href="profile.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg><span>Профайл</span></a>
+    <a class="mbn-item" href="index.html" aria-label="Нүүр">
+      <div class="mbn-emoji">🏠</div>
+      <span>Нүүр</span>
+    </a>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
+      <div class="mbn-emoji">📚</div>
+      <span>Сургалт</span>
+    </a>
+    <a class="mbn-item active" href="zar.html" aria-label="Зар мэдээ">
+      <div class="mbn-emoji">📢</div>
+      <span>Зар</span>
+    </a>
+    <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
+      <div class="mbn-emoji">⚙️</div>
+      <span>Үйлчилгээ</span>
+    </a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл">
+      <div class="mbn-emoji">👤</div>
+      <span>Профайл</span>
+    </a>
   </div>
 </nav>
 
