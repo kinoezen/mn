@@ -574,35 +574,47 @@ async function runSeoTitle() {
 // ============================================================
 // PLAGIARISM ШАЛГАГЧ
 // ============================================================
+// ШИНЭ runPlagiarism() — /api/plagiarism руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runPlagiarism() функцийг ЭНЭ
+// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ============================================================
 async function runPlagiarism() {
     const text = document.getElementById('plagiarism-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
     try {
-        const words = text.split(/\s+/);
-        const uniqueWords = new Set(words);
-        const similarity = Math.min(Math.round((1 - uniqueWords.size / words.length) * 100) + 20, 95);
+        const response = await fetch('/api/plagiarism', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Шалгах үед алдаа гарлаа');
+
+        const score = data.score ?? 50;
+        const isHigh = score > 60;
         const resultDiv = document.getElementById('plagiarism-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🔎 Шалгалтын дүн</div>
             <div style="display:flex;gap:20px;flex-wrap:wrap;margin:8px 0;">
-                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid ${similarity > 70 ? 'rgba(230,57,70,0.3)' : 'rgba(74,222,128,0.3)'};">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Давхардлын магадлал</div>
-                    <div style="font-size:24px;font-weight:700;color:${similarity > 70 ? '#e63946' : '#4ade80'};">${similarity}%</div>
+                <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;border:1px solid ${isHigh ? 'rgba(230,57,70,0.3)' : 'rgba(74,222,128,0.3)'};">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Клише/Өвөрмөц бус байдал</div>
+                    <div style="font-size:24px;font-weight:700;color:${isHigh ? '#e63946' : '#4ade80'};">${score}%</div>
                 </div>
                 <div style="padding:12px 20px;background:rgba(255,255,255,0.03);border-radius:8px;">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Үгийн тоо</div>
-                    <div style="font-size:24px;font-weight:700;color:#63b3ff;">${words.length}</div>
+                    <div style="font-size:11px;color:rgba(255,255,255,0.3);">Дүгнэлт</div>
+                    <div style="font-size:14px;font-weight:700;color:${isHigh ? '#e63946' : '#4ade80'};">${data.verdict || ''}</div>
                 </div>
             </div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">⚠️ Энэ нь демо хувилбар.</div>`;
+            ${data.reasons ? `<div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">${data.reasons.join('<br>')}</div>` : ''}
+            <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:8px;">⚠️ Энэ хэрэгсэл интернет дэх эх сурвалжтай шууд харьцуулдаггуй, зөвхөн текстийн хэв шинжийг шинжилдэг.</div>`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
     } catch (error) {
         console.error('Plagiarism error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🔎 Шалгах'; }
 }
