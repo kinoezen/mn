@@ -1,36 +1,44 @@
 // ============================================================
-// ШИНЭ runSeoTitle() — /api/seo-title руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runSeoTitle() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// functions/api/seo-title.js
+// URL: POST /api/seo-title
+// Body: { content: string }
+//
+// _shared/ai.js-ийн callAI()-г ашигладаг: Gemini->Groq fallback.
 // ============================================================
-async function runSeoTitle() {
-    const text = document.getElementById('seo-title-input')?.value.trim();
-    if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
-    const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
-    try {
-        const response = await fetch('/api/seo-title', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content: text })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'SEO үүсгэх үед алдаа гарлаа');
+import { callAI, corsJson, corsOptions } from '../_shared/ai.js';
 
-        const resultDiv = document.getElementById('seo-title-result');
-        if (resultDiv) {
-            resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">🔍 SEO гарчиг & мета тайлбар</div>
-            <div style="margin-bottom:8px;"><div style="font-size:11px;color:rgba(255,255,255,0.3);">📌 Гарчиг</div>
-            <div style="font-size:15px;font-weight:700;color:#4ade80;">${data.title}</div></div>
-            <div><div style="font-size:11px;color:rgba(255,255,255,0.3);">📝 Мета тайлбар</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.6;">${data.description}</div></div>
-            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
-        }
-        showToast('✅ SEO гарчиг амжилттай!', 'success');
-    } catch (error) {
-        console.error('SeoTitle error:', error);
-        showToast('❌ ' + error.message, 'error');
+export async function onRequestOptions() {
+  return corsOptions();
+}
+
+export async function onRequestPost({ request, env }) {
+  try {
+    const { content } = await request.json();
+
+    if (!content || !content.trim()) {
+      return corsJson({ error: 'Агуулга оруулна уу' }, 400);
     }
-    if (btn) { btn.disabled = false; btn.textContent = '🔍 SEO үүсгэх'; }
+
+    const systemPrompt = `Чи SEO мэргэжилтэн. Доорх агуулгад тулгуурлан SEO гарчиг (50-60 тэмдэгт орчим) болон мета тайлбар (140-160 тэмдэгт орчим) бичнэ. Гарчиг түлхуур үг агуулсан, хайлтанд тохирсон байх. Мета тайлбар сонирхол татах, товч байх.
+
+Зөвхөн JSON форматаар хариул, markdown code fence ашиглах хэрэггуй:
+{"title": "SEO гарчиг", "description": "Мета тайлбар"}`;
+
+    const { text: rawText } = await callAI(env, systemPrompt, content, {
+      temperature: 0.6,
+      maxOutputTokens: 500
+    });
+
+    let result;
+    try {
+      const clean = rawText.replace(/```json|```/g, '').trim();
+      result = JSON.parse(clean);
+    } catch {
+      result = { title: content.slice(0, 60), description: rawText.slice(0, 160) };
+    }
+
+    return corsJson(result);
+  } catch (err) {
+    return corsJson({ error: err.message }, 500);
+  }
 }
