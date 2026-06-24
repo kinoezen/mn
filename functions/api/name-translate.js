@@ -8,7 +8,7 @@
 // ============================================================
 import { callAI, corsJson, corsOptions } from '../_shared/ai.js';
 
-const LANG_NAMES = { en: 'Англи', ru: 'Орос', zh: 'Хятад', ja: 'Япон' };
+const LANG_NAMES = { en: 'Англи', ru: 'Орос', zh: 'Хятад', ja: 'Япон', mn: 'Монгол' };
 
 export async function onRequestOptions() {
   return corsOptions();
@@ -16,7 +16,7 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
   try {
-    const { names, sourceLang } = await request.json();
+    const { names, sourceLang, targetLang } = await request.json();
 
     if (!names || !names.trim()) {
       return corsJson({ error: 'Нэрс оруулна уу' }, 400);
@@ -28,11 +28,21 @@ export async function onRequestPost({ request, env }) {
     }
 
     const langName = LANG_NAMES[sourceLang] || sourceLang || 'Англи';
+    const isFromMongolian = sourceLang === 'mn';
 
-    const systemPrompt = `Чи кино/телевизийн дүрийн нэр орчуулагч. Доорх ${langName} хэлний хувь хүний нэрсийг Монгол хэлний стандарт дуудлагын дүрмээр (кириллээр) орчуул. Бодит дуудлагад ойртуулж бич, шууд үсэг хөрвүүлэлт хийхгуй.
+    let systemPrompt;
+    if (isFromMongolian) {
+      const toLangName = LANG_NAMES[targetLang] || targetLang || 'Англи';
+      systemPrompt = `Чи кино/телевизийн дүрийн нэр орчуулагч. Доорх Монгол хувь хүний нэрсийг ${toLangName} хэлний латин/стандарт бичигт хөрвүүл (жишээ нь "Лхагваа" -> "Lkhagvaa" эсвэл тухайн хэлний стандарт романчлал). Бодит дуудлагад ойртуулж бич.
+
+Зөвхөн JSON форматаар хариул, markdown code fence ашиглах хэрэггуй:
+{"translations": [{"original": "эх нэр", "translated": "орчуулга"}, ...]}`;
+    } else {
+      systemPrompt = `Чи кино/телевизийн дүрийн нэр орчуулагч. Доорх ${langName} хэлний хувь хүний нэрсийг Монгол хэлний стандарт дуудлагын дүрмээр (кириллээр) орчуул. Бодит дуудлагад ойртуулж бич, шууд үсэг хөрвүүлэлт хийхгуй.
 
 Зөвхөн JSON форматаар хариул, markdown code fence ашиглах хэрэггуй:
 {"translations": [{"original": "эх нэр", "translated": "монгол орчуулга"}, ...]}`;
+    }
 
     const { text: rawText } = await callAI(env, systemPrompt, nameList.join('\n'), {
       temperature: 0.3,
