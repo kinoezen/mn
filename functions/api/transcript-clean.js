@@ -27,7 +27,7 @@ export async function onRequestPost({ request, env }) {
 
     const { text: cleaned } = await callAI(env, systemPrompt, text, {
       temperature: 0.3,
-      maxOutputTokens: 3000
+      maxOutputTokens: 8000
     });
 
     return corsJson({ original: text, cleaned });
