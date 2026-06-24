@@ -26,7 +26,24 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .nav-links a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 
 /* ===== WRAP ===== */
-.wrap{max-width:640px;margin:0 auto;padding:20px 18px 40px;}
+.page-layout{max-width:980px;margin:0 auto;display:flex;gap:20px;align-items:flex-start;padding:20px 18px 40px;}
+.wrap{flex:1;min-width:0;max-width:640px;margin:0 auto;padding:0;}
+.left-sidebar{display:none;}
+@media(min-width:1000px){
+  .left-sidebar{display:block;width:240px;flex-shrink:0;position:sticky;top:84px;}
+}
+
+/* ===== LEFT SIDEBAR (зөвхөн computer) ===== */
+.sb-card{background:#161621;border-radius:16px;padding:16px;margin-bottom:14px;border:1px solid rgba(255,255,255,0.04);}
+.sb-title{font-size:12px;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 6px;border-radius:10px;cursor:pointer;transition:0.2s;margin-bottom:2px;}
+.sb-item:hover{background:rgba(255,255,255,0.05);}
+.sb-thumb{width:36px;height:36px;border-radius:8px;object-fit:cover;background:#222;flex-shrink:0;}
+.sb-thumb.icon{display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(74,222,128,0.12);}
+.sb-text{flex:1;min-width:0;}
+.sb-name{font-size:13px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-sub{font-size:11px;color:rgba(255,255,255,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-empty{font-size:12px;color:rgba(255,255,255,0.3);padding:8px 6px;}
 
 /* ===== COVER ===== */
 .cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
@@ -210,6 +227,47 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 </div>
 </nav>
 
+<div class="page-layout">
+
+<!-- LEFT SIDEBAR (зөвхөн computer дэлгэцэнд харагдана) -->
+<aside class="left-sidebar">
+
+<div class="sb-card">
+<div class="sb-title">🕐 Сүүлд үзсэн</div>
+<div id="sbRecent">
+<div class="sb-empty">Ачааллаж байна...</div>
+</div>
+</div>
+
+<div class="sb-card">
+<div class="sb-title">🔖 Хадгалсан</div>
+<div id="sbSaved">
+<div class="sb-empty">Ачааллаж байна...</div>
+</div>
+</div>
+
+<div class="sb-card">
+<div class="sb-title">📂 Үйлчилгээ</div>
+<div class="sb-item" onclick="location.href='services.html'">
+<div class="sb-thumb icon">🎤</div>
+<div class="sb-text"><div class="sb-name">TTS үйлчилгээ</div><div class="sb-sub">Монгол дуу үүсгэх</div></div>
+</div>
+<div class="sb-item" onclick="location.href='services.html'">
+<div class="sb-thumb icon">✨</div>
+<div class="sb-text"><div class="sb-name">Humanizer</div><div class="sb-sub">Текст хүмүүнжүүлэх</div></div>
+</div>
+<div class="sb-item" onclick="location.href='services.html'">
+<div class="sb-thumb icon">🎓</div>
+<div class="sb-text"><div class="sb-name">Сургалт</div><div class="sb-sub">Онлайн хичээл</div></div>
+</div>
+<div class="sb-item" onclick="location.href='services.html'">
+<div class="sb-thumb icon">💻</div>
+<div class="sb-text"><div class="sb-name">Программ</div><div class="sb-sub">Программ хангамж</div></div>
+</div>
+</div>
+
+</aside>
+
 <div class="wrap">
 
 <!-- COVER -->
@@ -330,6 +388,7 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <!-- LOGOUT -->
 <button class="logout-btn" onclick="logout()">🚪 Гарах</button>
 
+</div>
 </div>
 
 <!-- ===== BOTTOM NAV — index.html-тэй ижил 5 товч (зөвхөн mobile) ===== -->
@@ -458,10 +517,62 @@ async function loadSession(){
   }
 
   loadWallet();
+  loadSidebar();
 }
 loadSession();
 
-// ===== WALLET (кредит хэтэвч) =====
+// ===== LEFT SIDEBAR (зөвхөн computer) =====
+async function loadSidebar(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  if(!token || !userId) return;
+
+  // Сүүлд үзсэн (watch_history хүснэгт байгаа тохиолдолд)
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/watch_history?user_id=eq.${userId}&select=*&order=watched_at.desc&limit=5`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    if(r.ok){
+      const rows = await r.json();
+      renderSidebarList('sbRecent', rows, 'title', 'thumbnail_url', '🎬');
+    }else{
+      document.getElementById('sbRecent').innerHTML = '<div class="sb-empty">Хараахан үзсэн зүйл байхгүй</div>';
+    }
+  }catch(e){
+    document.getElementById('sbRecent').innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
+  }
+
+  // Хадгалсан (saved_items хүснэгт байгаа тохиолдолд)
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/saved_items?user_id=eq.${userId}&select=*&order=created_at.desc&limit=5`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    if(r.ok){
+      const rows = await r.json();
+      renderSidebarList('sbSaved', rows, 'title', 'thumbnail_url', '🔖');
+    }else{
+      document.getElementById('sbSaved').innerHTML = '<div class="sb-empty">Хараахан хадгалсан зүйл байхгүй</div>';
+    }
+  }catch(e){
+    document.getElementById('sbSaved').innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
+  }
+}
+
+function renderSidebarList(containerId, rows, titleField, thumbField, fallbackIcon){
+  const el = document.getElementById(containerId);
+  if(!Array.isArray(rows) || rows.length === 0){
+    el.innerHTML = '<div class="sb-empty">Хараахан зүйл байхгүй</div>';
+    return;
+  }
+  el.innerHTML = rows.map(row => {
+    const title = escapeHtml(row[titleField] || 'Нэргүй');
+    const thumb = row[thumbField];
+    const thumbHtml = thumb
+      ? `<img class="sb-thumb" src="${escapeHtml(thumb)}" alt="">`
+      : `<div class="sb-thumb icon">${fallbackIcon}</div>`;
+    return `<div class="sb-item">${thumbHtml}<div class="sb-text"><div class="sb-name">${title}</div></div></div>`;
+  }).join('');
+}
 async function loadWallet(){
   const token = localStorage.getItem('sb_token');
   const userId = getUserId();
