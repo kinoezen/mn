@@ -1,88 +1,105 @@
 // ============================================================
-// functions/api/tts.js
-// URL: POST /api/tts
-// Body: { text, engine: 'gemini'|'edge', voice, geminiVoice, rate, pitch, volume }
-//
-// Hugging Face Gradio Space (ezensait/mng) -тэй ЗӨВ Gradio HTTP API
-// замаар холбогддог: /gradio_api/call/<endpoint>
+// ШИНЭ TTS frontend логик — 2 хоолойтой (Edge/Gemini).
+// services.js доторх ХУУЧИН эдгээр функцуудыг СОЛИХ:
+//   - updateTTSCount()
+//   - selVoice()
+//   - runTTS()
+// БА дараах ШИНЭ функцийг НЭМЭХ:
+//   - selEngine()
 // ============================================================
-import { corsJson, corsOptions } from '../_shared/ai.js';
 
-const HF_SPACE = 'ezensait-mng.hf.space';
-const ENDPOINT_NAME = 'generate_audio';
+// Одоогийн сонгосон engine ('edge' эсвэл 'gemini')
+let ttsEngine = 'edge';
+const TTS_CHAR_LIMITS = { edge: 2000, gemini: 1000 };
 
-export async function onRequestOptions() {
-  return corsOptions();
+// Engine солих (Edge <-> Gemini)
+function selEngine(engine, el) {
+    ttsEngine = engine;
+    document.querySelectorAll('#engine-edge, #engine-gemini').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+
+    // Дуу сонголтын мөрийг солих
+    document.getElementById('edge-voice-row').style.display = engine === 'edge' ? 'block' : 'none';
+    document.getElementById('gemini-voice-row').style.display = engine === 'gemini' ? 'block' : 'none';
+
+    // Тэмдэгтийн хязгаарыг шинэчлэх
+    updateTTSCount();
 }
 
-export async function onRequestPost({ request }) {
-  try {
-    const { text, engine, voice, geminiVoice, rate, pitch, volume } = await request.json();
+// Тэмдэгтийн тоо харуулах (engine-ээс хамаарсан хязгаартай)
+function updateTTSCount() {
+    const len = document.getElementById('tts-text').value.length;
+    const limit = TTS_CHAR_LIMITS[ttsEngine];
+    const countEl = document.getElementById('char-count');
+    if (countEl) {
+        countEl.textContent = len + '/' + limit;
+        countEl.style.color = len > limit ? '#e63946' : '#4ade80';
+    }
+}
 
-    if (!text || !text.trim()) {
-      return corsJson({ error: 'Текст оруулна уу' }, 400);
+// Едж TTS-ийн дуу сонгох (Батаа/Есүй)
+function selVoice(el) {
+    document.querySelectorAll('#edge-voice-row .vbtn').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+}
+
+// Дуу үүсгэх — /api/tts руу fetch хийнэ
+async function runTTS() {
+    const text = document.getElementById('tts-text')?.value.trim();
+    if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
+
+    const limit = TTS_CHAR_LIMITS[ttsEngine];
+    if (text.length > limit) {
+        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгүй байх ёстой)`, 'error');
+        return;
     }
 
-    const isGemini = engine === 'gemini';
-    const engineLabel = isGemini ? 'Gemini TTS (Байгалийн)' : 'Edge TTS (Батаа / Есүй)';
-    const voiceSelect = voice || 'Батаа (эрэгтэй)';
-    const voiceGemini = geminiVoice || 'Лхагваа (эрэгтэй)';
+    const btn = document.getElementById('tts-run-btn');
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
 
-    // app.py-ийн generate_audio(text, engine_select, voice_select, voice_gemini, rate, pitch, volume)
-    // дараалалтай яг тэнцуу байх ёстой
-    const payload = {
-      data: [
-        text,
-        engineLabel,
-        voiceSelect,
-        voiceGemini,
-        rate ?? 0,
-        pitch ?? 0,
-        volume ?? 0
-      ]
-    };
+    try {
+        const rate = document.getElementById('rate')?.value || 15;
+        const pitch = document.getElementById('pitch')?.value || -8;
 
-    // 1-р алхам: ажил эхлүүлэх хүсэлт явуулна
-    const startRes = await fetch(`https://${HF_SPACE}/gradio_api/call/${ENDPOINT_NAME}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
+        let body;
+        if (ttsEngine === 'gemini') {
+            const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Лхагваа (эрэгтэй)';
+            body = { text, engine: 'gemini', geminiVoice, rate: Number(rate), pitch: Number(pitch), volume: 0 };
+        } else {
+            const voice = document.querySelector('#edge-voice-row .vbtn.on')?.textContent.trim() || 'Батаа';
+            body = {
+                text,
+                engine: 'edge',
+                voice: voice === 'Есүй' ? 'Есүй (эмэгтэй)' : 'Батаа (эрэгтэй)',
+                rate: Number(rate),
+                pitch: Number(pitch),
+                volume: 0
+            };
+        }
 
-    if (!startRes.ok) {
-      const errText = await startRes.text();
-      throw new Error(`HF Space эхлэх алдаа (${startRes.status}): ${errText}`);
+        const response = await fetch('/api/tts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Дуу үүсгэх үед алдаа гарлаа');
+        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгүй');
+
+        const resultDiv = document.getElementById('tts-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">✅ Дуу бэлэн</div>
+            <audio controls style="width:100%;border-radius:8px;margin-top:6px;">
+                <source src="${data.audioUrl}" type="audio/mpeg">
+            </audio>`;
+        }
+        showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
+    } catch (error) {
+        console.error('TTS error:', error);
+        showToast('❌ ' + error.message, 'error');
     }
 
-    const { event_id } = await startRes.json();
-    if (!event_id) throw new Error('HF Space event_id буцаасангуй');
-
-    // 2-р алхам: үр дүнг хүлээж авна (SSE урсгал)
-    const resultRes = await fetch(`https://${HF_SPACE}/gradio_api/call/${ENDPOINT_NAME}/${event_id}`);
-    const resultText = await resultRes.text();
-
-    const dataLine = resultText
-      .split('\n')
-      .find(line => line.startsWith('data:'));
-
-    if (!dataLine) throw new Error('HF Space-ээс үр дүн ирсэнгуй: ' + resultText.slice(0, 300));
-
-    const resultData = JSON.parse(dataLine.replace('data:', '').trim());
-    const audioInfo = resultData[0];
-
-    let audioUrl = null;
-    if (typeof audioInfo === 'string') {
-      audioUrl = audioInfo;
-    } else if (audioInfo?.url) {
-      audioUrl = audioInfo.url;
-    } else if (audioInfo?.path) {
-      audioUrl = `https://${HF_SPACE}/file=` + audioInfo.path;
-    }
-
-    if (!audioUrl) throw new Error('Дуу URL олдсонгуй: ' + JSON.stringify(resultData).slice(0, 300));
-
-    return corsJson({ audioUrl });
-  } catch (err) {
-    return corsJson({ error: err.message }, 500);
-  }
+    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
