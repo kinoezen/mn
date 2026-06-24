@@ -490,10 +490,30 @@ async function runThumbnail() {
 // ШИНЭ runTranscriptClean() — /api/transcript-clean руу бодитоор
 // fetch хийнэ. services.js доторх ХУУЧИН runTranscriptClean()
 // функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+//
+// АНХААР: HTML-д "transcript-clean-input" textarea-ийн дараа
+// тэмдэгтийн тоолуур (span id="transcript-clean-count") нэмэх
+// ёстой — доорхи updateTranscriptCleanCount() үүнийг шинэчилнэ.
 // ============================================================
+
+const TRANSCRIPT_CLEAN_LIMIT = 6000;
+
+function updateTranscriptCleanCount() {
+    const textEl = document.getElementById('transcript-clean-input');
+    const countEl = document.getElementById('transcript-clean-count');
+    if (!textEl || !countEl) return;
+    const len = textEl.value.length;
+    countEl.textContent = len + '/' + TRANSCRIPT_CLEAN_LIMIT;
+    countEl.style.color = len > TRANSCRIPT_CLEAN_LIMIT ? '#e63946' : '#4ade80';
+}
+
 async function runTranscriptClean() {
     const text = document.getElementById('transcript-clean-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
+    if (text.length > TRANSCRIPT_CLEAN_LIMIT) {
+        showToast(`⚠️ Текст ${TRANSCRIPT_CLEAN_LIMIT} тэмдэгтээс ихгуй байх ёстой`, 'error');
+        return;
+    }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Цэвэрлэж байна...'; }
     try {
