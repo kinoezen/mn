@@ -688,7 +688,7 @@ async function loadPrograms(){
   }catch(e){
     allPrograms=[
       {id:'d1',title:'Кино Эзэн Плеер',category:'Кино',description:'Монгол кино үзэх зориулалттай хөнгөн, хурдан плеер.',features:'Монгол хадмал дэмжлэг\nБүх видео формат\nДаркмод горим',price:0,is_new:true,downloads:124,views:567,rating_avg:4.8,rating_count:12},
-      {id:'d2',title:'Subtitle AI Орчуулагч',category:'AI',description:'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг.',features:'GPT-4 хэрэглэдэг\nSRT форматтай\nБатч боловсруулалт',price:15000,original_price:25000,is_hot:true,is_sale:true,downloads:89,views:432,rating_avg:4.5,rating_count:8},
+      {id:'d2',title:'Subtitle AI Орчуулагч',category:'AI',description:'AI технологи ашиглан хадмал текстийг монгол хэл рүү автоматаар орчуулдаг.',features:'GPT-4 хэрэглэдэг\nSRT форматтай\nБатч боловсруулалт',price:15000,original_price:null,is_hot:true,is_sale:false,downloads:89,views:432,rating_avg:4.5,rating_count:8},
       {id:'d3',title:'Трейлер Татагч',category:'Хэрэгсэл',description:'YouTube болон бусад сайтуудаас видео татаж авах хэрэгсэл.',features:'4K чанартай татах\n50+ сайт дэмжих\nМП3 хөрвүүлэгч',price:0,downloads:312,views:891,rating_avg:4.2,rating_count:21}
     ];
     const cats=[...new Set(allPrograms.map(p=>p.category))];
