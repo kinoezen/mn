@@ -487,23 +487,37 @@ async function runThumbnail() {
 // ============================================================
 // ТРАНСКРИПТ ЗАСАГЧ
 // ============================================================
+// ШИНЭ runTranscriptClean() — /api/transcript-clean руу бодитоор
+// fetch хийнэ. services.js доторх ХУУЧИН runTranscriptClean()
+// функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ============================================================
 async function runTranscriptClean() {
     const text = document.getElementById('transcript-clean-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Цэвэрлэж байна...'; }
     try {
-        let cleaned = text.replace(/ааа|эээ|өөө|ууу|тэгээд/g, '').replace(/\s+/g, ' ').trim();
+        const removeFillers = document.getElementById('clean-fillers')?.checked ?? true;
+        const removeRepeats = document.getElementById('clean-repeat')?.checked ?? true;
+
+        const response = await fetch('/api/transcript-clean', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, removeFillers, removeRepeats })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Цэвэрлэх үед алдаа гарлаа');
+
         const beforeEl = document.getElementById('transcript-clean-before');
         const afterEl = document.getElementById('transcript-clean-after');
         const resultEl = document.getElementById('transcript-clean-result');
-        if (beforeEl) beforeEl.textContent = text;
-        if (afterEl) afterEl.textContent = cleaned;
+        if (beforeEl) beforeEl.textContent = data.original;
+        if (afterEl) afterEl.textContent = data.cleaned;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Транскрипт цэвэрлэгдлээ!', 'success');
     } catch (error) {
         console.error('TranscriptClean error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🧹 Цэвэрлэх'; }
 }
