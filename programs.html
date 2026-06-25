@@ -301,9 +301,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-heigh
   .modal-feats{grid-template-columns:1fr;}
   .modal-box{border-radius:14px;}
 
-  /* BOTTOM NAV — нүүр хуудасных шиг */
-  .bottom-nav-mobile{display:flex;}
-
   /* FOOTER */
   .footer{padding:14px 16px;}
   body{padding-bottom:70px;}
@@ -311,7 +308,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-heigh
 @media(min-width:769px){
   .nav-mobile-menu{display:none;}
   .mobile-drawer{display:none!important;}
-  .bottom-nav-mobile{display:none;}
 }
 </style>
 </head>
@@ -490,6 +486,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);line-heigh
 <div class="modal-overlay" id="detail-modal">
   <div class="modal-box" id="modal-inner"></div>
 </div>
+
+<!-- Bottom Nav ачаалах -->
+<div id="bottom-nav-placeholder"></div>
 
 <script>
 const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
@@ -794,43 +793,5 @@ function openDrawer(){document.getElementById('mobile-drawer').classList.add('op
 function closeDrawer(){document.getElementById('mobile-drawer').classList.remove('open');document.body.style.overflow='';}
 </script>
 
-<!-- BOTTOM NAV -->
-<nav style="display:none;position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:4px 0 env(safe-area-inset-bottom);z-index:1000;" id="bottom-nav">
-  <div style="display:flex;justify-content:space-between;align-items:center;padding:0 8px;max-width:480px;margin:0 auto;">
-    <a href="index.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;">
-      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">🏠</div>
-      <span>Нүүр</span>
-    </a>
-    <a href="lessons.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;">
-      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">📚</div>
-      <span>Сургалт</span>
-    </a>
-    <a href="programs.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:#4ade80;text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;">
-      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">💻</div>
-      <span>Программ</span>
-    </a>
-    <a href="services.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;">
-      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">⚙️</div>
-      <span>Үйлчилгээ</span>
-    </a>
-    <a href="profile.html" style="display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 6px;color:rgba(255,255,255,0.4);text-decoration:none;font-size:8px;font-weight:700;font-family:'Nunito',sans-serif;flex:1;">
-      <div style="width:26px;height:26px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;">👤</div>
-      <span>Профайл</span>
-    </a>
-  </div>
-</nav>
-
-<script>
-// Утасны дэлгэцэд л bottom nav харуул
-if(window.innerWidth<=768){
-  document.getElementById('bottom-nav').style.display='block';
-  document.body.style.paddingBottom='70px';
-}
-window.addEventListener('resize',()=>{
-  const bn=document.getElementById('bottom-nav');
-  if(window.innerWidth<=768){bn.style.display='block';document.body.style.paddingBottom='70px';}
-  else{bn.style.display='none';document.body.style.paddingBottom='0';}
-});
-</script>
 </body>
 </html>
