@@ -59,18 +59,18 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .hero p{font-size:13px;color:rgba(255,255,255,0.45);line-height:1.7;max-width:500px;margin:0 auto;}
 
 /* ================================================================
-   FILTER BAR — ЗАССАН ХЭСЭГ (Компьютер дээр хэвтээ байна)
+   FILTER BAR — ЗАССАН (Компьютер: нэг мөр, Утас: 2 эгнээ)
    ================================================================ */
 .filter-bar {
   display: flex;
-  flex-wrap: nowrap;        /* Нэг мөрөнд байлгах */
+  flex-wrap: nowrap;
   gap: 6px;
   justify-content: center;
   align-items: center;
   max-width: 900px;
   margin: 0 auto 20px;
   padding: 0 16px;
-  overflow-x: auto;        /* Нарийн дэлгэцэд гүйлгэх боломжтой */
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -84,8 +84,8 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s;
-  white-space: nowrap;      /* Текст хуваагдахгүй */
-  flex-shrink: 0;          /* Товчлуур шахагдахгүй */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .filter-btn:hover {
@@ -102,6 +102,22 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 
 .filter-btn .icon {
   margin-right: 4px;
+}
+
+/* ===== УТСАН ДЭЭР 2 ЭГНЭЭ БОЛГОХ ===== */
+@media (max-width: 768px) {
+  .filter-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    overflow-x: visible;
+    padding: 0 8px;
+  }
+  .filter-btn {
+    font-size: 10px;
+    padding: 4px 8px;
+    flex-shrink: 1;
+  }
 }
 
 /* ===== SERVICES GRID ===== */
@@ -204,8 +220,6 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
 @media(max-width:600px){
   .services-grid{grid-template-columns:1fr;}
   .hero h1{font-size:20px;}
-  .filter-bar{gap:4px;}
-  .filter-btn{font-size:10px;padding:4px 10px;}
 }
 @media(min-width:601px) and (max-width:900px){
   .services-grid{grid-template-columns:repeat(2,1fr);}
@@ -287,7 +301,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
   <p>Монгол хэлний хамгийн дэвшилтэт AI хэрэгслүүд нэг дор</p>
 </div>
 
-<!-- ===== FILTER BAR — ЗАССАН ===== -->
+<!-- ===== FILTER BAR ===== -->
 <div class="filter-bar" id="filter-bar">
   <button class="filter-btn active" data-filter="all"><span class="icon">📋</span> Бүгд</button>
   <button class="filter-btn" data-filter="audio"><span class="icon">🎤</span> Аудио</button>
