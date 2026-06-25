@@ -96,9 +96,6 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .notif-text{font-size:12.5px;color:#fff;line-height:1.4;}
 .notif-time{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:2px;}
 
-/* Trending list */
-
-
 /* ===== COVER ===== */
 .cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
 .cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(11,11,20,0.8));pointer-events:none;z-index:1;}
@@ -216,55 +213,33 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .logout-btn{width:100%;padding:13px;border-radius:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#ef4444;font-size:14px;font-weight:500;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:0.3s;}
 .logout-btn:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;}
 
-/* ===== BOTTOM NAV (mobile only, index.html-тай ижил 5 товч) ===== */
-.bottom-nav{display:none;}
-@media(max-width:768px){
-  body{padding-bottom:86px;}
-  .bottom-nav{
-    display:flex;
-    position:fixed;left:0;right:0;bottom:0;z-index:200;
-    background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-    border-top:1px solid rgba(255,255,255,0.08);
-    padding:8px 4px 10px;
-    justify-content:space-between;
-  }
-  .bnav-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-    text-decoration:none;cursor:pointer;background:none;border:none;
-    padding:4px 2px;
-  }
-  .bnav-icon{
-    width:38px;height:38px;border-radius:12px;
-    background:linear-gradient(135deg,#4ade80,#f4a261);
-    display:flex;align-items:center;justify-content:center;
-    font-size:19px;
-    box-shadow:0 3px 10px rgba(74,222,128,0.25);
-    transition:transform 0.2s;
-  }
-  .bnav-item:active .bnav-icon{transform:scale(0.92);}
-  .bnav-label{font-size:10.5px;font-weight:600;color:rgba(255,255,255,0.45);font-family:var(--font-body);}
-  .bnav-item.active .bnav-label{color:#4ade80;}
-  .bnav-item.active .bnav-icon{box-shadow:0 0 0 2px rgba(74,222,128,0.4),0 3px 10px rgba(74,222,128,0.35);}
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:480px){
-  .nav{padding:12px 14px;}
-  .nav-links{gap:14px;}
-  .logo-text{font-size:15px;}
-  .logo img{width:28px;height:28px;}
-  .ava{width:64px;height:64px;font-size:22px;}
-  .prof-name{font-size:18px;}
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .movie-grid{grid-template-columns:repeat(2,1fr);}
-  .prof-bio{max-width:100%;}
-}
-
 /* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar{width:6px;}
 ::-webkit-scrollbar-track{background:#0b0b14;}
 ::-webkit-scrollbar-thumb{background:#2d2d3d;border-radius:10px;}
 ::-webkit-scrollbar-thumb:hover{background:#4ade80;}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  body{padding-bottom:86px;}
+  .nav{padding:12px 14px;}
+  .nav-links{display:none;}
+  .page-layout{padding:16px 14px 30px;}
+  .wrap{max-width:100%;}
+  .left-sidebar,.right-sidebar{display:none !important;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .movie-grid{grid-template-columns:repeat(2,1fr);}
+  .prof-bio{max-width:100%;}
+  .prof-name{font-size:18px;}
+  .ava{width:64px;height:64px;font-size:22px;}
+}
+
+@media(max-width:480px){
+  .logo-text{font-size:15px;}
+  .logo img{width:28px;height:28px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .movie-grid{grid-template-columns:1fr 1fr;}
+}
 </style>
 </head>
 <body>
@@ -475,30 +450,6 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 
 </div>
 
-<!-- ===== BOTTOM NAV — index.html-тэй ижил 5 товч (зөвхөн mobile) ===== -->
-<nav class="bottom-nav" role="navigation" aria-label="Доод цэс">
-<a href="index.html" class="bnav-item">
-<div class="bnav-icon">🏠</div>
-<div class="bnav-label">Нүүр</div>
-</a>
-<a href="#" class="bnav-item" onclick="location.href='services.html?tab=sургалт';return false;">
-<div class="bnav-icon">📚</div>
-<div class="bnav-label">Сургалт</div>
-</a>
-<a href="#" class="bnav-item" onclick="location.href='services.html?tab=программ';return false;">
-<div class="bnav-icon">💻</div>
-<div class="bnav-label">Программ</div>
-</a>
-<a href="services.html" class="bnav-item">
-<div class="bnav-icon">⚙️</div>
-<div class="bnav-label">Үйлчилгээ</div>
-</a>
-<a href="profile.html" class="bnav-item active">
-<div class="bnav-icon">👤</div>
-<div class="bnav-label">Профайл</div>
-</a>
-</nav>
-
 <!-- ===== MODAL (Засах форм) ===== -->
 <div id="editModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:300;display:none;align-items:center;justify-content:center;">
 <div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
@@ -534,6 +485,9 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div id="topupMsg" style="display:none;margin-top:10px;padding:10px;border-radius:8px;font-size:12px;"></div>
 </div>
 </div>
+
+<!-- Bottom Nav ачаалах -->
+<div id="bottom-nav-placeholder"></div>
 
 <script>
 // ===== SUPABASE AUTH SESSION =====
@@ -1058,7 +1012,7 @@ saveBtn.disabled = true;
 
 try{
   const body = { data: { full_name: name, bio: bio } };
-  // Имэйл өөрчилсэн бол Supabase баталгаажуулах имэйл илгээнэ
+  // Имэйл өөрчилсөн бол Supabase баталгаажуулах имэйл илгээнэ
   if(email && email !== document.querySelector('.prof-email').textContent){
     body.email = email;
   }
