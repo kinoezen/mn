@@ -10,8 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="zar-page.css">
 <style>
+/* ===== ҲНДСЭН СТИЛЬ (services.html-тэй ижил) ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ===== NAVBAR (services.html-тэй ижил) ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(18,18,30,0.97);backdrop-filter:blur(16px);z-index:1000;gap:8px;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
 .logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);border:1.5px solid rgba(74,222,128,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -33,6 +36,8 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
 .nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 @media(max-width:768px){.nav-links-desktop{display:none;}.nav-desktop-right{display:none;}.nav-toggle{display:block;}}
+
+/* ===== HERO ===== */
 .hero{position:relative;text-align:center;padding:32px 16px 26px;overflow:hidden;}
 .hero::before,.hero::after{content:'';position:absolute;border-radius:50%;filter:blur(60px);opacity:0.25;z-index:0;pointer-events:none;}
 .hero::before{width:280px;height:280px;background:#4ade80;top:-120px;left:10%;animation:zarBlobFloat1 9s ease-in-out infinite;}
@@ -45,28 +50,28 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 @keyframes zarHeroIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
 .hero .zar-megaphone{display:inline-block;animation:zarMegaphoneWiggle 2.6s ease-in-out infinite;}
 @keyframes zarMegaphoneWiggle{0%,80%,100%{transform:rotate(0deg);}85%{transform:rotate(-12deg);}90%{transform:rotate(10deg);}95%{transform:rotate(-6deg);}}
+
+/* ===== FOOTER ===== */
 .footer{margin-top:30px;padding:16px 18px 80px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;font-size:12px;color:rgba(255,255,255,0.25);}
 
-
-
-
-
-
-@media(max-width:768px){body{padding-bottom:64px;}}
-@media(max-width:600px){.hero h1{font-size:20px;}}
-
-/* ===== MOBILE BOTTOM NAV — БҮГДЭД ИЖИЛхэн ===== */
-.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
-.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:480px;margin:0 auto;height:56px;}
-.mbn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 2px;color:rgba(255,255,255,0.38);text-decoration:none;font-size:9px;font-weight:700;font-family:'Nunito',sans-serif;transition:color 0.2s;min-width:0;}
-.mbn-item .mbn-emoji{font-size:20px;line-height:1;display:block;}
-.mbn-item span:last-child{font-size:9px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center;}
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
+.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;}
 .mbn-item.active{color:#4ade80;}
 .mbn-item:hover{color:rgba(255,255,255,0.7);}
-@media(max-width:768px){.mobile-bottom-nav{display:block;}body{padding-bottom:68px;}}
+.mbn-item .mbn-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.mbn-item .mbn-emoji{font-size:22px;line-height:1;}
+@media(max-width:768px){.mobile-bottom-nav{display:block;}body{padding-bottom:64px;}}
+
+@media(max-width:600px){
+  .hero h1{font-size:20px;}
+}
 </style>
 </head>
 <body>
+
+<!-- ===== NAVBAR ===== -->
 <nav class="nav">
   <a href="index.html" class="logo">
     <div class="logo-icon">
@@ -97,6 +102,7 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
   </div>
   <button class="nav-toggle" id="nav-toggle" onclick="toggleDrawer()" aria-label="Цэс">☰</button>
 </nav>
+
 <div class="nav-drawer" id="nav-drawer">
   <a href="index.html">🏠 Нүүр</a>
   <a href="movies.html">🎬 Кинонууд</a>
@@ -110,15 +116,47 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
 </div>
+
+<!-- ===== HERO ===== -->
 <div class="hero">
   <h1><span class="zar-megaphone">📢</span> <span>Зар мэдээ</span></h1>
   <p>Үл хөдлөх, автомашин, ажлын зар, бараа, үйлчилгээ — бүгдийг нэг дороос</p>
 </div>
+
+<!-- ===== ЗАР МЭДЭЭ АГУУЛГА (zar-page.js динамикаар дүүргэнэ) ===== -->
 <div class="zar-page-wrap">
   <a href="index.html" class="zar-home-btn">← Нүүр хуудас</a>
   <div id="zar-page-root"></div>
 </div>
+
+<!-- ===== FOOTER ===== -->
 <div class="footer">© 2026 Кино Эзэн — Монгол хэлний кино платформ</div>
+
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+  <div class="mbn-inner">
+    <a class="mbn-item" href="index.html" aria-label="Нүүр">
+      <div class="mbn-emoji">🏠</div>
+      <span>Нүүр</span>
+    </a>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
+      <div class="mbn-emoji">📚</div>
+      <span>Сургалт</span>
+    </a>
+    <a class="mbn-item active" href="zar.html" aria-label="Зар мэдээ">
+      <div class="mbn-emoji">📢</div>
+      <span>Зар</span>
+    </a>
+    <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
+      <div class="mbn-emoji">⚙️</div>
+      <span>Үйлчилгээ</span>
+    </a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл">
+      <div class="mbn-emoji">👤</div>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
 
 <script>
 function toggleDrawer() {
@@ -126,17 +164,5 @@ function toggleDrawer() {
 }
 </script>
 <script src="zar-page.js"></script>
-
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav" aria-label="Доод цэс">
-  <div class="mbn-inner">
-    <a class="mbn-item" href="index.html"><span class="mbn-emoji">🏠</span><span>Нүүр</span></a>
-    <a class="mbn-item" href="lessons.html"><span class="mbn-emoji">📚</span><span>Сургалт</span></a>
-    <a class="mbn-item" href="programs.html"><span class="mbn-emoji">💻</span><span>Программ</span></a>
-    <a class="mbn-item" href="services.html"><span class="mbn-emoji">⚙️</span><span>Үйлчилгээ</span></a>
-    <a class="mbn-item active" href="zar.html"><span class="mbn-emoji">📢</span><span>Зар мэдээ</span></a>
-    <a class="mbn-item" href="profile.html"><span class="mbn-emoji">👤</span><span>Профайл</span></a>
-  </div>
-</nav>
 </body>
 </html>
