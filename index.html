@@ -306,7 +306,7 @@
     background: rgba(74,222,128,0.12);
   }
 
-  /* ===== MOBILE BOTTOM NAV — ТОМРУУЛСАН ===== */
+  /* ===== MOBILE BOTTOM NAV — ТОМРУУЛСАН + ЗАЙ ХОЛДУУЛСАН ===== */
   .mobile-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -319,23 +319,25 @@
   }
   .mbn-inner {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    max-width: 660px;
+    max-width: 720px;
     margin: 0 auto;
+    padding: 0 8px;
   }
   .mbn-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 2px;
-    padding: 4px 18px;
+    padding: 4px 22px;
     color: rgba(255, 255, 255, 0.4);
     text-decoration: none;
     transition: color 0.2s;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     min-width: 55px;
+    flex-shrink: 0;
   }
   .mbn-item svg {
     width: 22px;
@@ -350,14 +352,14 @@
     color: rgba(255, 255, 255, 0.7);
   }
   .mbn-item .mbn-logo-icon {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     background: linear-gradient(135deg, #4ade80, #fbbf24);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 19px;
     font-weight: 900;
     color: #0a0a14;
     flex-shrink: 0;
@@ -497,6 +499,7 @@
     .mbn-inner {
       max-width: 100%;
       justify-content: space-around;
+      padding: 0 4px;
     }
     .mbn-item {
       padding: 4px 8px;
