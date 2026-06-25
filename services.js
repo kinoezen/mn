@@ -100,7 +100,7 @@ async function runTTS() {
 
         let body;
         if (ttsEngine === 'gemini') {
-            const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Charon';
+            const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Лхагваа (эрэгтэй)';
             body = { text, engine: 'gemini', geminiVoice, rate: Number(rate), pitch: Number(pitch), volume: 0 };
         } else {
             const voice = document.querySelector('#edge-voice-row .vbtn.on')?.textContent.trim() || 'Батаа';
