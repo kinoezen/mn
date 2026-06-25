@@ -4,88 +4,499 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Сургалт — Кино Эзэн</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0e0e18;--accent:#4ade80;--accent2:#f4a261;}
+:root{
+  --bg:#0e0e18;--bg2:#161624;--bg3:#1e1e32;--bg4:#252540;
+  --accent:#4ade80;--accent2:#f4a261;--red:#e63946;
+  --border:rgba(255,255,255,0.08);--border2:rgba(74,222,128,0.2);
+  --text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.45);--text4:rgba(255,255,255,0.25);
+  --font-d:'Bebas Neue',sans-serif;--font-b:'Nunito',sans-serif;
+  --r:14px;--rs:8px;
+}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:#fff;font-family:'Nunito',sans-serif;}
-.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
-.logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo-text{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.nav-links{display:flex;gap:4px;align-items:center;}
-.nav-links a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:8px;transition:all 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
-.nav-right{display:flex;gap:8px;}
-.btn-back{padding:7px 14px;border-radius:8px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);color:#4ade80;font-size:12px;font-family:'Nunito',sans-serif;font-weight:700;cursor:pointer;text-decoration:none;}
-.btn-login{padding:7px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:4px 8px;}
-.hero{background:linear-gradient(135deg,#0e0e18,#0d1a2e,#0e1a10);padding:56px 24px 48px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:center;}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:#4ade80;margin-bottom:18px;}
-.hero h1{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;margin-bottom:14px;}
-.hero h1 span{color:#4ade80;}
-.hero p{font-size:15px;color:rgba(255,255,255,0.45);max-width:520px;margin:0 auto 28px;}
-.section{padding:28px 24px 48px;}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:600px){.grid{grid-template-columns:1fr;}.hero h1{font-size:36px;}}
-@media(max-width:768px){.nav-links{display:none;}.nav-right{display:none;}.nav-toggle{display:block;}}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x:hidden;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ===== MOBILE BOTTOM NAV ===== */
-.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,20,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.08);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
-.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:480px;margin:0 auto;height:56px;}
-.mbn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 2px;color:rgba(255,255,255,0.38);text-decoration:none;font-size:9px;font-weight:700;font-family:'Nunito',sans-serif;transition:color 0.2s;min-width:0;}
-.mbn-item .mbn-emoji{font-size:20px;line-height:1;display:block;}
-.mbn-item span:last-child{font-size:9px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;text-align:center;}
-.mbn-item.active{color:#4ade80;}
-.mbn-item:hover{color:rgba(255,255,255,0.7);}
-@media(max-width:768px){.mobile-bottom-nav{display:block;}body{padding-bottom:68px;}}
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
+.logo img{width:34px;height:34px;border-radius:9px;object-fit:cover;border:2px solid rgba(74,222,128,0.3);}
+.logo-text{font-family:var(--font-d);font-size:24px;letter-spacing:1px;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-links{display:flex;gap:4px;align-items:center;}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:13px;font-weight:600;padding:6px 11px;border-radius:var(--rs);transition:all 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--accent);background:rgba(74,222,128,0.08);}
+.nav-right{display:flex;gap:8px;align-items:center;}
+.btn-back{padding:7px 14px;border-radius:var(--rs);background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);color:var(--accent);font-size:12px;font-family:var(--font-b);font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:6px;transition:all 0.2s;}
+.btn-back:hover{background:rgba(74,222,128,0.18);}
+.btn-login{padding:7px 14px;border-radius:var(--rs);background:transparent;border:1px solid rgba(255,255,255,0.2);color:var(--text2);font-size:12px;font-family:var(--font-b);font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-login:hover{border-color:var(--accent);color:var(--accent);}
+.nav-toggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#0e0e18 0%,#0d1a2e 40%,#0e1a10 100%);
+  padding:56px 24px 48px;
+  border-bottom:1px solid var(--border);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:400px;background:radial-gradient(ellipse,rgba(74,222,128,0.06) 0%,transparent 70%);pointer-events:none;}
+.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.25);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:0.5px;margin-bottom:18px;}
+.hero h1{font-family:var(--font-d);font-size:52px;letter-spacing:3px;line-height:1.05;margin-bottom:14px;}
+.hero h1 span{color:var(--accent);}
+.hero p{font-size:15px;color:var(--text3);line-height:1.7;max-width:520px;margin:0 auto 28px;}
+.hero-stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;}
+.h-stat{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.h-stat-num{font-family:var(--font-d);font-size:28px;color:var(--accent);letter-spacing:1px;}
+.h-stat-label{font-size:11px;color:var(--text4);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:10px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.filter-search{display:flex;align-items:center;gap:8px;background:var(--bg3);border-radius:10px;padding:8px 14px;border:1px solid var(--border);flex:1;min-width:160px;max-width:260px;transition:border-color 0.2s;}
+.filter-search:focus-within{border-color:var(--accent);}
+.filter-search input{background:transparent;border:none;color:var(--text);font-size:13px;font-family:var(--font-b);outline:none;width:100%;}
+.filter-search input::placeholder{color:var(--text4);}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;}
+.fpill{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,0.03);color:var(--text3);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-b);}
+.fpill:hover{border-color:var(--border2);color:var(--accent);}
+.fpill.on{background:rgba(74,222,128,0.12);color:var(--accent);border-color:var(--accent);}
+.filter-count{margin-left:auto;font-size:12px;color:var(--text4);white-space:nowrap;}
+
+/* MAIN SECTION */
+.section{padding:28px 24px 48px;}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.section-title{font-family:var(--font-d);font-size:24px;letter-spacing:1px;color:var(--text2);}
+.section-title span{color:var(--accent);}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+
+/* CARD */
+.card{background:var(--bg3);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;}
+.card:hover{transform:translateY(-5px);border-color:var(--border2);box-shadow:0 8px 32px rgba(74,222,128,0.12);}
+.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.12s}
+.card:nth-child(4){animation-delay:.16s}.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+
+/* THUMB */
+.card-thumb{width:100%;height:170px;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1040,#0e1a10);flex-shrink:0;}
+.card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
+.card:hover .card-thumb img{transform:scale(1.06);}
+.card-thumb .emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;filter:drop-shadow(0 4px 16px rgba(0,0,0,0.5));}
+.badges{position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2;}
+.bdg{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;}
+.bdg-hot{background:linear-gradient(90deg,var(--red),var(--accent2));color:#fff;}
+.bdg-free{background:rgba(74,222,128,0.2);color:var(--accent);border:1px solid rgba(74,222,128,0.4);}
+.bdg-new{background:var(--accent);color:#0a2a0a;}
+.bdg-sale{background:var(--red);color:#fff;}
+.lesson-cnt{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);border-radius:8px;padding:3px 8px;font-size:10px;color:rgba(255,255,255,0.85);font-weight:700;}
+.play-ov{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background 0.3s;}
+.card:hover .play-ov{background:rgba(0,0,0,0.35);}
+.play-ic{width:46px;height:46px;border-radius:50%;background:rgba(74,222,128,0.9);display:flex;align-items:center;justify-content:center;font-size:18px;color:#0a2a0a;opacity:0;transform:scale(0.8);transition:opacity 0.3s,transform 0.3s;}
+.card:hover .play-ic{opacity:1;transform:scale(1);}
+
+/* BODY */
+.card-body{padding:16px;flex:1;display:flex;flex-direction:column;}
+.card-cat{font-size:9px;padding:3px 9px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.1);color:var(--accent);display:inline-block;margin-bottom:8px;}
+.card-title{font-size:15px;font-weight:800;color:var(--text);line-height:1.35;margin-bottom:6px;}
+.card-desc{font-size:12px;color:var(--text3);line-height:1.6;flex:1;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.card-meta{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.cmeta{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text4);}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;}
+.price-main{font-family:var(--font-d);font-size:22px;color:var(--accent);letter-spacing:1px;line-height:1;}
+.price-old{font-size:10px;color:var(--text4);text-decoration:line-through;}
+.price-free{font-family:var(--font-d);font-size:20px;color:var(--accent);}
+.card-btn{padding:9px 18px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:12px;font-family:var(--font-d);letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;}
+.card-btn:hover{opacity:0.9;transform:translateY(-1px);}
+
+/* SKELETON */
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+.skel-thumb{width:100%;height:170px;}
+.skel-body{padding:16px;}
+.skel-line{height:12px;border-radius:4px;margin-bottom:10px;}
+.skel-line.w70{width:70%;}
+.skel-line.w40{width:40%;}
+
+/* EMPTY */
+.empty{grid-column:1/-1;text-align:center;padding:70px 20px;}
+.empty-icon{font-size:52px;margin-bottom:16px;}
+.empty h3{font-family:var(--font-d);font-size:24px;color:var(--text2);margin-bottom:8px;}
+.empty p{font-size:13px;color:var(--text4);}
+
+/* DETAIL PAGE */
+.detail-page{display:none;min-height:100vh;animation:fadeUp 0.25s ease;}
+.detail-page.open{display:block;}
+
+.detail-hero{background:linear-gradient(135deg,#0e0e18,#1a1040,#0e1a10);padding:32px 24px;border-bottom:1px solid var(--border);display:flex;gap:26px;align-items:flex-start;}
+.detail-thumb{width:180px;height:120px;border-radius:var(--r);overflow:hidden;flex-shrink:0;border:1px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:44px;}
+.detail-thumb img{width:100%;height:100%;object-fit:cover;}
+.detail-info{flex:1;}
+.detail-cats{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
+.detail-cat{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;background:rgba(74,222,128,0.1);color:var(--accent);}
+.detail-info h2{font-family:var(--font-d);font-size:28px;letter-spacing:1px;line-height:1.2;margin-bottom:8px;}
+.detail-info p{font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:14px;}
+.detail-metas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;}
+.detail-meta{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3);}
+.price-block{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.big-price{font-family:var(--font-d);font-size:30px;color:var(--accent);letter-spacing:1px;}
+.big-price-old{font-size:13px;color:var(--text4);text-decoration:line-through;}
+.buy-btn{padding:12px 28px;border-radius:var(--rs);background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;font-size:14px;font-family:var(--font-d);letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:opacity 0.2s,transform 0.2s;}
+.buy-btn:hover{opacity:0.9;transform:translateY(-1px);}
+.buy-btn.free{background:linear-gradient(90deg,#3b82f6,#6366f1);}
+
+/* TABS */
+.detail-body{padding:0 24px;}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:13px 18px;font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--font-b);}
+.tab:hover{color:var(--text);}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-panel{display:none;}.tab-panel.on{display:block;animation:fadeUp 0.2s ease;}
+.about-text{font-size:13px;color:var(--text3);line-height:1.8;margin-bottom:20px;}
+.about-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.about-tag{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);color:var(--text3);}
+.section-h3{font-family:var(--font-d);font-size:17px;letter-spacing:0.5px;color:var(--text2);margin-bottom:12px;}
+
+/* LESSONS */
+.lesson-list{display:flex;flex-direction:column;}
+.lesson-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.2s;}
+.lesson-item:last-child{border-bottom:none;}
+.lesson-item:hover .lesson-title{color:var(--accent);}
+.lesson-num{width:32px;height:32px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--text3);flex-shrink:0;transition:all 0.2s;}
+.lesson-item:hover .lesson-num{background:rgba(74,222,128,0.12);border-color:var(--accent);color:var(--accent);}
+.lesson-main{flex:1;}
+.lesson-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;transition:color 0.2s;}
+.lesson-sub{font-size:11px;color:var(--text4);display:flex;gap:10px;}
+.ltype{font-size:9px;padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px;}
+.ltype-vid{background:rgba(230,57,70,0.15);color:#ff6b7a;}
+.ltype-text{background:rgba(59,130,246,0.15);color:#6b8ff7;}
+.ltype-img{background:rgba(168,85,247,0.15);color:#c084fc;}
+.lesson-lock{font-size:15px;color:var(--text4);flex-shrink:0;}
+.lesson-item.unlocked .lesson-lock{color:var(--accent);}
+
+/* VIEWER */
+.viewer{display:none;min-height:100vh;background:var(--bg);animation:fadeUp 0.2s ease;}
+.viewer.open{display:block;}
+.viewer-nav{display:flex;align-items:center;gap:12px;padding:12px 24px;background:rgba(14,14,24,0.98);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+.viewer-info{flex:1;}
+.viewer-num{font-size:10px;color:var(--text4);font-weight:600;}
+.viewer-title{font-size:14px;font-weight:700;}
+.viewer-prog{font-size:11px;color:var(--text4);background:var(--bg3);padding:4px 10px;border-radius:10px;white-space:nowrap;}
+.viewer-content{padding:24px;}
+.video-wrap{width:100%;aspect-ratio:16/9;background:#000;border-radius:var(--r);overflow:hidden;margin-bottom:20px;border:1px solid var(--border);position:relative;}
+.video-wrap video,.video-wrap iframe{width:100%;height:100%;display:block;border:none;}
+.vid-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1040,#0e1a10);gap:10px;}
+.vid-placeholder .icon{font-size:48px;}
+.vid-placeholder p{font-size:13px;color:var(--text3);}
+.lesson-img{width:100%;border-radius:var(--r);overflow:hidden;margin-bottom:20px;border:1px solid var(--border);}
+.lesson-img img{width:100%;height:auto;display:block;}
+.lesson-text{background:var(--bg2);border-radius:var(--r);padding:22px 26px;margin-bottom:20px;border:1px solid var(--border);font-size:14px;color:var(--text2);line-height:1.9;}
+.lesson-text h3{font-family:var(--font-d);font-size:20px;color:var(--accent);margin-bottom:14px;letter-spacing:0.5px;}
+.lesson-text p{margin-bottom:12px;}
+.viewer-foot{display:flex;justify-content:space-between;align-items:center;padding:0 24px;margin-top:24px;gap:10px;flex-wrap:wrap;}
+.nav-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--rs);border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-size:13px;font-weight:600;font-family:var(--font-b);cursor:pointer;transition:all 0.2s;}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent);}
+.nav-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;}
+.nav-btn.primary:hover{opacity:0.9;}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
+
+/* BACK BTN */
+.back-btn{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-size:13px;font-weight:600;padding:8px 16px;border-radius:var(--rs);cursor:pointer;font-family:var(--font-b);transition:all 0.2s;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}.detail-hero{flex-direction:column;}.detail-thumb{width:100%;height:160px;}}
+@media(max-width:600px){.grid{grid-template-columns:1fr;}.hero h1{font-size:36px;}.viewer-content{padding:16px;}.detail-body{padding:0 16px;}.price-block{flex-direction:column;align-items:flex-start;}.buy-btn{width:100%;}.viewer-foot{flex-direction:column;}.nav-btn{width:100%;justify-content:center;}}
+@media(max-width:768px){.nav{padding:10px 16px;flex-wrap:wrap;}.nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--border);}.nav-links.open{display:flex;}.nav-right{display:none;width:100%;}.nav-right.open{display:flex;flex-direction:column;gap:8px;}.nav-toggle{display:block;}}
 </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav class="nav">
   <a href="index.html" class="logo">
+    <img src="logo.png" alt="КиноЭзэн" onerror="this.style.display='none'">
     <div class="logo-text">КиноЭзэн</div>
   </a>
-  <div class="nav-links">
+  <div class="nav-links" id="nav-links">
     <a href="index.html">Нүүр</a>
     <a href="movies.html">Кинонууд</a>
-    <a href="lessons.html" class="active">Сургалт</a>
+    <a href="surgalt.html" class="active">Сургалт</a>
     <a href="programs.html">Программ</a>
     <a href="services.html">Үйлчилгээ</a>
-    <a href="zar.html">Зар мэдээ</a>
     <a href="profile.html">Профайл</a>
   </div>
-  <div class="nav-right">
+  <div class="nav-right" id="nav-right">
     <a class="btn-back" href="index.html">← Нүүр хуудас</a>
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
   </div>
-  <button class="nav-toggle" onclick="this.closest('nav').querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">☰</button>
 </nav>
-<section class="hero">
-  <div class="hero-tag">🎓 Мэргэжлийн сургалт</div>
-  <h1>Манай <span>Сургалтууд</span></h1>
-  <p>Монгол хэлээр видео засвар, контент бүтээлч, AI хэрэгсэл болон бусад мэргэжлийн сургалтуудыг нэг дороос авна уу.</p>
-</section>
-<section class="section">
-  <div class="grid" id="courses-grid">
-    <div style="padding:40px;text-align:center;color:rgba(255,255,255,0.3);grid-column:1/-1;">Сургалтууд ачааллаж байна...</div>
-  </div>
-</section>
-<footer style="padding:20px 24px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;font-size:12px;color:rgba(255,255,255,0.25);">
-  © 2026 Кино Эзэн
-</footer>
-<script src="navbar.js"></script>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav" aria-label="Доод цэс">
-  <div class="mbn-inner">
-    <a class="mbn-item" href="index.html"><span class="mbn-emoji">🏠</span><span>Нүүр</span></a>
-    <a class="mbn-item active" href="lessons.html"><span class="mbn-emoji">📚</span><span>Сургалт</span></a>
-    <a class="mbn-item" href="programs.html"><span class="mbn-emoji">💻</span><span>Программ</span></a>
-    <a class="mbn-item" href="services.html"><span class="mbn-emoji">⚙️</span><span>Үйлчилгээ</span></a>
-    <a class="mbn-item" href="zar.html"><span class="mbn-emoji">📢</span><span>Зар мэдээ</span></a>
-    <a class="mbn-item" href="profile.html"><span class="mbn-emoji">👤</span><span>Профайл</span></a>
+<!-- ===== MAIN LIST PAGE ===== -->
+<div id="list-page">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">🎓 Мэргэжлийн сургалт</div>
+    <h1>Манай <span>Сургалтууд</span></h1>
+    <p>Монгол хэлээр видео засвар, контент бүтээлч, AI хэрэгсэл болон бусад мэргэжлийн сургалтуудыг нэг дороос авна уу.</p>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-num" id="stat-total">—</div><div class="h-stat-label">Нийт сургалт</div></div>
+      <div class="h-stat"><div class="h-stat-num" id="stat-lessons">—</div><div class="h-stat-label">Нийт хичээл</div></div>
+      <div class="h-stat"><div class="h-stat-num">100%</div><div class="h-stat-label">Монгол хэл</div></div>
+    </div>
+  </section>
+
+  <!-- FILTER -->
+  <div class="filter-bar">
+    <div class="filter-search">
+      <span>🔍</span>
+      <input type="text" placeholder="Сургалт хайх..." id="search-inp" oninput="filterCourses()" autocomplete="off">
+    </div>
+    <div class="filter-pills" id="filter-pills">
+      <button class="fpill on" onclick="setFilter(this,'')">Бүгд</button>
+    </div>
+    <div class="filter-count" id="filter-count"></div>
   </div>
-</nav>
+
+  <!-- GRID -->
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title"><span>Сургалт</span>нууд</h2>
+    </div>
+    <div class="grid" id="courses-grid">
+      <div class="card"><div class="skel-thumb skel"></div><div class="skel-body"><div class="skel-line skel"></div><div class="skel-line skel w70"></div><div class="skel-line skel w40"></div></div></div>
+      <div class="card"><div class="skel-thumb skel"></div><div class="skel-body"><div class="skel-line skel"></div><div class="skel-line skel w70"></div><div class="skel-line skel w40"></div></div></div>
+      <div class="card"><div class="skel-thumb skel"></div><div class="skel-body"><div class="skel-line skel"></div><div class="skel-line skel w70"></div><div class="skel-line skel w40"></div></div></div>
+    </div>
+  </section>
+
+</div><!-- /list-page -->
+
+<!-- ===== DETAIL PAGE ===== -->
+<div class="detail-page" id="detail-page">
+  <nav class="nav" style="position:sticky;top:0;">
+    <button class="back-btn" onclick="closeDetail()">← Буцах</button>
+    <div style="font-family:var(--font-d);font-size:18px;letter-spacing:1px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="detail-nav-title">Сургалт</div>
+  </nav>
+
+  <div class="detail-hero">
+    <div class="detail-thumb" id="detail-thumb"></div>
+    <div class="detail-info">
+      <div class="detail-cats" id="detail-cats"></div>
+      <h2 id="detail-title">—</h2>
+      <p id="detail-desc">—</p>
+      <div class="detail-metas" id="detail-metas"></div>
+      <div class="price-block">
+        <div>
+          <div class="big-price" id="detail-price">—</div>
+          <div class="big-price-old" id="detail-old-price"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text4);flex:1;">Энэхүү сургалтанд хичээлүүд бүгд багтана.</div>
+        <button class="buy-btn" id="detail-buy-btn" onclick="handleBuy()">Авах</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab(this,'t-about')">Тойм</button>
+      <button class="tab" onclick="switchTab(this,'t-lessons')">Хичээлүүд</button>
+    </div>
+    <div class="tab-panel on" id="t-about">
+      <h3 class="section-h3">Сургалтын тухай</h3>
+      <p class="about-text" id="detail-about">—</p>
+      <h3 class="section-h3">Юу сурах вэ?</h3>
+      <div class="about-tags" id="detail-outcomes"></div>
+    </div>
+    <div class="tab-panel" id="t-lessons">
+      <div class="lesson-list" id="detail-lessons"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VIEWER ===== -->
+<div class="viewer" id="viewer">
+  <div class="viewer-nav">
+    <button class="back-btn" onclick="closeViewer()">← Буцах</button>
+    <div class="viewer-info">
+      <div class="viewer-num" id="viewer-num">Хичээл 1</div>
+      <div class="viewer-title" id="viewer-title">—</div>
+    </div>
+    <div class="viewer-prog" id="viewer-prog">1 / 1</div>
+  </div>
+  <div class="viewer-content" id="viewer-content"></div>
+  <div class="viewer-foot">
+    <button class="nav-btn" id="btn-prev" onclick="navLesson(-1)">← Өмнөх</button>
+    <button class="nav-btn primary" id="btn-next" onclick="navLesson(1)">Дараах →</button>
+  </div>
+</div>
+
+<script>
+const SB='https://smncsxlbyyhowfarxxlz.supabase.co';
+const SK='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+async function sb(table,params=''){
+  const r=await fetch(`${SB}/rest/v1/${table}?${params}`,{headers:{'apikey':SK,'Authorization':`Bearer ${SK}`}});
+  if(!r.ok)throw new Error(r.status);
+  return r.json();
+}
+
+let allCourses=[],allLessons=[],curCourse=null,curLessonIdx=0,activeFilter='',navOpen=false;
+
+function toggleNav(){navOpen=!navOpen;document.getElementById('nav-links').classList.toggle('open',navOpen);document.getElementById('nav-right').classList.toggle('open',navOpen);document.getElementById('nav-toggle').textContent=navOpen?'✕':'☰';}
+document.addEventListener('click',e=>{if(navOpen&&!e.target.closest('.nav')){navOpen=false;document.getElementById('nav-links').classList.remove('open');document.getElementById('nav-right').classList.remove('open');document.getElementById('nav-toggle').textContent='☰';}});
+
+function showToast(msg,dur=2500){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),dur);}
+function san(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
+
+async function init(){
+  try{
+    const[courses,lessons]=await Promise.all([sb('surgalt_courses','select=*&order=created_at.desc'),sb('surgalt_lessons','select=*&order=sort_order.asc')]);
+    allCourses=Array.isArray(courses)?courses:[];
+    allLessons=Array.isArray(lessons)?lessons:[];
+  }catch(e){allCourses=demoC();allLessons=demoL();}
+  document.getElementById('stat-total').textContent=allCourses.length;
+  document.getElementById('stat-lessons').textContent=allLessons.length;
+  buildPills();
+  renderCourses(allCourses);
+}
+
+function demoC(){return[{id:'d1',title:'YouTube Анхан шатны сургалт',description:'YouTube суваг эхлүүлэх, өсгөх, мөнгө олох бүрэн гарын авлага.',category:'YouTube',emoji:'🎬',price:50000,old_price:80000,is_free:false,is_featured:true,instructor:'КиноЭзэн',level:'Анхан',about:'Энэхүү сургалтанд YouTube сувгаа эхнээс нь байгуулж, хурдан өсгөх, монетизаци хийх бүх нууцыг заана.',outcomes:['Суваг эхлүүлэх','Thumbnail хийх','SEO оновчлол','Монетизаци']},{id:'d2',title:'AI Хэрэгслүүд — Дэвшилтэт',description:'ChatGPT, Midjourney, Claude болон бусад AI хэрэгслүүдийг ажилдаа хэрэглэж, цагаа хэмнэ.',category:'AI',emoji:'🤖',price:0,is_free:true,instructor:'КиноЭзэн',level:'Дунд',about:'AI хэрэгслүүдийг практикт ашиглах бодит жишээнүүд.',outcomes:['ChatGPT prompt','Midjourney зураг','Claude ашиглах']},{id:'d3',title:'Видео засвар — Premiere Pro',description:'Adobe Premiere Pro-г эхнээс суралцаж, мэргэжлийн видео хийх иж бүрэн сургалт.',category:'Видео засвар',emoji:'🎞️',price:75000,old_price:120000,is_free:false,is_featured:true,instructor:'КиноЭзэн',level:'Анхан',about:'Premiere Pro хөтөлбөрийг бүрэн эзэмших сургалт.',outcomes:['Timeline засварлах','Color grading','Audio засвар','Export тохиргоо']}];}
+function demoL(){return[{id:'l1',course_id:'d1',title:'YouTube гэж юу вэ?',type:'video',duration_min:12,sort_order:1,is_free_preview:true},{id:'l2',course_id:'d1',title:'Суваг тохиргоо',type:'text',duration_min:8,sort_order:2,is_free_preview:false,content:'Сувгийн нэр сонгохдоо keyword-д анхаарна уу.'},{id:'l3',course_id:'d1',title:'Анхны видеог хэрхэн хийх вэ?',type:'video',duration_min:18,sort_order:3,is_free_preview:false},{id:'l4',course_id:'d1',title:'SEO, thumbnail, монетизаци',type:'video',duration_min:22,sort_order:4,is_free_preview:false},{id:'l5',course_id:'d2',title:'AI гэж юу вэ?',type:'video',duration_min:10,sort_order:1,is_free_preview:true},{id:'l6',course_id:'d2',title:'ChatGPT мэргэжлийн түвшинд',type:'text',duration_min:15,sort_order:2,is_free_preview:true,content:'ChatGPT-д зааварчилга өгөхдөө контекст, дүр, хэлбэр гэсэн 3 зүйлийг тодорхой бич.'},{id:'l7',course_id:'d2',title:'Midjourney — prompt нууц',type:'image',duration_min:12,sort_order:3,is_free_preview:false},{id:'l8',course_id:'d3',title:'Premiere Pro танилцуулга',type:'video',duration_min:9,sort_order:1,is_free_preview:true},{id:'l9',course_id:'d3',title:'Timeline, cuts, transitions',type:'video',duration_min:20,sort_order:2,is_free_preview:false},{id:'l10',course_id:'d3',title:'Color grading',type:'video',duration_min:16,sort_order:3,is_free_preview:false},{id:'l11',course_id:'d3',title:'Audio засвар, export',type:'text',duration_min:11,sort_order:4,is_free_preview:false,content:'Audio-г -14 LUFS болгоорой.'},{id:'l12',course_id:'d3',title:'Эцсийн төсөл',type:'video',duration_min:25,sort_order:5,is_free_preview:false}];}
+
+function buildPills(){
+  const cats=[...new Set(allCourses.map(c=>c.category).filter(Boolean))];
+  const p=document.getElementById('filter-pills');
+  p.innerHTML='<button class="fpill on" onclick="setFilter(this,\'\')">Бүгд</button>';
+  cats.forEach(cat=>{const b=document.createElement('button');b.className='fpill';b.textContent=cat;b.onclick=()=>setFilter(b,cat);p.appendChild(b);});
+}
+function setFilter(el,cat){document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));el.classList.add('on');activeFilter=cat;filterCourses();}
+function filterCourses(){const q=document.getElementById('search-inp').value.toLowerCase();const f=allCourses.filter(c=>(!activeFilter||c.category===activeFilter)&&(!q||c.title.toLowerCase().includes(q)||(c.description||'').toLowerCase().includes(q)));renderCourses(f);document.getElementById('filter-count').textContent=f.length+' сургалт';}
+
+function renderCourses(list){
+  const g=document.getElementById('courses-grid');
+  if(!list.length){g.innerHTML=`<div class="empty"><div class="empty-icon">🎓</div><h3>Сургалт олдсонгүй</h3><p>Удахгүй шинэ сургалтууд нэмэгдэнэ</p></div>`;return;}
+  g.innerHTML=list.map((c,i)=>{
+    const ls=allLessons.filter(l=>l.course_id===c.id);
+    const priceHtml=c.is_free?`<div class="price-free">Үнэгүй</div>`:`<div class="price-main">${Number(c.price||0).toLocaleString()}₮</div>${c.old_price?`<div class="price-old">${Number(c.old_price).toLocaleString()}₮</div>`:''}`;
+    const badges=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:''].filter(Boolean).join('');
+    const thumbHtml=c.thumb_url?`<img src="${san(c.thumb_url)}" alt="${san(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="emoji">${c.emoji||'🎓'}</div>`;
+    return`<article class="card" onclick="openCourse('${san(c.id)}')" style="animation-delay:${i*0.06}s">
+  <div class="card-thumb">${thumbHtml}<div class="badges">${badges}</div><div class="lesson-cnt">▶ ${ls.length} хичээл</div><div class="play-ov"><div class="play-ic">▶</div></div></div>
+  <div class="card-body">
+    <div class="card-cat">${san(c.category||'Сургалт')}</div>
+    <div class="card-title">${san(c.title)}</div>
+    <div class="card-desc">${san(c.description)}</div>
+    <div class="card-meta"><div class="cmeta">📚 ${ls.length} хичээл</div><div class="cmeta">📊 ${san(c.level||'Анхан')}</div></div>
+    <div class="card-foot"><div>${priceHtml}</div><button class="card-btn" onclick="event.stopPropagation();openCourse('${san(c.id)}')">Дэлгэрэнгүй</button></div>
+  </div>
+</article>`;
+  }).join('');
+}
+
+function openCourse(id){
+  const c=allCourses.find(x=>x.id===id);if(!c)return;
+  curCourse=c;
+  const ls=allLessons.filter(l=>l.course_id===c.id);
+  document.getElementById('detail-nav-title').textContent=c.title;
+  const th=document.getElementById('detail-thumb');
+  th.innerHTML=c.thumb_url?`<img src="${san(c.thumb_url)}" onerror="this.parentElement.innerHTML='<span style=font-size:44px>${c.emoji||'🎓'}</span>'">`:`<span style="font-size:44px">${c.emoji||'🎓'}</span>`;
+  document.getElementById('detail-cats').innerHTML=`<span class="detail-cat">${san(c.category||'Сургалт')}</span><span class="detail-cat">${san(c.level||'Анхан')}</span>`;
+  document.getElementById('detail-title').textContent=c.title;
+  document.getElementById('detail-desc').textContent=c.description;
+  document.getElementById('detail-metas').innerHTML=`<div class="detail-meta">📚 ${ls.length} хичээл</div><div class="detail-meta">👤 ${san(c.instructor||'КиноЭзэн')}</div><div class="detail-meta">📊 ${san(c.level||'Анхан')}</div>`;
+  const p=document.getElementById('detail-price'),po=document.getElementById('detail-old-price'),bb=document.getElementById('detail-buy-btn');
+  if(c.is_free){p.textContent='Үнэгүй';po.textContent='';bb.textContent='Суралцах';bb.className='buy-btn free';}
+  else{p.textContent=Number(c.price||0).toLocaleString()+'₮';po.textContent=c.old_price?Number(c.old_price).toLocaleString()+'₮':'';bb.textContent='Худалдаж авах';bb.className='buy-btn';}
+  document.getElementById('detail-about').textContent=c.about||c.description;
+  const outs=c.outcomes||c.tags||[];
+  document.getElementById('detail-outcomes').innerHTML=outs.map(o=>`<span class="about-tag">✓ ${san(o)}</span>`).join('');
+  renderLessons(ls,c);
+  document.querySelector('.tab.on').click();
+  document.getElementById('list-page').style.display='none';
+  document.getElementById('detail-page').classList.add('open');
+  window.scrollTo(0,0);
+}
+
+function renderLessons(ls,c){
+  const el=document.getElementById('detail-lessons');
+  if(!ls.length){el.innerHTML=`<div style="padding:30px;text-align:center;color:var(--text4);font-size:13px">Хичээл удахгүй нэмэгдэнэ</div>`;return;}
+  el.innerHTML=ls.map((l,i)=>{
+    const tl=l.type==='video'?`<span class="ltype ltype-vid">Видео</span>`:l.type==='image'?`<span class="ltype ltype-img">Зураг</span>`:`<span class="ltype ltype-text">Текст</span>`;
+    const unlocked=l.is_free_preview||c.is_free;
+    return`<div class="lesson-item ${unlocked?'unlocked':''}" onclick="openLesson('${san(c.id)}',${i})">
+  <div class="lesson-num">${i+1}</div>
+  <div class="lesson-main"><div class="lesson-title">${san(l.title)}${tl}</div><div class="lesson-sub">${l.duration_min?`<span>⏱ ${l.duration_min} мин</span>`:''} ${l.is_free_preview?`<span style="color:var(--accent)">Үнэгүй урьдчилан үзэх</span>`:''}</div></div>
+  <div class="lesson-lock">${unlocked?'🔓':'🔒'}</div>
+</div>`;
+  }).join('');
+}
+
+function closeDetail(){
+  document.getElementById('detail-page').classList.remove('open');
+  document.getElementById('list-page').style.display='block';
+  curCourse=null;window.scrollTo(0,0);
+}
+
+function switchTab(btn,panelId){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));btn.classList.add('on');document.getElementById(panelId).classList.add('on');}
+
+function handleBuy(){if(!curCourse)return;if(curCourse.is_free)openLesson(curCourse.id,0);else showToast('💳 Төлбөрийн систем удахгүй нэмэгдэнэ');}
+
+function openLesson(courseId,idx){
+  const c=allCourses.find(x=>x.id===courseId);if(!c)return;
+  curCourse=c;curLessonIdx=idx;
+  const ls=allLessons.filter(l=>l.course_id===courseId);
+  renderViewer(ls);
+  document.getElementById('detail-page').classList.remove('open');
+  document.getElementById('viewer').classList.add('open');
+  window.scrollTo(0,0);
+}
+
+function renderViewer(ls){
+  if(!ls.length)return;
+  const l=ls[curLessonIdx];if(!l)return;
+  document.getElementById('viewer-num').textContent=`Хичээл ${curLessonIdx+1}`;
+  document.getElementById('viewer-title').textContent=l.title;
+  document.getElementById('viewer-prog').textContent=`${curLessonIdx+1} / ${ls.length}`;
+  let html='';
+  if(l.type==='video'){
+    if(l.video_url){
+      const isYT=l.video_url.includes('youtube.com')||l.video_url.includes('youtu.be');
+      html+=`<div class="video-wrap">${isYT?`<iframe src="${san(l.video_url)}" allowfullscreen></iframe>`:`<video controls src="${san(l.video_url)}"></video>`}</div>`;
+    }else{html+=`<div class="video-wrap"><div class="vid-placeholder"><div class="icon">🎬</div><p>Видео удахгүй нэмэгдэнэ</p></div></div>`;}
+  }
+  if(l.image_url){html+=`<div class="lesson-img"><img src="${san(l.image_url)}" alt="${san(l.title)}"></div>`;}
+  if(l.content){html+=`<div class="lesson-text"><h3>${san(l.title)}</h3><p>${san(l.content).replace(/\n/g,'</p><p>')}</p></div>`;}
+  else if(l.type==='text'){html+=`<div class="lesson-text"><h3>${san(l.title)}</h3><p style="color:var(--text4)">Хичээлийн агуулга удахгүй нэмэгдэнэ.</p></div>`;}
+  document.getElementById('viewer-content').innerHTML=html;
+  document.getElementById('btn-prev').disabled=curLessonIdx===0;
+  const nb=document.getElementById('btn-next');nb.textContent=curLessonIdx===ls.length-1?'✓ Дуусгах':'Дараах →';
+}
+
+function navLesson(dir){
+  const ls=allLessons.filter(l=>l.course_id===curCourse.id);
+  const next=curLessonIdx+dir;
+  if(next<0||next>=ls.length){if(dir>0){closeViewer();showToast('🎉 Сургалт амжилттай дууслаа!');}return;}
+  curLessonIdx=next;renderViewer(ls);
+}
+
+function closeViewer(){
+  document.getElementById('viewer').classList.remove('open');
+  if(curCourse){document.getElementById('detail-page').classList.add('open');}
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('viewer').classList.contains('open'))closeViewer();else if(document.getElementById('detail-page').classList.contains('open'))closeDetail();}});
+
+init();
+</script>
 </body>
 </html>
