@@ -63,11 +63,30 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 }
 .streak-num{font-size:24px;font-weight:700;color:#fbbf24;}
 .streak-label{font-size:11px;color:rgba(255,255,255,0.4);}
-.streak-dots{display:flex;gap:5px;margin-bottom:10px;}
-.streak-dot{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,0.08);}
-.streak-dot.done{background:#fbbf24;}
 .streak-msg{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
 .streak-msg b{color:#fbbf24;}
+
+.reward-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:12px;}
+.reward-day{border-radius:8px;padding:7px 2px;text-align:center;background:rgba(255,255,255,0.04);border:1px solid transparent;transition:0.2s;}
+.reward-day.past{background:rgba(74,222,128,0.12);}
+.reward-day.today{background:rgba(251,191,36,0.15);border-color:#fbbf24;animation:glow-today 1.8s ease-in-out infinite;}
+@keyframes glow-today{
+  0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0.4);}
+  50%{box-shadow:0 0 8px 2px rgba(251,191,36,0.3);}
+}
+.reward-day.today.claimed{animation:none;border-color:#4ade80;background:rgba(74,222,128,0.15);}
+.reward-day-num{font-size:9px;color:rgba(255,255,255,0.35);margin-bottom:3px;}
+.reward-day.past .reward-day-num{color:#4ade80;}
+.reward-day.today .reward-day-num{color:#fbbf24;font-weight:700;}
+.reward-day-amt{font-size:9.5px;font-weight:600;color:rgba(255,255,255,0.5);}
+.reward-day.past .reward-day-amt{color:#4ade80;}
+.reward-day.today .reward-day-amt{color:#fbbf24;}
+.reward-day.day7 .reward-day-amt{color:#fbbf24;}
+
+.claim-btn{width:100%;padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:0.2s;background:#fbbf24;color:#1a1050;}
+.claim-btn:hover:not(:disabled){background:#f59e0b;transform:scale(1.02);}
+.claim-btn:disabled{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.3);cursor:default;}
+.claim-btn.claimed-state{background:rgba(74,222,128,0.15);color:#4ade80;}
 
 /* Notification list */
 .notif-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
@@ -78,13 +97,7 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .notif-time{font-size:10.5px;color:rgba(255,255,255,0.3);margin-top:2px;}
 
 /* Trending list */
-.trend-item{display:flex;align-items:center;gap:10px;padding:8px 0;cursor:pointer;border-radius:8px;transition:0.2s;}
-.trend-item:hover{background:rgba(255,255,255,0.04);}
-.trend-rank{font-size:15px;font-weight:700;color:rgba(255,255,255,0.25);width:18px;flex-shrink:0;}
-.trend-rank.hot{color:#f87171;}
-.trend-thumb{width:34px;height:34px;border-radius:8px;background:#222;object-fit:cover;flex-shrink:0;}
-.trend-name{font-size:12.5px;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.trend-views{font-size:10.5px;color:rgba(255,255,255,0.3);}
+
 
 /* ===== COVER ===== */
 .cover{height:120px;border-radius:20px;background:linear-gradient(135deg,#1a1050,#0a2a10);margin-bottom:-48px;position:relative;overflow:hidden;}
@@ -434,20 +447,20 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <!-- RIGHT SIDEBAR (зөвхөн computer, өргөн дэлгэц) -->
 <aside class="right-sidebar">
 
-<!-- STREAK (дараалсан өдрийн тоолуур) -->
+<!-- DAILY REWARD (өдөр тутмын урамшуулал, 7 хоногийн хуанли) -->
 <div class="streak-card">
 <div class="streak-top">
-<span class="streak-flame">🔥</span>
+<span class="streak-flame" id="streakFlame">🔥</span>
 <div>
 <div class="streak-num" id="streakNum">0 өдөр</div>
 <div class="streak-label">дараалсан ашиглалт</div>
 </div>
 </div>
-<div class="streak-dots" id="streakDots">
-<div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div>
-<div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div><div class="streak-dot"></div>
+<div class="reward-grid" id="rewardGrid">
+<div class="sb-empty">Ачааллаж байна...</div>
 </div>
-<div class="streak-msg" id="streakMsg">Өнөөдөр нэвтэрвэл streak эхэлнэ. <b>7 өдөр дараалан</b> орвол bonus кредит!</div>
+<button class="claim-btn" id="claimBtn" onclick="claimDailyReward()" disabled>Ачааллаж байна...</button>
+<div class="streak-msg" id="streakMsg"></div>
 </div>
 
 <!-- МЭДЭГДЭЛ -->
@@ -455,14 +468,6 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="rsb-title">🔔 Мэдэгдэл</div>
 <div id="rsbNotifs">
 <div class="sb-empty">Мэдэгдэл байхгүй байна</div>
-</div>
-</div>
-
-<!-- TRENDING -->
-<div class="rsb-card">
-<div class="rsb-title">📈 Их үзсэн кино</div>
-<div id="rsbTrending">
-<div class="sb-empty">Ачааллаж байна...</div>
 </div>
 </div>
 
@@ -656,40 +661,103 @@ function renderSidebarList(containerId, rows, titleField, thumbField, fallbackIc
 }
 
 // ===== STREAK (дараалсан өдрийн ашиглалт) =====
+const REWARD_AMOUNTS = [10, 15, 30, 40, 50, 70, 200];
+
 async function loadStreak(){
   const token = localStorage.getItem('sb_token');
   if(!token) return;
   try{
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/touch_streak`,{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_daily_reward_status`,{
       method:'POST',
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
       body:'{}'
     });
     if(!r.ok){
-      document.getElementById('streakMsg').textContent = 'Streak систем тохируулагдаагүй байна.';
+      document.getElementById('streakMsg').textContent = 'Урамшуулал систем тохируулагдаагүй байна.';
+      document.getElementById('claimBtn').textContent = 'Боломжгүй';
+      renderRewardGrid(1, false);
       return;
     }
     const rows = await r.json();
     const data = Array.isArray(rows) ? rows[0] : rows;
     if(!data) return;
-    const count = data.streak_count || 0;
-    document.getElementById('streakNum').textContent = count + ' өдөр';
 
-    const dots = document.querySelectorAll('#streakDots .streak-dot');
-    const filled = count % 7 === 0 && count > 0 ? 7 : count % 7;
-    dots.forEach((d, i) => d.classList.toggle('done', i < filled));
-
-    const remaining = 7 - (count % 7 === 0 ? 0 : count % 7);
-    const msgEl = document.getElementById('streakMsg');
-    if(data.bonus_awarded){
-      msgEl.innerHTML = `🎉 <b>+200 кредит</b> bonus авлаа! ${count} өдрийн streak.`;
-    }else if(count === 0){
-      msgEl.innerHTML = 'Өнөөдөр нэвтэрвэл streak эхэлнэ. <b>7 өдөр дараалан</b> орвол bonus кредит!';
-    }else{
-      msgEl.innerHTML = `<b>${remaining} өдрийн дараа</b> bonus кредит авна. Streak-аа бүү тас!`;
-    }
+    document.getElementById('streakNum').textContent = (data.streak_count || 0) + ' өдөр';
+    renderRewardGrid(data.current_day || 1, data.already_claimed);
+    updateClaimButton(data.current_day || 1, data.already_claimed);
   }catch(e){
     document.getElementById('streakMsg').textContent = 'Ачаалж чадсангүй.';
+  }
+}
+
+function renderRewardGrid(currentDay, alreadyClaimed){
+  const grid = document.getElementById('rewardGrid');
+  grid.innerHTML = REWARD_AMOUNTS.map((amt, i) => {
+    const day = i + 1;
+    let cls = 'reward-day';
+    if(day === 7) cls += ' day7';
+    if(day < currentDay){ cls += ' past'; }
+    else if(day === currentDay){
+      cls += ' today';
+      if(alreadyClaimed) cls += ' claimed';
+    }
+    return `<div class="${cls}"><div class="reward-day-num">${day}</div><div class="reward-day-amt">${amt}</div></div>`;
+  }).join('');
+}
+
+function updateClaimButton(currentDay, alreadyClaimed){
+  const btn = document.getElementById('claimBtn');
+  const msgEl = document.getElementById('streakMsg');
+  const amount = REWARD_AMOUNTS[currentDay - 1] || 10;
+
+  if(alreadyClaimed){
+    btn.textContent = '✓ Өнөөдөр авсан';
+    btn.disabled = true;
+    btn.classList.add('claimed-state');
+    msgEl.innerHTML = `Маргааш буцаж ирвэл <b>${REWARD_AMOUNTS[currentDay % 7]} кредит</b> хүлээж байна!`;
+  }else{
+    btn.textContent = `🎁 ${amount} кредит авах`;
+    btn.disabled = false;
+    btn.classList.remove('claimed-state');
+    msgEl.innerHTML = currentDay === 7
+      ? '🎉 <b>Энэ долоо хоногийн хамгийн их шагнал!</b>'
+      : `Авбал маргааш <b>${REWARD_AMOUNTS[currentDay % 7]} кредит</b> авах боломжтой.`;
+  }
+}
+
+async function claimDailyReward(){
+  const token = localStorage.getItem('sb_token');
+  const btn = document.getElementById('claimBtn');
+  btn.disabled = true;
+  btn.textContent = 'Хүлээж байна...';
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/claim_daily_reward`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    const rows = await r.json();
+    const data = Array.isArray(rows) ? rows[0] : rows;
+    if(!r.ok || !data || !data.success){
+      document.getElementById('streakMsg').textContent = (data && data.message) || 'Шагнал авч чадсангүй.';
+      btn.textContent = 'Дахин оролдох';
+      btn.disabled = false;
+      return;
+    }
+    const flame = document.getElementById('streakFlame');
+    flame.style.animation = 'none';
+    setTimeout(()=>{ flame.style.animation=''; }, 50);
+
+    document.getElementById('streakMsg').innerHTML = `🎉 <b>+${data.reward_amount} кредит</b> авлаа!`;
+    document.getElementById('streakNum').textContent = data.new_streak + ' өдөр';
+    const cycleDay = ((data.new_streak - 1) % 7) + 1;
+    renderRewardGrid(cycleDay, true);
+    updateClaimButton(cycleDay, true);
+    loadWallet();
+  }catch(e){
+    document.getElementById('streakMsg').textContent = 'Сүлжээний алдаа гарлаа.';
+    btn.textContent = 'Дахин оролдох';
+    btn.disabled = false;
   }
 }
 
@@ -709,21 +777,6 @@ async function loadRightSidebar(){
       renderNotifications(rows);
     }
   }catch(e){}
-
-  // Trending (movies хүснэгт view_count-аар эрэмбэлэгдсэн тохиолдолд)
-  try{
-    const r = await fetch(`${SUPABASE_URL}/rest/v1/movies?select=title,view_count,thumbnail_url&order=view_count.desc&limit=5`,{
-      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
-    });
-    if(r.ok){
-      const rows = await r.json();
-      renderTrending(rows);
-    }else{
-      document.getElementById('rsbTrending').innerHTML = '<div class="sb-empty">Хараахан өгөгдөл байхгүй</div>';
-    }
-  }catch(e){
-    document.getElementById('rsbTrending').innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
-  }
 }
 
 function renderNotifications(rows){
@@ -736,22 +789,6 @@ function renderNotifications(rows){
     const text = escapeHtml(n.message || n.title || 'Шинэ мэдэгдэл');
     const date = n.created_at ? new Date(n.created_at).toLocaleDateString('mn-MN', {month:'short', day:'numeric'}) : '';
     return `<div class="notif-item"><div class="notif-dot"></div><div><div class="notif-text">${text}</div><div class="notif-time">${date}</div></div></div>`;
-  }).join('');
-}
-
-function renderTrending(rows){
-  const el = document.getElementById('rsbTrending');
-  if(!Array.isArray(rows) || rows.length === 0){
-    el.innerHTML = '<div class="sb-empty">Хараахан өгөгдөл байхгүй</div>';
-    return;
-  }
-  el.innerHTML = rows.map((row, i) => {
-    const rankClass = i < 1 ? 'hot' : '';
-    const thumb = row.thumbnail_url
-      ? `<img class="trend-thumb" src="${escapeHtml(row.thumbnail_url)}" alt="">`
-      : `<div class="trend-thumb"></div>`;
-    const views = row.view_count ? row.view_count.toLocaleString('mn-MN') + ' үзсэн' : '';
-    return `<div class="trend-item"><div class="trend-rank ${rankClass}">${i+1}</div>${thumb}<div style="flex:1;min-width:0;"><div class="trend-name">${escapeHtml(row.title||'Нэргүй')}</div><div class="trend-views">${views}</div></div></div>`;
   }).join('');
 }
 async function loadWallet(){
@@ -1080,5 +1117,5 @@ document.getElementById('topupModal').addEventListener('click', function(e) {
 if(e.target === this) closeTopupModal();
 });
 </script>
-</body><!--
- </html>
+</body>
+</html>
