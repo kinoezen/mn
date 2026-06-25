@@ -144,6 +144,10 @@ async function runTTS() {
 // ============================================================
 // ОРЧУУЛАГЧ
 // ============================================================
+// ШИНЭ runTranslate() — /api/translate руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runTranslate() функцийг ЭНЭ
+// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ============================================================
 async function runTranslate() {
     const text = document.getElementById('trans-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
@@ -152,13 +156,16 @@ async function runTranslate() {
     try {
         const from = document.getElementById('trans-from')?.value || 'en';
         const to = document.getElementById('trans-to')?.value || 'mn';
-        const response = await fetch('https://translate.argosopentech.com/translate', {
+
+        const response = await fetch('/api/translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ q: text, source: from, target: to, format: 'text' })
+            body: JSON.stringify({ text, from, to })
         });
-        if (!response.ok) throw new Error('Translation error');
+
         const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
+
         const resultDiv = document.getElementById('trans-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
@@ -168,7 +175,7 @@ async function runTranslate() {
         showToast('✅ Орчуулга амжилттай!', 'success');
     } catch (error) {
         console.error('Translate error:', error);
-        showToast('❌ Орчуулах үед алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🌐 Орчуулах'; }
 }
