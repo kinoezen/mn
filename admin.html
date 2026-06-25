@@ -3,14 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Эзэн — Admin</title>
-→ <title>Кино Эзэн — Admin</title>
-
-<div class="login-logo">Эзэн</div>
-→ <div class="login-logo">Кино Эзэн</div>
-
-<div class="sidebar-logo">Эзэн</div>
-→ <div class="sidebar-logo">Кино Эзэн</div>
+<title>Кино Эзэн — Admin</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0f0f1a;color:#fff;font-family:Arial,sans-serif;min-height:100vh;}
@@ -110,13 +103,11 @@ tr:last-child td{border-bottom:none;}
   .form-grid{grid-template-columns:1fr;}
   .form-group.full{grid-column:1;}
 }
-/* ===== БУЦАХ ТОВЧ ===== */
 .page-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
 .back-to-dash{background:none;border:none;color:#4ade80;font-size:15px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:600;padding:4px 8px;border-radius:6px;transition:background 0.2s;}
 .back-to-dash:hover{background:rgba(74,222,128,0.08);}
 .back-to-dash svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none;}
 .page-title-text{font-size:20px;font-weight:700;}
-/* ===== ПРОГРАММ УДИРДЛАГА ===== */
 .prog-toggle-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px;}
 .prog-toggle{display:flex;align-items:center;gap:8px;padding:9px 12px;background:#12121e;border-radius:8px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;user-select:none;flex:1;min-width:130px;}
 .pt-track{width:36px;height:20px;background:rgba(255,255,255,0.12);border-radius:10px;position:relative;transition:background 0.2s;flex-shrink:0;}
@@ -133,7 +124,7 @@ tr:last-child td{border-bottom:none;}
 
 <div class="login-wrap" id="login-page">
   <div class="login-box">
-    <div class="login-logo">Эзэн</div>
+    <div class="login-logo">Кино Эзэн</div>
     <div class="login-sub">Admin хэсэг</div>
     <label class="inp-label">Нэвтрэх нэр</label>
     <input class="inp" type="text" id="admin-user" placeholder="admin">
@@ -146,7 +137,7 @@ tr:last-child td{border-bottom:none;}
 
 <div class="admin-wrap" id="admin-page">
   <div class="sidebar">
-    <div class="sidebar-logo">Эзэн</div>
+    <div class="sidebar-logo">Кино Эзэн</div>
     <div class="nav-item active" onclick="showPage('dashboard',this)"><span>📊</span> Хянах самбар</div>
     <div class="nav-item" onclick="showPage('movies',this)"><span>🎬</span> Кино нэмэх</div>
     <div class="nav-item" onclick="showPage('news',this)"><span>📰</span> Мэдээ нэмэх</div>
@@ -797,6 +788,76 @@ tr:last-child td{border-bottom:none;}
     </div>
     <div class="success-msg" id="edit-a-ok" style="margin-top:8px;">✅ Амжилттай!</div>
     <div class="error-msg2" id="edit-a-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
+  </div>
+</div>
+
+<!-- ==================== ПРОГРАММ EDIT MODAL ==================== -->
+<div class="modal-overlay" id="modal-program">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Программ засах<button class="modal-close" onclick="closeModal('modal-program')">✕</button></div>
+    <input type="hidden" id="edit-pr-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-pr-title"></div>
+      <div class="form-group"><label class="form-label">Ангилал</label>
+        <select class="form-inp" id="edit-pr-cat"><option>Кино</option><option>Хэрэгсэл</option><option>AI</option><option>Тоглоом</option><option>Бусад</option></select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label class="form-label">Үнэ ₮</label><input class="form-inp" id="edit-pr-price" type="number" min="0"></div>
+        <div class="form-group"><label class="form-label">Анхны үнэ ₮</label><input class="form-inp" id="edit-pr-orig-price" type="number" min="0"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Татах URL</label><input class="form-inp" id="edit-pr-download-url"></div>
+      <div class="form-group"><label class="form-label">Худалдах URL</label><input class="form-inp" id="edit-pr-buy-url"></div>
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-pr-img-file','edit-pr-img-preview')">
+          <input type="file" id="edit-pr-img-file" accept="image/*" onchange="previewFile(this,'edit-pr-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-pr-img-preview">
+            <img id="edit-pr-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-pr-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-pr-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-pr-desc" style="min-height:70px;"></textarea></div>
+      <div class="form-group"><label class="form-label">Функцүүд (мөр бүр нэг)</label><textarea class="form-inp" id="edit-pr-features" style="min-height:70px;"></textarea></div>
+      <div class="form-group">
+        <label class="form-label">Тэмдэглэгээ</label>
+        <div class="prog-toggle-row">
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-new')">
+            <div class="pt-track" id="track-edit-pr-is-new"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Шинэ</span>
+            <span class="pt-badge" id="badge-edit-pr-is-new">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-new" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-hot')">
+            <div class="pt-track" id="track-edit-pr-is-hot"><div class="pt-thumb"></div></div>
+            <span class="pt-label">🔥 Хит</span>
+            <span class="pt-badge" id="badge-edit-pr-is-hot">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-hot" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-sale')">
+            <div class="pt-track" id="track-edit-pr-is-sale"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Хямдрал</span>
+            <span class="pt-badge" id="badge-edit-pr-is-sale">Идэвхгүй</span>
+            <input type="hidden" id="edit-pr-is-sale" value="false">
+          </label>
+          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-active')">
+            <div class="pt-track on" id="track-edit-pr-is-active"><div class="pt-thumb"></div></div>
+            <span class="pt-label">Нийтэлсэн</span>
+            <span class="pt-badge" id="badge-edit-pr-is-active" style="background:rgba(74,222,128,0.18);color:#4ade80;">Идэвхтэй</span>
+            <input type="hidden" id="edit-pr-is-active" value="true">
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-program')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveProgram()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-pr-ok" style="margin-top:8px;">✅ Амжилттай!</div>
+    <div class="error-msg2" id="edit-pr-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
   </div>
 </div>
 
@@ -1464,75 +1525,5 @@ async function saveProgram(){
   else{document.getElementById('edit-pr-err').style.display='block';}
 }
 </script>
-
-<!-- ==================== ПРОГРАММ EDIT MODAL ==================== -->
-<div class="modal-overlay" id="modal-program">
-  <div class="modal-box">
-    <div class="modal-title">✏️ Программ засах<button class="modal-close" onclick="closeModal('modal-program')">✕</button></div>
-    <input type="hidden" id="edit-pr-id">
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-pr-title"></div>
-      <div class="form-group"><label class="form-label">Ангилал</label>
-        <select class="form-inp" id="edit-pr-cat"><option>Кино</option><option>Хэрэгсэл</option><option>AI</option><option>Тоглоом</option><option>Бусад</option></select>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="form-group"><label class="form-label">Үнэ ₮</label><input class="form-inp" id="edit-pr-price" type="number" min="0"></div>
-        <div class="form-group"><label class="form-label">Анхны үнэ ₮</label><input class="form-inp" id="edit-pr-orig-price" type="number" min="0"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Татах URL</label><input class="form-inp" id="edit-pr-download-url"></div>
-      <div class="form-group"><label class="form-label">Худалдах URL</label><input class="form-inp" id="edit-pr-buy-url"></div>
-      <div class="form-group">
-        <label class="form-label">Зураг</label>
-        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-pr-img-file','edit-pr-img-preview')">
-          <input type="file" id="edit-pr-img-file" accept="image/*" onchange="previewFile(this,'edit-pr-img-preview','image')">
-          <div class="upload-icon" style="font-size:20px;">🖼️</div>
-          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
-          <div class="upload-preview" id="edit-pr-img-preview">
-            <img id="edit-pr-img-preview-img" src="" alt="preview" style="max-height:120px;">
-            <div class="upload-preview-name" id="edit-pr-img-preview-name"></div>
-          </div>
-        </div>
-        <input class="form-inp" id="edit-pr-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
-      </div>
-      <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-pr-desc" style="min-height:70px;"></textarea></div>
-      <div class="form-group"><label class="form-label">Функцүүд (мөр бүр нэг)</label><textarea class="form-inp" id="edit-pr-features" style="min-height:70px;"></textarea></div>
-      <div class="form-group">
-        <label class="form-label">Тэмдэглэгээ</label>
-        <div class="prog-toggle-row">
-          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-new')">
-            <div class="pt-track" id="track-edit-pr-is-new"><div class="pt-thumb"></div></div>
-            <span class="pt-label">Шинэ</span>
-            <span class="pt-badge" id="badge-edit-pr-is-new">Идэвхгүй</span>
-            <input type="hidden" id="edit-pr-is-new" value="false">
-          </label>
-          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-hot')">
-            <div class="pt-track" id="track-edit-pr-is-hot"><div class="pt-thumb"></div></div>
-            <span class="pt-label">🔥 Хит</span>
-            <span class="pt-badge" id="badge-edit-pr-is-hot">Идэвхгүй</span>
-            <input type="hidden" id="edit-pr-is-hot" value="false">
-          </label>
-          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-sale')">
-            <div class="pt-track" id="track-edit-pr-is-sale"><div class="pt-thumb"></div></div>
-            <span class="pt-label">Хямдрал</span>
-            <span class="pt-badge" id="badge-edit-pr-is-sale">Идэвхгүй</span>
-            <input type="hidden" id="edit-pr-is-sale" value="false">
-          </label>
-          <label class="prog-toggle" onclick="toggleProg('edit-pr-is-active')">
-            <div class="pt-track on" id="track-edit-pr-is-active"><div class="pt-thumb"></div></div>
-            <span class="pt-label">Нийтэлсэн</span>
-            <span class="pt-badge" id="badge-edit-pr-is-active" style="background:rgba(74,222,128,0.18);color:#4ade80;">Идэвхтэй</span>
-            <input type="hidden" id="edit-pr-is-active" value="true">
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="modal-btns">
-      <button class="modal-cancel-btn" onclick="closeModal('modal-program')">Цуцлах</button>
-      <button class="modal-save-btn" onclick="saveProgram()">💾 Хадгалах</button>
-    </div>
-    <div class="success-msg" id="edit-pr-ok" style="margin-top:8px;">✅ Амжилттай!</div>
-    <div class="error-msg2" id="edit-pr-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
-  </div>
-</div>
 </body>
 </html>
