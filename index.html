@@ -320,7 +320,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 400px;
+    max-width: 500px;
     margin: 0 auto;
   }
   .mbn-item {
@@ -487,6 +487,18 @@
       gap: 10px;
       padding: 0 12px 16px;
     }
+    .mbn-inner {
+      max-width: 100%;
+    }
+    .mbn-item {
+      padding: 4px 4px;
+      font-size: 8px;
+    }
+    .mbn-item .mbn-logo-icon {
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+    }
   }
 
   @media(max-width: 400px) {
@@ -507,6 +519,15 @@
     .ad-btn {
       font-size: 8px;
       padding: 3px 8px;
+    }
+    .mbn-item .mbn-logo-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 10px;
+    }
+    .mbn-item {
+      font-size: 7px;
+      padding: 2px 2px;
     }
   }
 </style>
@@ -778,22 +799,37 @@
 <!-- ===== MOBILE BOTTOM NAV ===== -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
+    <!-- 1. Нүүр -->
     <a class="mbn-item active" href="index.html" aria-label="Нүүр">
       <div class="mbn-logo-icon">🏠</div>
       <span>Нүүр</span>
     </a>
+
+    <!-- 2. Сургалт -->
     <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
       <div class="mbn-logo-icon">📚</div>
       <span>Сургалт</span>
     </a>
+
+    <!-- 3. Программ -->
     <a class="mbn-item" href="programs.html" aria-label="Программ">
       <div class="mbn-logo-icon">💻</div>
       <span>Программ</span>
     </a>
+
+    <!-- 4. Үйлчилгээ (AI робот) -->
     <a class="mbn-item" href="services.html" aria-label="Үйлчилгээ">
-      <div class="mbn-logo-icon">⚙️</div>
+      <div class="mbn-logo-icon">🤖</div>
       <span>Үйлчилгээ</span>
     </a>
+
+    <!-- 5. Зар (ШИНЭ) -->
+    <a class="mbn-item" href="zar.html" aria-label="Зар">
+      <div class="mbn-logo-icon">📢</div>
+      <span>Зар</span>
+    </a>
+
+    <!-- 6. Профайл -->
     <a class="mbn-item" href="profile.html" aria-label="Профайл">
       <div class="mbn-logo-icon">👤</div>
       <span>Профайл</span>
