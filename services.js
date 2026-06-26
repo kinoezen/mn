@@ -1,3 +1,4 @@
+
 // ============================================================
 // services.js — КиноЭзэн AI Үйлчилгээнүүд (АЛДААГҮЙ ХУВИЛБАР)
 // ============================================================
@@ -40,59 +41,47 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// TTS — ДУУ ҮҮСГЭГЧ (2 хоолойтой: Edge / Gemini)
+// ШИНЭ runTTS() — progress bar (0-100%) нэмэгдсэн хувилбар.
+// services.js доторх ОДОО байгаа runTTS() функцийг ЭНЭ
+// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
 // ============================================================
-
-// Одоогийн сонгосон engine ('edge' эсвэл 'gemini')
-let ttsEngine = 'edge';
-const TTS_CHAR_LIMITS = { edge: 2000, gemini: 1000 };
-
-// Engine солих (Edge <-> Gemini) — HTML дотор onclick="selEngine('edge', this)" гэж дуудагдана
-function selEngine(engine, el) {
-    ttsEngine = engine;
-    document.querySelectorAll('#engine-edge, #engine-gemini').forEach(b => b.classList.remove('on'));
-    el.classList.add('on');
-
-    const edgeRow = document.getElementById('edge-voice-row');
-    const geminiRow = document.getElementById('gemini-voice-row');
-    if (edgeRow) edgeRow.style.display = engine === 'edge' ? 'block' : 'none';
-    if (geminiRow) geminiRow.style.display = engine === 'gemini' ? 'block' : 'none';
-
-    updateTTSCount();
-}
-
-// Тэмдэгтийн тоо харуулах (engine-ээс хамаарсан хязгаартай)
-function updateTTSCount() {
-    const textEl = document.getElementById('tts-text');
-    if (!textEl) return;
-    const len = textEl.value.length;
-    const limit = TTS_CHAR_LIMITS[ttsEngine];
-    const countEl = document.getElementById('char-count');
-    if (countEl) {
-        countEl.textContent = len + '/' + limit;
-        countEl.style.color = len > limit ? '#e63946' : '#4ade80';
-    }
-}
-
-// Едж TTS-ийн дуу сонгох (Батаа/Есүй)
-function selVoice(el) {
-    document.querySelectorAll('#edge-voice-row .vbtn').forEach(b => b.classList.remove('on'));
-    el.classList.add('on');
-}
-
-// Дуу үүсгэх — /api/tts руу fetch хийнэ
 async function runTTS() {
     const text = document.getElementById('tts-text')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
 
     const limit = TTS_CHAR_LIMITS[ttsEngine];
     if (text.length > limit) {
-        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгүй байх ёстой)`, 'error');
+        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгуй байх ёстой)`, 'error');
         return;
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; }
+
+    // Progress bar-ийг harуулна
+    const resultDiv = document.getElementById('tts-result');
+    if (resultDiv) {
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = `<div class="result-label">⏳ Дуу үүсгэж байна...</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
+            <div id="tts-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
+        </div>
+        <div id="tts-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
+    }
+
+    // Хуурамч progress (бодит progress Gemini-ээс ирэхгуй тул дөхөмжтэй
+    // нэмэгдэх дүрслэл өгнө — 90% хүртэл удаан, дараа нь хариу ирэхэд 100%)
+    let fakeProgress = 0;
+    const progressInterval = setInterval(() => {
+        if (fakeProgress < 90) {
+            fakeProgress += Math.random() * 8;
+            if (fakeProgress > 90) fakeProgress = 90;
+            const bar = document.getElementById('tts-progress-bar');
+            const txt = document.getElementById('tts-progress-text');
+            if (bar) bar.style.width = fakeProgress + '%';
+            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
+        }
+    }, 400);
 
     try {
         const rate = document.getElementById('rate')?.value || 15;
@@ -122,25 +111,40 @@ async function runTTS() {
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Дуу үүсгэх үед алдаа гарлаа');
-        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгүй');
+        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгуй');
 
-        const resultDiv = document.getElementById('tts-result');
-        if (resultDiv) {
-            resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">✅ Дуу бэлэн</div>
-            <audio controls style="width:100%;border-radius:8px;margin-top:6px;">
-                <source src="${data.audioUrl}" type="audio/mpeg">
-            </audio>`;
-        }
+        // 100% болгож харуулна
+        clearInterval(progressInterval);
+        const bar = document.getElementById('tts-progress-bar');
+        const txt = document.getElementById('tts-progress-text');
+        if (bar) bar.style.width = '100%';
+        if (txt) txt.textContent = '100%';
+
+        setTimeout(() => {
+            if (resultDiv) {
+                resultDiv.innerHTML = `<div class="result-label">✅ Дуу бэлэн</div>
+                <audio controls style="width:100%;border-radius:8px;margin-top:6px;">
+                    <source src="${data.audioUrl}" type="audio/mpeg">
+                </audio>`;
+            }
+        }, 400);
+
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
+        clearInterval(progressInterval);
         console.error('TTS error:', error);
-        showToast('❌ ' + error.message, 'error');
+        if (resultDiv) resultDiv.classList.remove('show');
+
+        // Gemini хязгаарт хүрсэн бол ойлгомжтой мессеж харуулна
+        if (ttsEngine === 'gemini' && error.message.includes('429')) {
+            showToast('⚠️ Gemini хоолой одоогоор хязгаартай дүүрсэн. Edge TTS-ийг турших уу!', 'error');
+        } else {
+            showToast('❌ ' + error.message, 'error');
+        }
     }
 
     if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
-
 // ============================================================
 // ОРЧУУЛАГЧ
 // ============================================================
