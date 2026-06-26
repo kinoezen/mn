@@ -269,33 +269,41 @@ function startSpeechRecognition() {
 // ============================================================
 // ТЕКСТ ЗАСАГЧ
 // ============================================================
+// ШИНЭ runTextEdit() — /api/textedit руу бодитоор fetch хийнэ.
+// services.js доторх ХУУЧИН runTextEdit() функцийг ЭНЭ
+// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ============================================================
 async function runTextEdit() {
     const text = document.getElementById('textedit-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Засаж байна...'; }
     try {
-        let edited = text;
-        if (document.getElementById('fix-grammar')?.checked) {
-            edited = edited.replace(/байгаа/g, 'байна').replace(/тиймээ/g, 'тиймээ');
-        }
-        if (document.getElementById('fix-punctuation')?.checked) {
-            edited = edited.replace(/\s*\.\s*/g, '. ').replace(/\s*,\s*/g, ', ').replace(/  +/g, ' ');
-        }
+        const fixGrammar = document.getElementById('fix-grammar')?.checked ?? true;
+        const fixPunctuation = document.getElementById('fix-punctuation')?.checked ?? true;
+        const fixStyle = document.getElementById('fix-style')?.checked ?? false;
+
+        const response = await fetch('/api/textedit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text, fixGrammar, fixPunctuation, fixStyle })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Засах үед алдаа гарлаа');
+
         const beforeEl = document.getElementById('textedit-before');
         const afterEl = document.getElementById('textedit-after');
         const resultEl = document.getElementById('textedit-result');
-        if (beforeEl) beforeEl.textContent = text;
-        if (afterEl) afterEl.textContent = edited;
+        if (beforeEl) beforeEl.textContent = data.original;
+        if (afterEl) afterEl.textContent = data.edited;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Текст амжилттай засагдлаа!', 'success');
     } catch (error) {
         console.error('TextEdit error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📝 Засах'; }
 }
-
 // ============================================================
 // КИНО ТОЙМЧ
 // ============================================================
