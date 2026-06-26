@@ -37,7 +37,6 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
-  padding-bottom: var(--bottom-nav-h);
 }
 
 /* ===== ANIMATIONS ===== */
@@ -993,10 +992,10 @@ body {
 }
 
 /* ============================================================ */
-/* ===== MOBILE BOTTOM NAV — ЗАССАН (БАЙНГЫН ХАРАГДАХ) ===== */
+/* ===== MOBILE BOTTOM NAV ===== */
 /* ============================================================ */
 .mobile-bottom-nav {
-  display: flex !important;
+  display: none !important;  /* Компьютер дээр нуугдах */
   position: fixed;
   bottom: 0;
   left: 0;
@@ -1191,9 +1190,11 @@ body {
 
   /* --- ДООД ЦЭС --- */
   .mobile-bottom-nav { 
-    display: flex !important; 
+    display: flex !important;  /* Утас дээр харагдах */
   }
-  body { padding-bottom: var(--bottom-nav-h); }
+  body { 
+    padding-bottom: var(--bottom-nav-h); 
+  }
   .messenger-fab { bottom: calc(var(--bottom-nav-h) + 14px); }
   .toast { bottom: calc(var(--bottom-nav-h) + 12px); }
 }
