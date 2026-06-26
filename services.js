@@ -821,6 +821,42 @@ function copyText(btn) {
         });
     }
 }
+// ============================================================
+// ШИНЭ runScriptWriter() — /api/script-writer руу fetch хийнэ.
+// Энэ бол ШИНЭ функц (Script бичигч өмнө нь "Премиум" badge-
+// тэй, код байгаагуй учраас).
+// ============================================================
+async function runScriptWriter() {
+    const topic = document.getElementById('script-writer-input')?.value.trim();
+    if (!topic) { showToast('⚠️ Сэдэв оруулна уу!', 'error'); return; }
+    const btn = event.target;
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Бичиж байна...'; }
+    try {
+        const type = document.querySelector('input[name="script-type"]:checked')?.value || 'youtube';
+        const length = document.getElementById('script-writer-length')?.value || 'medium';
+
+        const response = await fetch('/api/script-writer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic, type, length })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Script бичих үед алдаа гарлаа');
+
+        const resultDiv = document.getElementById('script-writer-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">✍️ Script</div>
+            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;max-height:500px;overflow-y:auto;">${data.script}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
+        }
+        showToast('✅ Script амжилттай бичигдлээ!', 'success');
+    } catch (error) {
+        console.error('ScriptWriter error:', error);
+        showToast('❌ ' + error.message, 'error');
+    }
+    if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; }
+}
 
 // ============================================================
 // INIT
