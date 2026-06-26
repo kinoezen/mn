@@ -211,6 +211,86 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
 
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-bottom-nav {
+  display: none !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  background: rgba(12, 12, 22, 0.98);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(74, 222, 128, 0.15);
+  z-index: 1000;
+  padding: 0 8px;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+}
+.mobile-bottom-nav .mbn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.mbn-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 10px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  background: none;
+  flex: 1;
+  min-width: 0;
+  max-width: 80px;
+  letter-spacing: 0.3px;
+}
+.mbn-item.active {
+  color: #4ade80;
+}
+.mbn-item .mbn-logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #4ade80, #fbbf24);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  color: #0a0a14;
+}
+.mbn-item span {
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.8;
+}
+.mbn-item.active span {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+  body {
+    padding-bottom: 70px;
+  }
+}
+
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}.detail-hero{flex-direction:column;}.detail-thumb{width:100%;height:160px;}}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}.hero h1{font-size:36px;}.viewer-content{padding:16px;}.detail-body{padding:0 16px;}.price-block{flex-direction:column;align-items:flex-start;}.buy-btn{width:100%;}.viewer-foot{flex-direction:column;}.nav-btn{width:100%;justify-content:center;}}
 @media(max-width:768px){.nav{padding:10px 16px;flex-wrap:wrap;}.nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--border);}.nav-links.open{display:flex;}.nav-right{display:none;width:100%;}.nav-right.open{display:flex;flex-direction:column;gap:8px;}.nav-toggle{display:block;}}
@@ -339,8 +419,35 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- Bottom Nav ачаалах -->
-<div id="bottom-nav-placeholder"></div>
+<!-- ===== MOBILE BOTTOM NAV ===== -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+  <div class="mbn-inner">
+    <a class="mbn-item" href="index.html" aria-label="Нүүр">
+      <div class="mbn-logo-icon">🏠</div>
+      <span>Нүүр</span>
+    </a>
+    <a class="mbn-item active" href="lessons.html" aria-label="Сургалт">
+      <div class="mbn-logo-icon">📚</div>
+      <span>Сургалт</span>
+    </a>
+    <a class="mbn-item" href="programs.html" aria-label="Программ">
+      <div class="mbn-logo-icon">💻</div>
+      <span>Программ</span>
+    </a>
+    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ">
+      <div class="mbn-logo-icon">🤖</div>
+      <span>AI</span>
+    </a>
+    <a class="mbn-item" href="zar.html" aria-label="Зар">
+      <div class="mbn-logo-icon">📢</div>
+      <span>Зар</span>
+    </a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл">
+      <div class="mbn-logo-icon">👤</div>
+      <span>Профайл</span>
+    </a>
+  </div>
+</nav>
 
 <script>
 const SB='https://smncsxlbyyhowfarxxlz.supabase.co';
