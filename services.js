@@ -206,6 +206,11 @@ async function runHum() {
 // ============================================================
 // STT (Дуу → Текст)
 // ============================================================
+// runSTT() — /api/stt руу FormData-аар fetch хийнэ, progress
+// bar-тай. services.js доторх ХУУЧИН runSTT() функцийг ЭНЭ
+// ФУНКЦЭЭР бухэлд нь СОЛИХ. (startSpeechRecognition() функцийг
+// ХӖНДӖХГҲЙ, хэвээр үлдээнэ.)
+// ============================================================
 async function runSTT() {
     const fileInput = document.getElementById('stt-file');
     if (!fileInput?.files || fileInput.files.length === 0) {
@@ -214,28 +219,88 @@ async function runSTT() {
     }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
+
+    const resultDiv = document.getElementById('stt-result');
+    if (resultDiv) {
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = `<div class="result-label">⏳ Боловсруулж байна...</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
+            <div id="stt-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
+        </div>
+        <div id="stt-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
+    }
+    let fakeProgress = 0;
+    const progressInterval = setInterval(() => {
+        if (fakeProgress < 90) {
+            fakeProgress += Math.random() * 6;
+            if (fakeProgress > 90) fakeProgress = 90;
+            const bar = document.getElementById('stt-progress-bar');
+            const txt = document.getElementById('stt-progress-text');
+            if (bar) bar.style.width = fakeProgress + '%';
+            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
+        }
+    }, 400);
+
     try {
         const file = fileInput.files[0];
-        const audioUrl = URL.createObjectURL(file);
-        const resultDiv = document.getElementById('stt-result');
-        if (resultDiv) {
-            resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">🎙️ Аудио боловсруулагдлаа</div>
-            <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
-                <source src="${audioUrl}">
-            </audio>
-            <div style="font-size:13px;color:rgba(255,255,255,0.4);padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
-                🎤 Доорх товчоор микрофоноор ярьж болно:
-            </div>
-            <button onclick="startSpeechRecognition()" style="padding:10px 20px;border-radius:10px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">🎤 Микрофоноор ярих</button>
-            <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;min-height:40px;"></div>`;
+
+        if (file.size > 20 * 1024 * 1024) {
+            throw new Error('Аудио файл 20MB-ээс ихгуй байх ёстой');
         }
-        showToast('✅ Аудио боловсруулагдлаа!', 'success');
+
+        const formData = new FormData();
+        formData.append('audio', file);
+
+        const response = await fetch('/api/stt', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'STT боловсруулах үед алдаа гарлаа');
+
+        clearInterval(progressInterval);
+        const bar = document.getElementById('stt-progress-bar');
+        const txt = document.getElementById('stt-progress-text');
+        if (bar) bar.style.width = '100%';
+        if (txt) txt.textContent = '100%';
+
+        const audioUrl = URL.createObjectURL(file);
+
+        setTimeout(() => {
+            if (resultDiv) {
+                resultDiv.innerHTML = `<div class="result-label">🎙️ Текст болсон</div>
+                <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
+                    <source src="${audioUrl}">
+                </audio>
+                <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.85);font-size:14px;line-height:1.7;white-space:pre-wrap;">${data.transcript}</div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                    <button onclick="copyText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
+                    <button onclick="downloadSttText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:11px;cursor:pointer;">⬇️ Татах (.txt)</button>
+                </div>`;
+            }
+        }, 400);
+
+        showToast('✅ Текст болгогдлоо!', 'success');
     } catch (error) {
+        clearInterval(progressInterval);
+        if (resultDiv) resultDiv.classList.remove('show');
         console.error('STT error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; }
+}
+
+// Транскрипцийг .txt файл болгож татах (ШИНЭ функц, дээрх кодын зэрэгцээ нэмнэ)
+function downloadSttText(btn) {
+    const parent = btn.closest('.result');
+    const textEl = parent.querySelector('[style*="white-space:pre-wrap"]');
+    if (!textEl) return;
+    const blob = new Blob([textEl.textContent], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'transcript.txt';
+    link.click();
 }
 
 // ===== SPEECH RECOGNITION =====
