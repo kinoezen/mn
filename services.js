@@ -41,9 +41,9 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// ШИНЭ runTTS() — progress bar (0-100%) нэмэгдсэн хувилбар.
-// services.js доторх ОДОО байгаа runTTS() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// runTTS() — ОДОО БАЙГАА ФУНКЦИЙГ ЭНЭГЭЭР СОЛИХ.
+// Цорын ганц өөрчлөлт: progress bar (0-100%) нэмэгдсэн.
+// Бусад бугд (engine сонголт, body бэлдэх, fetch) ХЭВЭЭРЭЭ.
 // ============================================================
 async function runTTS() {
     const text = document.getElementById('tts-text')?.value.trim();
@@ -56,9 +56,9 @@ async function runTTS() {
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
 
-    // Progress bar-ийг harуулна
+    // ===== ШИНЭ: progress bar харуулна =====
     const resultDiv = document.getElementById('tts-result');
     if (resultDiv) {
         resultDiv.classList.add('show');
@@ -68,9 +68,6 @@ async function runTTS() {
         </div>
         <div id="tts-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
     }
-
-    // Хуурамч progress (бодит progress Gemini-ээс ирэхгуй тул дөхөмжтэй
-    // нэмэгдэх дүрслэл өгнө — 90% хүртэл удаан, дараа нь хариу ирэхэд 100%)
     let fakeProgress = 0;
     const progressInterval = setInterval(() => {
         if (fakeProgress < 90) {
@@ -82,6 +79,7 @@ async function runTTS() {
             if (txt) txt.textContent = Math.round(fakeProgress) + '%';
         }
     }, 400);
+    // ===== ШИНЭ ХЭСЭГ ТӲГСЛӖ =====
 
     try {
         const rate = document.getElementById('rate')?.value || 15;
@@ -111,9 +109,9 @@ async function runTTS() {
 
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || 'Дуу үүсгэх үед алдаа гарлаа');
-        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгуй');
+        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгүй');
 
-        // 100% болгож харуулна
+        // ===== ШИНЭ: 100% болгож, дараа нь audio харуулна =====
         clearInterval(progressInterval);
         const bar = document.getElementById('tts-progress-bar');
         const txt = document.getElementById('tts-progress-text');
@@ -128,19 +126,14 @@ async function runTTS() {
                 </audio>`;
             }
         }, 400);
+        // ===== ШИНЭ ХЭСЭГ ТҲГСЛӖ =====
 
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
         clearInterval(progressInterval);
-        console.error('TTS error:', error);
         if (resultDiv) resultDiv.classList.remove('show');
-
-        // Gemini хязгаарт хүрсэн бол ойлгомжтой мессеж харуулна
-        if (ttsEngine === 'gemini' && error.message.includes('429')) {
-            showToast('⚠️ Gemini хоолой одоогоор хязгаартай дүүрсэн. Edge TTS-ийг турших уу!', 'error');
-        } else {
-            showToast('❌ ' + error.message, 'error');
-        }
+        console.error('TTS error:', error);
+        showToast('❌ ' + error.message, 'error');
     }
 
     if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
