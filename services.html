@@ -484,19 +484,49 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
     </div>
 
-    <!-- 4. Script бичигч -->
-    <div class="svc-card" data-category="text">
-      <div class="svc-head">
-        <div class="svc-ico purple">✍️</div>
-        <div class="svc-info">
-          <div class="svc-name">Монгол Script бичигч</div>
-          <div class="svc-desc">YouTube, подкаст, кино тайлбарын script монголоор бичнэ.</div>
-          <div class="badges"><span class="badge badge-pro">Премиум</span></div>
-        </div>
-      </div>
-      <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
-    </div>
+   <!-- ============================================================
+ШИНЭ "Монгол Script бичигч" card — services.html доторх ХУУЧИН
+card-ийг ОЛЖ (Ctrl+F-ээр "Монгол Script бичигч" гэж хайвал
+олдоно) бухэлд нь дараах кодоор СОЛИХ.
 
+Хуучин card нь зөвхөн:
+  <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
+гэсэн товчтой байсан — бугдийг доорхоор солих.
+============================================================ -->
+<div class="svc-card" data-category="text">
+  <div class="svc-head">
+    <div class="svc-ico purple">✍️</div>
+    <div class="svc-info">
+      <div class="svc-name">Монгол Script бичигч</div>
+      <div class="svc-desc">YouTube, подкаст, кино тайлбарын script монголоор бичнэ.</div>
+      <div class="badges">
+        <span class="badge badge-free">Үнэгуй</span>
+        <span class="badge badge-credit">⚡ 5 кредит/script</span>
+      </div>
+    </div>
+  </div>
+  <button class="svc-btn" onclick="toggleBox('script-writer-box',this)">✍️ Турших</button>
+  <div class="svc-box" id="script-writer-box">
+    <div class="cost-pill">⚡ Үнэ: 5 кредит/script</div>
+    <label class="form-label">Сэдэв / Агуулга</label>
+    <textarea id="script-writer-input" placeholder="Жишээ: Монгол хоолны түухийн тухай видео..."></textarea>
+    <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;">
+      <label style="font-size:12px;color:rgba(255,255,255,0.5);">Төрөл:</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="youtube" checked style="accent-color:#4ade80;"> YouTube</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="podcast" style="accent-color:#4ade80;"> Подкаст</label>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="movie" style="accent-color:#4ade80;"> Кино тайлбар</label>
+    </div>
+    <label class="form-label">Урт</label>
+    <select class="lang-select" id="script-writer-length" style="width:100%;margin-bottom:10px;">
+      <option value="short">Богино (1-2 мин)</option>
+      <option value="medium" selected>Дунд (3-5 мин)</option>
+      <option value="long">Урт (7-10 мин)</option>
+    </select>
+    <button class="run-btn" onclick="runScriptWriter()">✍️ Script бичих</button>
+    <div class="notice-box" id="script-writer-notice">💎 Кредит хүрэлцэхгуй — <a href="pricing.html">тариф сонгох →</a></div>
+    <div class="result" id="script-writer-result"></div>
+  </div>
+</div>
     <!-- 5. Орчуулагч -->
     <div class="svc-card" data-category="text">
       <div class="svc-head">
