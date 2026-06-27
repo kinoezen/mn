@@ -307,7 +307,7 @@
     background: rgba(74,222,128,0.12);
   }
 
-  /* ===== MOBILE BOTTOM NAV — ТОМРУУЛСАН ===== */
+  /* ===== MOBILE BOTTOM NAV ===== */
   .mobile-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -440,11 +440,19 @@
     display: none !important;
   }
 
+  /* ===== МЭДЭЭНИЙ GRID — DESKTOP: 2 ЭГНЭЭ 4 БАГАНА = 8 КАРТ ===== */
   .news-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
     padding: 0 24px 24px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (min-width: 901px) {
+    .news-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
   }
 
   @media(max-width: 900px) {
@@ -457,6 +465,9 @@
     .mcat-icon svg { width: 36px; height: 36px; }
     .mcat-label { font-size: 11px; }
     .mcat-sub { display: none; }
+    .news-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 
   @media(max-width: 600px) {
@@ -633,7 +644,7 @@
       <div class="mcat-label">Сургалт</div><div class="mcat-sub">VN, AI, YouTube</div><div class="mcat-badge">📚</div>
     </div>
     
-    <!-- 4. Программ — programs.html руу шилждэг -->
+    <!-- 4. Программ -->
     <div class="mcat-card mcat-software" id="mcat-software" onclick="location.href='programs.html'" tabindex="0" role="button" aria-label="Программ">
       <div class="mcat-icon"><svg viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#mgSoftware)"/><defs><linearGradient id="mgSoftware" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><rect x="10" y="10" width="22" height="22" rx="3" fill="white" fill-opacity="0.15" stroke="white" stroke-width="1.5"/><line x1="14" y1="16" x2="28" y2="16" stroke="white" stroke-width="1.5"/><line x1="14" y1="20" x2="28" y2="20" stroke="white" stroke-width="1.5"/><line x1="14" y1="24" x2="24" y2="24" stroke="white" stroke-width="1.5"/></svg></div>
       <div class="mcat-label">Программ</div><div class="mcat-sub">Татаж авах</div><div class="mcat-badge">💻</div>
