@@ -149,8 +149,8 @@ tr:last-child td{border-bottom:none;}
     <div class="nav-item" onclick="showPage('list-movies',this)"><span>📋</span> Кино жагсаалт</div>
     <div class="nav-item" onclick="showPage('list-news',this)"><span>📋</span> Мэдээ жагсаалт</div>
     <div style="padding:6px 20px 2px;font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;margin-top:8px;">🎓 СУРГАЛТ</div>
-    <div class="nav-item" onclick="showPage('sc-list',this)"><span>📚</span> Сургалтууд</div>
-    <div class="nav-item" onclick="showPage('sc-add',this)"><span>➕</span> Сургалт нэмэх</div>
+    <div class="nav-item" onclick="showPage('list-lessons',this)"><span>📚</span> Сургалтууд</div>
+    <div class="nav-item" onclick="showPage('lessons',this)"><span>➕</span> Сургалт нэмэх</div>
     <div class="nav-item" onclick="showPage('list-ads',this)"><span>📋</span> Реклам жагсаалт</div>
     <div class="nav-item" onclick="showPage('programs',this)"><span>💻</span> Программ нэмэх</div>
     <div class="nav-item" onclick="showPage('list-programs',this)"><span>📋</span> Программ жагсаалт</div>
@@ -553,6 +553,20 @@ tr:last-child td{border-bottom:none;}
       </div>
     </div>
 
+    <div class="page" id="page-list-lessons">
+      <div class="page-header">
+        <button class="back-to-dash" onclick="showPage('dashboard',null)">
+          <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Буцах
+        </button>
+        <span class="page-title-text">📋 Сургалтын жагсаалт</span>
+      </div>
+      <div class="table-card">
+        <div class="table-head"><div class="table-head-title">Бүх сургалтууд</div><button class="form-btn" style="margin:0;padding:6px 14px;font-size:12px;" onclick="loadLessonList()">🔄 Шинэчлэх</button></div>
+        <div id="lesson-table"><div class="loading">Ачааллаж байна...</div></div>
+      </div>
+    </div>
+
     <div class="page" id="page-list-ads">
       <div class="page-header">
         <button class="back-to-dash" onclick="showPage('dashboard',null)">
@@ -863,6 +877,62 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
+<!-- ==================== СУРГАЛТ EDIT MODAL ==================== -->
+<div class="modal-overlay" id="modal-lesson">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Сургалт засах<button class="modal-close" onclick="closeModal('modal-lesson')">✕</button></div>
+    <input type="hidden" id="edit-l-id">
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="form-group"><label class="form-label">Нэр *</label><input class="form-inp" id="edit-l-title"></div>
+      <div class="form-group"><label class="form-label">Ангилал</label>
+        <select class="form-inp" id="edit-l-category">
+          <option value="VN Capcut">VN + Capcut</option>
+          <option value="AI Веб">AI Веб хөгжүүлэлт</option>
+          <option value="YouTube">YouTube суваг</option>
+          <option value="Дата анализ">Дата анализ</option>
+          <option value="AI агент">AI агент</option>
+          <option value="Олон улсын худалдаа">Олон улсын худалдаа</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Түвшин</label>
+        <select class="form-inp" id="edit-l-level">
+          <option value="Эхлэгч">📘 Эхлэгч</option>
+          <option value="Дунд">📗 Дунд</option>
+          <option value="Ахмад">📕 Ахмад</option>
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label class="form-label">Үнэ</label><input class="form-inp" id="edit-l-price"></div>
+        <div class="form-group"><label class="form-label">Үргэлжлэх хугацаа</label><input class="form-inp" id="edit-l-duration"></div>
+      </div>
+      <div class="form-group"><label class="form-label">Багш / Сургагч</label><input class="form-inp" id="edit-l-instructor"></div>
+      <div class="form-group">
+        <label class="form-label">Зураг</label>
+        <div class="upload-area" style="padding:12px;" ondragover="onDragOver(event,this)" ondragleave="onDragLeave(this)" ondrop="onDrop(event,'edit-l-img-file','edit-l-img-preview')">
+          <input type="file" id="edit-l-img-file" accept="image/*" onchange="previewFile(this,'edit-l-img-preview','image')">
+          <div class="upload-icon" style="font-size:20px;">🖼️</div>
+          <div class="upload-text" style="font-size:11px;">Шинэ зураг сонгох</div>
+          <div class="upload-preview" id="edit-l-img-preview">
+            <img id="edit-l-img-preview-img" src="" alt="preview" style="max-height:120px;">
+            <div class="upload-preview-name" id="edit-l-img-preview-name"></div>
+          </div>
+        </div>
+        <input class="form-inp" id="edit-l-thumb" placeholder="Эсвэл URL оруулах" style="margin-top:6px;">
+      </div>
+      <div class="form-group"><label class="form-label">Видео URL</label><input class="form-inp" id="edit-l-video"></div>
+      <div class="form-group"><label class="form-label">Нэмэлт файлын URL</label><input class="form-inp" id="edit-l-file-url"></div>
+      <div class="form-group"><label class="form-label">Тайлбар</label><textarea class="form-inp" id="edit-l-desc" style="min-height:70px;"></textarea></div>
+      <div class="form-group"><label class="form-label">Хичээлийн жагсаалт (мөр тус бүр)</label><textarea class="form-inp" id="edit-l-lessons" style="min-height:100px;"></textarea></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel-btn" onclick="closeModal('modal-lesson')">Цуцлах</button>
+      <button class="modal-save-btn" onclick="saveLesson()">💾 Хадгалах</button>
+    </div>
+    <div class="success-msg" id="edit-l-ok" style="margin-top:8px;">✅ Амжилттай!</div>
+    <div class="error-msg2" id="edit-l-err" style="margin-top:8px;">❌ Алдаа гарлаа.</div>
+  </div>
+</div>
+
 <!-- Supabase JS клиент сан (CDN) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1035,6 +1105,7 @@ function showPage(name,el){
   if(el)el.classList.add('active');
   if(name==='list-movies')loadMovieList();
   if(name==='list-news')loadNewsList();
+  if(name==='list-lessons')loadLessonList();
   if(name==='list-ads')loadAdList();
   if(name==='list-programs')loadProgramList();
   if(name==='dashboard'){loadStats();loadDashPreviews();}
@@ -1307,7 +1378,7 @@ async function loadMovieList(){
       <td>${m.featured?'<span class="badge badge-green">⭐ Тийм</span>':'—'}</td>
       <td>${new Date(m.created_at).toLocaleDateString('mn-MN')}</td>
       <td style="white-space:nowrap;">
-        <button class="action-btn edit-btn" onclick="openEditMovie('${m.id}','${escStr(m.title)}','${m.genre||''}','${escStr(m.description||'')}','${m.thumbnail||''}','${m.video_url||''}',${!!m.featured})">✏️ Засах</button>
+        <button class="action-btn edit-btn" onclick="openEditMovie(${JSON.stringify(m).replace(/"/g,'&quot;')})">✏️ Засах</button>
         <button class="action-btn del-btn" onclick="deleteMovie('${m.id}')">🗑 Устгах</button>
       </td>
     </tr>`).join('')}</tbody></table>`;
@@ -1315,14 +1386,14 @@ async function loadMovieList(){
 }
 async function deleteMovie(id){if(!confirm('Устгах уу?'))return;await supaDelete('movies',id);loadMovieList();loadStats();}
 
-function openEditMovie(id,title,genre,desc,thumb,video,featured){
-  document.getElementById('edit-movie-id').value=id;
-  document.getElementById('edit-m-title').value=title;
-  document.getElementById('edit-m-genre').value=genre||'Фантастик';
-  document.getElementById('edit-m-desc').value=desc;
-  document.getElementById('edit-m-thumb').value=thumb;
-  document.getElementById('edit-m-video').value=video;
-  setEditFeatured(featured);
+function openEditMovie(m){
+  document.getElementById('edit-movie-id').value=m.id;
+  document.getElementById('edit-m-title').value=m.title||'';
+  document.getElementById('edit-m-genre').value=m.genre||'Фантастик';
+  document.getElementById('edit-m-desc').value=m.description||'';
+  document.getElementById('edit-m-thumb').value=m.thumbnail||'';
+  document.getElementById('edit-m-video').value=m.video_url||'';
+  setEditFeatured(!!m.featured);
   openModal('modal-movie');
 }
 async function saveMovie(){
@@ -1353,7 +1424,7 @@ async function loadNewsList(){
       <td>👁 ${n.views||0}</td>
       <td>${new Date(n.created_at).toLocaleDateString('mn-MN')}</td>
       <td style="white-space:nowrap;">
-        <button class="action-btn edit-btn" onclick="openEditNews('${n.id}','${escStr(n.title)}','${n.category||''}','${n.thumbnail||''}','${escStr(n.content||'')}')">✏️ Засах</button>
+        <button class="action-btn edit-btn" onclick="openEditNews(${JSON.stringify(n).replace(/"/g,'&quot;')})">✏️ Засах</button>
         <button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button>
       </td>
     </tr>`).join('')}</tbody></table>`;
@@ -1361,12 +1432,12 @@ async function loadNewsList(){
 }
 async function deleteNews(id){if(!confirm('Устгах уу?'))return;await supaDelete('news',id);loadNewsList();loadStats();}
 
-function openEditNews(id,title,cat,thumb,content){
-  document.getElementById('edit-news-id').value=id;
-  document.getElementById('edit-n-title').value=title;
-  document.getElementById('edit-n-cat').value=cat||'Мэдээ';
-  document.getElementById('edit-n-thumb').value=thumb;
-  document.getElementById('edit-n-content').value=content;
+function openEditNews(n){
+  document.getElementById('edit-news-id').value=n.id;
+  document.getElementById('edit-n-title').value=n.title||'';
+  document.getElementById('edit-n-cat').value=n.category||'Мэдээ';
+  document.getElementById('edit-n-thumb').value=n.thumbnail||'';
+  document.getElementById('edit-n-content').value=n.content||'';
   openModal('modal-news');
 }
 async function saveNews(){
@@ -1397,7 +1468,7 @@ async function loadAdList(){
       <td>${a.active?'<span class="badge badge-green">✅</span>':'<span class="badge" style="background:rgba(230,57,70,0.15);color:#e63946;">❌</span>'}</td>
       <td>${new Date(a.created_at).toLocaleDateString('mn-MN')}</td>
       <td style="white-space:nowrap;">
-        <button class="action-btn edit-btn" onclick="openEditAd('${a.id}','${escStr(a.title)}','${escStr(a.description||'')}','${escStr(a.button_text||'')}','${a.image_url||''}',${!!a.active})">✏️ Засах</button>
+        <button class="action-btn edit-btn" onclick="openEditAd(${JSON.stringify(a).replace(/"/g,'&quot;')})">✏️ Засах</button>
         <button class="action-btn del-btn" onclick="deleteAd('${a.id}')">🗑 Устгах</button>
       </td>
     </tr>`).join('')}</tbody></table>`;
@@ -1405,13 +1476,81 @@ async function loadAdList(){
 }
 async function deleteAd(id){if(!confirm('Устгах уу?'))return;await supaDelete('ads',id);loadAdList();loadStats();}
 
-function openEditAd(id,title,desc,btn,image,active){
-  document.getElementById('edit-ad-id').value=id;
-  document.getElementById('edit-a-title').value=title;
-  document.getElementById('edit-a-desc').value=desc;
-  document.getElementById('edit-a-btn').value=btn;
-  document.getElementById('edit-a-thumb').value=image||'';
-  document.getElementById('edit-a-active').value=String(active);
+// ============================================================
+// СУРГАЛТ ЖАГСААЛТ
+// ============================================================
+async function loadLessonList(){
+  const el=document.getElementById('lesson-table');
+  if(!el) return;
+  el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
+  try{
+    const lessons=await supaFetch('lessons','order=created_at.desc');
+    if(!Array.isArray(lessons)||lessons.length===0){el.innerHTML='<div class="loading">Сургалт байхгүй байна</div>';return;}
+    el.innerHTML=`<table><thead><tr><th>Нэр</th><th>Ангилал</th><th>Түвшин</th><th>Зураг</th><th>Үнэ</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${lessons.map(l=>`<tr>
+      <td>${l.title}</td>
+      <td><span class="badge badge-blue">${l.category||'-'}</span></td>
+      <td><span class="badge badge-green">${l.level||'-'}</span></td>
+      <td>${l.thumbnail?`<img src="${l.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
+      <td>${l.price||'-'}</td>
+      <td>${new Date(l.created_at).toLocaleDateString('mn-MN')}</td>
+      <td style="white-space:nowrap;">
+        <button class="action-btn edit-btn" onclick="openEditLesson(${JSON.stringify(l).replace(/"/g,'&quot;')})">✏️ Засах</button>
+        <button class="action-btn del-btn" onclick="deleteLesson('${l.id}')">🗑 Устгах</button>
+      </td>
+    </tr>`).join('')}</tbody></table>`;
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
+}
+async function deleteLesson(id){if(!confirm('Устгах уу?'))return;await supaDelete('lessons',id);loadLessonList();loadStats();}
+
+function openEditLesson(l){
+  document.getElementById('edit-l-id').value=l.id;
+  document.getElementById('edit-l-title').value=l.title||'';
+  document.getElementById('edit-l-category').value=l.category||'VN Capcut';
+  document.getElementById('edit-l-level').value=l.level||'Эхлэгч';
+  document.getElementById('edit-l-price').value=l.price||'';
+  document.getElementById('edit-l-duration').value=l.duration||'';
+  document.getElementById('edit-l-instructor').value=l.instructor||'';
+  document.getElementById('edit-l-thumb').value=l.thumbnail||'';
+  document.getElementById('edit-l-video').value=l.video_url||'';
+  document.getElementById('edit-l-file-url').value=l.file_url||'';
+  document.getElementById('edit-l-desc').value=l.description||'';
+  document.getElementById('edit-l-lessons').value=l.lessons_list||'';
+  document.getElementById('edit-l-ok').style.display='none';
+  document.getElementById('edit-l-err').style.display='none';
+  openModal('modal-lesson');
+}
+async function saveLesson(){
+  const id=document.getElementById('edit-l-id').value;
+  const title=document.getElementById('edit-l-title').value.trim();
+  if(!title){alert('Нэр оруулна уу!');return;}
+  let thumbUrl=document.getElementById('edit-l-thumb').value.trim()||null;
+  const imgFile=document.getElementById('edit-l-img-file');
+  if(imgFile&&imgFile.files.length>0){thumbUrl=await uploadFile(imgFile.files[0],'lessons','edit-l-img');}
+  const ok=await supaUpdate('lessons',id,{
+    title,
+    category:document.getElementById('edit-l-category').value,
+    level:document.getElementById('edit-l-level').value,
+    price:document.getElementById('edit-l-price').value,
+    duration:document.getElementById('edit-l-duration').value,
+    instructor:document.getElementById('edit-l-instructor').value,
+    thumbnail:thumbUrl,
+    video_url:document.getElementById('edit-l-video').value.trim()||null,
+    file_url:document.getElementById('edit-l-file-url').value.trim()||null,
+    description:document.getElementById('edit-l-desc').value,
+    lessons_list:document.getElementById('edit-l-lessons').value
+  });
+  if(ok){document.getElementById('edit-l-ok').style.display='block';setTimeout(()=>{closeModal('modal-lesson');loadLessonList();loadStats();},1200);}
+  else{document.getElementById('edit-l-err').style.display='block';}
+}
+
+function openEditAd(a){
+  document.getElementById('edit-ad-id').value=a.id;
+  document.getElementById('edit-a-title').value=a.title||'';
+  document.getElementById('edit-a-desc').value=a.description||'';
+  document.getElementById('edit-a-btn').value=a.button_text||'';
+  document.getElementById('edit-a-thumb').value=a.image_url||'';
+  document.getElementById('edit-a-active').value=String(!!a.active);
   openModal('modal-ad');
 }
 async function saveAd(){
