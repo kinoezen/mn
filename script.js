@@ -130,15 +130,12 @@ async function loadAd() {
   if (!slider) return;
 
   try {
-    // Supabase-ийн 'ads' хүснэгтээс татна
-    // is_active багана байхгүй тул шүүлтгүйгээр бүгдийг татна
     const ads = await supaFetch('ads', 'order=created_at.desc&limit=5');
     if (ads && ads.length > 0) {
       console.log('📢 ads баганууд:', Object.keys(ads[0]));
     }
 
     if (!ads || ads.length === 0) {
-      // Supabase-д реклам байхгүй бол default реклам харуулна
       slider.innerHTML = `
         <div class="ad-slide active">
           <div class="ad-banner">
@@ -152,7 +149,6 @@ async function loadAd() {
       return;
     }
 
-    // Supabase-ийн рекламуудыг харуулна
     slider.innerHTML = ads.map((ad, i) => `
       <div class="ad-slide${i === 0 ? ' active' : ''}">
         <div class="ad-banner">
@@ -168,7 +164,6 @@ async function loadAd() {
       </div>
     `).join('');
 
-    // Олон реклам байвал автоматаар солино
     if (ads.length > 1) {
       let adIdx = 0;
       setInterval(() => {
@@ -454,7 +449,6 @@ function openMcatDropdown(card, menuKey) {
     `<button class="news-filter-btn${i === 0 ? ' active' : ''}" onclick="handleMcatSub('${item.cat}', this, '${menuKey}')">${item.label}</button>`
   ).join('');
 
-  // Эхний "Бүгд" товчийг автоматаар дарах
   handleMcatSub('', document.querySelector('.news-filter-btn'), menuKey);
   setTimeout(() => goSection('news'), 150);
 }
@@ -478,7 +472,6 @@ function handleMcatSub(cat, btn, mainKey) {
 }
 
 // ===== МЭДЭЭ — SUPABASE =====
-// Мэдээний хүснэгтийн баганыг шалгах: category болон sub_category
 async function loadNewsByMainCategory(mainCategory) {
   const list = document.getElementById('news-list');
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
@@ -488,19 +481,15 @@ async function loadNewsByMainCategory(mainCategory) {
 
     let allNews = [];
     if (subCats.length > 0) {
-      // sub_category-д тохирох мэдээнүүдийг татна
-      // Supabase-д OR filter ашиглана
       const filterStr = subCats.map(c => `sub_category.eq.${encodeURIComponent(c)}`).join(',');
       allNews = await supaFetch('news', `or=(${filterStr})&order=created_at.desc&limit=100`);
 
-      // Хэрэв sub_category байхгүй бол category баганаар хайна
       if (!allNews || allNews.length === 0) {
         const filterStr2 = subCats.map(c => `category.eq.${encodeURIComponent(c)}`).join(',');
         allNews = await supaFetch('news', `or=(${filterStr2})&order=created_at.desc&limit=100`);
       }
     }
 
-    // Аль нэгэнд ч олдоогүй бол бүх мэдээнаас category-аар хайна
     if (!allNews || allNews.length === 0) {
       const raw = await supaFetch('news', 'order=created_at.desc&limit=100');
       allNews = raw.filter(n =>
@@ -527,10 +516,8 @@ async function loadNewsBySubCategory(subCategory) {
   list.innerHTML = '<div class="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.3);">📰 Ачааллаж байна...</div>';
 
   try {
-    // Эхлээд sub_category-аар хайна
     let news = await supaFetch('news', `sub_category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
 
-    // Байхгүй бол category-аар хайна
     if (!news || news.length === 0) {
       news = await supaFetch('news', `category=eq.${encodeURIComponent(subCategory)}&order=created_at.desc&limit=100`);
     }
@@ -547,8 +534,8 @@ async function loadNewsBySubCategory(subCategory) {
   }
 }
 
-// ===== МЭДЭЭ PAGINATION =====
-const NEWS_PER_PAGE = 4;
+// ===== МЭДЭЭ PAGINATION — 8 КАРТ =====
+const NEWS_PER_PAGE = 8;
 let allNewsData = [];
 let newsPage = 1;
 
@@ -560,7 +547,6 @@ function renderNewsList(news) {
     return;
   }
 
-  // Бүх мэдээг хадгалж pagination хийнэ
   allNewsData = news;
   newsPage = 1;
   renderNewsPage();
@@ -591,10 +577,8 @@ function renderNewsPage() {
     </div>
   `).join('');
 
-  // Pagination товчнууд
   renderNewsPagination(totalPages);
 
-  // Хуудас солих үед дээш гүйлгэнэ
   const newsSection = document.getElementById('news');
   if (newsSection && newsPage > 1) {
     newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
