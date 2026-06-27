@@ -15,10 +15,11 @@ body{background:#0f0f1a;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .inp{width:100%;background:#12121e;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;color:#fff;font-size:13px;outline:none;margin-bottom:14px;}
 .inp:focus{border-color:#4ade80;}
 .btn-primary{width:100%;padding:11px;border-radius:8px;background:linear-gradient(90deg,#4ade80,#f4a261);border:none;color:#0a2a0a;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-primary:disabled{opacity:0.6;cursor:default;}
 .err-msg{color:#e63946;font-size:12px;text-align:center;margin-top:8px;display:none;}
 .admin-wrap{display:none;min-height:100vh;}
 
-/* ===== SIDEBAR — ЗАССАН ===== */
+/* ===== SIDEBAR ===== */
 .sidebar{width:220px;background:#1a1a2e;border-right:1px solid rgba(255,255,255,0.08);padding:20px 0;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;display:flex;flex-direction:column;}
 .sidebar-logo{padding:0 20px 16px;font-size:18px;font-weight:700;color:#4ade80;border-bottom:1px solid rgba(255,255,255,0.08);margin-bottom:12px;flex-shrink:0;}
 .sidebar-logo span{color:#fff;}
@@ -128,11 +129,11 @@ tr:last-child td{border-bottom:none;}
   <div class="login-box">
     <div class="login-logo">Кино Эзэн</div>
     <div class="login-sub">Admin хэсэг</div>
-    <label class="inp-label">Нэвтрэх нэр</label>
-    <input class="inp" type="text" id="admin-user" placeholder="admin">
+    <label class="inp-label">И-мэйл</label>
+    <input class="inp" type="email" id="admin-user" placeholder="admin@kinoezen.mn" autocomplete="username">
     <label class="inp-label">Нууц үг</label>
-    <input class="inp" type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-    <button class="btn-primary" onclick="doLogin()">Нэвтрэх</button>
+    <input class="inp" type="password" id="admin-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" id="login-btn" onclick="doLogin()">Нэвтрэх</button>
     <div class="err-msg" id="login-err">Нэвтрэх нэр эсвэл нууц үг буруу!</div>
   </div>
 </div>
@@ -862,15 +863,19 @@ tr:last-child td{border-bottom:none;}
   </div>
 </div>
 
+<!-- Supabase JS клиент сан (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================================
 // SUPABASE ХОЛБОЛТ
 // ============================================================
 const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
 const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-const ADMIN_USER='admin';
-const ADMIN_PASS='kinoezen2026';
 const BUCKET='images';
+
+// Жинхэнэ Supabase Auth клиент — энэ нь session-ийг автоматаар хадгалж,
+// шаардлагатай үед token-ийг шинэчилдэг.
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ============================================================
 // ДЭД ЦЭСНИЙ СОНГОЛТ
@@ -897,44 +902,76 @@ function updateSubCatOptions() {
 document.addEventListener('DOMContentLoaded', updateSubCatOptions);
 
 // ============================================================
-// НЭВТРЭХ
+// НЭВТРЭХ — Supabase Auth ашиглана (хуучин hardcoded шалгалт бүрэн хасагдсан)
 // ============================================================
-function doLogin(){
-  const u=document.getElementById('admin-user').value;
-  const p=document.getElementById('admin-pass').value;
-  if(u===ADMIN_USER&&p===ADMIN_PASS){
-    document.getElementById('login-page').style.display='none';
-    document.getElementById('admin-page').style.display='flex';
-    loadStats();loadDashPreviews();
-  }else{document.getElementById('login-err').style.display='block';}
+async function doLogin(){
+  const email = document.getElementById('admin-user').value.trim();
+  const pass = document.getElementById('admin-pass').value;
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-err');
+  errEl.style.display = 'none';
+  if (!email || !pass) { errEl.textContent = 'И-мэйл, нууц үгээ оруулна уу!'; errEl.style.display='block'; return; }
+  btn.disabled = true; btn.textContent = '⏳ Нэвтэрч байна...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.disabled = false; btn.textContent = 'Нэвтрэх';
+  if (error || !data.session) {
+    errEl.textContent = 'Нэвтрэх нэр эсвэл нууц үг буруу!';
+    errEl.style.display = 'block';
+    return;
+  }
+  enterAdmin();
 }
-function doLogout(){
+
+async function doLogout(){
+  await sb.auth.signOut();
   document.getElementById('login-page').style.display='flex';
   document.getElementById('admin-page').style.display='none';
 }
 
+function enterAdmin(){
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('admin-page').style.display='flex';
+  loadStats(); loadDashPreviews();
+}
+
+// Хуудас ачаалах үед хэрэв chиний session хэвээр хүчинтэй байгаа бол
+// дахин нэвтрэх шаардлагагүйгээр шууд admin хэсэгрүү оруулна.
+(async () => {
+  const { data } = await sb.auth.getSession();
+  if (data.session) enterAdmin();
+})();
+
 // ============================================================
-// SUPABASE ФУНКЦУУД
+// SUPABASE ФУНКЦУУД — одоо бүгд нэвтэрсэн хэрэглэгчийн access token ашигладаг
 // ============================================================
+async function authHeader(){
+  const { data } = await sb.auth.getSession();
+  const token = data?.session?.access_token || SUPABASE_KEY; // нэвтрээгүй үед зөвхөн public унших боломжтой
+  return { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` };
+}
 async function supaFetch(table,params=''){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+  const headers = await authHeader();
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`,{headers});
   return r.json();
 }
 async function supaInsert(table,data){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+  const headers = await authHeader();
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}`,{method:'POST',headers:{...headers,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
   return r.ok;
 }
 async function supaUpdate(table,id,data){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
+  const headers = await authHeader();
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:'PATCH',headers:{...headers,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});
   return r.ok;
 }
 async function supaDelete(table,id){
-  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});
+  const headers = await authHeader();
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`,{method:'DELETE',headers});
   return r.ok;
 }
 
 // ============================================================
-// ФАЙЛ UPLOAD
+// ФАЙЛ UPLOAD — мөн адил нэвтэрсэн хэрэглэгчийн token ашиглана
 // ============================================================
 async function uploadFile(file,folder,progressId){
   const ext=file.name.split('.').pop();
@@ -944,9 +981,10 @@ async function uploadFile(file,folder,progressId){
   const ptext=document.getElementById(progressId+'-ptext');
   if(prog){prog.style.display='block';fill.style.width='10%';ptext.textContent='Ачааллаж байна...';}
   try{
+    const headers = await authHeader();
     const r=await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${fileName}`,{
       method:'POST',
-      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':file.type,'x-upsert':'true'},
+      headers:{...headers,'Content-Type':file.type,'x-upsert':'true'},
       body:file
     });
     if(fill)fill.style.width='100%';
@@ -1052,7 +1090,6 @@ async function loadStats(){
     document.getElementById('st-news').textContent=nc;
     document.getElementById('st-ads').textContent=ac;
     document.getElementById('st-lessons').textContent=lc;
-    document.getElementById('st-views').textContent=totalViews>999?(totalViews/1000).toFixed(1)+'к':totalViews;
     document.getElementById('st-likes').textContent=totalLikes;
     document.getElementById('st-featured').textContent=featuredCount;
     document.getElementById('st-total').textContent=mc+nc+lc;
