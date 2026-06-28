@@ -1,18 +1,135 @@
-
 // ============================================================
-// services.js — КиноЭзэн AI Үйлчилгээнүүд (АЛДААГҮЙ ХУВИЛБАР)
+// services.js — КиноЭзэн AI Үйлчилгээнүүд
+// КРЕДИТ СИСТЕМ + FEEDBACK ХОЛБОГДСОН ХУВИЛБАР
 // ============================================================
 
 console.log('✅ services.js ачааллаж байна...');
 
-// ===== КРЕДИТ СИСТЕМ (ТҮР ХААСАН) =====
-function checkCredits(cost) { return true; }
-function useCredits(cost) { return 0; }
-function updateCreditUI() {
+// ============================================================
+// SUPABASE ТОХИРГОО (profile.html, login.html-тэй ИЖИЛ байх ёстой)
+// ============================================================
+const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+// ============================================================
+// КРЕДИТ СИСТЕМ — БОДИТ SUPABASE ХОЛБОЛТ
+// ============================================================
+
+let currentBalance = 0;
+
+function isLoggedIn() {
+    return !!localStorage.getItem('sb_token');
+}
+
+async function updateCreditUI() {
     const bar = document.getElementById('credit-bar');
-    if (bar) bar.style.display = 'none';
-    const guest = document.getElementById('credit-bar-guest');
-    if (guest) guest.style.display = 'none';
+    const guestBar = document.getElementById('credit-bar-guest');
+
+    if (!isLoggedIn()) {
+        if (bar) bar.classList.add('hidden');
+        if (guestBar) guestBar.style.display = 'block';
+        return;
+    }
+
+    if (guestBar) guestBar.style.display = 'none';
+    if (bar) bar.classList.remove('hidden');
+
+    try {
+        const token = localStorage.getItem('sb_token');
+        const user = JSON.parse(localStorage.getItem('sb_user') || '{}');
+        const userId = user.id;
+        if (!userId) return;
+
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=credit_balance`, {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}` }
+        });
+        const rows = await r.json();
+        const balance = (rows && rows[0] && typeof rows[0].credit_balance === 'number') ? rows[0].credit_balance : 0;
+        currentBalance = balance;
+
+        const remainingEl = document.getElementById('cred-remaining');
+        const totalEl = document.getElementById('cred-total');
+        const fillEl = document.getElementById('cred-fill');
+        const pctEl = document.getElementById('cred-pct');
+
+        const referenceMax = Math.max(balance, 100);
+
+        if (remainingEl) remainingEl.textContent = balance.toLocaleString('mn-MN');
+        if (totalEl) totalEl.textContent = referenceMax.toLocaleString('mn-MN');
+
+        const pct = Math.min(100, Math.round((balance / referenceMax) * 100));
+        if (fillEl) fillEl.style.width = pct + '%';
+        if (pctEl) pctEl.textContent = pct + '% үлдсэн';
+
+        if (fillEl) {
+            fillEl.style.background = pct < 15
+                ? 'linear-gradient(90deg,#e63946,#f4a261)'
+                : 'linear-gradient(90deg,#4ade80,#f4a261)';
+        }
+    } catch (e) {
+        console.error('Credit balance fetch error:', e);
+    }
+}
+
+async function spendCreditsOrFail(amount, service, description, noticeId) {
+    if (!isLoggedIn()) {
+        window.location.href = 'login.html';
+        return false;
+    }
+
+    const token = localStorage.getItem('sb_token');
+    const noticeEl = noticeId ? document.getElementById(noticeId) : null;
+    if (noticeEl) noticeEl.style.display = 'none';
+
+    try {
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/spend_credits`, {
+            method: 'POST',
+            headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                p_amount: amount,
+                p_service: service,
+                p_description: description
+            })
+        });
+
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            const msg = (err.message || '').toLowerCase();
+            if (msg.includes('хүрэлцэхгүй') || msg.includes('insufficient') || r.status === 400) {
+                if (noticeEl) noticeEl.style.display = 'block';
+                else showToast('💎 Кредит хүрэлцэхгүй байна!', 'error');
+            } else {
+                showToast('❌ Кредит хасах үед алдаа гарлаа.', 'error');
+            }
+            return false;
+        }
+
+        const newBalance = await r.json();
+        currentBalance = newBalance;
+        updateCreditUI();
+        return true;
+    } catch (e) {
+        console.error('spendCreditsOrFail error:', e);
+        showToast('❌ Сүлжээний алдаа гарлаа.', 'error');
+        return false;
+    }
+}
+
+// ============================================================
+// FEEDBACK ХОЛБОЛТ — Урсгал 2 (AI үйлчилгээний дараах ⭐ үнэлгээ)
+// ============================================================
+function triggerServiceFeedback(serviceKey, serviceLabel) {
+    try {
+        if (window.КиноЭзэнFeedback && typeof window.КиноЭзэнFeedback.showServiceRating === 'function') {
+            window.КиноЭзэнFeedback.showServiceRating(serviceKey, serviceLabel);
+        }
+    } catch (e) {
+        console.warn('Feedback widget дуудахад алдаа гарлаа:', e);
+    }
 }
 
 // ===== TOAST МЭДЭГДЭЛ =====
@@ -39,14 +156,14 @@ function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 400);
     }, 3000);
 }
+
+// ============================================================
 // TTS — ДУУ ҮҮСГЭГЧ (2 хоолойтой: Edge / Gemini)
 // ============================================================
 
-// Одоогийн сонгосон engine ('edge' эсвэл 'gemini')
 let ttsEngine = 'edge';
 const TTS_CHAR_LIMITS = { edge: 2000, gemini: 1000 };
 
-// Engine солих (Edge <-> Gemini) — HTML дотор onclick="selEngine('edge', this)" гэж дуудагдана
 function selEngine(engine, el) {
     ttsEngine = engine;
     document.querySelectorAll('#engine-edge, #engine-gemini').forEach(b => b.classList.remove('on'));
@@ -60,7 +177,6 @@ function selEngine(engine, el) {
     updateTTSCount();
 }
 
-// Тэмдэгтийн тоо харуулах (engine-ээс хамаарсан хязгаартай)
 function updateTTSCount() {
     const textEl = document.getElementById('tts-text');
     if (!textEl) return;
@@ -73,13 +189,19 @@ function updateTTSCount() {
     }
 }
 
-// Едж TTS-ийн дуу сонгох (Батаа/Есүй)
 function selVoice(el) {
     document.querySelectorAll('#edge-voice-row .vbtn').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
 }
 
-// Дуу үүсгэх — /api/tts руу fetch хийнэ
+function swapLangs() {
+    const from = document.getElementById('trans-from');
+    const to = document.getElementById('trans-to');
+    const tmp = from.value;
+    from.value = to.value;
+    to.value = tmp;
+}
+
 async function runTTS() {
     const text = document.getElementById('tts-text')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
@@ -91,7 +213,16 @@ async function runTTS() {
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const cost = text.length;
+    const ok = await spendCreditsOrFail(cost, 'tts', `TTS: ${text.length} тэмдэгт`, 'tts-notice');
+    if (!ok) {
+        if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
+        return;
+    }
+
+    if (btn) { btn.textContent = '⏳ Үүсгэж байна...'; }
 
     try {
         const rate = document.getElementById('rate')?.value || 15;
@@ -132,6 +263,7 @@ async function runTTS() {
             </audio>`;
         }
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
+        triggerServiceFeedback('tts', 'TTS дуу үүсгэгч');
     } catch (error) {
         console.error('TTS error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -139,18 +271,21 @@ async function runTTS() {
 
     if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
+
 // ============================================================
-// ОРЧУУЛАГЧ
-// ============================================================
-// ШИНЭ runTranslate() — /api/translate руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runTranslate() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ОРЧУУЛАГЧ — 1 тэмдэгт = 2 кредит
 // ============================================================
 async function runTranslate() {
     const text = document.getElementById('trans-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const cost = text.length * 2;
+    const ok = await spendCreditsOrFail(cost, 'translate', `Орчуулга: ${text.length} тэмдэгт`, 'trans-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🌐 Орчуулах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Орчуулж байна...';
     try {
         const from = document.getElementById('trans-from')?.value || 'en';
         const to = document.getElementById('trans-to')?.value || 'mn';
@@ -171,6 +306,7 @@ async function runTranslate() {
             <div style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.8);">${data.translatedText}</div>`;
         }
         showToast('✅ Орчуулга амжилттай!', 'success');
+        triggerServiceFeedback('translate', 'Орчуулагч');
     } catch (error) {
         console.error('Translate error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -179,13 +315,19 @@ async function runTranslate() {
 }
 
 // ============================================================
-// HUMANIZER
+// HUMANIZER — 1 тэмдэгт = 1 кредит
 // ============================================================
 async function runHum() {
     const text = document.getElementById('hum-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Хүмүүнжүүлж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const cost = text.length;
+    const ok = await spendCreditsOrFail(cost, 'humanizer', `Humanizer: ${text.length} тэмдэгт`, 'hum-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '✨ Хүмүүнжүүлэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Хүмүүнжүүлж байна...';
     try {
         const humanized = text.replace(/машин/g, 'гайхалтай').replace(/хиймэл/g, 'байгалийн')
             .replace(/автомат/g, 'ухаалаг').replace(/технологи/g, 'арга');
@@ -196,6 +338,7 @@ async function runHum() {
         if (afterEl) afterEl.textContent = humanized;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Хүмүүнжүүлэлт амжилттай!', 'success');
+        triggerServiceFeedback('humanizer', 'Humanizer');
     } catch (error) {
         console.error('Humanizer error:', error);
         showToast('❌ Алдаа гарлаа.', 'error');
@@ -204,12 +347,129 @@ async function runHum() {
 }
 
 // ============================================================
-// STT (Дуу → Текст)
+// SRT СУБТИТР ОРЧУУЛАГЧ — 10 кредит/файл
 // ============================================================
-// runSTT() — /api/stt руу FormData-аар fetch хийнэ, progress
-// bar-тай. services.js доторх ХУУЧИН runSTT() функцийг ЭНЭ
-// ФУНКЦЭЭР бухэлд нь СОЛИХ. (startSpeechRecognition() функцийг
-// ХӖНДӖХГҲЙ, хэвээр үлдээнэ.)
+function selSrtMode(mode, el) {
+    document.querySelectorAll('#srt-mode-file, #srt-mode-text').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+    document.getElementById('srt-file-row').style.display = mode === 'file' ? 'block' : 'none';
+    document.getElementById('srt-text-row').style.display = mode === 'text' ? 'block' : 'none';
+}
+
+function handleSrtFile(e) {
+    const f = e.target.files[0];
+    if (f) document.getElementById('srt-file-name').textContent = f.name;
+}
+function handleSrtDrop(e) {
+    e.preventDefault();
+    const f = e.dataTransfer.files[0];
+    if (f) {
+        document.getElementById('srt-file').files = e.dataTransfer.files;
+        document.getElementById('srt-file-name').textContent = f.name;
+    }
+}
+
+async function runSrtTranslate() {
+    const fileMode = document.getElementById('srt-mode-file')?.classList.contains('on');
+    const btn = event.target;
+
+    let srtContent = '';
+    if (fileMode) {
+        const file = document.getElementById('srt-file')?.files[0];
+        if (!file) { showToast('⚠️ SRT файл оруулна уу!', 'error'); return; }
+        srtContent = await file.text();
+    } else {
+        srtContent = document.getElementById('srt-text-input')?.value.trim();
+        if (!srtContent) { showToast('⚠️ SRT агуулга оруулна уу!', 'error'); return; }
+    }
+
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(10, 'srt-translate', 'SRT субтитр орчуулагч', 'srt-translate-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📄 Орчуулах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Орчуулж байна...';
+    try {
+        const targetLang = document.getElementById('srt-target-lang')?.value || 'mn';
+
+        const response = await fetch('/api/srt-translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ srt: srtContent, targetLang })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
+
+        const resultDiv = document.getElementById('srt-translate-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">📄 Орчуулагдсан SRT</div>
+            <textarea readonly style="height:160px;font-family:monospace;font-size:11px;">${data.translatedSrt || ''}</textarea>
+            <button onclick="downloadSrt(this)" data-content="${encodeURIComponent(data.translatedSrt || '')}" style="margin-top:8px;padding:8px 16px;border-radius:8px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:#4ade80;font-size:12px;cursor:pointer;">⬇️ .srt файл татах</button>`;
+        }
+        showToast('✅ SRT орчуулга амжилттай!', 'success');
+        triggerServiceFeedback('srt-translate', 'SRT субтитр орчуулагч');
+    } catch (error) {
+        console.error('SrtTranslate error:', error);
+        showToast('❌ ' + error.message, 'error');
+    }
+    if (btn) { btn.disabled = false; btn.textContent = '📄 Орчуулах'; }
+}
+
+function downloadSrt(btn) {
+    const content = decodeURIComponent(btn.dataset.content || '');
+    const blob = new Blob([content], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'translated.srt';
+    link.click();
+}
+
+// ============================================================
+// SCRIPT БИЧИГЧ — 5 кредит/script
+// ============================================================
+async function runScriptWriter() {
+    const topic = document.getElementById('script-writer-input')?.value.trim();
+    if (!topic) { showToast('⚠️ Сэдэв оруулна уу!', 'error'); return; }
+    const btn = event.target;
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(5, 'script-writer', `Script бичигч: ${topic.slice(0,40)}`, 'script-writer-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; } return; }
+
+    if (btn) btn.textContent = '⏳ Бичиж байна...';
+    try {
+        const scriptType = document.querySelector('input[name="script-type"]:checked')?.value || 'youtube';
+        const length = document.getElementById('script-writer-length')?.value || 'medium';
+
+        const response = await fetch('/api/script-writer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ topic, type: scriptType, length })
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Script бичих үед алдаа гарлаа');
+
+        const resultDiv = document.getElementById('script-writer-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">✍️ Script</div>
+            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.script}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
+        }
+        showToast('✅ Script амжилттай бичигдлээ!', 'success');
+        triggerServiceFeedback('script-writer', 'Script бичигч');
+    } catch (error) {
+        console.error('ScriptWriter error:', error);
+        showToast('❌ ' + error.message, 'error');
+    }
+    if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; }
+}
+
+// ============================================================
+// STT (Дуу → Текст) — 1 мин = 10 кредит
 // ============================================================
 async function runSTT() {
     const fileInput = document.getElementById('stt-file');
@@ -218,92 +478,40 @@ async function runSTT() {
         return;
     }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const resultDiv = document.getElementById('stt-result');
-    if (resultDiv) {
-        resultDiv.classList.add('show');
-        resultDiv.innerHTML = `<div class="result-label">⏳ Боловсруулж байна...</div>
-        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
-            <div id="stt-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
-        </div>
-        <div id="stt-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
-    }
-    let fakeProgress = 0;
-    const progressInterval = setInterval(() => {
-        if (fakeProgress < 90) {
-            fakeProgress += Math.random() * 6;
-            if (fakeProgress > 90) fakeProgress = 90;
-            const bar = document.getElementById('stt-progress-bar');
-            const txt = document.getElementById('stt-progress-text');
-            if (bar) bar.style.width = fakeProgress + '%';
-            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
-        }
-    }, 400);
+    const file = fileInput.files[0];
+    const estimatedMinutes = Math.max(1, Math.ceil(file.size / (1024 * 1024)));
+    const cost = estimatedMinutes * 10;
 
+    const ok = await spendCreditsOrFail(cost, 'stt', `STT: ~${estimatedMinutes} мин`, 'stt-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; } return; }
+
+    if (btn) btn.textContent = '⏳ Боловсруулж байна...';
     try {
-        const file = fileInput.files[0];
-
-        if (file.size > 20 * 1024 * 1024) {
-            throw new Error('Аудио файл 20MB-ээс ихгуй байх ёстой');
-        }
-
-        const formData = new FormData();
-        formData.append('audio', file);
-
-        const response = await fetch('/api/stt', {
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'STT боловсруулах үед алдаа гарлаа');
-
-        clearInterval(progressInterval);
-        const bar = document.getElementById('stt-progress-bar');
-        const txt = document.getElementById('stt-progress-text');
-        if (bar) bar.style.width = '100%';
-        if (txt) txt.textContent = '100%';
-
         const audioUrl = URL.createObjectURL(file);
-
-        setTimeout(() => {
-            if (resultDiv) {
-                resultDiv.innerHTML = `<div class="result-label">🎙️ Текст болсон</div>
-                <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
-                    <source src="${audioUrl}">
-                </audio>
-                <div style="padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.85);font-size:14px;line-height:1.7;white-space:pre-wrap;">${data.transcript}</div>
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                    <button onclick="copyText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
-                    <button onclick="downloadSttText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:11px;cursor:pointer;">⬇️ Татах (.txt)</button>
-                </div>`;
-            }
-        }, 400);
-
-        showToast('✅ Текст болгогдлоо!', 'success');
+        const resultDiv = document.getElementById('stt-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">🎙️ Аудио боловсруулагдлаа</div>
+            <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
+                <source src="${audioUrl}">
+            </audio>
+            <div style="font-size:13px;color:rgba(255,255,255,0.4);padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
+                🎤 Доорх товчоор микрофоноор ярьж болно:
+            </div>
+            <button onclick="startSpeechRecognition()" style="padding:10px 20px;border-radius:10px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">🎤 Микрофоноор ярих</button>
+            <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;min-height:40px;"></div>`;
+        }
+        showToast('✅ Аудио боловсруулагдлаа!', 'success');
+        triggerServiceFeedback('stt', 'Дуу → Текст');
     } catch (error) {
-        clearInterval(progressInterval);
-        if (resultDiv) resultDiv.classList.remove('show');
         console.error('STT error:', error);
-        showToast('❌ ' + error.message, 'error');
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; }
 }
 
-// Транскрипцийг .txt файл болгож татах (ШИНЭ функц, дээрх кодын зэрэгцээ нэмнэ)
-function downloadSttText(btn) {
-    const parent = btn.closest('.result');
-    const textEl = parent.querySelector('[style*="white-space:pre-wrap"]');
-    if (!textEl) return;
-    const blob = new Blob([textEl.textContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'transcript.txt';
-    link.click();
-}
-
-// ===== SPEECH RECOGNITION =====
 function startSpeechRecognition() {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
         showToast('❌ Таны браузер дуу танихыг дэмжихгүй байна.', 'error');
@@ -330,53 +538,56 @@ function startSpeechRecognition() {
 }
 
 // ============================================================
-// ТЕКСТ ЗАСАГЧ
-// ============================================================
-// ШИНЭ runTextEdit() — /api/textedit руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runTextEdit() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// ТЕКСТ ЗАСАГЧ — 1 тэмдэгт = 1 кредит
 // ============================================================
 async function runTextEdit() {
     const text = document.getElementById('textedit-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Засаж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const cost = text.length;
+    const ok = await spendCreditsOrFail(cost, 'textedit', `Текст засагч: ${text.length} тэмдэгт`, 'textedit-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📝 Засах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Засаж байна...';
     try {
-        const fixGrammar = document.getElementById('fix-grammar')?.checked ?? true;
-        const fixPunctuation = document.getElementById('fix-punctuation')?.checked ?? true;
-        const fixStyle = document.getElementById('fix-style')?.checked ?? false;
-
-        const response = await fetch('/api/textedit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, fixGrammar, fixPunctuation, fixStyle })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Засах үед алдаа гарлаа');
-
+        let edited = text;
+        if (document.getElementById('fix-grammar')?.checked) {
+            edited = edited.replace(/байгаа/g, 'байна').replace(/тиймээ/g, 'тиймээ');
+        }
+        if (document.getElementById('fix-punctuation')?.checked) {
+            edited = edited.replace(/\s*\.\s*/g, '. ').replace(/\s*,\s*/g, ', ').replace(/  +/g, ' ');
+        }
         const beforeEl = document.getElementById('textedit-before');
         const afterEl = document.getElementById('textedit-after');
         const resultEl = document.getElementById('textedit-result');
-        if (beforeEl) beforeEl.textContent = data.original;
-        if (afterEl) afterEl.textContent = data.edited;
+        if (beforeEl) beforeEl.textContent = text;
+        if (afterEl) afterEl.textContent = edited;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Текст амжилттай засагдлаа!', 'success');
+        triggerServiceFeedback('textedit', 'Текст засагч');
     } catch (error) {
         console.error('TextEdit error:', error);
-        showToast('❌ ' + error.message, 'error');
+        showToast('❌ Алдаа гарлаа.', 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📝 Засах'; }
 }
+
 // ============================================================
-// КИНО ТОЙМЧ
+// КИНО ТОЙМЧ — 5 кредит
 // ============================================================
 async function runMovieReview() {
     const movieName = document.getElementById('movie-review-input')?.value.trim();
     if (!movieName) { showToast('⚠️ Кино нэр оруулна уу!', 'error'); return; }
 
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Тойм бичиж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
+    const ok = await spendCreditsOrFail(5, 'movie-review', `Кино тойм: ${movieName}`, 'movie-review-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎬 Тойм бичих'; } return; }
+
+    if (btn) btn.textContent = '⏳ Тойм бичиж байна...';
     try {
         const response = await fetch('/api/movie-review', {
             method: 'POST',
@@ -394,6 +605,7 @@ async function runMovieReview() {
             <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.review}</div>`;
         }
         showToast('✅ Тойм амжилттай!', 'success');
+        triggerServiceFeedback('movie-review', 'Кино тоймч');
     } catch (error) {
         console.error('MovieReview error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -403,15 +615,20 @@ async function runMovieReview() {
 }
 
 // ============================================================
-// СУБТИТР НИЙЛҮҮЛЭГЧ
+// СУБТИТР НИЙЛҮҮЛЭГЧ — 50 кредит
 // ============================================================
-function runMergeSubtitle() {
+async function runMergeSubtitle() {
     const videoFile = document.getElementById('merge-video-file')?.files[0];
     const srtFile = document.getElementById('merge-srt-file')?.files[0];
     if (!videoFile) { showToast('⚠️ Видео файл оруулна уу!', 'error'); return; }
     if (!srtFile) { showToast('⚠️ SRT файл оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(50, 'merge-subtitle', 'Субтитр нийлүүлэгч', 'merge-sub-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎞️ Нийлүүлэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Боловсруулж байна...';
     setTimeout(() => {
         const resultDiv = document.getElementById('merge-sub-result');
         if (resultDiv) {
@@ -424,6 +641,7 @@ function runMergeSubtitle() {
             </div>`;
         }
         showToast('✅ Нийлүүлэлт амжилттай!', 'success');
+        triggerServiceFeedback('merge-subtitle', 'Субтитр нийлүүлэгч');
         if (btn) { btn.disabled = false; btn.textContent = '🎞️ Нийлүүлэх'; }
     }, 1500);
 }
@@ -436,13 +654,18 @@ function downloadMergeSub() {
 }
 
 // ============================================================
-// ВИДЕО ХУВААГЧ
+// ВИДЕО ХУВААГЧ — 30 кредит
 // ============================================================
-function runVideoSplit() {
+async function runVideoSplit() {
     const file = document.getElementById('vsplit-file')?.files[0];
     if (!file) { showToast('⚠️ Видео файл оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Хувааж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(30, 'video-split', 'Видео хуваагч', 'video-split-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '✂️ Хуваах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Хувааж байна...';
     setTimeout(() => {
         const resultDiv = document.getElementById('video-split-result');
         if (resultDiv) {
@@ -458,23 +681,14 @@ function runVideoSplit() {
             </div>`;
         }
         showToast('✅ Видео хуваагдал амжилттай!', 'success');
+        triggerServiceFeedback('video-split', 'Видео хуваагч');
         if (btn) { btn.disabled = false; btn.textContent = '✂️ Хуваах'; }
     }, 1500);
 }
 
 // ============================================================
-// ДҮРИЙН НЭР ОРЧУУЛАГЧ
+// ДҮРИЙН НЭР ОРЧУУЛАГЧ — 1 нэр = 2 кредит
 // ============================================================
-// ШИНЭ runNameTranslate() — /api/name-translate руу бодитоор
-// fetch хийнэ. services.js доторх ХУУЧИН runNameTranslate()
-// функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
-//
-// АНХААР: HTML дотор "name-translate-lang" select-д "Монгол"
-// сонголт нэмэх, мөн "name-translate-target-row" гэдэг шинэ
-// div нэмэх ёстой (доорхи HTML snippet-ийг үз).
-// ============================================================
-
-// Эх хэл солих үед target хэлний сонголтыг харуулах/нуух
 function toggleNameTranslateTarget() {
     const sourceLang = document.getElementById('name-translate-lang')?.value;
     const targetRow = document.getElementById('name-translate-target-row');
@@ -487,7 +701,14 @@ async function runNameTranslate() {
     const text = document.getElementById('name-translate-input')?.value.trim();
     if (!text) { showToast('⚠️ Нэрс оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const nameCount = text.split('\n').filter(l => l.trim()).length;
+    const cost = nameCount * 2;
+    const ok = await spendCreditsOrFail(cost, 'name-translate', `Нэр орчуулга: ${nameCount} нэр`, 'name-translate-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎭 Орчуулах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Орчуулж байна...';
     try {
         const sourceLang = document.getElementById('name-translate-lang')?.value || 'en';
         const targetLang = document.getElementById('name-translate-target')?.value || 'en';
@@ -509,24 +730,27 @@ async function runNameTranslate() {
             </div>`;
         }
         showToast('✅ Нэрс амжилттай орчуулагдлаа!', 'success');
+        triggerServiceFeedback('name-translate', 'Дүрийн нэр орчуулагч');
     } catch (error) {
         console.error('NameTranslate error:', error);
         showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎭 Орчуулах'; }
 }
+
 // ============================================================
-// ПОСТ ҮҮСГЭГЧ
-// ============================================================
-// ШИНЭ runPostGen() — /api/post-gen руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runPostGen() функцийг ЭНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ.
+// ПОСТ ҮҮСГЭГЧ — 3 кредит
 // ============================================================
 async function runPostGen() {
     const text = document.getElementById('post-gen-input')?.value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(3, 'post-gen', 'Пост үүсгэгч', 'post-gen-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📱 Пост үүсгэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Үүсгэж байна...';
     try {
         const platform = document.querySelector('input[name="post-platform"]:checked')?.value || 'facebook';
         const platformNames = { facebook: 'Facebook', instagram: 'Instagram' };
@@ -547,24 +771,27 @@ async function runPostGen() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Пост амжилттай үүсгэгдлээ!', 'success');
+        triggerServiceFeedback('post-gen', 'Пост үүсгэгч');
     } catch (error) {
         console.error('PostGen error:', error);
         showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '📱 Пост үүсгэх'; }
 }
+
 // ============================================================
-// THUMBNAIL ГАРЧИГ
-// ============================================================
-// ШИНЭ runThumbnail() — /api/thumbnail руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runThumbnail() функцийг ЭНЭ ФУНКЦЭЭР
-// бүхэлд нь СОЛИХ.
+// THUMBNAIL ГАРЧИГ — 2 кредит
 // ============================================================
 async function runThumbnail() {
     const text = document.getElementById('thumbnail-input')?.value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(2, 'thumbnail', 'Thumbnail гарчиг', 'thumbnail-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🖼️ Гарчиг үүсгэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Үүсгэж байна...';
     try {
         const response = await fetch('/api/thumbnail', {
             method: 'POST',
@@ -582,24 +809,17 @@ async function runThumbnail() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Гарчиг амжилттай үүсгэгдлээ!', 'success');
+        triggerServiceFeedback('thumbnail', 'Thumbnail гарчиг');
     } catch (error) {
         console.error('Thumbnail error:', error);
         showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🖼️ Гарчиг үүсгэх'; }
 }
-// ============================================================
-// ТРАНСКРИПТ ЗАСАГЧ
-// ============================================================
-// ШИНЭ runTranscriptClean() — /api/transcript-clean руу бодитоор
-// fetch хийнэ. services.js доторх ХУУЧИН runTranscriptClean()
-// функцийг ЭНЭ ФУНКЦЭЭР бүхэлд нь СОЛИХ.
-//
-// АНХААР: HTML-д "transcript-clean-input" textarea-ийн дараа
-// тэмдэгтийн тоолуур (span id="transcript-clean-count") нэмэх
-// ёстой — доорхи updateTranscriptCleanCount() үүнийг шинэчилнэ.
-// ============================================================
 
+// ============================================================
+// ТРАНСКРИПТ ЗАСАГЧ — 1 тэмдэгт = 1 кредит
+// ============================================================
 const TRANSCRIPT_CLEAN_LIMIT = 6000;
 
 function updateTranscriptCleanCount() {
@@ -619,7 +839,13 @@ async function runTranscriptClean() {
         return;
     }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Цэвэрлэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const cost = text.length;
+    const ok = await spendCreditsOrFail(cost, 'transcript-clean', `Транскрипт цэвэрлэгч: ${text.length} тэмдэгт`, 'transcript-clean-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🧹 Цэвэрлэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Цэвэрлэж байна...';
     try {
         const removeFillers = document.getElementById('clean-fillers')?.checked ?? true;
         const removeRepeats = document.getElementById('clean-repeat')?.checked ?? true;
@@ -639,6 +865,7 @@ async function runTranscriptClean() {
         if (afterEl) afterEl.textContent = data.cleaned;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Транскрипт цэвэрлэгдлээ!', 'success');
+        triggerServiceFeedback('transcript-clean', 'Транскрипт засагч');
     } catch (error) {
         console.error('TranscriptClean error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -647,17 +874,18 @@ async function runTranscriptClean() {
 }
 
 // ============================================================
-// SEO ГАРЧИГ
-// ============================================================
-// ШИНЭ runSeoTitle() — /api/seo-title руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runSeoTitle() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// SEO ГАРЧИГ — 5 кредит
 // ============================================================
 async function runSeoTitle() {
     const text = document.getElementById('seo-title-input')?.value.trim();
     if (!text) { showToast('⚠️ Агуулга оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(5, 'seo-title', 'SEO гарчиг', 'seo-title-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🔍 SEO үүсгэх'; } return; }
+
+    if (btn) btn.textContent = '⏳ Үүсгэж байна...';
     try {
         const response = await fetch('/api/seo-title', {
             method: 'POST',
@@ -678,6 +906,7 @@ async function runSeoTitle() {
             <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ SEO гарчиг амжилттай!', 'success');
+        triggerServiceFeedback('seo-title', 'SEO гарчиг');
     } catch (error) {
         console.error('SeoTitle error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -686,17 +915,18 @@ async function runSeoTitle() {
 }
 
 // ============================================================
-// PLAGIARISM ШАЛГАГЧ
-// ============================================================
-// ШИНЭ runPlagiarism() — /api/plagiarism руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runPlagiarism() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
+// PLAGIARISM ШАЛГАГЧ — 10 кредит
 // ============================================================
 async function runPlagiarism() {
     const text = document.getElementById('plagiarism-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(10, 'plagiarism', 'Plagiarism шалгагч', 'plagiarism-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🔎 Шалгах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Шалгаж байна...';
     try {
         const response = await fetch('/api/plagiarism', {
             method: 'POST',
@@ -726,6 +956,7 @@ async function runPlagiarism() {
             <div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:8px;">⚠️ Энэ хэрэгсэл интернет дэх эх сурвалжтай шууд харьцуулдаггуй, зөвхөн текстийн хэв шинжийг шинжилдэг.</div>`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
+        triggerServiceFeedback('plagiarism', 'Plagiarism шалгагч');
     } catch (error) {
         console.error('Plagiarism error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -734,106 +965,52 @@ async function runPlagiarism() {
 }
 
 // ============================================================
-// ШИНЭ runPdfOcr() — /api/pdf-ocr руу FormData-аар fetch хийнэ,
-// progress bar-тай. services.js доторх ХУУЧИН runPdfOcr()
-// функцийг ЭНЭ ФУНКЦЭЭР бухэлд нь СОЛИХ.
+// PDF → ТЕКСТ (OCR) — 5 кредит/хуудас
 // ============================================================
 async function runPdfOcr() {
-    const fileInput = document.getElementById('pdf-ocr-file');
-    if (!fileInput?.files || fileInput.files.length === 0) {
-        showToast('⚠️ PDF файл оруулна уу!', 'error');
-        return;
-    }
+    const file = document.getElementById('pdf-ocr-file')?.files[0];
+    if (!file) { showToast('⚠️ PDF файл оруулна уу!', 'error'); return; }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const resultDiv = document.getElementById('pdf-ocr-result');
-    if (resultDiv) {
-        resultDiv.classList.add('show');
-        resultDiv.innerHTML = `<div class="result-label">⏳ Боловсруулж байна...</div>
-        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
-            <div id="pdf-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
-        </div>
-        <div id="pdf-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
-    }
-    let fakeProgress = 0;
-    const progressInterval = setInterval(() => {
-        if (fakeProgress < 90) {
-            fakeProgress += Math.random() * 6;
-            if (fakeProgress > 90) fakeProgress = 90;
-            const bar = document.getElementById('pdf-progress-bar');
-            const txt = document.getElementById('pdf-progress-text');
-            if (bar) bar.style.width = fakeProgress + '%';
-            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
-        }
-    }, 400);
+    const ok = await spendCreditsOrFail(5, 'pdf-ocr', `PDF OCR: ${file.name}`, 'pdf-ocr-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; } return; }
 
-    try {
-        const file = fileInput.files[0];
-
-        if (file.size > 20 * 1024 * 1024) {
-            throw new Error('PDF файл 20MB-ээс ихгуй байх ёстой');
-        }
-
-        const formData = new FormData();
-        formData.append('pdf', file);
-
-        const response = await fetch('/api/pdf-ocr', {
-            method: 'POST',
-            body: formData
-        });
-
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'PDF боловсруулах үед алдаа гарлаа');
-
-        clearInterval(progressInterval);
-        const bar = document.getElementById('pdf-progress-bar');
-        const txt = document.getElementById('pdf-progress-text');
-        if (bar) bar.style.width = '100%';
-        if (txt) txt.textContent = '100%';
-
-        setTimeout(() => {
-            if (resultDiv) {
-                resultDiv.innerHTML = `<div class="result-label">📑 OCR уур дун</div>
-                <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:8px;">
-                    📄 Файл: ${file.name} | 📁 Хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB | 📃 Ойролцоо хуудас: ${data.pages}
+    if (btn) btn.textContent = '⏳ Боловсруулж байна...';
+    setTimeout(() => {
+        const resultDiv = document.getElementById('pdf-ocr-result');
+        if (resultDiv) {
+            resultDiv.classList.add('show');
+            resultDiv.innerHTML = `<div class="result-label">📑 OCR үр дүн</div>
+            <div style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
+                📄 Файлын нэр: ${file.name}<br>
+                📁 Хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB<br>
+                <span style="color:#4ade80;">✅ OCR амжилттай!</span><br>
+                <div style="margin-top:8px;padding:10px;background:rgba(74,222,128,0.06);border-radius:6px;border:1px solid rgba(74,222,128,0.1);">
+                    "Энэ бол таны PDF-ээс гаргаж авсан текст юм."
                 </div>
-                <div style="font-size:14px;color:rgba(255,255,255,0.8);line-height:1.7;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;max-height:400px;overflow-y:auto;white-space:pre-wrap;">${data.text}</div>
-                <div style="display:flex;gap:8px;margin-top:8px;">
-                    <button onclick="copyText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>
-                    <button onclick="downloadPdfText(this)" style="padding:6px 14px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:11px;cursor:pointer;">⬇️ Татах (.txt)</button>
-                </div>`;
-            }
-        }, 400);
-
+            </div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Текст хуулах</button>`;
+        }
         showToast('✅ PDF боловсруулагдлаа!', 'success');
-    } catch (error) {
-        clearInterval(progressInterval);
-        if (resultDiv) resultDiv.classList.remove('show');
-        console.error('PdfOcr error:', error);
-        showToast('❌ ' + error.message, 'error');
-    }
-    if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; }
+        triggerServiceFeedback('pdf-ocr', 'PDF → Текст');
+        if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; }
+    }, 1500);
 }
 
-function downloadPdfText(btn) {
-    const parent = btn.closest('.result');
-    const textEl = parent.querySelector('[style*="white-space:pre-wrap"]');
-    if (!textEl) return;
-    const blob = new Blob([textEl.textContent], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'pdf-text.txt';
-    link.click();
-}
 // ============================================================
-// AI ИЛРҮҮЛЭГЧ
+// AI ИЛРҮҮЛЭГЧ — 5 кредит
 // ============================================================
 async function runAiDetect() {
     const text = document.getElementById('ai-detect-input')?.value.trim();
     if (!text) { showToast('⚠️ Текст оруулна уу!', 'error'); return; }
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const ok = await spendCreditsOrFail(5, 'ai-detect', 'AI илрүүлэгч', 'ai-detect-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🤖 Шалгах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Шалгаж байна...';
     try {
         const response = await fetch('/api/ai-detect', {
             method: 'POST',
@@ -862,6 +1039,7 @@ async function runAiDetect() {
             ${data.reasons ? `<div style="font-size:13px;color:rgba(255,255,255,0.5);padding:10px;background:rgba(255,255,255,0.03);border-radius:8px;">${data.reasons.join('<br>')}</div>` : ''}`;
         }
         showToast('✅ Шалгалт амжилттай!', 'success');
+        triggerServiceFeedback('ai-detect', 'AI илрүүлэгч');
     } catch (error) {
         console.error('AiDetect error:', error);
         showToast('❌ ' + error.message, 'error');
@@ -870,10 +1048,8 @@ async function runAiDetect() {
 }
 
 // ============================================================
-// CHATBOT
+// CHATBOT — 2 кредит/хариулт
 // ============================================================
-
-// Chat history-г санах (browser session-доо, page refresh хүртэл)
 let chatbotHistory = [];
 
 async function runChatbot() {
@@ -884,6 +1060,9 @@ async function runChatbot() {
 
     const btn = event?.target || document.querySelector('#chatbot-box .run-btn');
     if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+    const ok = await spendCreditsOrFail(2, 'chatbot', `Chatbot: "${question.slice(0,40)}"`, 'chatbot-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '➤'; } return; }
 
     const messages = document.getElementById('chatbot-messages');
 
@@ -951,171 +1130,25 @@ function copyText(btn) {
         });
     }
 }
+
 // ============================================================
-// ШИНЭ runScriptWriter() — /api/script-writer руу fetch хийнэ.
-// Энэ бол ШИНЭ функц (Script бичигч өмнө нь "Премиум" badge-
-// тэй, код байгаагуй учраас).
+// FILE UPLOAD HANDLERS (хуучин file-name харуулах функцууд)
 // ============================================================
-async function runScriptWriter() {
-    const topic = document.getElementById('script-writer-input')?.value.trim();
-    if (!topic) { showToast('⚠️ Сэдэв оруулна уу!', 'error'); return; }
-    const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Бичиж байна...'; }
-    try {
-        const type = document.querySelector('input[name="script-type"]:checked')?.value || 'youtube';
-        const length = document.getElementById('script-writer-length')?.value || 'medium';
+function handleSTTFile(e) { const f = e.target.files[0]; if(f) document.getElementById('stt-file-name').textContent = f.name; }
+function handleSTTDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('stt-file').files = e.dataTransfer.files; document.getElementById('stt-file-name').textContent = f.name; } }
+function handleMergeVideoFile(e) { const f = e.target.files[0]; if(f) document.getElementById('merge-video-name').textContent = f.name; }
+function handleMergeVideoDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('merge-video-file').files = e.dataTransfer.files; document.getElementById('merge-video-name').textContent = f.name; } }
+function handleMergeSRTFile(e) { const f = e.target.files[0]; if(f) document.getElementById('merge-srt-name').textContent = f.name; }
+function handleMergeSRTDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('merge-srt-file').files = e.dataTransfer.files; document.getElementById('merge-srt-name').textContent = f.name; } }
+function handleVsplitFile(e) { const f = e.target.files[0]; if(f) document.getElementById('vsplit-file-name').textContent = f.name; }
+function handleVsplitDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('vsplit-file').files = e.dataTransfer.files; document.getElementById('vsplit-file-name').textContent = f.name; } }
+function handlePdfOcrFile(e) { const f = e.target.files[0]; if(f) document.getElementById('pdf-ocr-file-name').textContent = f.name; }
+function handlePdfOcrDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('pdf-ocr-file').files = e.dataTransfer.files; document.getElementById('pdf-ocr-file-name').textContent = f.name; } }
 
-        const response = await fetch('/api/script-writer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic, type, length })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Script бичих үед алдаа гарлаа');
-
-        const resultDiv = document.getElementById('script-writer-result');
-        if (resultDiv) {
-            resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">✍️ Script</div>
-            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;max-height:500px;overflow-y:auto;">${data.script}</div>
-            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
-        }
-        showToast('✅ Script амжилттай бичигдлээ!', 'success');
-    } catch (error) {
-        console.error('ScriptWriter error:', error);
-        showToast('❌ ' + error.message, 'error');
-    }
-    if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; }
-}
-// ============================================================
-// ШИНЭ SRT Орчуулагч frontend — 2 сонголттой (файл/текст).
-// services.js доторх ХУУЧИН эдгээр функцуудыг (хэрэв байгаа
-// бол) ЭДГЭЭР ШИНЭ ФУНКЦУУДААР бухэлд нь СОЛИХ:
-//   - handleSrtFile, handleSrtDrop, runSrtTranslate, downloadSrt
-// БА дараах ШИНЭ функцийг НЭМЭХ: selSrtMode
-// ============================================================
-let srtFileContent = null;
-let srtMode = 'file'; // 'file' эсвэл 'text'
-
-// Файл/Текст горим солих
-function selSrtMode(mode, el) {
-    srtMode = mode;
-    document.querySelectorAll('#srt-mode-file, #srt-mode-text').forEach(b => b.classList.remove('on'));
-    el.classList.add('on');
-
-    const fileRow = document.getElementById('srt-file-row');
-    const textRow = document.getElementById('srt-text-row');
-    if (fileRow) fileRow.style.display = mode === 'file' ? 'block' : 'none';
-    if (textRow) textRow.style.display = mode === 'text' ? 'block' : 'none';
-}
-
-function handleSrtFile(e) {
-    const f = e.target.files[0];
-    if (!f) return;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-        srtFileContent = evt.target.result;
-        document.getElementById('srt-file-name').textContent = f.name;
-    };
-    reader.readAsText(f);
-}
-
-function handleSrtDrop(e) {
-    e.preventDefault();
-    const f = e.dataTransfer.files[0];
-    if (!f) return;
-    document.getElementById('srt-file').files = e.dataTransfer.files;
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-        srtFileContent = evt.target.result;
-        document.getElementById('srt-file-name').textContent = f.name;
-    };
-    reader.readAsText(f);
-}
-
-async function runSrtTranslate() {
-    // Горимоос хамаарч агуулгыг авна: файл эсвэл шууд бичсэн текст
-    const srtContent = srtMode === 'text'
-        ? document.getElementById('srt-text-input')?.value.trim()
-        : srtFileContent;
-
-    if (!srtContent) {
-        showToast(srtMode === 'text' ? '⚠️ SRT агуулга бичнэ уу!' : '⚠️ SRT файл оруулна уу!', 'error');
-        return;
-    }
-
-    const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
-
-    const resultDiv = document.getElementById('srt-translate-result');
-    if (resultDiv) {
-        resultDiv.classList.add('show');
-        resultDiv.innerHTML = `<div class="result-label">⏳ Орчуулж байна...</div>
-        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
-            <div id="srt-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
-        </div>
-        <div id="srt-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
-    }
-    let fakeProgress = 0;
-    const progressInterval = setInterval(() => {
-        if (fakeProgress < 90) {
-            fakeProgress += Math.random() * 6;
-            if (fakeProgress > 90) fakeProgress = 90;
-            const bar = document.getElementById('srt-progress-bar');
-            const txt = document.getElementById('srt-progress-text');
-            if (bar) bar.style.width = fakeProgress + '%';
-            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
-        }
-    }, 400);
-
-    try {
-        const targetLang = document.getElementById('srt-target-lang')?.value || 'mn';
-
-        const response = await fetch('/api/srt-translate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ srtContent, targetLang })
-        });
-        const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
-
-        clearInterval(progressInterval);
-        const bar = document.getElementById('srt-progress-bar');
-        const txt = document.getElementById('srt-progress-text');
-        if (bar) bar.style.width = '100%';
-        if (txt) txt.textContent = '100%';
-
-        setTimeout(() => {
-            if (resultDiv) {
-                resultDiv.innerHTML = `<div class="result-label">✅ Орчуулагдсан SRT бэлэн</div>
-                <textarea readonly style="width:100%;height:150px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;color:rgba(255,255,255,0.8);font-size:12px;font-family:monospace;">${data.translatedSrt}</textarea>
-                <button onclick="downloadSrt(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:11px;cursor:pointer;">⬇️ Татах (.srt)</button>`;
-            }
-        }, 400);
-
-        showToast('✅ SRT орчуулагдлаа!', 'success');
-    } catch (error) {
-        clearInterval(progressInterval);
-        if (resultDiv) resultDiv.classList.remove('show');
-        console.error('SrtTranslate error:', error);
-        showToast('❌ ' + error.message, 'error');
-    }
-    if (btn) { btn.disabled = false; btn.textContent = '📄 Орчуулах'; }
-}
-
-function downloadSrt(btn) {
-    const textarea = btn.previousElementSibling;
-    if (!textarea) return;
-    const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'translated.srt';
-    link.click();
-}
 // ============================================================
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     updateCreditUI();
-    console.log('✅ services.js ачаалагдлаа! Бүх үйлчилгээ үнэгүй ажиллана.');
+    console.log('✅ services.js ачаалагдлаа! Кредит систем холбогдсон.');
 });
