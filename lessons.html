@@ -263,6 +263,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .mbn-item .mbn-label { font-size: 10px; font-family: 'Nunito', sans-serif; font-weight: 600; line-height: 1; }
 .mbn-item.active { color: #4ade80; }
 .mbn-item:active { opacity: 0.7; }
+/* mbn-logo-icon — emoji товч, ногоон квадратгүй */
+.mbn-logo-icon {
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: none !important;
+  border-radius: 0 !important;
+}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
@@ -357,16 +369,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
     <div class="marquee-wrap">
       <div class="marquee-label">Ангиллууд</div>
       <div class="marquee-track" id="marquee-track">
-        <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
-        <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'YouTube суваг')"><div class="icon">▶️</div><div class="lbl">YouTube суваг</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'AI агент')"><div class="icon">🤖</div><div class="lbl">AI агент</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'Олон улсын худалдаа')"><div class="icon">🌏</div><div class="lbl">Олон улсын худалдаа</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'AI Prompt')"><div class="icon">💬</div><div class="lbl">AI Prompt</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'No-Code')"><div class="icon">🛠️</div><div class="lbl">No-Code</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Контент')"><div class="icon">📱</div><div class="lbl">Контент</div></div>
-        <div class="marquee-item" onclick="setFilter(null,'Вэб')"><div class="icon">💻</div><div class="lbl">Вэб хөгжүүлэлт</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Дизайн')"><div class="icon">🎨</div><div class="lbl">Дизайн</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Бизнес')"><div class="icon">💼</div><div class="lbl">Бизнес</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Маркетинг')"><div class="icon">📊</div><div class="lbl">Маркетинг</div></div>
-        <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
-        <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
+        <!-- давтах -->
+        <div class="marquee-item" onclick="setFilter(null,'YouTube суваг')"><div class="icon">▶️</div><div class="lbl">YouTube суваг</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'AI агент')"><div class="icon">🤖</div><div class="lbl">AI агент</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'Олон улсын худалдаа')"><div class="icon">🌏</div><div class="lbl">Олон улсын худалдаа</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'AI Prompt')"><div class="icon">💬</div><div class="lbl">AI Prompt</div></div>
+        <div class="marquee-item" onclick="setFilter(null,'No-Code')"><div class="icon">🛠️</div><div class="lbl">No-Code</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Контент')"><div class="icon">📱</div><div class="lbl">Контент</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Вэб')"><div class="icon">💻</div><div class="lbl">Вэб хөгжүүлэлт</div></div>
@@ -451,30 +469,37 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav">
+<!-- ===== MOBILE BOTTOM NAV — index.html-тэй яг ижил ===== -->
+<!-- ===== MOBILE BOTTOM NAV — 6 ЦЭС ===== -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
-    <a class="mbn-item" href="index.html">
+    <!-- 1. Нүүр -->
+    <a class="mbn-item" href="index.html" aria-label="Нүүр">
       <div class="mbn-logo-icon">🏠</div>
       <span>Нүүр</span>
     </a>
-    <a class="mbn-item active" href="lessons.html">
+    <!-- 2. Сургалт -->
+    <a class="mbn-item active" href="lessons.html" aria-label="Сургалт">
       <div class="mbn-logo-icon">📚</div>
       <span>Сургалт</span>
     </a>
-    <a class="mbn-item" href="programs.html">
+    <!-- 3. Программ -->
+    <a class="mbn-item" href="programs.html" aria-label="Программ">
       <div class="mbn-logo-icon">💻</div>
       <span>Программ</span>
     </a>
-    <a class="mbn-item" href="services.html">
+    <!-- 4. AI (Үйлчилгээ) -->
+    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ">
       <div class="mbn-logo-icon">🤖</div>
       <span>AI</span>
     </a>
-    <a class="mbn-item" href="zar.html">
+    <!-- 5. Зар -->
+    <a class="mbn-item" href="zar.html" aria-label="Зар">
       <div class="mbn-logo-icon">📢</div>
       <span>Зар</span>
     </a>
-    <a class="mbn-item" href="profile.html">
+    <!-- 6. Профайл -->
+    <a class="mbn-item" href="profile.html" aria-label="Профайл">
       <div class="mbn-logo-icon">👤</div>
       <span>Профайл</span>
     </a>
