@@ -23,57 +23,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* ===== ANIMATIONS ===== */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-/* ===== FLOATING ILLUSTRATIONS ===== */
-@keyframes float{0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
-@keyframes floatR{0%,100%{transform:translateY(0px) rotate(4deg)}50%{transform:translateY(-12px) rotate(-4deg)}}
-@keyframes floatSpin{0%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-10px) rotate(180deg)}100%{transform:translateY(0px) rotate(360deg)}}
-@keyframes marqueeSlide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes glow{0%,100%{filter:drop-shadow(0 0 8px rgba(74,222,128,0.4))}50%{filter:drop-shadow(0 0 18px rgba(74,222,128,0.8))}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-
-.fi-wrap{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-
-/* Зүүн талын хөдөлдөг зурагнууд */
-.fi-left{position:absolute;left:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;padding:0 12px;}
-.fi-right{position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;padding:0 12px;}
-
-.fi-svg{opacity:0.85;}
-.fi-svg.f1{animation:float 4s ease-in-out infinite;}
-.fi-svg.f2{animation:floatR 5s ease-in-out infinite 0.7s;}
-.fi-svg.f3{animation:float 6s ease-in-out infinite 1.4s;}
-.fi-svg.f4{animation:floatR 4.5s ease-in-out infinite 0.3s;}
-.fi-svg.f5{animation:float 5.5s ease-in-out infinite 1s;}
-.fi-svg.f6{animation:floatSpin 8s linear infinite;}
-
-/* MARQUEE */
-.marquee-section{
-  position:relative;z-index:2;
-  padding:18px 0 0;
-  overflow:hidden;
-}
-.marquee-label{text-align:center;font-size:10px;color:var(--text4);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
-.marquee-track{display:flex;width:max-content;animation:marqueeSlide 28s linear infinite;}
-.marquee-track:hover{animation-play-state:paused;}
-.mq-item{
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
-  border-radius:12px;padding:10px 14px;margin-right:10px;
-  min-width:80px;cursor:pointer;transition:all 0.25s;flex-shrink:0;
-}
-.mq-item:hover{background:rgba(74,222,128,0.09);border-color:rgba(74,222,128,0.3);transform:translateY(-3px);}
-.mq-item .mq-icon{font-size:24px;}
-.mq-item .mq-lbl{font-size:10px;font-weight:700;color:var(--text3);text-align:center;white-space:nowrap;}
-
-@media(max-width:600px){
-  .fi-left,.fi-right{display:none;}
-}
-
 @keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-12px)}}
 @keyframes floatR{0%,100%{transform:translateY(0px) rotate(3deg)}50%{transform:translateY(-10px) rotate(-3deg)}}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}}
 @keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(74,222,128,0.3)}50%{box-shadow:0 0 40px rgba(74,222,128,0.6)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}}
 
 /* ===== NAVBAR ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
@@ -125,7 +79,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .fi-8{top:20%;left:14%;font-size:18px;animation:floatR 8s ease-in-out infinite 1s;}
 .fi-9{top:70%;right:8%;font-size:20px;animation:float 6.5s ease-in-out infinite 0.7s;}
 
-/* ===== MARQUEE STRIP — хөдөлдөг зурагнуудын мөр ===== */
+/* ===== MARQUEE STRIP ===== */
 .marquee-wrap{
   position:relative;z-index:2;
   margin-top:8px;
@@ -143,7 +97,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 }
 .marquee-item:hover{background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.3);transform:translateY(-3px);}
 .marquee-item .icon{font-size:28px;animation:float 4s ease-in-out infinite;}
-.marquee-item:nth-child(2n) .icon{animation-name:floatR;}
 .marquee-item .lbl{font-size:10px;font-weight:700;color:var(--text3);text-align:center;white-space:nowrap;}
 
 /* ===== FILTER BAR ===== */
@@ -287,14 +240,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .nav-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-/* ===== MOBILE BOTTOM NAV — ЗАССАН (зай ойртуулсан, 6 цэс) ===== */
+/* ===== MOBILE BOTTOM NAV — index-тэй яг адил ===== */
 .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
-.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 4px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
+.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:480px;margin:0 auto;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:10px;font-weight:600;font-family:var(--font-b);}
 .mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;}
 .mbn-item.active{color:#4ade80;}
 .mbn-item:hover{color:rgba(255,255,255,0.7);}
-.mbn-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#0a0a14;}
+.mbn-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0a0a14;}
+.mbn-item span{font-size:11px;line-height:1;}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
@@ -311,9 +265,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   .v-foot{flex-direction:column;}
   .nav-btn{width:100%;justify-content:center;}
   .fi{display:none;}
-  .mbn-item{padding:4px 2px;font-size:8px;}
-  .mbn-logo-icon{width:24px;height:24px;font-size:12px;}
-  .mbn-inner{max-width:320px;}
+  .mbn-item{padding:4px 6px;font-size:9px;}
+  .mbn-logo-icon{width:28px;height:28px;font-size:14px;}
+  .mbn-item span{font-size:10px;}
+  .mbn-inner{max-width:360px;}
 }
 @media(max-width:768px){
   .nav{padding:10px 16px;flex-wrap:wrap;}
@@ -395,7 +350,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
     <div class="marquee-wrap">
       <div class="marquee-label">Ангиллууд</div>
       <div class="marquee-track" id="marquee-track">
-        <!-- 1st set -->
         <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
         <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
@@ -404,7 +358,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
         <div class="marquee-item" onclick="setFilter(null,'Дизайн')"><div class="icon">🎨</div><div class="lbl">Дизайн</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Бизнес')"><div class="icon">💼</div><div class="lbl">Бизнес</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Маркетинг')"><div class="icon">📊</div><div class="lbl">Маркетинг</div></div>
-        <!-- 2nd set (copy for seamless loop) -->
         <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
         <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
@@ -495,7 +448,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV — ЗАССАН (зай ойртуулсан, 6 цэс) ===== -->
+<!-- ===== MOBILE BOTTOM NAV — index-тэй яг адил ===== -->
 <nav class="mobile-bottom-nav">
   <div class="mbn-inner">
     <a class="mbn-item" href="index.html">
