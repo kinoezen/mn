@@ -74,7 +74,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .h-stat-label{font-size:11px;color:var(--text4);}
 
 .floats{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
-.fi{position:absolute;font-size:32px;opacity:0.18;filter:blur(0px);}
+.fi{position:absolute;font-size:32px;opacity:0.18;}
 .fi-1{top:8%;left:3%;font-size:42px;animation:float 4s ease-in-out infinite;}
 .fi-2{top:15%;right:4%;font-size:38px;animation:floatR 5s ease-in-out infinite 0.5s;}
 .fi-3{top:55%;left:1%;font-size:28px;animation:float 6s ease-in-out infinite 1s;}
@@ -110,7 +110,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* ===== SECTION ===== */
 .section{padding:28px 24px 48px;}
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.section-title{font-family:var(--font-d);font-size:24px;letter-spacing:1px;color:var(--text2);}
+.section-title{font-family:var(--font-d);font-size:24px;letter-spacing:1px;color:var(--accent);}
 .section-title span{color:var(--accent);}
 
 /* ===== GRID ===== */
@@ -119,8 +119,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* ===== CARD ===== */
 .card{background:var(--bg3);border-radius:var(--r);overflow:hidden;border:1px solid var(--border);cursor:pointer;transition:transform 0.25s,border-color 0.25s,box-shadow 0.25s;animation:fadeUp 0.4s ease both;display:flex;flex-direction:column;}
 .card:hover{transform:translateY(-5px);border-color:var(--border2);box-shadow:0 8px 32px rgba(74,222,128,0.12);}
-.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.12s}
-.card:nth-child(4){animation-delay:.16s}.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
 .card-thumb{width:100%;height:170px;position:relative;overflow:hidden;background:linear-gradient(135deg,#1a1040,#0e1a10);flex-shrink:0;}
 .card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;}
 .card:hover .card-thumb img{transform:scale(1.06);}
@@ -234,13 +232,37 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
 /* ===== MOBILE BOTTOM NAV ===== */
-.mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
-.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
-.mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;}
-.mbn-item.active{color:#4ade80;}
-.mbn-item:hover{color:rgba(255,255,255,0.7);}
-.mbn-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#0a0a14;}
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #0a0a14;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding: 6px 0 env(safe-area-inset-bottom, 4px);
+  z-index: 9999;
+}
+.mbn-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 4px;
+}
+.mbn-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 4px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+  flex: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.mbn-item .mbn-icon { font-size: 22px; line-height: 1; }
+.mbn-item .mbn-label { font-size: 10px; font-family: 'Nunito', sans-serif; font-weight: 600; line-height: 1; }
+.mbn-item.active { color: #4ade80; }
+.mbn-item:active { opacity: 0.7; }
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
@@ -248,8 +270,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* ===== RESPONSIVE ===== */
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr);}.detail-hero{flex-direction:column;}.detail-thumb{width:100%;height:160px;}}
 @media(max-width:600px){.grid{grid-template-columns:1fr;}.hero h1{font-size:38px;}.v-content{padding:16px;}.detail-body{padding:0 16px;}.price-block{flex-direction:column;align-items:flex-start;}.buy-btn{width:100%;}.v-foot{flex-direction:column;}.nav-btn{width:100%;justify-content:center;}.fi{display:none;}}
-@media(max-width:768px){.nav{padding:10px 16px;flex-wrap:wrap;}.nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--border);}.nav-links.open{display:flex;}.nav-right{display:none;width:100%;}.nav-right.open{display:flex;flex-direction:column;gap:8px;}.nav-toggle{display:block;}.filter-bar{top:57px;}}
-@media(min-width:769px){.mobile-bottom-nav{display:none;}}
+@media(max-width:768px){
+  .nav{padding:10px 16px;flex-wrap:wrap;}
+  .nav-links{display:none;width:100%;flex-direction:column;gap:4px;padding:8px 0;border-top:1px solid var(--border);}
+  .nav-links.open{display:flex;}
+  .nav-right{display:none;width:100%;}
+  .nav-right.open{display:flex;flex-direction:column;gap:8px;}
+  .nav-toggle{display:block;}
+  .filter-bar{top:57px;}
+  .mobile-bottom-nav { display: block; }
+  body { padding-bottom: 65px !important; }
+  .toast { bottom: 74px; }
+}
 </style>
 </head>
 <body>
@@ -279,14 +311,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
     <a href="profile.html">Профайл</a>
   </div>
   <div class="nav-right" id="nav-right">
-
-    <!-- ❌ Нэвтрээгүй үед -->
     <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
       <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
       <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
     </div>
-
-    <!-- ✅ Нэвтэрсэн үед -->
     <div class="user-menu-wrap" id="user-menu">
       <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
       <div class="user-dropdown" id="user-dropdown">
@@ -303,7 +331,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
         <button class="dd-item dd-logout" onclick="signOutUser()">🚪 Гарах</button>
       </div>
     </div>
-
   </div>
   <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">☰</button>
 </nav>
@@ -363,7 +390,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 
   <section class="section">
     <div class="section-head">
-      <h2 class="section-title"><span>Сургалт</span>нууд</h2>
+      <h2 class="section-title"><span>Сургалт</span>ууд</h2>
     </div>
     <div class="grid" id="courses-grid">
       <div class="card"><div class="skel-thumb skel"></div><div class="skel-body"><div class="skel-line skel"></div><div class="skel-line skel w70"></div><div class="skel-line skel w40"></div></div></div>
@@ -424,14 +451,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav">
+<!-- ===== MOBILE BOTTOM NAV — index.html-тэй яг ижил ===== -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
-    <a class="mbn-item" href="index.html"><div class="mbn-logo-icon">🏠</div><span>Нүүр</span></a>
-    <a class="mbn-item active" href="lessons.html"><div class="mbn-logo-icon">📚</div><span>Сургалт</span></a>
-    <a class="mbn-item" href="programs.html"><div class="mbn-logo-icon">💻</div><span>Программ</span></a>
-    <a class="mbn-item" href="services.html"><div class="mbn-logo-icon">⚙️</div><span>Үйлчилгээ</span></a>
-    <a class="mbn-item" href="profile.html"><div class="mbn-logo-icon">👤</div><span>Профайл</span></a>
+    <a class="mbn-item" href="index.html">
+      <span class="mbn-icon">🏠</span>
+      <span class="mbn-label">Нүүр</span>
+    </a>
+    <a class="mbn-item active" href="lessons.html">
+      <span class="mbn-icon">📚</span>
+      <span class="mbn-label">Сургалт</span>
+    </a>
+    <a class="mbn-item" href="programs.html">
+      <span class="mbn-icon">💻</span>
+      <span class="mbn-label">Программ</span>
+    </a>
+    <a class="mbn-item" href="services.html">
+      <span class="mbn-icon">🤖</span>
+      <span class="mbn-label">AI</span>
+    </a>
+    <a class="mbn-item" href="zar.html">
+      <span class="mbn-icon">📢</span>
+      <span class="mbn-label">Зар</span>
+    </a>
+    <a class="mbn-item" href="profile.html">
+      <span class="mbn-icon">👤</span>
+      <span class="mbn-label">Профайл</span>
+    </a>
   </div>
 </nav>
 
@@ -440,74 +486,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 (function(){
   const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
   const SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-
   function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
   function getToken(){return localStorage.getItem('sb_token')||null;}
-
-  async function verifyToken(token){
-    try{
-      const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}});
-      if(!r.ok)return null;
-      return await r.json();
-    }catch(e){return null;}
-  }
-
-  function avatarUrl(user){
-    if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;
-    const name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email||'U';
-    return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;
-  }
-  function displayName(user){
-    if(user.user_metadata){if(user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata.name)return user.user_metadata.name;}
-    return user.email?user.email.split('@')[0]:'Хэрэглэгч';
-  }
-
-  function showLoggedIn(user){
-    const av=avatarUrl(user);
-    const nm=displayName(user);
-    const em=user.email||'';
-    const a=document.getElementById('user-avatar');if(a)a.src=av;
-    const da=document.getElementById('dd-avatar');if(da)da.src=av;
-    const dn=document.getElementById('dd-name');if(dn)dn.textContent=nm;
-    const de=document.getElementById('dd-email');if(de)de.textContent=em;
-    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='none';
-    const um=document.getElementById('user-menu');if(um)um.style.display='flex';
-  }
-
-  function showLoggedOut(){
-    localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');
-    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='flex';
-    const um=document.getElementById('user-menu');if(um)um.style.display='none';
-  }
-
-  window.toggleUserDropdown=function(){
-    const dd=document.getElementById('user-dropdown');if(dd)dd.classList.toggle('open');
-  };
-  document.addEventListener('click',function(e){
-    const um=document.getElementById('user-menu');
-    const dd=document.getElementById('user-dropdown');
-    if(!um||!dd)return;
-    if(!um.contains(e.target))dd.classList.remove('open');
-  });
-  window.signOutUser=async function(){
-    const tk=getToken();
-    if(tk){try{await fetch(`${SB_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${tk}`}});}catch(e){}}
-    showLoggedOut();
-    const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');
-  };
-
-  async function checkAuth(){
-    const tk=getToken();
-    const cu=getUser();
-    if(!tk){showLoggedOut();return;}
-    if(cu)showLoggedIn(cu);
-    const live=await verifyToken(tk);
-    if(live&&live.id){localStorage.setItem('sb_user',JSON.stringify(live));showLoggedIn(live);}
-    else showLoggedOut();
-  }
-
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',checkAuth);}
-  else{checkAuth();}
+  async function verifyToken(token){try{const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+  function avatarUrl(user){if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;const name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email||'U';return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;}
+  function displayName(user){if(user.user_metadata){if(user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata.name)return user.user_metadata.name;}return user.email?user.email.split('@')[0]:'Хэрэглэгч';}
+  function showLoggedIn(user){const av=avatarUrl(user);const nm=displayName(user);const em=user.email||'';const a=document.getElementById('user-avatar');if(a)a.src=av;const da=document.getElementById('dd-avatar');if(da)da.src=av;const dn=document.getElementById('dd-name');if(dn)dn.textContent=nm;const de=document.getElementById('dd-email');if(de)de.textContent=em;const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='none';const um=document.getElementById('user-menu');if(um)um.style.display='flex';}
+  function showLoggedOut(){localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='flex';const um=document.getElementById('user-menu');if(um)um.style.display='none';}
+  window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(dd)dd.classList.toggle('open');};
+  document.addEventListener('click',function(e){const um=document.getElementById('user-menu');const dd=document.getElementById('user-dropdown');if(!um||!dd)return;if(!um.contains(e.target))dd.classList.remove('open');});
+  window.signOutUser=async function(){const tk=getToken();if(tk){try{await fetch(`${SB_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${tk}`}});}catch(e){}}showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');};
+  async function checkAuth(){const tk=getToken();const cu=getUser();if(!tk){showLoggedOut();return;}if(cu)showLoggedIn(cu);const live=await verifyToken(tk);if(live&&live.id){localStorage.setItem('sb_user',JSON.stringify(live));showLoggedIn(live);}else showLoggedOut();}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',checkAuth);}else{checkAuth();}
 })();
 </script>
 
@@ -524,152 +514,40 @@ function toast(msg,dur=2500){const t=document.createElement('div');t.className='
 function san(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 
 async function init(){
-  try{
-    const rows=await sb('lessons','select=*&order=created_at.desc');
-    const data=Array.isArray(rows)?rows:[];
-    allC=data.map(mapRowToCourse);
-    allL=[];
-    allC.forEach(c=>{allL.push(...buildSubLessons(c));});
-  }catch(e){console.error('Сургалт ачаалахад алдаа:',e);allC=[];allL=[];}
+  try{const rows=await sb('lessons','select=*&order=created_at.desc');const data=Array.isArray(rows)?rows:[];allC=data.map(mapRowToCourse);allL=[];allC.forEach(c=>{allL.push(...buildSubLessons(c));});}catch(e){console.error('Сургалт ачаалахад алдаа:',e);allC=[];allL=[];}
   document.getElementById('stat-total').textContent=allC.length;
   document.getElementById('stat-lessons').textContent=allL.length;
   buildPills();renderCourses(allC);
 }
 
 function parsePriceNum(p){if(p===null||p===undefined)return 0;const n=parseInt(String(p).replace(/[^\d]/g,''),10);return isNaN(n)?0:n;}
-function mapRowToCourse(row){
-  const priceNum=parsePriceNum(row.price);
-  return{id:row.id,title:row.title||'(нэргүй)',description:row.description||'',category:row.category||'Сургалт',level:row.level||'Эхлэгч',price:priceNum,old_price:null,is_free:priceNum===0,is_featured:false,instructor:row.instructor||'КиноЭзэн',thumb_url:row.thumbnail||null,about:row.description||'',outcomes:[],duration:row.duration||null,video_url:row.video_url||null,file_url:row.file_url||null,file_name:row.file_name||null,lessons_list:row.lessons_list||''};
-}
-function buildSubLessons(c){
-  const subs=[];
-  if(c.video_url){subs.push({id:c.id+'-video',course_id:c.id,title:'Үндсэн видео хичээл',type:'video',video_url:c.video_url,is_free_preview:true,sort_order:subs.length});}
-  (c.lessons_list||'').split('\n').map(s=>s.trim()).filter(Boolean).forEach(line=>{subs.push({id:c.id+'-l'+subs.length,course_id:c.id,title:line,type:'text',sort_order:subs.length,is_free_preview:false});});
-  if(c.file_url){subs.push({id:c.id+'-file',course_id:c.id,title:'📎 Нэмэлт материал: '+(c.file_name||'файл татах'),type:'text',sort_order:subs.length,is_free_preview:false,content:'Файлыг эндээс татаж авна уу: '+c.file_url});}
-  if(!subs.length){subs.push({id:c.id+'-empty',course_id:c.id,title:'Хичээлийн агуулга удахгүй нэмэгдэнэ',type:'text',sort_order:0,is_free_preview:true});}
-  return subs;
-}
+function mapRowToCourse(row){const priceNum=parsePriceNum(row.price);return{id:row.id,title:row.title||'(нэргүй)',description:row.description||'',category:row.category||'Сургалт',level:row.level||'Эхлэгч',price:priceNum,old_price:null,is_free:priceNum===0,is_featured:false,instructor:row.instructor||'КиноЭзэн',thumb_url:row.thumbnail||null,about:row.description||'',outcomes:[],duration:row.duration||null,video_url:row.video_url||null,file_url:row.file_url||null,file_name:row.file_name||null,lessons_list:row.lessons_list||''};}
+function buildSubLessons(c){const subs=[];if(c.video_url){subs.push({id:c.id+'-video',course_id:c.id,title:'Үндсэн видео хичээл',type:'video',video_url:c.video_url,is_free_preview:true,sort_order:subs.length});}(c.lessons_list||'').split('\n').map(s=>s.trim()).filter(Boolean).forEach(line=>{subs.push({id:c.id+'-l'+subs.length,course_id:c.id,title:line,type:'text',sort_order:subs.length,is_free_preview:false});});if(c.file_url){subs.push({id:c.id+'-file',course_id:c.id,title:'📎 Нэмэлт материал: '+(c.file_name||'файл татах'),type:'text',sort_order:subs.length,is_free_preview:false,content:'Файлыг эндээс татаж авна уу: '+c.file_url});}if(!subs.length){subs.push({id:c.id+'-empty',course_id:c.id,title:'Хичээлийн агуулга удахгүй нэмэгдэнэ',type:'text',sort_order:0,is_free_preview:true});}return subs;}
 
-function buildPills(){
-  const cats=[...new Set(allC.map(c=>c.category).filter(Boolean))];
-  const p=document.getElementById('filter-pills');
-  p.innerHTML='<button class="fpill on" onclick="setFilter(this,\'\')">Бүгд</button>';
-  cats.forEach(cat=>{const b=document.createElement('button');b.className='fpill';b.textContent=cat;b.onclick=()=>setFilter(b,cat);p.appendChild(b);});
-}
-function setFilter(el,cat){
-  document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));
-  if(el)el.classList.add('on');
-  else{const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);if(found)found.classList.add('on');}
-  activeF=cat;filterCourses();
-  document.getElementById('courses-grid')?.scrollIntoView({behavior:'smooth',block:'start'});
-}
-function filterCourses(){
-  const q=document.getElementById('search-inp').value.toLowerCase();
-  const f=allC.filter(c=>(!activeF||c.category===activeF)&&(!q||c.title.toLowerCase().includes(q)||(c.description||'').toLowerCase().includes(q)));
-  renderCourses(f);
-  document.getElementById('filter-count').textContent=f.length+' сургалт';
-}
+function buildPills(){const cats=[...new Set(allC.map(c=>c.category).filter(Boolean))];const p=document.getElementById('filter-pills');p.innerHTML='<button class="fpill on" onclick="setFilter(this,\'\')">Бүгд</button>';cats.forEach(cat=>{const b=document.createElement('button');b.className='fpill';b.textContent=cat;b.onclick=()=>setFilter(b,cat);p.appendChild(b);});}
+function setFilter(el,cat){document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));if(el)el.classList.add('on');else{const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);if(found)found.classList.add('on');}activeF=cat;filterCourses();document.getElementById('courses-grid')?.scrollIntoView({behavior:'smooth',block:'start'});}
+function filterCourses(){const q=document.getElementById('search-inp').value.toLowerCase();const f=allC.filter(c=>(!activeF||c.category===activeF)&&(!q||c.title.toLowerCase().includes(q)||(c.description||'').toLowerCase().includes(q)));renderCourses(f);document.getElementById('filter-count').textContent=f.length+' сургалт';}
 
-function renderCourses(list){
-  const g=document.getElementById('courses-grid');
-  if(!list.length){g.innerHTML=`<div class="empty"><div class="empty-icon">🎓</div><h3>Сургалт олдсонгүй</h3><p>Удахгүй шинэ сургалтууд нэмэгдэнэ</p></div>`;return;}
-  g.innerHTML=list.map((c,i)=>{
-    const ls=allL.filter(l=>l.course_id===c.id);
-    const ph=c.is_free?`<div class="price-free">Үнэгүй</div>`:`<div class="price-main">${Number(c.price||0).toLocaleString()}₮</div>${c.old_price?`<div class="price-old">${Number(c.old_price).toLocaleString()}₮</div>`:''}`;
-    const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');
-    const th=c.thumb_url?`<img src="${san(c.thumb_url)}" alt="${san(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="emoji">${c.emoji||'🎓'}</div>`;
-    return`<article class="card" onclick="openCourse('${san(c.id)}')" style="animation-delay:${i*0.06}s">
-  <div class="card-thumb">${th}<div class="badges">${bd}</div><div class="lesson-cnt">▶ ${ls.length} хичээл</div><div class="play-ov"><div class="play-ic">▶</div></div></div>
-  <div class="card-body">
-    <div class="card-cat">${san(c.category||'Сургалт')}</div>
-    <div class="card-title">${san(c.title)}</div>
-    <div class="card-desc">${san(c.description)}</div>
-    <div class="card-meta"><div class="cmeta">📚 ${ls.length} хичээл</div><div class="cmeta">📊 ${san(c.level||'Анхан')}</div></div>
-    <div class="card-foot"><div>${ph}</div><button class="card-btn" onclick="event.stopPropagation();openCourse('${san(c.id)}')">Дэлгэрэнгүй</button></div>
-  </div>
-</article>`;
-  }).join('');
-}
+function renderCourses(list){const g=document.getElementById('courses-grid');if(!list.length){g.innerHTML=`<div class="empty"><div class="empty-icon">🎓</div><h3>Сургалт олдсонгүй</h3><p>Удахгүй шинэ сургалтууд нэмэгдэнэ</p></div>`;return;}g.innerHTML=list.map((c,i)=>{const ls=allL.filter(l=>l.course_id===c.id);const ph=c.is_free?`<div class="price-free">Үнэгүй</div>`:`<div class="price-main">${Number(c.price||0).toLocaleString()}₮</div>${c.old_price?`<div class="price-old">${Number(c.old_price).toLocaleString()}₮</div>`:''}`;const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');const th=c.thumb_url?`<img src="${san(c.thumb_url)}" alt="${san(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="emoji">${c.emoji||'🎓'}</div>`;return`<article class="card" onclick="openCourse('${san(c.id)}')" style="animation-delay:${i*0.06}s"><div class="card-thumb">${th}<div class="badges">${bd}</div><div class="lesson-cnt">▶ ${ls.length} хичээл</div><div class="play-ov"><div class="play-ic">▶</div></div></div><div class="card-body"><div class="card-cat">${san(c.category||'Сургалт')}</div><div class="card-title">${san(c.title)}</div><div class="card-desc">${san(c.description)}</div><div class="card-meta"><div class="cmeta">📚 ${ls.length} хичээл</div><div class="cmeta">📊 ${san(c.level||'Анхан')}</div></div><div class="card-foot"><div>${ph}</div><button class="card-btn" onclick="event.stopPropagation();openCourse('${san(c.id)}')">Дэлгэрэнгүй</button></div></div></article>`;}).join('');}
 
-function openCourse(id){
-  const c=allC.find(x=>x.id===id);if(!c)return;curC=c;
-  const ls=allL.filter(l=>l.course_id===c.id);
-  document.getElementById('d-nav-title').textContent=c.title;
-  const th=document.getElementById('d-thumb');
-  th.innerHTML=c.thumb_url?`<img src="${san(c.thumb_url)}" onerror="this.parentElement.innerHTML='<span style=font-size:44px>🎓</span>'">`:`<span style="font-size:44px">🎓</span>`;
-  document.getElementById('d-cats').innerHTML=`<span class="d-cat">${san(c.category||'Сургалт')}</span><span class="d-cat">${san(c.level||'Анхан')}</span>`;
-  document.getElementById('d-title').textContent=c.title;
-  document.getElementById('d-desc').textContent=c.description;
-  document.getElementById('d-metas').innerHTML=`<div class="d-meta">📚 ${ls.length} хичээл</div><div class="d-meta">👤 ${san(c.instructor||'КиноЭзэн')}</div>`;
-  const p=document.getElementById('d-price'),po=document.getElementById('d-old-price'),bb=document.getElementById('d-buy-btn');
-  if(c.is_free){p.textContent='Үнэгүй';po.textContent='';bb.textContent='Суралцах';bb.className='buy-btn free';}
-  else{p.textContent=Number(c.price||0).toLocaleString()+'₮';po.textContent=c.old_price?Number(c.old_price).toLocaleString()+'₮':'';bb.textContent='Худалдаж авах';bb.className='buy-btn';}
-  document.getElementById('d-about').textContent=c.about||c.description;
-  document.getElementById('d-outcomes').innerHTML=(c.outcomes||[]).map(o=>`<span class="about-tag">✓ ${san(o)}</span>`).join('');
-  renderLessons(ls,c);
-  document.querySelector('.tab.on')?.click();
-  document.getElementById('list-page').style.display='none';
-  document.getElementById('detail-page').classList.add('open');
-  window.scrollTo(0,0);
-}
+function openCourse(id){const c=allC.find(x=>x.id===id);if(!c)return;curC=c;const ls=allL.filter(l=>l.course_id===c.id);document.getElementById('d-nav-title').textContent=c.title;const th=document.getElementById('d-thumb');th.innerHTML=c.thumb_url?`<img src="${san(c.thumb_url)}" onerror="this.parentElement.innerHTML='<span style=font-size:44px>🎓</span>'">`:`<span style="font-size:44px">🎓</span>`;document.getElementById('d-cats').innerHTML=`<span class="d-cat">${san(c.category||'Сургалт')}</span><span class="d-cat">${san(c.level||'Анхан')}</span>`;document.getElementById('d-title').textContent=c.title;document.getElementById('d-desc').textContent=c.description;document.getElementById('d-metas').innerHTML=`<div class="d-meta">📚 ${ls.length} хичээл</div><div class="d-meta">👤 ${san(c.instructor||'КиноЭзэн')}</div>`;const p=document.getElementById('d-price'),po=document.getElementById('d-old-price'),bb=document.getElementById('d-buy-btn');if(c.is_free){p.textContent='Үнэгүй';po.textContent='';bb.textContent='Суралцах';bb.className='buy-btn free';}else{p.textContent=Number(c.price||0).toLocaleString()+'₮';po.textContent=c.old_price?Number(c.old_price).toLocaleString()+'₮':'';bb.textContent='Худалдаж авах';bb.className='buy-btn';}document.getElementById('d-about').textContent=c.about||c.description;document.getElementById('d-outcomes').innerHTML=(c.outcomes||[]).map(o=>`<span class="about-tag">✓ ${san(o)}</span>`).join('');renderLessons(ls,c);document.querySelector('.tab.on')?.click();document.getElementById('list-page').style.display='none';document.getElementById('detail-page').classList.add('open');window.scrollTo(0,0);}
 
-function renderLessons(ls,c){
-  const el=document.getElementById('d-lessons');
-  if(!ls.length){el.innerHTML=`<div style="padding:30px;text-align:center;color:var(--text4);font-size:13px">Хичээл удахгүй нэмэгдэнэ</div>`;return;}
-  el.innerHTML=ls.map((l,i)=>{
-    const tl=l.type==='video'?`<span class="ltype ltype-vid">Видео</span>`:l.type==='image'?`<span class="ltype ltype-img">Зураг</span>`:`<span class="ltype ltype-text">Текст</span>`;
-    const ul=l.is_free_preview||c.is_free;
-    return`<div class="lesson-item ${ul?'unlocked':''}" onclick="openLesson('${san(c.id)}',${i})">
-  <div class="l-num">${i+1}</div>
-  <div class="l-main"><div class="lesson-title">${san(l.title)}${tl}</div><div class="l-sub">${l.duration_min?`<span>⏱ ${l.duration_min} мин</span>`:''} ${l.is_free_preview?`<span style="color:var(--accent)">Үнэгүй үзэх</span>`:''}</div></div>
-  <div class="l-lock">${ul?'🔓':'🔒'}</div>
-</div>`;
-  }).join('');
-}
+function renderLessons(ls,c){const el=document.getElementById('d-lessons');if(!ls.length){el.innerHTML=`<div style="padding:30px;text-align:center;color:var(--text4);font-size:13px">Хичээл удахгүй нэмэгдэнэ</div>`;return;}el.innerHTML=ls.map((l,i)=>{const tl=l.type==='video'?`<span class="ltype ltype-vid">Видео</span>`:l.type==='image'?`<span class="ltype ltype-img">Зураг</span>`:`<span class="ltype ltype-text">Текст</span>`;const ul=l.is_free_preview||c.is_free;return`<div class="lesson-item ${ul?'unlocked':''}" onclick="openLesson('${san(c.id)}',${i})"><div class="l-num">${i+1}</div><div class="l-main"><div class="lesson-title">${san(l.title)}${tl}</div><div class="l-sub">${l.duration_min?`<span>⏱ ${l.duration_min} мин</span>`:''} ${l.is_free_preview?`<span style="color:var(--accent)">Үнэгүй үзэх</span>`:''}</div></div><div class="l-lock">${ul?'🔓':'🔒'}</div></div>`;}).join('');}
 
 function closeDetail(){document.getElementById('detail-page').classList.remove('open');document.getElementById('list-page').style.display='block';curC=null;window.scrollTo(0,0);}
 function switchTab(btn,id){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));btn.classList.add('on');document.getElementById(id).classList.add('on');}
 function handleBuy(){if(!curC)return;if(curC.is_free)openLesson(curC.id,0);else toast('💳 Төлбөрийн систем удахгүй нэмэгдэнэ');}
 
-function openLesson(cid,idx){
-  const c=allC.find(x=>x.id===cid);if(!c)return;
-  curC=c;curIdx=idx;
-  const ls=allL.filter(l=>l.course_id===cid);
-  renderViewer(ls);
-  document.getElementById('detail-page').classList.remove('open');
-  document.getElementById('viewer').classList.add('open');
-  window.scrollTo(0,0);
-}
+function openLesson(cid,idx){const c=allC.find(x=>x.id===cid);if(!c)return;curC=c;curIdx=idx;const ls=allL.filter(l=>l.course_id===cid);renderViewer(ls);document.getElementById('detail-page').classList.remove('open');document.getElementById('viewer').classList.add('open');window.scrollTo(0,0);}
 
-function renderViewer(ls){
-  if(!ls.length)return;
-  const l=ls[curIdx];if(!l)return;
-  document.getElementById('v-num').textContent=`Хичээл ${curIdx+1}`;
-  document.getElementById('v-title').textContent=l.title;
-  document.getElementById('v-prog').textContent=`${curIdx+1} / ${ls.length}`;
-  let html='';
-  if(l.type==='video'){
-    if(l.video_url){const isYT=l.video_url.includes('youtube.com')||l.video_url.includes('youtu.be');html+=`<div class="video-wrap">${isYT?`<iframe src="${san(l.video_url)}" allowfullscreen></iframe>`:`<video controls src="${san(l.video_url)}"></video>`}</div>`;}
-    else{html+=`<div class="video-wrap"><div class="vid-ph"><div class="vicon">🎬</div><p>Видео удахгүй нэмэгдэнэ</p></div></div>`;}
-  }
-  if(l.image_url)html+=`<div class="l-img"><img src="${san(l.image_url)}" alt="${san(l.title)}"></div>`;
-  if(l.content)html+=`<div class="l-text"><h3>${san(l.title)}</h3><p>${san(l.content).replace(/\n/g,'</p><p>')}</p></div>`;
-  else if(l.type==='text')html+=`<div class="l-text"><h3>${san(l.title)}</h3><p style="color:var(--text4)">Хичээлийн агуулга удахгүй нэмэгдэнэ.</p></div>`;
-  document.getElementById('v-content').innerHTML=html;
-  document.getElementById('btn-prev').disabled=curIdx===0;
-  const nb=document.getElementById('btn-next');nb.textContent=curIdx===ls.length-1?'✓ Дуусгах':'Дараах →';
-}
+function renderViewer(ls){if(!ls.length)return;const l=ls[curIdx];if(!l)return;document.getElementById('v-num').textContent=`Хичээл ${curIdx+1}`;document.getElementById('v-title').textContent=l.title;document.getElementById('v-prog').textContent=`${curIdx+1} / ${ls.length}`;let html='';if(l.type==='video'){if(l.video_url){const isYT=l.video_url.includes('youtube.com')||l.video_url.includes('youtu.be');html+=`<div class="video-wrap">${isYT?`<iframe src="${san(l.video_url)}" allowfullscreen></iframe>`:`<video controls src="${san(l.video_url)}"></video>`}</div>`;}else{html+=`<div class="video-wrap"><div class="vid-ph"><div class="vicon">🎬</div><p>Видео удахгүй нэмэгдэнэ</p></div></div>`;}}if(l.image_url)html+=`<div class="l-img"><img src="${san(l.image_url)}" alt="${san(l.title)}"></div>`;if(l.content)html+=`<div class="l-text"><h3>${san(l.title)}</h3><p>${san(l.content).replace(/\n/g,'</p><p>')}</p></div>`;else if(l.type==='text')html+=`<div class="l-text"><h3>${san(l.title)}</h3><p style="color:var(--text4)">Хичээлийн агуулга удахгүй нэмэгдэнэ.</p></div>`;document.getElementById('v-content').innerHTML=html;document.getElementById('btn-prev').disabled=curIdx===0;const nb=document.getElementById('btn-next');nb.textContent=curIdx===ls.length-1?'✓ Дуусгах':'Дараах →';}
 
-function navLesson(dir){
-  const ls=allL.filter(l=>l.course_id===curC.id);
-  const n=curIdx+dir;
-  if(n<0||n>=ls.length){if(dir>0){closeViewer();toast('🎉 Сургалт амжилттай дууслаа!');}return;}
-  curIdx=n;renderViewer(ls);
-}
+function navLesson(dir){const ls=allL.filter(l=>l.course_id===curC.id);const n=curIdx+dir;if(n<0||n>=ls.length){if(dir>0){closeViewer();toast('🎉 Сургалт амжилттай дууслаа!');}return;}curIdx=n;renderViewer(ls);}
 function closeViewer(){document.getElementById('viewer').classList.remove('open');if(curC)document.getElementById('detail-page').classList.add('open');window.scrollTo(0,0);}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('viewer').classList.contains('open'))closeViewer();else if(document.getElementById('detail-page').classList.contains('open'))closeDetail();}});
 
 init();
 </script>
+<script src="feedback-widget.js"></script>
 </body>
 </html>
