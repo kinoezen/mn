@@ -747,7 +747,19 @@ tr:last-child td{border-bottom:none;}
     <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="form-group"><label class="form-label">Гарчиг *</label><input class="form-inp" id="edit-n-title"></div>
       <div class="form-group"><label class="form-label">Ангилал</label>
-        <select class="form-inp" id="edit-n-cat"><option>Кино мэдээ</option><option>Мэдээ</option><option>Аялал</option><option>Шинжлэх ухаан</option><option>AI</option><option>Кино түүх</option><option>Одод ёртөнц</option><option>Бусад</option></select>
+        <select class="form-inp" id="edit-n-main-cat" onchange="updateEditSubCatOptions()">
+          <option value="Аялал">Аялал</option>
+          <option value="Шинжлэх ухаан">Шинжлэх ухаан</option>
+          <option value="AI">AI</option>
+          <option value="Кино түүх">Кино түүх</option>
+          <option value="Танин мэдэхүй">Танин мэдэхүй</option>
+          <option value="Одод ертөнц">Одод ертөнц</option>
+          <option value="Мэдээ">Мэдээ</option>
+          <option value="Бусад">Бусад</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Дэд ангилал</label>
+        <select class="form-inp" id="edit-n-sub-cat"><option value="">Сонгох</option></select>
       </div>
       <div class="form-group">
         <label class="form-label">Зураг</label>
@@ -967,6 +979,22 @@ function updateSubCatOptions() {
   const options = SUB_CAT_OPTIONS[mainCat] || [];
   subSelect.innerHTML = '<option value="">Сонгох</option>' + 
     options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+}
+
+// Засах цонхны Ангилал/Дэд ангилал dropdown-уудыг холбоно (нэмэх форм-той ижил логик)
+function updateEditSubCatOptions(presetSub){
+  const mainCat=document.getElementById('edit-n-main-cat').value;
+  const subSelect=document.getElementById('edit-n-sub-cat');
+  const options=SUB_CAT_OPTIONS[mainCat]||[];
+  subSelect.innerHTML='<option value="">Сонгох</option>'+options.map(opt=>`<option value="${opt}">${opt}</option>`).join('');
+  if(presetSub) setSelectValueOrAdd(subSelect,presetSub);
+}
+// Хуучин (legacy) утга сонголтод байхгүй байсан ч алга болгохгүйгээр сонгоно
+function setSelectValueOrAdd(selectEl,value){
+  if(!value)return;
+  let opt=[...selectEl.options].find(o=>o.value===value);
+  if(!opt){opt=document.createElement('option');opt.value=value;opt.textContent=value;selectEl.appendChild(opt);}
+  selectEl.value=value;
 }
 
 document.addEventListener('DOMContentLoaded', updateSubCatOptions);
@@ -1408,17 +1436,73 @@ async function saveMovie(){
   else{document.getElementById('edit-m-err').style.display='block';}
 }
 
+// ============================================================
+// МЭДЭЭ ЖАГСААЛТ — ангилал тус бүрээр нь хавтаслаж харуулна (урт жагсаалтаас сэргийлнэ)
+// ============================================================
+let newsCache=[],newsViewCat=null,newsViewSub='';
+const NEWS_MAIN_CATS=['Аялал','Шинжлэх ухаан','AI','Кино түүх','Танин мэдэхүй','Одод ертөнц','Мэдээ','Бусад'];
+const NEWS_CAT_ICONS={'Аялал':'✈️','Шинжлэх ухаан':'🔬','AI':'🤖','Кино түүх':'🎬','Танин мэдэхүй':'💡','Одод ертөнц':'🌌','Мэдээ':'📰','Бусад':'📁'};
+
 async function loadNewsList(){
   const el=document.getElementById('news-table');
   if(!el) return;
   el.innerHTML='<div class="loading">Ачааллаж байна...</div>';
+  newsViewCat=null;newsViewSub='';
   try{
     const news=await supaFetch('news','order=created_at.desc');
-    if(!Array.isArray(news)||news.length===0){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
-    el.innerHTML=`<table><thead><tr><th>Гарчиг</th><th>Ангилал</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
-    ${news.map(n=>`<tr>
+    newsCache=Array.isArray(news)?news:[];
+  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';return;}
+  renderNewsView();
+}
+async function reloadNewsCache(){
+  try{const news=await supaFetch('news','order=created_at.desc');newsCache=Array.isArray(news)?news:[];}catch(e){}
+  renderNewsView();
+}
+function renderNewsView(){
+  const el=document.getElementById('news-table');
+  if(!el)return;
+  if(!newsCache.length){el.innerHTML='<div class="loading">Мэдээ байхгүй байна</div>';return;}
+  if(!newsViewCat){renderNewsCategoryOverview();}
+  else{renderNewsCategoryDetail();}
+}
+function renderNewsCategoryOverview(){
+  const el=document.getElementById('news-table');
+  const counts={};
+  newsCache.forEach(n=>{const cat=n.main_category||n.category||'Бусад';counts[cat]=(counts[cat]||0)+1;});
+  const cats=[...new Set([...NEWS_MAIN_CATS,...Object.keys(counts)])];
+  el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:18px;">
+    ${cats.map(cat=>{
+      const cnt=counts[cat]||0;
+      const icon=NEWS_CAT_ICONS[cat]||'📁';
+      return`<div onclick="openNewsCategory('${cat.replace(/'/g,"\\'")}')" style="background:#12121e;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:18px 14px;cursor:pointer;transition:border-color .2s,transform .2s;" onmouseover="this.style.borderColor='#4ade80';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.08)';this.style.transform='none'">
+        <div style="font-size:22px;margin-bottom:8px;">${icon}</div>
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;">${cat}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.4);">${cnt} мэдээ</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+function openNewsCategory(cat){newsViewCat=cat;newsViewSub='';renderNewsView();}
+function backToNewsOverview(){newsViewCat=null;newsViewSub='';renderNewsView();}
+function filterNewsSub(sub){newsViewSub=sub;renderNewsView();}
+function renderNewsCategoryDetail(){
+  const el=document.getElementById('news-table');
+  const inCat=newsCache.filter(n=>(n.main_category||n.category||'Бусад')===newsViewCat);
+  const subs=[...new Set(inCat.map(n=>n.sub_category).filter(Boolean))];
+  const filtered=newsViewSub?inCat.filter(n=>n.sub_category===newsViewSub):inCat;
+  el.innerHTML=`
+    <div style="padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.06);flex-wrap:wrap;">
+      <button class="action-btn" style="background:rgba(255,255,255,0.08);color:#fff;" onclick="backToNewsOverview()">← Ангилал руу</button>
+      <span style="font-size:13px;font-weight:700;color:#4ade80;">${NEWS_CAT_ICONS[newsViewCat]||'📁'} ${newsViewCat}</span>
+      <span style="font-size:11px;color:rgba(255,255,255,0.4);">(${inCat.length})</span>
+      ${subs.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;">
+        <button class="action-btn" style="background:${!newsViewSub?'rgba(74,222,128,0.2)':'rgba(255,255,255,0.05)'};color:${!newsViewSub?'#4ade80':'rgba(255,255,255,0.5)'};" onclick="filterNewsSub('')">Бүгд</button>
+        ${subs.map(s=>`<button class="action-btn" style="background:${newsViewSub===s?'rgba(74,222,128,0.2)':'rgba(255,255,255,0.05)'};color:${newsViewSub===s?'#4ade80':'rgba(255,255,255,0.5)'};" onclick="filterNewsSub('${s.replace(/'/g,"\\'")}')">${s}</button>`).join('')}
+      </div>`:''}
+    </div>
+    <table><thead><tr><th>Гарчиг</th><th>Дэд ангилал</th><th>Зураг</th><th>Үзэлт</th><th>Огноо</th><th>Үйлдэл</th></tr></thead><tbody>
+    ${filtered.map(n=>`<tr>
       <td>${n.title}</td>
-      <td><span class="badge badge-green">${n.category||'-'}</span></td>
       <td>${n.sub_category?`<span class="badge" style="background:rgba(107,127,247,0.2);color:#818cf8;">${n.sub_category}</span>`:'—'}</td>
       <td>${n.thumbnail?`<img src="${n.thumbnail}" style="width:50px;height:30px;object-fit:cover;border-radius:4px;">`:'—'}</td>
       <td>👁 ${n.views||0}</td>
@@ -1428,14 +1512,15 @@ async function loadNewsList(){
         <button class="action-btn del-btn" onclick="deleteNews('${n.id}')">🗑 Устгах</button>
       </td>
     </tr>`).join('')}</tbody></table>`;
-  }catch(e){el.innerHTML='<div class="loading">Алдаа гарлаа</div>';}
 }
-async function deleteNews(id){if(!confirm('Устгах уу?'))return;await supaDelete('news',id);loadNewsList();loadStats();}
+async function deleteNews(id){if(!confirm('Устгах уу?'))return;await supaDelete('news',id);await reloadNewsCache();loadStats();}
 
 function openEditNews(n){
   document.getElementById('edit-news-id').value=n.id;
   document.getElementById('edit-n-title').value=n.title||'';
-  document.getElementById('edit-n-cat').value=n.category||'Мэдээ';
+  const mainCat=n.main_category||n.category||'Мэдээ';
+  setSelectValueOrAdd(document.getElementById('edit-n-main-cat'),mainCat);
+  updateEditSubCatOptions(n.sub_category||'');
   document.getElementById('edit-n-thumb').value=n.thumbnail||'';
   document.getElementById('edit-n-content').value=n.content||'';
   openModal('modal-news');
@@ -1447,8 +1532,10 @@ async function saveNews(){
   let thumbUrl=document.getElementById('edit-n-thumb').value.trim()||null;
   const imgFile=document.getElementById('edit-n-img-file');
   if(imgFile&&imgFile.files.length>0){thumbUrl=await uploadFile(imgFile.files[0],'news','edit-n-img');}
-  const ok=await supaUpdate('news',id,{title,category:document.getElementById('edit-n-cat').value,thumbnail:thumbUrl,content:document.getElementById('edit-n-content').value});
-  if(ok){document.getElementById('edit-n-ok').style.display='block';setTimeout(()=>{closeModal('modal-news');loadNewsList();loadStats();},1200);}
+  const mainCat=document.getElementById('edit-n-main-cat').value;
+  const subCat=document.getElementById('edit-n-sub-cat').value;
+  const ok=await supaUpdate('news',id,{title,category:subCat||mainCat,main_category:mainCat,sub_category:subCat,thumbnail:thumbUrl,content:document.getElementById('edit-n-content').value});
+  if(ok){document.getElementById('edit-n-ok').style.display='block';setTimeout(()=>{closeModal('modal-news');reloadNewsCache();loadStats();},1200);}
   else{document.getElementById('edit-n-err').style.display='block';}
 }
 
