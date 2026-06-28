@@ -287,7 +287,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .nav-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-/* ===== MOBILE BOTTOM NAV — index.html-тай яг адил ===== */
+/* ===== MOBILE BOTTOM NAV — ЗАССАН (6 цэс, index-тэй ижил) ===== */
 .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
 .mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
 .mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
@@ -492,7 +492,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV — index.html-тай яг адил ===== -->
+<!-- ===== MOBILE BOTTOM NAV — ЗАССАН (6 цэс, index-тэй ижил) ===== -->
 <nav class="mobile-bottom-nav">
   <div class="mbn-inner">
     <a class="mbn-item" href="index.html">
@@ -508,8 +508,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
       <span>Программ</span>
     </a>
     <a class="mbn-item" href="services.html">
-      <div class="mbn-logo-icon">⚙️</div>
-      <span>Үйлчилгээ</span>
+      <div class="mbn-logo-icon">🤖</div>
+      <span>AI</span>
+    </a>
+    <a class="mbn-item" href="zar.html">
+      <div class="mbn-logo-icon">📢</div>
+      <span>Зар</span>
     </a>
     <a class="mbn-item" href="profile.html">
       <div class="mbn-logo-icon">👤</div>
@@ -586,7 +590,7 @@ function renderCourses(list){
   g.innerHTML=list.map((c,i)=>{
     const ls=allL.filter(l=>l.course_id===c.id);
     const ph=c.is_free?`<div class="price-free">Үнэгүй</div>`:`<div class="price-main">${Number(c.price||0).toLocaleString()}₮</div>${c.old_price?`<div class="price-old">${Number(c.old_price).toLocaleString()}₮</div>`:''}`;
-    const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'`',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');
+    const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');
     const th=c.thumb_url?`<img src="${san(c.thumb_url)}" alt="${san(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="emoji">${c.emoji||'🎓'}</div>`;
     return`<article class="card" onclick="openCourse('${san(c.id)}')" style="animation-delay:${i*0.06}s">
   <div class="card-thumb">${th}<div class="badges">${bd}</div><div class="lesson-cnt">▶ ${ls.length} хичээл</div><div class="play-ov"><div class="play-ic">▶</div></div></div>
