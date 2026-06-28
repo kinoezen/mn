@@ -922,7 +922,131 @@ async function runScriptWriter() {
     }
     if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; }
 }
+// ============================================================
+// ШИНЭ SRT Орчуулагч frontend — 2 сонголттой (файл/текст).
+// services.js доторх ХУУЧИН эдгээр функцуудыг (хэрэв байгаа
+// бол) ЭДГЭЭР ШИНЭ ФУНКЦУУДААР бухэлд нь СОЛИХ:
+//   - handleSrtFile, handleSrtDrop, runSrtTranslate, downloadSrt
+// БА дараах ШИНЭ функцийг НЭМЭХ: selSrtMode
+// ============================================================
+let srtFileContent = null;
+let srtMode = 'file'; // 'file' эсвэл 'text'
 
+// Файл/Текст горим солих
+function selSrtMode(mode, el) {
+    srtMode = mode;
+    document.querySelectorAll('#srt-mode-file, #srt-mode-text').forEach(b => b.classList.remove('on'));
+    el.classList.add('on');
+
+    const fileRow = document.getElementById('srt-file-row');
+    const textRow = document.getElementById('srt-text-row');
+    if (fileRow) fileRow.style.display = mode === 'file' ? 'block' : 'none';
+    if (textRow) textRow.style.display = mode === 'text' ? 'block' : 'none';
+}
+
+function handleSrtFile(e) {
+    const f = e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        srtFileContent = evt.target.result;
+        document.getElementById('srt-file-name').textContent = f.name;
+    };
+    reader.readAsText(f);
+}
+
+function handleSrtDrop(e) {
+    e.preventDefault();
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    document.getElementById('srt-file').files = e.dataTransfer.files;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        srtFileContent = evt.target.result;
+        document.getElementById('srt-file-name').textContent = f.name;
+    };
+    reader.readAsText(f);
+}
+
+async function runSrtTranslate() {
+    // Горимоос хамаарч агуулгыг авна: файл эсвэл шууд бичсэн текст
+    const srtContent = srtMode === 'text'
+        ? document.getElementById('srt-text-input')?.value.trim()
+        : srtFileContent;
+
+    if (!srtContent) {
+        showToast(srtMode === 'text' ? '⚠️ SRT агуулга бичнэ уу!' : '⚠️ SRT файл оруулна уу!', 'error');
+        return;
+    }
+
+    const btn = event.target;
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Орчуулж байна...'; }
+
+    const resultDiv = document.getElementById('srt-translate-result');
+    if (resultDiv) {
+        resultDiv.classList.add('show');
+        resultDiv.innerHTML = `<div class="result-label">⏳ Орчуулж байна...</div>
+        <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
+            <div id="srt-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
+        </div>
+        <div id="srt-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
+    }
+    let fakeProgress = 0;
+    const progressInterval = setInterval(() => {
+        if (fakeProgress < 90) {
+            fakeProgress += Math.random() * 6;
+            if (fakeProgress > 90) fakeProgress = 90;
+            const bar = document.getElementById('srt-progress-bar');
+            const txt = document.getElementById('srt-progress-text');
+            if (bar) bar.style.width = fakeProgress + '%';
+            if (txt) txt.textContent = Math.round(fakeProgress) + '%';
+        }
+    }, 400);
+
+    try {
+        const targetLang = document.getElementById('srt-target-lang')?.value || 'mn';
+
+        const response = await fetch('/api/srt-translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ srtContent, targetLang })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Орчуулах үед алдаа гарлаа');
+
+        clearInterval(progressInterval);
+        const bar = document.getElementById('srt-progress-bar');
+        const txt = document.getElementById('srt-progress-text');
+        if (bar) bar.style.width = '100%';
+        if (txt) txt.textContent = '100%';
+
+        setTimeout(() => {
+            if (resultDiv) {
+                resultDiv.innerHTML = `<div class="result-label">✅ Орчуулагдсан SRT бэлэн</div>
+                <textarea readonly style="width:100%;height:150px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px;color:rgba(255,255,255,0.8);font-size:12px;font-family:monospace;">${data.translatedSrt}</textarea>
+                <button onclick="downloadSrt(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);color:#4ade80;font-size:11px;cursor:pointer;">⬇️ Татах (.srt)</button>`;
+            }
+        }, 400);
+
+        showToast('✅ SRT орчуулагдлаа!', 'success');
+    } catch (error) {
+        clearInterval(progressInterval);
+        if (resultDiv) resultDiv.classList.remove('show');
+        console.error('SrtTranslate error:', error);
+        showToast('❌ ' + error.message, 'error');
+    }
+    if (btn) { btn.disabled = false; btn.textContent = '📄 Орчуулах'; }
+}
+
+function downloadSrt(btn) {
+    const textarea = btn.previousElementSibling;
+    if (!textarea) return;
+    const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'translated.srt';
+    link.click();
+}
 // ============================================================
 // INIT
 // ============================================================
