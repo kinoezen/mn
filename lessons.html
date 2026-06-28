@@ -23,11 +23,57 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 /* ===== ANIMATIONS ===== */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* ===== FLOATING ILLUSTRATIONS ===== */
+@keyframes float{0%,100%{transform:translateY(0px) rotate(-3deg)}50%{transform:translateY(-14px) rotate(3deg)}}
+@keyframes floatR{0%,100%{transform:translateY(0px) rotate(4deg)}50%{transform:translateY(-12px) rotate(-4deg)}}
+@keyframes floatSpin{0%{transform:translateY(0px) rotate(0deg)}50%{transform:translateY(-10px) rotate(180deg)}100%{transform:translateY(0px) rotate(360deg)}}
+@keyframes marqueeSlide{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 8px rgba(74,222,128,0.4))}50%{filter:drop-shadow(0 0 18px rgba(74,222,128,0.8))}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+.fi-wrap{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden;}
+
+/* Зүүн талын хөдөлдөг зурагнууд */
+.fi-left{position:absolute;left:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;padding:0 12px;}
+.fi-right{position:absolute;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:20px;padding:0 12px;}
+
+.fi-svg{opacity:0.85;}
+.fi-svg.f1{animation:float 4s ease-in-out infinite;}
+.fi-svg.f2{animation:floatR 5s ease-in-out infinite 0.7s;}
+.fi-svg.f3{animation:float 6s ease-in-out infinite 1.4s;}
+.fi-svg.f4{animation:floatR 4.5s ease-in-out infinite 0.3s;}
+.fi-svg.f5{animation:float 5.5s ease-in-out infinite 1s;}
+.fi-svg.f6{animation:floatSpin 8s linear infinite;}
+
+/* MARQUEE */
+.marquee-section{
+  position:relative;z-index:2;
+  padding:18px 0 0;
+  overflow:hidden;
+}
+.marquee-label{text-align:center;font-size:10px;color:var(--text4);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.marquee-track{display:flex;width:max-content;animation:marqueeSlide 28s linear infinite;}
+.marquee-track:hover{animation-play-state:paused;}
+.mq-item{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);
+  border-radius:12px;padding:10px 14px;margin-right:10px;
+  min-width:80px;cursor:pointer;transition:all 0.25s;flex-shrink:0;
+}
+.mq-item:hover{background:rgba(74,222,128,0.09);border-color:rgba(74,222,128,0.3);transform:translateY(-3px);}
+.mq-item .mq-icon{font-size:24px;}
+.mq-item .mq-lbl{font-size:10px;font-weight:700;color:var(--text3);text-align:center;white-space:nowrap;}
+
+@media(max-width:600px){
+  .fi-left,.fi-right{display:none;}
+}
+
 @keyframes float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-12px)}}
 @keyframes floatR{0%,100%{transform:translateY(0px) rotate(3deg)}50%{transform:translateY(-10px) rotate(-3deg)}}
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(1.05)}}
+@keyframes slideLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(74,222,128,0.3)}50%{box-shadow:0 0 40px rgba(74,222,128,0.6)}}
 
 /* ===== NAVBAR ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 24px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(14,14,24,0.97);backdrop-filter:blur(20px);z-index:1000;gap:12px;}
@@ -79,7 +125,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .fi-8{top:20%;left:14%;font-size:18px;animation:floatR 8s ease-in-out infinite 1s;}
 .fi-9{top:70%;right:8%;font-size:20px;animation:float 6.5s ease-in-out infinite 0.7s;}
 
-/* ===== MARQUEE STRIP ===== */
+/* ===== MARQUEE STRIP — хөдөлдөг зурагнуудын мөр ===== */
 .marquee-wrap{
   position:relative;z-index:2;
   margin-top:8px;
@@ -97,6 +143,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 }
 .marquee-item:hover{background:rgba(74,222,128,0.08);border-color:rgba(74,222,128,0.3);transform:translateY(-3px);}
 .marquee-item .icon{font-size:28px;animation:float 4s ease-in-out infinite;}
+.marquee-item:nth-child(2n) .icon{animation-name:floatR;}
 .marquee-item .lbl{font-size:10px;font-weight:700;color:var(--text3);text-align:center;white-space:nowrap;}
 
 /* ===== FILTER BAR ===== */
@@ -240,15 +287,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .nav-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-/* ===== MOBILE BOTTOM NAV — index-тэй яг адил ===== */
+/* ===== MOBILE BOTTOM NAV — index.html-тай яг адил ===== */
 .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
-.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:480px;margin:0 auto;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:10px;font-weight:600;font-family:var(--font-b);}
+.mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
 .mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;}
 .mbn-item.active{color:#4ade80;}
 .mbn-item:hover{color:rgba(255,255,255,0.7);}
-.mbn-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0a0a14;}
-.mbn-item span{font-size:11px;line-height:1;}
+.mbn-logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#0a0a14;}
 
 /* ===== TOAST ===== */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:600;z-index:9999;animation:fadeUp 0.3s ease;box-shadow:0 8px 32px rgba(0,0,0,0.5);white-space:nowrap;}
@@ -265,10 +311,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   .v-foot{flex-direction:column;}
   .nav-btn{width:100%;justify-content:center;}
   .fi{display:none;}
-  .mbn-item{padding:4px 6px;font-size:9px;}
-  .mbn-logo-icon{width:28px;height:28px;font-size:14px;}
-  .mbn-item span{font-size:10px;}
-  .mbn-inner{max-width:360px;}
 }
 @media(max-width:768px){
   .nav{padding:10px 16px;flex-wrap:wrap;}
@@ -350,6 +392,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
     <div class="marquee-wrap">
       <div class="marquee-label">Ангиллууд</div>
       <div class="marquee-track" id="marquee-track">
+        <!-- 1st set -->
         <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
         <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
@@ -358,6 +401,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
         <div class="marquee-item" onclick="setFilter(null,'Дизайн')"><div class="icon">🎨</div><div class="lbl">Дизайн</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Бизнес')"><div class="icon">💼</div><div class="lbl">Бизнес</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Маркетинг')"><div class="icon">📊</div><div class="lbl">Маркетинг</div></div>
+        <!-- 2nd set (copy for seamless loop) -->
         <div class="marquee-item" onclick="setFilter(null,'YouTube')"><div class="icon">🎬</div><div class="lbl">YouTube</div></div>
         <div class="marquee-item" onclick="setFilter(null,'AI')"><div class="icon">🤖</div><div class="lbl">AI</div></div>
         <div class="marquee-item" onclick="setFilter(null,'Видео засвар')"><div class="icon">🎞️</div><div class="lbl">Видео засвар</div></div>
@@ -448,30 +492,26 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
-<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+<!-- ===== MOBILE BOTTOM NAV — index.html-тай яг адил ===== -->
+<nav class="mobile-bottom-nav">
   <div class="mbn-inner">
-    <a class="mbn-item" href="index.html" aria-label="Нүүр">
+    <a class="mbn-item" href="index.html">
       <div class="mbn-logo-icon">🏠</div>
       <span>Нүүр</span>
     </a>
-    <a class="mbn-item active" href="lessons.html" aria-label="Сургалт">
+    <a class="mbn-item active" href="lessons.html">
       <div class="mbn-logo-icon">📚</div>
       <span>Сургалт</span>
     </a>
-    <a class="mbn-item" href="programs.html" aria-label="Программ">
+    <a class="mbn-item" href="programs.html">
       <div class="mbn-logo-icon">💻</div>
       <span>Программ</span>
     </a>
-    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ">
-      <div class="mbn-logo-icon">🤖</div>
-      <span>AI</span>
+    <a class="mbn-item" href="services.html">
+      <div class="mbn-logo-icon">⚙️</div>
+      <span>Үйлчилгээ</span>
     </a>
-    <a class="mbn-item" href="zar.html" aria-label="Зар">
-      <div class="mbn-logo-icon">📢</div>
-      <span>Зар</span>
-    </a>
-    <a class="mbn-item" href="profile.html" aria-label="Профайл">
+    <a class="mbn-item" href="profile.html">
       <div class="mbn-logo-icon">👤</div>
       <span>Профайл</span>
     </a>
@@ -491,22 +531,71 @@ function toast(msg,dur=2500){const t=document.createElement('div');t.className='
 function san(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 
 async function init(){
-  try{const[c,l]=await Promise.all([sb('surgalt_courses','select=*&order=created_at.desc'),sb('surgalt_lessons','select=*&order=sort_order.asc')]);allC=Array.isArray(c)?c:[];allL=Array.isArray(l)?l:[];}
-  catch(e){allC=demoC();allL=demoL();}
+  try{
+    const rows=await sb('lessons','select=*&order=created_at.desc');
+    const data=Array.isArray(rows)?rows:[];
+    allC=data.map(mapRowToCourse);
+    allL=[];
+    allC.forEach(c=>{ allL.push(...buildSubLessons(c)); });
+  }catch(e){
+    console.error('Сургалт ачаалахад алдаа:',e);
+    allC=[];allL=[];
+  }
   document.getElementById('stat-total').textContent=allC.length;
   document.getElementById('stat-lessons').textContent=allL.length;
   buildPills();renderCourses(allC);
 }
 
-function demoC(){return[{id:'d1',title:'YouTube Анхан шатны сургалт',description:'YouTube суваг эхлүүлэх, өсгөх, мөнгө олох бүрэн гарын авлага.',category:'YouTube',emoji:'🎬',price:50000,old_price:80000,is_free:false,is_featured:true,instructor:'КиноЭзэн',level:'Анхан',about:'Энэхүү сургалтанд YouTube сувгаа эхнээс нь байгуулж, хурдан өсгөх, монетизаци хийх бүх нууцыг заана.',outcomes:['Суваг эхлүүлэх','Thumbnail хийх','SEO оновчлол','Монетизаци']},{id:'d2',title:'AI Хэрэгслүүд — Дэвшилтэт',description:'ChatGPT, Midjourney, Claude болон бусад AI хэрэгслүүдийг ажилдаа хэрэглэж, цагаа хэмнэ.',category:'AI',emoji:'🤖',price:0,is_free:true,instructor:'КиноЭзэн',level:'Дунд',about:'AI хэрэгслүүдийг практикт ашиглах бодит жишээнүүд.',outcomes:['ChatGPT prompt','Midjourney зураг','Claude ашиглах']},{id:'d3',title:'Видео засвар — Premiere Pro',description:'Adobe Premiere Pro-г эхнээс суралцаж, мэргэжлийн видео хийх иж бүрэн сургалт.',category:'Видео засвар',emoji:'🎞️',price:75000,old_price:120000,is_free:false,is_featured:true,instructor:'КиноЭзэн',level:'Анхан',about:'Premiere Pro хөтөлбөрийг бүрэн эзэмших сургалт.',outcomes:['Timeline засварлах','Color grading','Audio засвар','Export тохиргоо']}];}
-function demoL(){return[{id:'l1',course_id:'d1',title:'YouTube гэж юу вэ?',type:'video',duration_min:12,sort_order:1,is_free_preview:true},{id:'l2',course_id:'d1',title:'Суваг тохиргоо',type:'text',duration_min:8,sort_order:2,content:'Сувгийн нэр сонгохдоо keyword-д анхаарна уу.'},{id:'l3',course_id:'d1',title:'Анхны видеог хэрхэн хийх вэ?',type:'video',duration_min:18,sort_order:3},{id:'l4',course_id:'d1',title:'SEO, thumbnail, монетизаци',type:'video',duration_min:22,sort_order:4},{id:'l5',course_id:'d2',title:'AI гэж юу вэ?',type:'video',duration_min:10,sort_order:1,is_free_preview:true},{id:'l6',course_id:'d2',title:'ChatGPT мэргэжлийн түвшинд',type:'text',duration_min:15,sort_order:2,is_free_preview:true,content:'ChatGPT-д зааварчилга өгөхдөө контекст, дүр, хэлбэр гэсэн 3 зүйлийг тодорхой бич.'},{id:'l7',course_id:'d2',title:'Midjourney — prompt нууц',type:'image',duration_min:12,sort_order:3},{id:'l8',course_id:'d3',title:'Premiere Pro танилцуулга',type:'video',duration_min:9,sort_order:1,is_free_preview:true},{id:'l9',course_id:'d3',title:'Timeline, cuts, transitions',type:'video',duration_min:20,sort_order:2},{id:'l10',course_id:'d3',title:'Color grading',type:'video',duration_min:16,sort_order:3},{id:'l11',course_id:'d3',title:'Audio засвар, export',type:'text',duration_min:11,sort_order:4,content:'Audio-г -14 LUFS болгоорой.'},{id:'l12',course_id:'d3',title:'Эцсийн төсөл',type:'video',duration_min:25,sort_order:5}];}
-
+// lessons хүснэгтийн нэг мөрийг (админ-ийн хадгалдаг бодит дата) карт дээр харуулах course объект болгон хөрвүүлнэ
+function parsePriceNum(p){if(p===null||p===undefined)return 0;const n=parseInt(String(p).replace(/[^\d]/g,''),10);return isNaN(n)?0:n;}
+function mapRowToCourse(row){
+  const priceNum=parsePriceNum(row.price);
+  return{
+    id:row.id,
+    title:row.title||'(нэргүй)',
+    description:row.description||'',
+    category:row.category||'Сургалт',
+    level:row.level||'Эхлэгч',
+    price:priceNum,
+    old_price:null,
+    is_free:priceNum===0,
+    is_featured:false,
+    instructor:row.instructor||'КиноЭзэн',
+    thumb_url:row.thumbnail||null,
+    about:row.description||'',
+    outcomes:[],
+    duration:row.duration||null,
+    video_url:row.video_url||null,
+    file_url:row.file_url||null,
+    file_name:row.file_name||null,
+    lessons_list:row.lessons_list||''
+  };
+}
+// lessons_list (мөр тус бүрт нэг хичээл), үндсэн видео, нэмэлт файлыг нэгтгэж хичээлийн жагсаалт болгоно
+function buildSubLessons(c){
+  const subs=[];
+  if(c.video_url){
+    subs.push({id:c.id+'-video',course_id:c.id,title:'Үндсэн видео хичээл',type:'video',video_url:c.video_url,is_free_preview:true,sort_order:subs.length});
+  }
+  (c.lessons_list||'').split('\n').map(s=>s.trim()).filter(Boolean).forEach(line=>{
+    subs.push({id:c.id+'-l'+subs.length,course_id:c.id,title:line,type:'text',sort_order:subs.length,is_free_preview:false});
+  });
+  if(c.file_url){
+    subs.push({id:c.id+'-file',course_id:c.id,title:'📎 Нэмэлт материал: '+(c.file_name||'файл татах'),type:'text',sort_order:subs.length,is_free_preview:false,content:'Файлыг эндээс татаж авна уу: '+c.file_url});
+  }
+  if(!subs.length){
+    subs.push({id:c.id+'-empty',course_id:c.id,title:'Хичээлийн агуулга удахгүй нэмэгдэнэ',type:'text',sort_order:0,is_free_preview:true});
+  }
+  return subs;
+}
 
 function filterByTag(cat){
+  // filter pills-с хайна, байхгүй бол шүүнэ
   document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));
   const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);
   if(found){found.classList.add('on');activeFilter=cat;}
   else{
+    // filter-pills-д динамикаар нэм
     const p=document.getElementById('filter-pills');
     const b=document.createElement('button');b.className='fpill on';b.textContent=cat;
     b.onclick=()=>setFilter(b,cat);p.appendChild(b);activeFilter=cat;
@@ -515,19 +604,18 @@ function filterByTag(cat){
   document.getElementById('courses-grid')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-const EXTRA_CATS=['Дата Аналист','AI Агент'];
 function buildPills(){
   const cats=[...new Set(allC.map(c=>c.category).filter(Boolean))];
   const p=document.getElementById('filter-pills');
   p.innerHTML='<button class="fpill on" onclick="setFilter(this,\'\')">Бүгд</button>';
-  const allCats=[...new Set([...cats,...EXTRA_CATS])];
-  allCats.forEach(cat=>{const b=document.createElement('button');b.className='fpill';b.textContent=cat;b.onclick=()=>setFilter(b,cat);p.appendChild(b);});
+  cats.forEach(cat=>{const b=document.createElement('button');b.className='fpill';b.textContent=cat;b.onclick=()=>setFilter(b,cat);p.appendChild(b);});
 }
 function setFilter(el,cat){
   document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));
   if(el)el.classList.add('on');
   else{const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);if(found)found.classList.add('on');}
   activeF=cat;filterCourses();
+  // scroll to grid
   document.getElementById('courses-grid')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function filterCourses(){
@@ -543,7 +631,7 @@ function renderCourses(list){
   g.innerHTML=list.map((c,i)=>{
     const ls=allL.filter(l=>l.course_id===c.id);
     const ph=c.is_free?`<div class="price-free">Үнэгүй</div>`:`<div class="price-main">${Number(c.price||0).toLocaleString()}₮</div>${c.old_price?`<div class="price-old">${Number(c.old_price).toLocaleString()}₮</div>`:''}`;
-    const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');
+    const bd=[c.is_featured?`<span class="bdg bdg-hot">⭐ Онцлох</span>`:'',c.is_free?`<span class="bdg bdg-free">Үнэгүй</span>`:'`',(c.old_price&&c.old_price>c.price)?`<span class="bdg bdg-sale">Хямдарсан</span>`:''].filter(Boolean).join('');
     const th=c.thumb_url?`<img src="${san(c.thumb_url)}" alt="${san(c.title)}" loading="lazy" onerror="this.style.display='none'">`:`<div class="emoji">${c.emoji||'🎓'}</div>`;
     return`<article class="card" onclick="openCourse('${san(c.id)}')" style="animation-delay:${i*0.06}s">
   <div class="card-thumb">${th}<div class="badges">${bd}</div><div class="lesson-cnt">▶ ${ls.length} хичээл</div><div class="play-ov"><div class="play-ic">▶</div></div></div>
@@ -638,6 +726,5 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElem
 
 init();
 </script>
-<script src="feedback-widget.js"></script>
 </body>
 </html>
