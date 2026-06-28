@@ -287,10 +287,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
 .nav-btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));border:none;color:#0a2a0a;}
 .nav-btn:disabled{opacity:0.3;cursor:not-allowed;}
 
-/* ===== MOBILE BOTTOM NAV — ЗАССАН (6 цэс, index-тэй ижил) ===== */
+/* ===== MOBILE BOTTOM NAV — ЗАССАН (зай ойртуулсан, 6 цэс) ===== */
 .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#0a0a14;border-top:1px solid rgba(255,255,255,0.06);padding:6px 0 env(safe-area-inset-bottom);z-index:1000;}
 .mbn-inner{display:flex;justify-content:space-around;align-items:center;max-width:400px;margin:0 auto;}
-.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
+.mbn-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 4px;color:rgba(255,255,255,0.4);text-decoration:none;transition:color 0.2s;font-size:9px;font-weight:600;font-family:var(--font-b);}
 .mbn-item svg{width:22px;height:22px;stroke:currentColor;fill:none;}
 .mbn-item.active{color:#4ade80;}
 .mbn-item:hover{color:rgba(255,255,255,0.7);}
@@ -311,6 +311,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   .v-foot{flex-direction:column;}
   .nav-btn{width:100%;justify-content:center;}
   .fi{display:none;}
+  .mbn-item{padding:4px 2px;font-size:8px;}
+  .mbn-logo-icon{width:24px;height:24px;font-size:12px;}
+  .mbn-inner{max-width:320px;}
 }
 @media(max-width:768px){
   .nav{padding:10px 16px;flex-wrap:wrap;}
@@ -492,7 +495,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-b);overflow-x
   </div>
 </div>
 
-<!-- ===== MOBILE BOTTOM NAV — ЗАССАН (6 цэс, index-тэй ижил) ===== -->
+<!-- ===== MOBILE BOTTOM NAV — ЗАССАН (зай ойртуулсан, 6 цэс) ===== -->
 <nav class="mobile-bottom-nav">
   <div class="mbn-inner">
     <a class="mbn-item" href="index.html">
@@ -547,12 +550,10 @@ function demoL(){return[{id:'l1',course_id:'d1',title:'YouTube гэж юу вэ?
 
 
 function filterByTag(cat){
-  // filter pills-с хайна, байхгүй бол шүүнэ
   document.querySelectorAll('.fpill').forEach(p=>p.classList.remove('on'));
   const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);
   if(found){found.classList.add('on');activeFilter=cat;}
   else{
-    // filter-pills-д динамикаар нэм
     const p=document.getElementById('filter-pills');
     const b=document.createElement('button');b.className='fpill on';b.textContent=cat;
     b.onclick=()=>setFilter(b,cat);p.appendChild(b);activeFilter=cat;
@@ -574,7 +575,6 @@ function setFilter(el,cat){
   if(el)el.classList.add('on');
   else{const found=[...document.querySelectorAll('.fpill')].find(p=>p.textContent===cat);if(found)found.classList.add('on');}
   activeF=cat;filterCourses();
-  // scroll to grid
   document.getElementById('courses-grid')?.scrollIntoView({behavior:'smooth',block:'start'});
 }
 function filterCourses(){
