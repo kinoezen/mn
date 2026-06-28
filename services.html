@@ -471,19 +471,47 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
     </div>
 
-    <!-- 3. SRT Орчуулагч -->
-    <div class="svc-card" data-category="video">
-      <div class="svc-head">
-        <div class="svc-ico blue">📄</div>
-        <div class="svc-info">
-          <div class="svc-name">SRT Субтитр орчуулагч</div>
-          <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
-          <div class="badges"><span class="badge badge-pro">Премиум</span></div>
-        </div>
+    <!-- ============================================================
+ШИНЭ "SRT Субтитр орчуулагч" card — services.html доторх
+ХУУЧИН card-ийг ОЛЖ (Ctrl+F-ээр "SRT Субтитр орчуулагч" гэж
+хайвал олдоно) бухэлд нь дараах кодоор СОЛИХ.
+============================================================ -->
+<div class="svc-card" data-category="video">
+  <div class="svc-head">
+    <div class="svc-ico blue">📄</div>
+    <div class="svc-info">
+      <div class="svc-name">SRT Субтитр орчуулагч</div>
+      <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
+      <div class="badges">
+        <span class="badge badge-free">Уунэгуй</span>
+        <span class="badge badge-credit">⚡ 10 кредит/файл</span>
       </div>
-      <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
     </div>
-
+  </div>
+  <button class="svc-btn" onclick="toggleBox('srt-translate-box',this)">📄 Турших</button>
+  <div class="svc-box" id="srt-translate-box">
+    <div class="cost-pill">⚡ Уунэ: 10 кредит/файл</div>
+    <label class="form-label">SRT файл</label>
+    <div class="upload-area" id="srt-upload-area" onclick="document.getElementById('srt-file').click()"
+      ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSrtDrop(event)">
+      <input type="file" id="srt-file" accept=".srt" onchange="handleSrtFile(event)">
+      <div class="upload-icon">📄</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.5)">.srt файл оруулах</div>
+      <div class="upload-name" id="srt-file-name"></div>
+    </div>
+    <label class="form-label" style="margin-top:10px;">Орчуулах хэл</label>
+    <select class="lang-select" id="srt-target-lang" style="width:100%;margin-bottom:10px;">
+      <option value="mn" selected>🇲🇳 Монгол</option>
+      <option value="en">🇺🇸 Англи</option>
+      <option value="ru">🇷🇺 Орос</option>
+      <option value="zh">🇨🇳 Хятад</option>
+      <option value="ja">🇯🇵 Япон</option>
+    </select>
+    <button class="run-btn" onclick="runSrtTranslate()">📄 Орчуулах</button>
+    <div class="notice-box" id="srt-translate-notice">💎 Кредит хурэлцэгуй — <a href="pricing.html">тариф сонгох →</a></div>
+    <div class="result" id="srt-translate-result"></div>
+  </div>
+</div>
    <!-- ============================================================
 ШИНЭ "Монгол Script бичигч" card — services.html доторх ХУУЧИН
 card-ийг ОЛЖ (Ctrl+F-ээр "Монгол Script бичигч" гэж хайвал
