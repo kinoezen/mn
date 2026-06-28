@@ -483,22 +483,35 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       <div class="svc-name">SRT Субтитр орчуулагч</div>
       <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
       <div class="badges">
-        <span class="badge badge-free">Уунэгуй</span>
         <span class="badge badge-credit">⚡ 10 кредит/файл</span>
       </div>
     </div>
   </div>
   <button class="svc-btn" onclick="toggleBox('srt-translate-box',this)">📄 Турших</button>
   <div class="svc-box" id="srt-translate-box">
-    <div class="cost-pill">⚡ Уунэ: 10 кредит/файл</div>
-    <label class="form-label">SRT файл</label>
-    <div class="upload-area" id="srt-upload-area" onclick="document.getElementById('srt-file').click()"
-      ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSrtDrop(event)">
-      <input type="file" id="srt-file" accept=".srt" onchange="handleSrtFile(event)">
-      <div class="upload-icon">📄</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.5)">.srt файл оруулах</div>
-      <div class="upload-name" id="srt-file-name"></div>
+    <div class="cost-pill">⚡ Уне: 10 кредит/файл</div>
+
+    <div class="voice-row">
+      <div class="vbtn on" id="srt-mode-file" onclick="selSrtMode('file', this)">📄 Файл оруулах</div>
+      <div class="vbtn" id="srt-mode-text" onclick="selSrtMode('text', this)">✍️ Текст оруулах</div>
     </div>
+
+    <div id="srt-file-row" style="margin-top:10px;">
+      <label class="form-label">SRT файл</label>
+      <div class="upload-area" id="srt-upload-area" onclick="document.getElementById('srt-file').click()"
+        ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSrtDrop(event)">
+        <input type="file" id="srt-file" accept=".srt" onchange="handleSrtFile(event)">
+        <div class="upload-icon">📄</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.5)">.srt файл оруулах</div>
+        <div class="upload-name" id="srt-file-name"></div>
+      </div>
+    </div>
+
+    <div id="srt-text-row" style="display:none;margin-top:10px;">
+      <label class="form-label">SRT агуулга (бичиж эсвэл хуулж оруулна)</label>
+      <textarea id="srt-text-input" placeholder="1&#10;00:00:01,000 --> 00:00:03,000&#10;Hello, how are you?&#10;&#10;2&#10;00:00:04,000 --> 00:00:06,000&#10;I am fine, thank you." style="height:150px;font-family:monospace;font-size:12px;"></textarea>
+    </div>
+
     <label class="form-label" style="margin-top:10px;">Орчуулах хэл</label>
     <select class="lang-select" id="srt-target-lang" style="width:100%;margin-bottom:10px;">
       <option value="mn" selected>🇲🇳 Монгол</option>
@@ -512,14 +525,6 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
     <div class="result" id="srt-translate-result"></div>
   </div>
 </div>
-   <!-- ============================================================
-ШИНЭ "Монгол Script бичигч" card — services.html доторх ХУУЧИН
-card-ийг ОЛЖ (Ctrl+F-ээр "Монгол Script бичигч" гэж хайвал
-олдоно) бухэлд нь дараах кодоор СОЛИХ.
-
-Хуучин card нь зөвхөн:
-  <button class="svc-btn" onclick="location.href='login.html'">🔒 Нэвтэрч авах</button>
-гэсэн товчтой байсан — бугдийг доорхоор солих.
 ============================================================ -->
 <div class="svc-card" data-category="text">
   <div class="svc-head">
