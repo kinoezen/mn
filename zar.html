@@ -10,21 +10,43 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="zar-page.css">
 <style>
-/* ===== ҲНДСЭН СТИЛЬ (services.html-тэй ижил) ===== */
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden;}
 
-/* ===== NAVBAR (services.html-тэй ижил) ===== */
+@keyframes ddFadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== NAVBAR ===== */
 .nav{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.08);position:sticky;top:0;background:rgba(18,18,30,0.97);backdrop-filter:blur(16px);z-index:1000;gap:8px;}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;flex-shrink:0;}
 .logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a0a2e,#3b1f6b);border:1.5px solid rgba(74,222,128,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .logo-icon svg{width:22px;height:22px;}
 .logo-text{font-size:18px;font-weight:800;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
+.nav-links-desktop{display:flex;gap:4px;align-items:center;}
+.nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
+.nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
 .nav-desktop-right{display:flex;gap:8px;align-items:center;}
-.btn-login{padding:7px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-login{padding:7px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif;font-weight:600;transition:all 0.2s;}
 .btn-login:hover{border-color:#4ade80;color:#4ade80;}
-.btn-join{padding:7px 14px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.btn-join{padding:7px 14px;border-radius:8px;background:linear-gradient(90deg,#4ade80,#fbbf24);border:none;color:#0a0a14;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif;}
 .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 6px;border-radius:8px;flex-shrink:0;line-height:1;}
+
+/* ===== USER DROPDOWN ===== */
+.user-menu-wrap{position:relative;display:none;align-items:center;}
+.user-avatar-btn{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #4ade80;cursor:pointer;box-shadow:0 0 10px rgba(74,222,128,0.35);transition:box-shadow 0.2s,transform 0.2s;display:block;flex-shrink:0;}
+.user-avatar-btn:hover{box-shadow:0 0 18px rgba(74,222,128,0.55);transform:scale(1.05);}
+.user-dropdown{display:none;position:absolute;right:0;top:48px;background:#12122a;border:1px solid rgba(74,222,128,0.18);border-radius:14px;min-width:220px;z-index:9999;box-shadow:0 16px 48px rgba(0,0,0,0.65);overflow:hidden;animation:ddFadeIn 0.15s ease;}
+.user-dropdown.open{display:block;}
+.dd-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.dd-header img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1.5px solid #4ade80;flex-shrink:0;}
+.dd-header-name{color:#fff;font-weight:700;font-size:13px;font-family:'Nunito',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dd-header-email{color:#666;font-size:11px;font-family:'Nunito',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.dd-item{display:flex;align-items:center;gap:9px;padding:11px 16px;color:#bbb;text-decoration:none;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s,color 0.15s;border:none;background:none;width:100%;text-align:left;}
+.dd-item:hover{background:rgba(74,222,128,0.08);color:#4ade80;}
+.dd-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:3px 0;}
+.dd-logout{color:#ff6b6b!important;}
+.dd-logout:hover{background:rgba(255,107,107,0.08)!important;color:#ff4444!important;}
+
+/* ===== NAV DRAWER ===== */
 .nav-drawer{display:none;flex-direction:column;background:rgba(18,18,30,0.99);border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 16px 16px;gap:6px;}
 .nav-drawer.open{display:flex;}
 .nav-drawer a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:14px;font-weight:600;padding:10px 12px;border-radius:10px;transition:background 0.2s,color 0.2s;}
@@ -32,10 +54,6 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .drawer-divider{height:1px;background:rgba(255,255,255,0.07);margin:6px 0;}
 .drawer-btns{display:flex;gap:8px;margin-top:4px;}
 .drawer-btns .btn-login,.drawer-btns .btn-join{flex:1;text-align:center;}
-.nav-links-desktop{display:flex;gap:4px;align-items:center;}
-.nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
-.nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
-@media(max-width:768px){.nav-links-desktop{display:none;}.nav-desktop-right{display:none;}.nav-toggle{display:block;}}
 
 /* ===== HERO ===== */
 .hero{position:relative;text-align:center;padding:32px 16px 26px;overflow:hidden;}
@@ -50,8 +68,6 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 @keyframes zarHeroIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
 .hero .zar-megaphone{display:inline-block;animation:zarMegaphoneWiggle 2.6s ease-in-out infinite;}
 @keyframes zarMegaphoneWiggle{0%,80%,100%{transform:rotate(0deg);}85%{transform:rotate(-12deg);}90%{transform:rotate(10deg);}95%{transform:rotate(-6deg);}}
-
-/* ===== HERO ДЭД ЗУРАГ (шинээр нэмэгдсэн — хажуу талын animated SVG) ===== */
 .zar-hero-deco{position:absolute;top:50%;transform:translateY(-50%);width:64px;height:64px;z-index:1;opacity:0.9;}
 .zar-hero-deco-left{left:4%;}
 .zar-hero-deco-right{right:4%;}
@@ -67,88 +83,15 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .footer{margin-top:30px;padding:16px 18px 80px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;font-size:12px;color:rgba(255,255,255,0.25);}
 
 /* ===== MOBILE BOTTOM NAV ===== */
-.mobile-bottom-nav {
-  display: none !important;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 68px;
-  background: rgba(12, 12, 22, 0.98);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-top: 1px solid rgba(74, 222, 128, 0.15);
-  z-index: 1000;
-  padding: 0 8px;
-  padding-bottom: env(safe-area-inset-bottom);
-  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
-}
-.mobile-bottom-nav .mbn-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  height: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-}
-.mbn-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 6px 8px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.35);
-  font-size: 10px;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-  border: none;
-  background: none;
-  flex: 1;
-  min-width: 0;
-  max-width: 80px;
-  letter-spacing: 0.3px;
-}
-.mbn-item.active {
-  color: #4ade80;
-}
-.mbn-item .mbn-logo-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #4ade80, #fbbf24);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: 900;
-  color: #0a0a14;
-}
-.mbn-item span {
-  font-size: 10px;
-  line-height: 1;
-  opacity: 0.8;
-}
-.mbn-item.active span {
-  opacity: 1;
-}
-
-@media (max-width: 768px) {
-  .mobile-bottom-nav {
-    display: flex !important;
-  }
-  body {
-    padding-bottom: 70px;
-  }
-}
-
-@media(max-width:600px){
-  .hero h1{font-size:20px;}
-}
+.mobile-bottom-nav{display:none!important;position:fixed;bottom:0;left:0;right:0;height:68px;background:rgba(12,12,22,0.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid rgba(74,222,128,0.15);z-index:1000;padding:0 8px;padding-bottom:env(safe-area-inset-bottom);box-shadow:0 -4px 24px rgba(0,0,0,0.5);}
+.mobile-bottom-nav .mbn-inner{display:flex;align-items:center;justify-content:space-around;height:100%;max-width:480px;margin:0 auto;}
+.mbn-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px 8px;border-radius:12px;text-decoration:none;color:rgba(255,255,255,0.35);font-size:10px;font-family:'Nunito',sans-serif;font-weight:600;transition:all 0.25s;cursor:pointer;border:none;background:none;flex:1;min-width:0;max-width:80px;letter-spacing:0.3px;}
+.mbn-item.active{color:#4ade80;}
+.mbn-item .mbn-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#4ade80,#fbbf24);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#0a0a14;}
+.mbn-item span{font-size:10px;line-height:1;opacity:0.8;}
+.mbn-item.active span{opacity:1;}
+@media(max-width:768px){.mobile-bottom-nav{display:flex!important;}body{padding-bottom:70px;}.nav-links-desktop{display:none;}.nav-desktop-right{display:none;}.nav-toggle{display:block;}}
+@media(max-width:600px){.hero h1{font-size:20px;}}
 </style>
 </head>
 <body>
@@ -171,29 +114,58 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
     </div>
     <div class="logo-text">Кино Эзэн</div>
   </a>
+
+  <!-- Desktop links -->
   <div class="nav-links-desktop">
     <a href="index.html">Нүүр</a>
     <a href="movies.html">Кинонууд</a>
-    <a href="news.html">Мэдээ</a>
+    <a href="lessons.html">Сургалт</a>
+    <a href="programs.html">Программ</a>
     <a href="services.html">Үйлчилгээ</a>
     <a href="zar.html" class="active">Зар мэдээ</a>
+    <a href="profile.html">Профайл</a>
   </div>
+
+  <!-- Desktop right: auth -->
   <div class="nav-desktop-right">
-    <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
-    <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    <!-- ❌ Нэвтрээгүй үед -->
+    <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+      <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    </div>
+    <!-- ✅ Нэвтэрсэн үед -->
+    <div class="user-menu-wrap" id="user-menu">
+      <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-header">
+          <img id="dd-avatar" src="" alt="">
+          <div>
+            <div class="dd-header-name" id="dd-name"></div>
+            <div class="dd-header-email" id="dd-email"></div>
+          </div>
+        </div>
+        <a href="profile.html" class="dd-item">👤 Профайл</a>
+        <a href="profile.html#settings" class="dd-item">⚙️ Тохиргоо</a>
+        <hr class="dd-divider">
+        <button class="dd-item dd-logout" onclick="signOutUser()">🚪 Гарах</button>
+      </div>
+    </div>
   </div>
+
   <button class="nav-toggle" id="nav-toggle" onclick="toggleDrawer()" aria-label="Цэс">☰</button>
 </nav>
 
+<!-- Mobile drawer -->
 <div class="nav-drawer" id="nav-drawer">
   <a href="index.html">🏠 Нүүр</a>
   <a href="movies.html">🎬 Кинонууд</a>
-  <a href="news.html">📰 Мэдээ</a>
+  <a href="lessons.html">📚 Сургалт</a>
+  <a href="programs.html">💻 Программ</a>
   <a href="services.html">⚡ Үйлчилгээ</a>
   <a href="zar.html" class="active">📢 Зар мэдээ</a>
   <a href="profile.html">👤 Профайл</a>
   <div class="drawer-divider"></div>
-  <div class="drawer-btns">
+  <div class="drawer-btns" id="drawer-auth-buttons">
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
@@ -225,7 +197,7 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
   </div>
 </div>
 
-<!-- ===== ЗАР МЭДЭЭ АГУУЛГА (zar-page.js динамикаар дүүргэнэ) ===== -->
+<!-- ===== ЗАР МЭДЭЭ АГУУЛГА ===== -->
 <div class="zar-page-wrap">
   <a href="index.html" class="zar-home-btn">← Нүүр хуудас</a>
   <div id="zar-page-root"></div>
@@ -237,35 +209,96 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 <!-- ===== MOBILE BOTTOM NAV ===== -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
-    <a class="mbn-item" href="index.html" aria-label="Нүүр">
-      <div class="mbn-logo-icon">🏠</div>
-      <span>Нүүр</span>
-    </a>
-    <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
-      <div class="mbn-logo-icon">📚</div>
-      <span>Сургалт</span>
-    </a>
-    <a class="mbn-item" href="programs.html" aria-label="Программ">
-      <div class="mbn-logo-icon">💻</div>
-      <span>Программ</span>
-    </a>
-    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ">
-      <div class="mbn-logo-icon">🤖</div>
-      <span>AI</span>
-    </a>
-    <a class="mbn-item active" href="zar.html" aria-label="Зар">
-      <div class="mbn-logo-icon">📢</div>
-      <span>Зар</span>
-    </a>
-    <a class="mbn-item" href="profile.html" aria-label="Профайл">
-      <div class="mbn-logo-icon">👤</div>
-      <span>Профайл</span>
-    </a>
+    <a class="mbn-item" href="index.html"><div class="mbn-logo-icon">🏠</div><span>Нүүр</span></a>
+    <a class="mbn-item" href="lessons.html"><div class="mbn-logo-icon">📚</div><span>Сургалт</span></a>
+    <a class="mbn-item" href="programs.html"><div class="mbn-logo-icon">💻</div><span>Программ</span></a>
+    <a class="mbn-item" href="services.html"><div class="mbn-logo-icon">🤖</div><span>AI</span></a>
+    <a class="mbn-item active" href="zar.html"><div class="mbn-logo-icon">📢</div><span>Зар</span></a>
+    <a class="mbn-item" href="profile.html"><div class="mbn-logo-icon">👤</div><span>Профайл</span></a>
   </div>
 </nav>
 
+<!-- ===== AUTH STATE ===== -->
 <script>
-function toggleDrawer() {
+(function(){
+  const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+  const SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+  function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
+  function getToken(){return localStorage.getItem('sb_token')||null;}
+
+  async function verifyToken(token){
+    try{
+      const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}});
+      if(!r.ok)return null;
+      return await r.json();
+    }catch(e){return null;}
+  }
+
+  function avatarUrl(user){
+    if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;
+    const name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email||'U';
+    return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;
+  }
+  function displayName(user){
+    if(user.user_metadata){if(user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata.name)return user.user_metadata.name;}
+    return user.email?user.email.split('@')[0]:'Хэрэглэгч';
+  }
+
+  function showLoggedIn(user){
+    const av=avatarUrl(user);
+    const nm=displayName(user);
+    const em=user.email||'';
+    const a=document.getElementById('user-avatar');if(a)a.src=av;
+    const da=document.getElementById('dd-avatar');if(da)da.src=av;
+    const dn=document.getElementById('dd-name');if(dn)dn.textContent=nm;
+    const de=document.getElementById('dd-email');if(de)de.textContent=em;
+    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='none';
+    const um=document.getElementById('user-menu');if(um)um.style.display='flex';
+    // Drawer-д ч мөн auth товчнуудыг нуух
+    const dab=document.getElementById('drawer-auth-buttons');
+    if(dab)dab.innerHTML=`<a href="profile.html" style="flex:1;text-align:center;padding:8px 14px;border-radius:8px;background:rgba(74,222,128,0.12);color:#4ade80;text-decoration:none;font-size:13px;font-weight:700;">👤 Профайл</a>`;
+  }
+
+  function showLoggedOut(){
+    localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');
+    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='flex';
+    const um=document.getElementById('user-menu');if(um)um.style.display='none';
+  }
+
+  window.toggleUserDropdown=function(){
+    const dd=document.getElementById('user-dropdown');if(dd)dd.classList.toggle('open');
+  };
+  document.addEventListener('click',function(e){
+    const um=document.getElementById('user-menu');
+    const dd=document.getElementById('user-dropdown');
+    if(!um||!dd)return;
+    if(!um.contains(e.target))dd.classList.remove('open');
+  });
+  window.signOutUser=async function(){
+    const tk=getToken();
+    if(tk){try{await fetch(`${SB_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${tk}`}});}catch(e){}}
+    showLoggedOut();
+    const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');
+  };
+
+  async function checkAuth(){
+    const tk=getToken();
+    const cu=getUser();
+    if(!tk){showLoggedOut();return;}
+    if(cu)showLoggedIn(cu);
+    const live=await verifyToken(tk);
+    if(live&&live.id){localStorage.setItem('sb_user',JSON.stringify(live));showLoggedIn(live);}
+    else showLoggedOut();
+  }
+
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',checkAuth);}
+  else{checkAuth();}
+})();
+</script>
+
+<script>
+function toggleDrawer(){
   document.getElementById('nav-drawer').classList.toggle('open');
 }
 </script>
