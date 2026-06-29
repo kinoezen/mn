@@ -22,6 +22,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .tab-sw button.active{background:linear-gradient(90deg,#e63946,#f4a261);color:#fff;}
 .google-btn{width:100%;padding:11px;border-radius:10px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;}
 .google-btn:hover{background:rgba(255,255,255,0.12);}
+.google-btn:disabled{opacity:0.6;cursor:not-allowed;}
 .g-circle{width:18px;height:18px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#e63946;}
 .divider{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .divider-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
@@ -60,7 +61,7 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
       <button onclick="switchTab('register',this)">Бүртгүүлэх</button>
     </div>
 
-    <button class="google-btn" onclick="googleLogin()">
+    <button class="google-btn" id="google-btn" onclick="googleLogin()">
       <div class="g-circle">G</div>
       Google-ээр нэвтрэх
     </button>
@@ -121,7 +122,7 @@ function showMsg(id,text,type){
   el.style.display='block';
 }
 
-// НЭВТРЭХ
+// НЭВТРЭХ (и-мэйл/нууц үг)
 async function doLogin(){
   const email=document.getElementById('login-email').value.trim();
   const pass=document.getElementById('login-pass').value;
@@ -137,11 +138,12 @@ async function doLogin(){
     const data=await r.json();
     if(data.access_token){
       localStorage.setItem('sb_token',data.access_token);
+      localStorage.setItem('sb_refresh',data.refresh_token||'');
       localStorage.setItem('sb_user',JSON.stringify(data.user));
       showMsg('login-msg','✅ Амжилттай нэвтэрлээ! Шилжиж байна...','success');
       setTimeout(()=>location.href='index.html',1000);
     }else{
-      showMsg('login-msg',data.error_description||'И-мэйл эсвэл нууц үг буруу байна!','error');
+      showMsg('login-msg',data.error_description||data.msg||'И-мэйл эсвэл нууц үг буруу байна!','error');
     }
   }catch(e){showMsg('login-msg','Алдаа гарлаа. Дахин оролдоно уу.','error');}
   btn.textContent='Нэвтрэх';btn.disabled=false;
@@ -175,15 +177,20 @@ async function doRegister(){
   btn.textContent='Бүртгүүлэх';btn.disabled=false;
 }
 
-// GOOGLE
-async function googleLogin(){
-  try{
-    const r=await fetch(`${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(location.origin+'/index.html')}`,{
-      headers:{'apikey':SUPABASE_KEY}
-    });
-    const data=await r.json();
-    if(data.url)location.href=data.url;
-  }catch(e){alert('Google нэвтрэх алдаатай байна.');}
+// GOOGLE-ЭЭР НЭВТРЭХ
+// Чухал: энд fetch ашиглаж болохгүй, учир нь Supabase-ийн /authorize
+// нь JSON буцаадаггүй — шууд redirect (302) хийдэг тул location.href-ээр
+// шууд тухайн URL руу шилжих ёстой. redirect_to нь index.html байх ёстой,
+// учир нь Google-ийн дараах token-ыг барих код index.html дотор байгаа.
+function googleLogin(){
+  const btn=document.getElementById('google-btn');
+  btn.disabled=true;
+  btn.innerHTML='<div class="g-circle">G</div> Google руу шилжиж байна...';
+
+  const redirectTo = location.origin + '/index.html';
+  const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
+
+  location.href = authUrl;
 }
 
 // НУУЦ ҮГ СЭРГЭЭХ
