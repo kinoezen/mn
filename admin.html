@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Кино Эзэн — Admin</title>
 <style>
+  
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#0f0f1a;color:#fff;font-family:Arial,sans-serif;min-height:100vh;}
 .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
@@ -1248,7 +1249,7 @@ async function addMovie(){
     const mVidUpload=document.getElementById('m-vid-upload');
     if(mVidUpload&&mVidUpload.style.display!=='none'){
       const vidFile=document.getElementById('m-vid-file');
-      if(vidFile&&vidFile.files.length>0)videoUrl=await uploadFile(vidFile.files[0],'videos','m-vid');
+     if(vidFile&&vidFile.files.length>0)videoUrl=await uploadVideoR2(vidFile.files[0],'m-vid');
     }else{videoUrl=document.getElementById('m-video-url').value.trim()||null;}
     const featured=document.getElementById('m-featured').value==='true';
     const ok=await supaInsert('movies',{title,genre:document.getElementById('m-genre').value,description:document.getElementById('m-desc').value,thumbnail:thumbUrl,video_url:videoUrl,featured});
