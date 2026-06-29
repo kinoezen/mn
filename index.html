@@ -913,6 +913,18 @@
     </a>
   </div>
 </nav>
+  <!-- ===== GOOGLE OAUTH HASH BRIDGE ===== -->
+<script>
+(function bridgeGoogleHashToLocalStorage(){
+  if(!location.hash || !location.hash.includes('access_token')) return;
+  const params = new URLSearchParams(location.hash.substring(1));
+  const accessToken = params.get('access_token');
+  if(accessToken){
+    localStorage.setItem('sb_token', accessToken);
+    history.replaceState(null, '', location.pathname);
+  }
+})();
+</script>
 
 <!-- ===== AUTH STATE — SUPABASE localStorage ===== -->
 <script>
