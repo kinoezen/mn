@@ -965,7 +965,6 @@ async function runPlagiarism() {
 }
 
 // ============================================================
-// ============================================================
 // ШИНЭ runPdfOcr() — /api/pdf-ocr руу FormData-аар fetch хийнэ,
 // progress bar-тай. services.js доторх ХУУЧИН runPdfOcr()
 // функцийг ЭНЭ ФУНКЦЭЭР бухэлд нь СОЛИХ.
@@ -1026,7 +1025,11 @@ async function runPdfOcr() {
 
         setTimeout(() => {
             if (resultDiv) {
+                const warningHtml = data.warning
+                    ? `<div style="font-size:12px;color:#f4a261;background:rgba(244,162,97,0.08);border:1px solid rgba(244,162,97,0.2);border-radius:8px;padding:8px 10px;margin-bottom:10px;">${data.warning}</div>`
+                    : '';
                 resultDiv.innerHTML = `<div class="result-label">📑 OCR уур дун</div>
+                ${warningHtml}
                 <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:8px;">
                     📄 Файл: ${file.name} | 📁 Хэмжээ: ${(file.size / 1024 / 1024).toFixed(1)} MB | 📃 Ойролцоо хуудас: ${data.pages}
                 </div>
@@ -1038,7 +1041,7 @@ async function runPdfOcr() {
             }
         }, 400);
 
-        showToast('✅ PDF боловсруулагдлаа!', 'success');
+        showToast(data.truncated ? '⚠️ PDF дутуу боловсруулагдлаа (хэт урт)' : '✅ PDF боловсруулагдлаа!', data.truncated ? 'error' : 'success');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
