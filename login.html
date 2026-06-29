@@ -9,7 +9,17 @@
 body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh;display:flex;flex-direction:column;}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none;}
-.logo-text{font-size:16px;font-weight:700;color:#fff;}
+.logo-icon{width:32px;height:32px;flex-shrink:0;}
+.logo-text{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#4ade80 0%,#86efac 25%,#fcd34d 55%,#fbbf24 80%,#f59e0b 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));
+}
 .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:30px 18px;}
 .box{width:100%;max-width:400px;background:#1e1e2e;border-radius:18px;padding:28px 24px;border:1px solid rgba(255,255,255,0.07);}
 .box-logo{text-align:center;margin-bottom:20px;}
@@ -41,20 +51,42 @@ body{background:#12121e;color:#fff;font-family:Arial,sans-serif;min-height:100vh
 .msg.success{background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;}
 .msg.error{background:rgba(230,57,70,0.15);border:1px solid rgba(230,57,70,0.3);color:#e63946;}
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
 <nav class="nav">
   <a href="index.html" class="logo">
-    <img src="logo.png" style="width:30px;height:30px;border-radius:50%;object-fit:cover;">
-    <div class="logo-text">КиноЭзэн</div>
+    <!-- index.html-тай яг адил SVG лого -->
+    <svg class="logo-icon" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+      <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+      <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+      <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+      <circle cx="4.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+      <circle cx="4.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+      <circle cx="21.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+      <circle cx="21.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+      <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+    </svg>
+    <div class="logo-text">Кино Эзэн</div>
   </a>
 </nav>
 <div class="wrap">
   <div class="box">
     <div class="box-logo">
-      <div class="box-logo-icon">КЭ</div>
-      <h1>Тавтай морил, <span>найз</span> аа</h1>
-      <p>Монгол хэлний кино платформд нэгдэх</p>
+      <svg width="56" height="56" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin:0 auto 10px;display:block;">
+        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+      </svg>
+      <h1>Тавтай морил</h1>
+      <p>Бүхнийг нэг дороос</p>
     </div>
     <div class="tab-sw">
       <button class="active" onclick="switchTab('login',this)">Нэвтрэх</button>
@@ -178,18 +210,12 @@ async function doRegister(){
 }
 
 // GOOGLE-ЭЭР НЭВТРЭХ
-// Чухал: энд fetch ашиглаж болохгүй, учир нь Supabase-ийн /authorize
-// нь JSON буцаадаггүй — шууд redirect (302) хийдэг тул location.href-ээр
-// шууд тухайн URL руу шилжих ёстой. redirect_to нь index.html байх ёстой,
-// учир нь Google-ийн дараах token-ыг барих код index.html дотор байгаа.
 function googleLogin(){
   const btn=document.getElementById('google-btn');
   btn.disabled=true;
   btn.innerHTML='<div class="g-circle">G</div> Google руу шилжиж байна...';
-
   const redirectTo = location.origin + '/index.html';
   const authUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
-
   location.href = authUrl;
 }
 
