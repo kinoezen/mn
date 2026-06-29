@@ -1071,6 +1071,25 @@ async function supaDelete(table,id){
 // ============================================================
 // ФАЙЛ UPLOAD — мөн адил нэвтэрсэн хэрэглэгчийн token ашиглана
 // ============================================================
+  const WORKER_URL='https://kinoezen-upload.ododdelhii.workers.dev';
+async function uploadVideoR2(file,progressId){
+  const MAX=600*1024*1024;
+  if(file.size>MAX){alert('600MB-с их файл оруулах боломжгүй!');return null;}
+  const prog=document.getElementById(progressId+'-progress');
+  const fill=document.getElementById(progressId+'-fill');
+  const ptext=document.getElementById(progressId+'-ptext');
+  if(prog){prog.style.display='block';fill.style.width='10%';ptext.textContent='R2 руу upload хийж байна...';}
+  try{
+    if(fill)fill.style.width='50%';
+    const res=await fetch(WORKER_URL,{method:'POST',headers:{'X-File-Name':file.name,'X-File-Size':String(file.size),'Content-Type':file.type||'video/mp4'},body:file});
+    const data=await res.json();
+    if(!data.success)throw new Error(data.error||'Upload failed');
+    if(fill)fill.style.width='100%';
+    if(ptext)ptext.textContent='Дууслаа ✅';
+    setTimeout(()=>{if(prog)prog.style.display='none';},2000);
+    return data.url;
+  }catch(err){if(ptext)ptext.textContent='❌ Алдаа: '+err.message;throw err;}
+}
 async function uploadFile(file,folder,progressId){
   const ext=file.name.split('.').pop();
   const fileName=`${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
