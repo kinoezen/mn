@@ -1211,5 +1211,6 @@ function handlePdfOcrFile(e) { const f = e.target.files[0]; if(f) document.getEl
 function handlePdfOcrDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('pdf-ocr-file').files = e.dataTransfer.files; document.getElementById('pdf-ocr-file-name').textContent = f.name; } }
 </script>
 <script src="services.js"></script>
+<script src="feedback-widget.js"></script>
 </body>
 </html>
