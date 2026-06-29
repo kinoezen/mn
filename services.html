@@ -17,9 +17,9 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .logo-icon svg{width:22px;height:22px;}
 .logo-text{font-size:18px;font-weight:800;background:linear-gradient(90deg,#4ade80,#f4a261);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;}
 .nav-desktop-right{display:flex;gap:8px;align-items:center;}
-.btn-login{padding:7px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-login{padding:7px 14px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'Nunito',sans-serif;font-weight:600;transition:all 0.2s;}
 .btn-login:hover{border-color:#4ade80;color:#4ade80;}
-.btn-join{padding:7px 14px;border-radius:8px;background:linear-gradient(90deg,#e63946,#f4a261);border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.btn-join{padding:7px 14px;border-radius:8px;background:linear-gradient(90deg,#4ade80,#fbbf24);border:none;color:#0a0a14;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 6px;border-radius:8px;flex-shrink:0;line-height:1;}
 .nav-drawer{display:none;flex-direction:column;background:rgba(18,18,30,0.99);border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 16px 16px;gap:6px;}
 .nav-drawer.open{display:flex;}
@@ -31,6 +31,24 @@ body{background:#0f0f1a;color:#fff;font-family:'Nunito',sans-serif;min-height:10
 .nav-links-desktop{display:flex;gap:4px;align-items:center;}
 .nav-links-desktop a{color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:600;padding:6px 10px;border-radius:8px;transition:all 0.2s;white-space:nowrap;}
 .nav-links-desktop a:hover,.nav-links-desktop a.active{color:#4ade80;background:rgba(74,222,128,0.08);}
+
+/* ===== USER DROPDOWN ===== */
+@keyframes ddFadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.user-menu-wrap{position:relative;display:none;align-items:center;}
+.user-avatar-btn{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #4ade80;cursor:pointer;box-shadow:0 0 10px rgba(74,222,128,0.35);transition:box-shadow 0.2s,transform 0.2s;display:block;flex-shrink:0;}
+.user-avatar-btn:hover{box-shadow:0 0 18px rgba(74,222,128,0.55);transform:scale(1.05);}
+.user-dropdown{display:none;position:absolute;right:0;top:48px;background:#12122a;border:1px solid rgba(74,222,128,0.18);border-radius:14px;min-width:220px;z-index:9999;box-shadow:0 16px 48px rgba(0,0,0,0.65);overflow:hidden;animation:ddFadeIn 0.15s ease;}
+.user-dropdown.open{display:block;}
+.dd-header{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.dd-header img{width:36px;height:36px;border-radius:50%;object-fit:cover;border:1.5px solid #4ade80;flex-shrink:0;}
+.dd-header-name{color:#fff;font-weight:700;font-size:13px;font-family:'Nunito',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dd-header-email{color:#666;font-size:11px;font-family:'Nunito',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.dd-item{display:flex;align-items:center;gap:9px;padding:11px 16px;color:#bbb;text-decoration:none;font-size:13px;font-family:'Nunito',sans-serif;font-weight:600;cursor:pointer;transition:background 0.15s,color 0.15s;border:none;background:none;width:100%;text-align:left;}
+.dd-item:hover{background:rgba(74,222,128,0.08);color:#4ade80;}
+.dd-divider{border:none;border-top:1px solid rgba(255,255,255,0.07);margin:3px 0;}
+.dd-logout{color:#ff6b6b!important;}
+.dd-logout:hover{background:rgba(255,107,107,0.08)!important;color:#ff4444!important;}
+
 @media(max-width:768px){.nav-links-desktop{display:none;}.nav-desktop-right{display:none;}.nav-toggle{display:block;}}
 
 /* ===== CREDIT BAR ===== */
@@ -317,27 +335,58 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
     </div>
     <div class="logo-text">КиноЭзэн</div>
   </a>
+
+  <!-- ✅ ЗАСАГДСАН: Мэдээ устгаж, Сургалт/Программ/Зар мэдээ/Профайл нэмсэн -->
   <div class="nav-links-desktop">
     <a href="index.html">Нүүр</a>
     <a href="movies.html">Кинонууд</a>
-    <a href="news.html">Мэдээ</a>
+    <a href="lessons.html">Сургалт</a>
+    <a href="programs.html">Программ</a>
     <a href="services.html" class="active">Үйлчилгээ</a>
+    <a href="zar.html">Зар мэдээ</a>
+    <a href="profile.html">Профайл</a>
   </div>
+
+  <!-- ✅ ЗАСАГДСАН: Auth dropdown нэмсэн -->
   <div class="nav-desktop-right">
-    <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
-    <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    <!-- Нэвтрээгүй үед -->
+    <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+      <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    </div>
+    <!-- Нэвтэрсэн үед -->
+    <div class="user-menu-wrap" id="user-menu">
+      <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-header">
+          <img id="dd-avatar" src="" alt="">
+          <div>
+            <div class="dd-header-name" id="dd-name"></div>
+            <div class="dd-header-email" id="dd-email"></div>
+          </div>
+        </div>
+        <a href="profile.html" class="dd-item">👤 Профайл</a>
+        <a href="profile.html#settings" class="dd-item">⚙️ Тохиргоо</a>
+        <hr class="dd-divider">
+        <button class="dd-item dd-logout" onclick="signOutUser()">🚪 Гарах</button>
+      </div>
+    </div>
   </div>
+
   <button class="nav-toggle" id="nav-toggle" onclick="toggleDrawer()" aria-label="Цэс">☰</button>
 </nav>
 
+<!-- ✅ ЗАСАГДСАН: Drawer-д Мэдээ устгаж, Сургалт/Программ/Зар мэдээ нэмсэн -->
 <div class="nav-drawer" id="nav-drawer">
   <a href="index.html">🏠 Нүүр</a>
   <a href="movies.html">🎬 Кинонууд</a>
-  <a href="news.html">📰 Мэдээ</a>
+  <a href="lessons.html">📚 Сургалт</a>
+  <a href="programs.html">💻 Программ</a>
   <a href="services.html" class="active">⚡ Үйлчилгээ</a>
+  <a href="zar.html">📢 Зар мэдээ</a>
   <a href="profile.html">👤 Профайл</a>
   <div class="drawer-divider"></div>
-  <div class="drawer-btns">
+  <div class="drawer-btns" id="drawer-auth-buttons">
     <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
     <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
   </div>
@@ -471,95 +520,89 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
     </div>
 
-    <!-- ============================================================
-ШИНЭ "SRT Субтитр орчуулагч" card — services.html доторх
-ХУУЧИН card-ийг ОЛЖ (Ctrl+F-ээр "SRT Субтитр орчуулагч" гэж
-хайвал олдоно) бухэлд нь дараах кодоор СОЛИХ.
-============================================================ -->
-<div class="svc-card" data-category="video">
-  <div class="svc-head">
-    <div class="svc-ico blue">📄</div>
-    <div class="svc-info">
-      <div class="svc-name">SRT Субтитр орчуулагч</div>
-      <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
-      <div class="badges">
-        <span class="badge badge-credit">⚡ 10 кредит/файл</span>
+    <!-- 3. SRT Субтитр орчуулагч -->
+    <div class="svc-card" data-category="video">
+      <div class="svc-head">
+        <div class="svc-ico blue">📄</div>
+        <div class="svc-info">
+          <div class="svc-name">SRT Субтитр орчуулагч</div>
+          <div class="svc-desc">Англи .srt файлыг монгол субтитр болгоно.</div>
+          <div class="badges">
+            <span class="badge badge-credit">⚡ 10 кредит/файл</span>
+          </div>
+        </div>
+      </div>
+      <button class="svc-btn" onclick="toggleBox('srt-translate-box',this)">📄 Турших</button>
+      <div class="svc-box" id="srt-translate-box">
+        <div class="cost-pill">⚡ Уне: 10 кредит/файл</div>
+        <div class="voice-row">
+          <div class="vbtn on" id="srt-mode-file" onclick="selSrtMode('file', this)">📄 Файл оруулах</div>
+          <div class="vbtn" id="srt-mode-text" onclick="selSrtMode('text', this)">✍️ Текст оруулах</div>
+        </div>
+        <div id="srt-file-row" style="margin-top:10px;">
+          <label class="form-label">SRT файл</label>
+          <div class="upload-area" id="srt-upload-area" onclick="document.getElementById('srt-file').click()"
+            ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSrtDrop(event)">
+            <input type="file" id="srt-file" accept=".srt" onchange="handleSrtFile(event)">
+            <div class="upload-icon">📄</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.5)">.srt файл оруулах</div>
+            <div class="upload-name" id="srt-file-name"></div>
+          </div>
+        </div>
+        <div id="srt-text-row" style="display:none;margin-top:10px;">
+          <label class="form-label">SRT агуулга (бичиж эсвэл хуулж оруулна)</label>
+          <textarea id="srt-text-input" placeholder="1&#10;00:00:01,000 --> 00:00:03,000&#10;Hello, how are you?&#10;&#10;2&#10;00:00:04,000 --> 00:00:06,000&#10;I am fine, thank you." style="height:150px;font-family:monospace;font-size:12px;"></textarea>
+        </div>
+        <label class="form-label" style="margin-top:10px;">Орчуулах хэл</label>
+        <select class="lang-select" id="srt-target-lang" style="width:100%;margin-bottom:10px;">
+          <option value="mn" selected>🇲🇳 Монгол</option>
+          <option value="en">🇺🇸 Англи</option>
+          <option value="ru">🇷🇺 Орос</option>
+          <option value="zh">🇨🇳 Хятад</option>
+          <option value="ja">🇯🇵 Япон</option>
+        </select>
+        <button class="run-btn" onclick="runSrtTranslate()">📄 Орчуулах</button>
+        <div class="notice-box" id="srt-translate-notice">💎 Кредит хурэлцэгуй — <a href="pricing.html">тариф сонгох →</a></div>
+        <div class="result" id="srt-translate-result"></div>
       </div>
     </div>
-  </div>
-  <button class="svc-btn" onclick="toggleBox('srt-translate-box',this)">📄 Турших</button>
-  <div class="svc-box" id="srt-translate-box">
-    <div class="cost-pill">⚡ Уне: 10 кредит/файл</div>
 
-    <div class="voice-row">
-      <div class="vbtn on" id="srt-mode-file" onclick="selSrtMode('file', this)">📄 Файл оруулах</div>
-      <div class="vbtn" id="srt-mode-text" onclick="selSrtMode('text', this)">✍️ Текст оруулах</div>
-    </div>
-
-    <div id="srt-file-row" style="margin-top:10px;">
-      <label class="form-label">SRT файл</label>
-      <div class="upload-area" id="srt-upload-area" onclick="document.getElementById('srt-file').click()"
-        ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSrtDrop(event)">
-        <input type="file" id="srt-file" accept=".srt" onchange="handleSrtFile(event)">
-        <div class="upload-icon">📄</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.5)">.srt файл оруулах</div>
-        <div class="upload-name" id="srt-file-name"></div>
+    <!-- 4. Монгол Script бичигч -->
+    <div class="svc-card" data-category="text">
+      <div class="svc-head">
+        <div class="svc-ico purple">✍️</div>
+        <div class="svc-info">
+          <div class="svc-name">Монгол Script бичигч</div>
+          <div class="svc-desc">YouTube, подкаст, кино тайлбарын script монголоор бичнэ.</div>
+          <div class="badges">
+            <span class="badge badge-free">Үнэгуй</span>
+            <span class="badge badge-credit">⚡ 5 кредит/script</span>
+          </div>
+        </div>
+      </div>
+      <button class="svc-btn" onclick="toggleBox('script-writer-box',this)">✍️ Турших</button>
+      <div class="svc-box" id="script-writer-box">
+        <div class="cost-pill">⚡ Үнэ: 5 кредит/script</div>
+        <label class="form-label">Сэдэв / Агуулга</label>
+        <textarea id="script-writer-input" placeholder="Жишээ: Монгол хоолны түухийн тухай видео..."></textarea>
+        <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;">
+          <label style="font-size:12px;color:rgba(255,255,255,0.5);">Төрөл:</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="youtube" checked style="accent-color:#4ade80;"> YouTube</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="podcast" style="accent-color:#4ade80;"> Подкаст</label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="movie" style="accent-color:#4ade80;"> Кино тайлбар</label>
+        </div>
+        <label class="form-label">Урт</label>
+        <select class="lang-select" id="script-writer-length" style="width:100%;margin-bottom:10px;">
+          <option value="short">Богино (1-2 мин)</option>
+          <option value="medium" selected>Дунд (3-5 мин)</option>
+          <option value="long">Урт (7-10 мин)</option>
+        </select>
+        <button class="run-btn" onclick="runScriptWriter()">✍️ Script бичих</button>
+        <div class="notice-box" id="script-writer-notice">💎 Кредит хүрэлцэхгуй — <a href="pricing.html">тариф сонгох →</a></div>
+        <div class="result" id="script-writer-result"></div>
       </div>
     </div>
 
-    <div id="srt-text-row" style="display:none;margin-top:10px;">
-      <label class="form-label">SRT агуулга (бичиж эсвэл хуулж оруулна)</label>
-      <textarea id="srt-text-input" placeholder="1&#10;00:00:01,000 --> 00:00:03,000&#10;Hello, how are you?&#10;&#10;2&#10;00:00:04,000 --> 00:00:06,000&#10;I am fine, thank you." style="height:150px;font-family:monospace;font-size:12px;"></textarea>
-    </div>
-
-    <label class="form-label" style="margin-top:10px;">Орчуулах хэл</label>
-    <select class="lang-select" id="srt-target-lang" style="width:100%;margin-bottom:10px;">
-      <option value="mn" selected>🇲🇳 Монгол</option>
-      <option value="en">🇺🇸 Англи</option>
-      <option value="ru">🇷🇺 Орос</option>
-      <option value="zh">🇨🇳 Хятад</option>
-      <option value="ja">🇯🇵 Япон</option>
-    </select>
-    <button class="run-btn" onclick="runSrtTranslate()">📄 Орчуулах</button>
-    <div class="notice-box" id="srt-translate-notice">💎 Кредит хурэлцэгуй — <a href="pricing.html">тариф сонгох →</a></div>
-    <div class="result" id="srt-translate-result"></div>
-  </div>
-</div>
-
-<div class="svc-card" data-category="text">
-  <div class="svc-head">
-    <div class="svc-ico purple">✍️</div>
-    <div class="svc-info">
-      <div class="svc-name">Монгол Script бичигч</div>
-      <div class="svc-desc">YouTube, подкаст, кино тайлбарын script монголоор бичнэ.</div>
-      <div class="badges">
-        <span class="badge badge-free">Үнэгуй</span>
-        <span class="badge badge-credit">⚡ 5 кредит/script</span>
-      </div>
-    </div>
-  </div>
-  <button class="svc-btn" onclick="toggleBox('script-writer-box',this)">✍️ Турших</button>
-  <div class="svc-box" id="script-writer-box">
-    <div class="cost-pill">⚡ Үнэ: 5 кредит/script</div>
-    <label class="form-label">Сэдэв / Агуулга</label>
-    <textarea id="script-writer-input" placeholder="Жишээ: Монгол хоолны түухийн тухай видео..."></textarea>
-    <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;">
-      <label style="font-size:12px;color:rgba(255,255,255,0.5);">Төрөл:</label>
-      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="youtube" checked style="accent-color:#4ade80;"> YouTube</label>
-      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="podcast" style="accent-color:#4ade80;"> Подкаст</label>
-      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:rgba(255,255,255,0.5);cursor:pointer;"><input type="radio" name="script-type" value="movie" style="accent-color:#4ade80;"> Кино тайлбар</label>
-    </div>
-    <label class="form-label">Урт</label>
-    <select class="lang-select" id="script-writer-length" style="width:100%;margin-bottom:10px;">
-      <option value="short">Богино (1-2 мин)</option>
-      <option value="medium" selected>Дунд (3-5 мин)</option>
-      <option value="long">Урт (7-10 мин)</option>
-    </select>
-    <button class="run-btn" onclick="runScriptWriter()">✍️ Script бичих</button>
-    <div class="notice-box" id="script-writer-notice">💎 Кредит хүрэлцэхгуй — <a href="pricing.html">тариф сонгох →</a></div>
-    <div class="result" id="script-writer-result"></div>
-  </div>
-</div>
     <!-- 5. Орчуулагч -->
     <div class="svc-card" data-category="text">
       <div class="svc-head">
@@ -1016,6 +1059,52 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
   </div>
 </nav>
 
+<!-- ✅ НЭМЭГДСЭН: Auth state script -->
+<script>
+(function(){
+  const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+  const SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+  function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
+  function getToken(){return localStorage.getItem('sb_token')||null;}
+  async function verifyToken(token){try{const r=await fetch(`${SB_URL}/auth/v1/user`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${token}`}});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
+  function avatarUrl(user){if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;const name=(user.user_metadata&&(user.user_metadata.full_name||user.user_metadata.name))||user.email||'U';return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;}
+  function displayName(user){if(user.user_metadata){if(user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata.name)return user.user_metadata.name;}return user.email?user.email.split('@')[0]:'Хэрэглэгч';}
+  function showLoggedIn(user){
+    const av=avatarUrl(user),nm=displayName(user),em=user.email||'';
+    const a=document.getElementById('user-avatar');if(a)a.src=av;
+    const da=document.getElementById('dd-avatar');if(da)da.src=av;
+    const dn=document.getElementById('dd-name');if(dn)dn.textContent=nm;
+    const de=document.getElementById('dd-email');if(de)de.textContent=em;
+    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='none';
+    const um=document.getElementById('user-menu');if(um)um.style.display='flex';
+    const dab=document.getElementById('drawer-auth-buttons');
+    if(dab)dab.innerHTML=`<a href="profile.html" style="flex:1;text-align:center;padding:8px 14px;border-radius:8px;background:rgba(74,222,128,0.12);color:#4ade80;text-decoration:none;font-size:13px;font-weight:700;">👤 Профайл</a>`;
+    const cbg=document.getElementById('credit-bar-guest');if(cbg)cbg.style.display='none';
+  }
+  function showLoggedOut(){
+    localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');
+    const ab=document.getElementById('auth-buttons');if(ab)ab.style.display='flex';
+    const um=document.getElementById('user-menu');if(um)um.style.display='none';
+  }
+  window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(dd)dd.classList.toggle('open');};
+  document.addEventListener('click',function(e){const um=document.getElementById('user-menu'),dd=document.getElementById('user-dropdown');if(!um||!dd)return;if(!um.contains(e.target))dd.classList.remove('open');});
+  window.signOutUser=async function(){
+    const tk=getToken();
+    if(tk){try{await fetch(`${SB_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${tk}`}});}catch(e){}}
+    showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');
+  };
+  async function checkAuth(){
+    const tk=getToken(),cu=getUser();
+    if(!tk){showLoggedOut();return;}
+    if(cu)showLoggedIn(cu);
+    const live=await verifyToken(tk);
+    if(live&&live.id){localStorage.setItem('sb_user',JSON.stringify(live));showLoggedIn(live);}
+    else showLoggedOut();
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',checkAuth);}else{checkAuth();}
+})();
+</script>
+
 <script>
 // ===== NAVBAR TOGGLE =====
 function toggleDrawer() {
@@ -1054,9 +1143,27 @@ function updateTTSCount() {
   const len = document.getElementById('tts-text').value.length;
   document.getElementById('char-count').textContent = len + '/500';
 }
+function updateTranscriptCleanCount() {
+  const len = document.getElementById('transcript-clean-input').value.length;
+  document.getElementById('transcript-clean-count').textContent = len + '/6000';
+}
 function selVoice(el) {
   document.querySelectorAll('.vbtn').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
+}
+function selEngine(type, el) {
+  document.getElementById('engine-edge').classList.remove('on');
+  document.getElementById('engine-gemini').classList.remove('on');
+  el.classList.add('on');
+  document.getElementById('edge-voice-row').style.display = type === 'edge' ? 'block' : 'none';
+  document.getElementById('gemini-voice-row').style.display = type === 'gemini' ? 'block' : 'none';
+}
+function selSrtMode(mode, el) {
+  document.getElementById('srt-mode-file').classList.remove('on');
+  document.getElementById('srt-mode-text').classList.remove('on');
+  el.classList.add('on');
+  document.getElementById('srt-file-row').style.display = mode === 'file' ? 'block' : 'none';
+  document.getElementById('srt-text-row').style.display = mode === 'text' ? 'block' : 'none';
 }
 function swapLangs() {
   const from = document.getElementById('trans-from');
@@ -1065,9 +1172,15 @@ function swapLangs() {
   from.value = to.value;
   to.value = tmp;
 }
+function toggleNameTranslateTarget() {
+  const lang = document.getElementById('name-translate-lang').value;
+  document.getElementById('name-translate-target-row').style.display = lang === 'mn' ? 'block' : 'none';
+}
 
 function runTTS() { alert('TTS функц services.js-д байна'); }
 function runHum() { alert('Humanizer функц services.js-д байна'); }
+function runSrtTranslate() { alert('SRT орчуулагч функц services.js-д байна'); }
+function runScriptWriter() { alert('Script бичигч функц services.js-д байна'); }
 function runTranslate() { alert('Орчуулагч функц services.js-д байна'); }
 function runSTT() { alert('STT функц services.js-д байна'); }
 function runTextEdit() { alert('Текст засагч функц services.js-д байна'); }
@@ -1084,6 +1197,8 @@ function runPdfOcr() { alert('PDF→Текст функц services.js-д бай�
 function runAiDetect() { alert('AI илрүүлэгч функц services.js-д байна'); }
 function runChatbot() { alert('Chatbot функц services.js-д байна'); }
 
+function handleSrtFile(e) { const f = e.target.files[0]; if(f) document.getElementById('srt-file-name').textContent = f.name; }
+function handleSrtDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('srt-file').files = e.dataTransfer.files; document.getElementById('srt-file-name').textContent = f.name; } }
 function handleSTTFile(e) { const f = e.target.files[0]; if(f) document.getElementById('stt-file-name').textContent = f.name; }
 function handleSTTDrop(e) { e.preventDefault(); const f = e.dataTransfer.files[0]; if(f){ document.getElementById('stt-file').files = e.dataTransfer.files; document.getElementById('stt-file-name').textContent = f.name; } }
 function handleMergeVideoFile(e) { const f = e.target.files[0]; if(f) document.getElementById('merge-video-name').textContent = f.name; }
