@@ -1070,46 +1070,46 @@ async function supaDelete(table,id){
 }
 
 // ============================================================
-// ФАЙЛ UPLOAD — мөн адил нэвтэрсэн хэрэглэгчийн token ашиглана
-// ============================================================
-  const WORKER_URL='https://kinoezen-upload.ododdelhii.workers.dev';
+const WORKER_URL='https://kinoezen-upload.ododdelhii.workers.dev';
 async function uploadVideoR2(file,progressId){
-  const MAX=600*1024*1024;
-  if(file.size>MAX){alert('600MB-с их файл оруулах боломжгүй!');return null;}
+  const MAX=2*1024*1024*1024; // 2GB хүртэл
+  if(file.size>MAX){alert('2GB-с их файл оруулах боломжгүй!');return null;}
   const prog=document.getElementById(progressId+'-progress');
   const fill=document.getElementById(progressId+'-fill');
   const ptext=document.getElementById(progressId+'-ptext');
-  if(prog){prog.style.display='block';fill.style.width='10%';ptext.textContent='R2 руу upload хийж байна...';}
+  if(prog){prog.style.display='block';fill.style.width='5%';ptext.textContent='Зөвшөөрөл авч байна...';}
   try{
-    if(fill)fill.style.width='50%';
-    const res=await fetch(WORKER_URL,{method:'POST',headers:{'X-File-Name':file.name,'X-File-Size':String(file.size),'Content-Type':file.type||'video/mp4'},body:file});
-    const data=await res.json();
-    if(!data.success)throw new Error(data.error||'Upload failed');
-    if(fill)fill.style.width='100%';
-    if(ptext)ptext.textContent='Дууслаа ✅';
-    setTimeout(()=>{if(prog)prog.style.display='none';},2000);
-    return data.url;
-  }catch(err){if(ptext)ptext.textContent='❌ Алдаа: '+err.message;throw err;}
-}
-async function uploadFile(file,folder,progressId){
-  const ext=file.name.split('.').pop();
-  const fileName=`${folder}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;
-  const prog=document.getElementById(progressId+'-progress');
-  const fill=document.getElementById(progressId+'-fill');
-  const ptext=document.getElementById(progressId+'-ptext');
-  if(prog){prog.style.display='block';fill.style.width='10%';ptext.textContent='Ачааллаж байна...';}
-  try{
-    const headers = await authHeader();
-    const r=await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET}/${fileName}`,{
+    const presignRes=await fetch(WORKER_URL,{
       method:'POST',
-      headers:{...headers,'Content-Type':file.type,'x-upsert':'true'},
-      body:file
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fileName:file.name,fileSize:file.size})
     });
+    const presignData=await presignRes.json();
+    if(!presignData.success)throw new Error(presignData.error||'Presign амжилтгүй');
+    const {uploadUrl,publicUrl}=presignData;
+
+    if(ptext)ptext.textContent='R2 руу upload хийж байна...';
+
+    await new Promise((resolve,reject)=>{
+      const xhr=new XMLHttpRequest();
+      xhr.open('PUT',uploadUrl,true);
+      xhr.setRequestHeader('Content-Type',file.type||'video/mp4');
+      xhr.upload.onprogress=(e)=>{
+        if(e.lengthComputable&&fill){
+          const percent=Math.round((e.loaded/e.total)*100);
+          fill.style.width=percent+'%';
+          if(ptext)ptext.textContent='Илгээж байна: '+percent+'%';
+        }
+      };
+      xhr.onload=()=>{(xhr.status>=200&&xhr.status<300)?resolve():reject(new Error('Upload алдаа: status '+xhr.status));};
+      xhr.onerror=()=>reject(new Error('Сүлжээний алдаа upload хийх явцад'));
+      xhr.send(file);
+    });
+
     if(fill)fill.style.width='100%';
     if(ptext)ptext.textContent='Дууслаа ✅';
     setTimeout(()=>{if(prog)prog.style.display='none';},2000);
-    if(!r.ok){const e=await r.json();throw new Error(e.message||'Upload failed');}
-    return`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${fileName}`;
+    return publicUrl;
   }catch(err){if(ptext)ptext.textContent='❌ Алдаа: '+err.message;throw err;}
 }
 
