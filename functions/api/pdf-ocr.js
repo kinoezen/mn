@@ -50,7 +50,7 @@ export async function onRequestPost({ request, env }) {
         }],
         generationConfig: {
           temperature: 0.1,
-          maxOutputTokens: 8000,
+          maxOutputTokens: 30000,
           thinkingConfig: { thinkingBudget: 0 }
         }
       })
@@ -65,10 +65,23 @@ export async function onRequestPost({ request, env }) {
     const extractedText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (!extractedText) throw new Error('Gemini-ээс текст ирсэнгуй');
 
+    // Хэрэв Gemini-ийн хариу token хязгаарт хурсэн бол (finishReason
+    // "MAX_TOKENS" байх), текст дунд нь тасарсан байж магадгуй —
+    // хэрэглэгчид тодорхой анхааруулга ӖгНӖ.
+    const finishReason = data?.candidates?.[0]?.finishReason;
+    const truncated = finishReason === 'MAX_TOKENS';
+
     // Хуудасны тоог тооцоолох (ойролцоо, форм-feed тэмдэгээр)
     const pageCount = (extractedText.match(/\f/g) || []).length + 1;
 
-    return corsJson({ text: extractedText.trim(), pages: pageCount });
+    return corsJson({
+      text: extractedText.trim(),
+      pages: pageCount,
+      truncated,
+      warning: truncated
+        ? '⚠️ PDF файл хэт их хуудастай тул текст бугдийг гаргаж амжаагуй (тоо хязгаарт хурсэн). ЗөвхОн эхний хэсэг харагдаж байна. Файлыг бага хуудастайгаар хуваагаад дахин оруулна уу.'
+        : null
+    });
   } catch (err) {
     return corsJson({ error: err.message }, 500);
   }
