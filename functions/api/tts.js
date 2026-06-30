@@ -171,44 +171,45 @@ async function callNaturalVoiceAPI(text) {
   const rawText = await getRes.text();
   const lines = rawText.split('\n');
 
-  // ЗАСВАР: generate_speech нь yield ашиглан ӨГУУЛБЭР тус бугдийг
-  // дараалан буцаадаг тул SSE урсгал дотор ОЛОН "data:" мор ирнэ.
-  // ЗӖвхӖн хамгийн сулийнг авбал зӨвхӨн СУЛИЙН ӨГУУЛБЭРИЙН аудио
-  // байж, эхний хэсэг алга болно. Тиймээс хамгийн ТОМ (урт) data
-  // мрийг сонгоно — ихэвчлэн хамгийн их мэдээлэлтэй нь хамгийн
-  // бутэн дуу байдаг.
+  // ЗАСВАР: app.py дотор progress=gr.Progress() байгаа тул Gradio
+  // "event: heartbeat" эсвэл бусад event тӨрӨл ч буцаадаг. ЗӨВХӨН
+  // "event: error" гэдгийг АЛДАА гэж тооцно — бусад бугдийг (тэр
+  // тоонд progress, generating, гэх мэт) АЛГАСНА.
   let bestDataLine = null;
   let bestLength = 0;
   let sawError = false;
   let errorData = null;
+  const seenEvents = [];
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (line.startsWith('event:')) {
       const ev = line.slice(6).trim();
-      if (ev === 'error') sawError = true;
+      seenEvents.push(ev);
+      sawError = (ev === 'error');
     } else if (line.startsWith('data:')) {
       const d = line.slice(5).trim();
-      if (d && d !== 'null') {
-        if (sawError) {
-          errorData = d;
-        } else if (d.length > bestLength) {
-          bestDataLine = d;
-          bestLength = d.length;
-        }
+      if (sawError) {
+        errorData = d;
+      } else if (d && d !== 'null' && d.length > bestLength) {
+        bestDataLine = d;
+        bestLength = d.length;
       }
     }
   }
+
+  console.error('SSE events дараалал:', seenEvents.join(', '));
+  console.error('SSE raw (эхний 1500):', rawText.slice(0, 1500));
 
   const lastDataLine = bestDataLine;
 
   if (sawError) {
     console.error('Natural voice raw SSE:', rawText.slice(0, 1000));
-    throw new Error('Байгалийн хоолойн Space-ээс алдаа ирлээ: ' + (errorData || '(тодорхойгуй)').slice(0, 300));
+    throw new Error('Байгалийн хоолойн Space-ээс алдаа ирлээ: ' + (errorData || '(тодорхойгуй)').slice(0, 300) + ' | events: ' + seenEvents.join(','));
   }
 
   if (!lastDataLine) {
-    throw new Error('Байгалийн хоолойн Space-ээс аудио өгөгдөл ирсэнгуй (хоосон урсгал)');
+    throw new Error('Аудио ирсэнгуй. SSE events: [' + seenEvents.join(', ') + '] | raw(200): ' + rawText.slice(0, 200));
   }
 
   let parsed;
