@@ -459,6 +459,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
         <div class="voice-row">
           <div class="vbtn on" id="engine-edge" onclick="selEngine('edge', this)">🎤 Edge TTS (Батаа/Есүй)</div>
           <div class="vbtn" id="engine-gemini" onclick="selEngine('gemini', this)">✨ Gemini TTS (Байгалийн)</div>
+          <div class="vbtn" id="engine-natural" onclick="selEngine('natural', this)">🌿 Дорж (Байгалийн, удаан)</div>
         </div>
         <div id="edge-voice-row">
           <label class="form-label" style="margin-top:10px">Дуу сонгох</label>
@@ -467,6 +468,11 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
             <div class="vbtn" onclick="selVoice(this)">🎤 Есүй</div>
           </div>
         </div>
+         <div id="natural-voice-row" style="display:none;">
+  <div style="font-size:12px;color:#f4a261;background:rgba(244,162,97,0.08);border:1px solid rgba(244,162,97,0.2);border-radius:8px;padding:10px 12px;line-height:1.6;margin-top:10px;">
+    🌿 <b>Дорж</b> — жинхэнэ Монгол байгалийн хоолой. Эхний ачаалал ~10-30 секунд авч болно. Текст 300 тэмдэгтээс ихгуй байх ёстой.
+  </div>
+</div>
         <div id="gemini-voice-row" style="display:none;">
           <label class="form-label" style="margin-top:10px">Gemini дуу сонгох</label>
           <select class="lang-select" id="gemini-voice-select" style="width:100%;">
