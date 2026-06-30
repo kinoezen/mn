@@ -42,6 +42,18 @@ const EDGE_VOICE_DISPLAY = {
   'Есүй (эмэгтэй)': 'Есүй (эмэгтэй)'
 };
 
+// ӖМНӖ: yг таг тааруулга (===) ашигладаг байсан тул frontend-ээс
+// emoji/зай нэмэгдсэн товч текст ирвэл (жишээ: "🎙️ Есуй") тааруулга
+// амжилтгуй болж, бугд "Батаа"-д унадаг байсан. Одоо ИЛуу НАЙДВАРТАЙ
+// includes()-ор шалгана.
+function resolveEdgeVoiceLabel(rawVoice) {
+  const v = (rawVoice || '').trim();
+  if (v.includes('Есуй') || v.includes('Есүй')) return 'Есүй (эмэгтэй)';
+  if (v.includes('Батаа')) return 'Батаа (эрэгтэй)';
+  if (EDGE_VOICE_DISPLAY[v]) return EDGE_VOICE_DISPLAY[v];
+  return 'Батаа (эрэгтэй)';
+}
+
 export async function onRequestOptions() {
   return corsOptions();
 }
@@ -64,7 +76,7 @@ export async function onRequestPost({ request }) {
       ? 'Gemini TTS (Байгалийн)'
       : 'Edge TTS (Батаа / Есүй)';
 
-    const edgeVoiceLabel = EDGE_VOICE_DISPLAY[(voice || '').trim()] || 'Батаа (эрэгтэй)';
+    const edgeVoiceLabel = resolveEdgeVoiceLabel(voice);
     const geminiVoiceLabel = GEMINI_VOICE_MAP_KEYS.includes(geminiVoice)
       ? geminiVoice
       : 'Лхагваа (эрэгтэй)';
