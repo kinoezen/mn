@@ -224,14 +224,19 @@ async function callNaturalVoiceAPI(text) {
     throw new Error('Байгалийн хоолойн Space-ээс аудио үр дун ирсэнгуй. parsed=' + JSON.stringify(parsed).slice(0, 300));
   }
 
-  // ВРЕМЕННЫЙ DEBUG: audioItem-ийн БУГД БУТЦИЙГ шууд алдаа болгож
-  // харуулна — тэгвэл frontend дээрх toast-аас шууд харж болно.
-  throw new Error('DEBUG audioItem keys: ' + Object.keys(audioItem || {}).join(',') + ' | full: ' + JSON.stringify(audioItem).slice(0, 500));
+  // ЗАСВАР: Gradio streaming Audio component нь is_stream:true үед
+  // .m3u8 (HLS playlist) URL буцаадаг — энэ нь жагсаалт текст,
+  // шууд audio src болгож ашиглаж болохгуй (browser native дэмждэггуй,
+  // мӨн зӨвхӨн ~270 тэмдэгт байдаг учир нь playlist бол ӨӨрӨӨ жижиг).
+  // Жинхэнэ аудио файлыг авахын тулд HLS playlist-ийг уншиж дотор нь
+  // байгаа segment (.ts) URL-уудыг олж, бугдийг нэгтгэж нэг WAV/MP3
+  // болгох ёстой. Gradio-ийн хувьд хамгийн найдвартай арга бол
+  // playlist-аас сулийн segment-ийн өмнөх "бутэн файл" URL-ийг олох,
+  // эсвэл reconnect хийж stream=false горимоор дахин хүсэх явдал юм.
+  if (audioItem.is_stream && audioItem.url) {
+    return await resolveHlsStreamToDataUrl(audioItem.url);
+  }
 
-  // ЗАСВАР: app.py дотор gr.Audio(type="numpy", ...) гэж заасан тул
-  // Gradio заримдаа { value: { sample_rate, data: [...] } } эсвэл
-  // шууд RAW numpy WAV массив хэлбэрээр буцаадаг. Энэ тохиолдолд
-  // url/path байхгуй тул WAV болгож ӖӖРӖӖ хувиргах ёстой.
   if (audioItem.sample_rate !== undefined && Array.isArray(audioItem.data)) {
     return numpyToWavDataUrl(audioItem.data, audioItem.sample_rate);
   }
@@ -408,7 +413,55 @@ async function callGradioAPI(inputsArray) {
   throw new Error('HF Space-ийн аудио хариуны бутэц танигдсангуй: ' + JSON.stringify(audioItem).slice(0, 200));
 }
 
-// HF Space-аас аудио файлыг татаж, base64 data URL болгож хувиргана
+// ============================================================
+// Gradio HLS streaming (.m3u8) playlist-ийг уншиж, дотор нь
+// заасан бугд segment-ийг (.ts эсвэл бусад) татаж нэгтгэн нэг
+// бутэн audio файл (data URL) болгож буцаана.
+// ============================================================
+async function resolveHlsStreamToDataUrl(m3u8Url) {
+  const res = await fetch(m3u8Url);
+  if (!res.ok) {
+    throw new Error(`HLS playlist татахад алдаа (${res.status}): ${m3u8Url}`);
+  }
+  const playlistText = await res.text();
+
+  // m3u8 playlist дотор #EXTINF мор бугдийн дараа segment URL ирдэг
+  const lines = playlistText.split('\n').map(l => l.trim()).filter(Boolean);
+  const segmentPaths = lines.filter(l => !l.startsWith('#'));
+
+  if (segmentPaths.length === 0) {
+    throw new Error('HLS playlist дотор segment олдсонгуй: ' + playlistText.slice(0, 300));
+  }
+
+  // Segment замууд харьцангуй (relative) байж болзошгуй тул m3u8-ийн
+  // base URL-тай нийлуулнэ
+  const baseUrl = m3u8Url.substring(0, m3u8Url.lastIndexOf('/') + 1);
+  const segmentUrls = segmentPaths.map(p => p.startsWith('http') ? p : baseUrl + p);
+
+  // Бугд segment-ийг параллель татаад дараалал хэвээр нэгтгэнэ
+  const buffers = await Promise.all(segmentUrls.map(async (url) => {
+    const r = await fetch(url);
+    if (!r.ok) throw new Error(`Segment татахад алдаа (${r.status}): ${url}`);
+    return await r.arrayBuffer();
+  }));
+
+  const totalLen = buffers.reduce((sum, b) => sum + b.byteLength, 0);
+  if (totalLen === 0) {
+    throw new Error('HLS segment-уудыг нэгтгэсэн ч аудио хоосон байна (0 byte)');
+  }
+
+  const merged = new Uint8Array(totalLen);
+  let offset = 0;
+  for (const buf of buffers) {
+    merged.set(new Uint8Array(buf), offset);
+    offset += buf.byteLength;
+  }
+
+  // Segment-ууд ихэвчлэн MPEG-TS эсвэл AAC форматтай байдаг,
+  // browser-д audio/mp4 эсвэл audio/aac гэж зааж ажиглая (.ts container)
+  const base64 = arrayBufferToBase64(merged.buffer);
+  return `data:audio/mp4;base64,${base64}`;
+}
 // (Frontend нь data: URL-ийг шууд <audio> tag-д ашигладаг тул)
 async function fetchAndConvertToDataUrl(fileUrl) {
   const res = await fetch(fileUrl);
