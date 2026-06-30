@@ -1234,6 +1234,20 @@ async function loadStats(){
     document.getElementById('st-featured').textContent=featuredCount;
     document.getElementById('st-total').textContent=mc+nc+lc;
     document.getElementById('st-programs').textContent=Array.isArray(programs)?programs.length:0;
+    try {
+          const r2Res = await fetch(WORKER_URL, { method: 'GET' });
+          const r2Data = await r2Res.json();
+          const storageEl = document.getElementById('st-storage');
+          if (storageEl) {
+            storageEl.textContent = r2Data.totalGB + ' / ' + r2Data.limitGB + ' GB';
+            storageEl.style.color = r2Data.percentUsed >= 85 ? '#e63946' : (r2Data.percentUsed >= 70 ? '#f4a261' : '#4ade80');
+          }
+          const warnEl = document.getElementById('st-storage-warn');
+          if (warnEl) {
+            warnEl.style.display = r2Data.percentUsed >= 85 ? 'block' : 'none';
+            warnEl.textContent = '⚠️ Сторж дүүрч байна! ' + r2Data.percentUsed + '% ашигласан';
+          }
+        } catch(e) {}
   }catch(e){console.error('Stats error:',e);}
 }
 
