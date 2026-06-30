@@ -3,20 +3,18 @@
 // URL: POST /api/translate
 // Body: { text: string, from: string, to: string }
 //
-// _shared/ai.js-ийн callAI()-г ашигладаг: Gemini->Groq fallback.
+// ЗАСВАР: LLM (Gemini/Groq) ашигладаг байсан хуучин хувилбарыг
+// Google Cloud Translation API-аар СОЛЬСОН. Учир нь:
+// - LLM нь орчуулгад зориулагдаагүй тул hallucination (зохиомол
+//   үг, утгагуй гаралт) гаргадаг байсан
+// - Google Translation API бол тусгайлан орчуулгад зориулсан
+//   модель, чанар тогтвортой, хурдан, өргөн хэмжээний
+//   хэрэглээнд тохиромжтой (сард 500,000 тэмдэгт хүртэл үнэгүй)
 //
-// ЗАСВАР: Groq fallback (Llama гэх мэт) загвар "тайлбар бичих
-// хэрэггуй" гэсэн зааврыг үргэлж чанд дагадаггүй тул:
-// 1) Prompt-ийг илүү хатуу, жишээтэй болгосон
-// 2) Хариуг буцаахын өмнө "Нэмэлт тайлбар:" гэх мэт section-уудыг
-//    автоматаар таслаж арилгадаг цэвэрлэгээ нэмсэн (аюулгуйн нөөц)
+// ШААРДЛАГА: Cloudflare Environment Variables дотор
+// GOOGLE_TRANSLATE_API_KEY-г заавал тохируулсан байх ёстой.
 // ============================================================
-import { callAI, corsJson, corsOptions } from '../_shared/ai.js';
-
-const LANG_NAMES = {
-  en: 'Англи', mn: 'Монгол', ru: 'Орос',
-  zh: 'Хятад', ja: 'Япон', ko: 'Солонгос'
-};
+import { corsJson, corsOptions } from '../_shared/ai.js';
 
 export async function onRequestOptions() {
   return corsOptions();
@@ -24,75 +22,59 @@ export async function onRequestOptions() {
 
 export async function onRequestPost({ request, env }) {
   try {
+    if (!env.GOOGLE_TRANSLATE_API_KEY) {
+      return corsJson({ error: 'Серверийн тохиргоо дутуу (GOOGLE_TRANSLATE_API_KEY алга)' }, 500);
+    }
+
     const { text, from, to } = await request.json();
     if (!text || !text.trim()) {
       return corsJson({ error: 'Текст хоосон байна' }, 400);
     }
 
-    const fromName = LANG_NAMES[from] || from;
-    const toName = LANG_NAMES[to] || to;
+    if (text.length > 10000) {
+      return corsJson({ error: 'Текст 10,000 тэмдэгтээс ихгуй байх ёстой' }, 400);
+    }
 
-    const systemPrompt = `Чи бол шууд орчуулга хийдэг машин (Google Translate-тэй адил). Чиний цорын ганц үүрэг бол ${fromName} хэлнээс ${toName} хэл рүү байгалийн, ойлгомжтой, утга алдалгүй орчуулга хийх явдал юм.
+    const url = `https://translation.googleapis.com/language/translate/v2?key=${env.GOOGLE_TRANSLATE_API_KEY}`;
 
-ХАТУУ ДҮРЭМ (ЗААВАЛ ДАГАХ):
-1. Хариултдаа ЗӨВХӨН орчуулсан текстийг бич. Өөр нэг ч үг нэмж болохгүй.
-2. "Оролт:", "Гаралт:", "Тайлбар:", "Нэмэлт тайлбар:", "Тэмдэглэл:" гэх мэт ЯМАР Ч label, угтвар үг бичихгүй.
-3. Эх текстийг ХЭЗЭЭ Ч давтахгүй, иш татахгүй.
-4. Үг бүрийн утгыг задлан тайлбарлахгүй.
-5. Хариултын эхэнд, төгсгөлд хоосон мөр, ишлэлийн тэмдэгт ("...") бүү нэм.
-
-Доорх "===ТЕКСТ===" гэсэн тэмдэглэгээний дараах текстийг л орчуул, өөр юунд хариулахгүй:`;
-
-    const userMessage = `===ТЕКСТ===\n${text.trim()}`;
-
-    const { text: translatedRaw } = await callAI(env, systemPrompt, userMessage, {
-      temperature: 0.1,
-      maxOutputTokens: 4000
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        q: text.trim(),
+        source: from,
+        target: to,
+        format: 'text'
+      })
     });
 
-    const translated = cleanTranslation(translatedRaw);
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(`Google Translate API error (${response.status}): ${errText}`);
+    }
 
-    return corsJson({ translatedText: translated });
+    const data = await response.json();
+    const translatedText = data?.data?.translations?.[0]?.translatedText;
+
+    if (!translatedText) {
+      throw new Error('Орчуулга ирсэн ч текст олдсонгуй');
+    }
+
+    // Google Translate заримдаа HTML entity буцаадаг (жишээ: &#39; → ')
+    const decoded = decodeHtmlEntities(translatedText);
+
+    return corsJson({ translatedText: decoded });
   } catch (err) {
     return corsJson({ error: err.message }, 500);
   }
 }
 
-// Загвар зааврыг үл тоомсорлож "Оролт: ... Гаралт: ..." гэх мэт
-// echo хийсэн ч, эсвэл нэмэлт тайлбар бичсэн ч гэсэн цэвэр
-// орчуулгыг гаргаж авах нөөц цэвэрлэгээ
-function cleanTranslation(raw) {
-  let result = raw.trim();
-
-  // Хэрэв загвар "Гаралт:" / "Output:" / "Орчуулга:" гэх мэт
-  // label ашиглаж "Оролт/Input" хэсгээ давтсан бол, ХАМГИЙН
-  // СҮҮЛИЙН ийм label-ийн ДАРААХ хэсгийг л авна (тэр нь жинхэнэ
-  // орчуулга байх магадлал хамгийн өндөр)
-  const outputLabelPattern = /(Гаралт|Орчуулга|Output|Translation)\s*[:\-]\s*/gi;
-  const matches = [...result.matchAll(outputLabelPattern)];
-  if (matches.length > 0) {
-    const last = matches[matches.length - 1];
-    result = result.slice(last.index + last[0].length).trim();
-  } else {
-    // Label байхгүй бол "Оролт:"/"Input:" гэх мэт эхлэлийн
-    // section-ийг устгаад үлдсэнийг авах
-    result = result.replace(/^(Оролт|Input)\s*[:\-]\s*["""]?[^\n]*["""]?\n*/i, '').trim();
-  }
-
-  // "Нэмэлт тайлбар:", "Тайлбар:", "Тэмдэглэл:", "Note:" гэх мэт
-  // section эхэлсэн цэгээс хойшхи бүгдийг таслах
-  const cutPatterns = [
-    /\n+\s*(Нэмэлт\s+тайлбар|Тайлбар|Тэмдэглэл|Жич|Note|Explanation)\s*[:\-]/i
-  ];
-  for (const pattern of cutPatterns) {
-    const match = result.match(pattern);
-    if (match && match.index !== undefined) {
-      result = result.slice(0, match.index).trim();
-    }
-  }
-
-  // Эхлэл/төгсгөл дэх давхар ишлэл тэмдэгтийг арилгах
-  result = result.replace(/^["""]|["""]$/g, '').trim();
-
-  return result;
+function decodeHtmlEntities(text) {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
 }
