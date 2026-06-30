@@ -137,7 +137,7 @@ async function callNaturalVoiceAPI(text) {
     body: JSON.stringify({
       data: [
         text,
-        'Дорж',   // voice — Space дотор "Bataa" гэж бичигдсэн ч UI дээр "Дорж" гэж харуулна
+        'Дорж',   // HF Space-ийн VOICES жагсаалт ["Дорж"] болж зассаны дараа энэ утга зөв ажиллана
         0.05,     // temperature
         1.0,      // top_p
         3.5,      // repetition_penalty
@@ -171,7 +171,14 @@ async function callNaturalVoiceAPI(text) {
   const rawText = await getRes.text();
   const lines = rawText.split('\n');
 
-  let lastDataLine = null;
+  // ЗАСВАР: generate_speech нь yield ашиглан ӨГУУЛБЭР тус бугдийг
+  // дараалан буцаадаг тул SSE урсгал дотор ОЛОН "data:" мор ирнэ.
+  // ЗӖвхӖн хамгийн сулийнг авбал зӨвхӨн СУЛИЙН ӨГУУЛБЭРИЙН аудио
+  // байж, эхний хэсэг алга болно. Тиймээс хамгийн ТОМ (урт) data
+  // мрийг сонгоно — ихэвчлэн хамгийн их мэдээлэлтэй нь хамгийн
+  // бутэн дуу байдаг.
+  let bestDataLine = null;
+  let bestLength = 0;
   let sawError = false;
   let errorData = null;
 
@@ -183,11 +190,17 @@ async function callNaturalVoiceAPI(text) {
     } else if (line.startsWith('data:')) {
       const d = line.slice(5).trim();
       if (d && d !== 'null') {
-        lastDataLine = d;
-        if (sawError) errorData = d;
+        if (sawError) {
+          errorData = d;
+        } else if (d.length > bestLength) {
+          bestDataLine = d;
+          bestLength = d.length;
+        }
       }
     }
   }
+
+  const lastDataLine = bestDataLine;
 
   if (sawError) {
     console.error('Natural voice raw SSE:', rawText.slice(0, 1000));
@@ -210,6 +223,17 @@ async function callNaturalVoiceAPI(text) {
     throw new Error('Байгалийн хоолойн Space-ээс аудио үр дун ирсэнгуй');
   }
 
+  // ЗАСВАР: app.py дотор gr.Audio(type="numpy", ...) гэж заасан тул
+  // Gradio заримдаа { value: { sample_rate, data: [...] } } эсвэл
+  // шууд RAW numpy WAV массив хэлбэрээр буцаадаг. Энэ тохиолдолд
+  // url/path байхгуй тул WAV болгож ӖӖРӖӖ хувиргах ёстой.
+  if (audioItem.sample_rate !== undefined && Array.isArray(audioItem.data)) {
+    return numpyToWavDataUrl(audioItem.data, audioItem.sample_rate);
+  }
+  if (audioItem.value && audioItem.value.sample_rate !== undefined) {
+    return numpyToWavDataUrl(audioItem.value.data, audioItem.value.sample_rate);
+  }
+
   if (audioItem.url) {
     return await fetchAndConvertToDataUrl(audioItem.url);
   }
@@ -220,11 +244,49 @@ async function callNaturalVoiceAPI(text) {
     const fileUrl = `${NATURAL_SPACE_BASE}/gradio_api/file=${audioItem.path}`;
     return await fetchAndConvertToDataUrl(fileUrl);
   }
-  if (audioItem.data) {
+  if (audioItem.data && typeof audioItem.data === 'string') {
     return audioItem.data.startsWith('data:') ? audioItem.data : `data:audio/mpeg;base64,${audioItem.data}`;
   }
 
+  console.error('Танигдсангуй audioItem бутэц:', JSON.stringify(audioItem).slice(0, 500));
   throw new Error('Байгалийн хоолойн аудио хариуны бутэц танигдсангуй: ' + JSON.stringify(audioItem).slice(0, 200));
+}
+
+// Gradio numpy audio [sample_rate, float_array] хэлбэрийг WAV
+// файл болгож хувиргана (16-bit PCM)
+function numpyToWavDataUrl(floatArray, sampleRate) {
+  const numSamples = floatArray.length;
+  const buffer = new ArrayBuffer(44 + numSamples * 2);
+  const view = new DataView(buffer);
+
+  function writeStr(offset, str) {
+    for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+  }
+
+  writeStr(0, 'RIFF');
+  view.setUint32(4, 36 + numSamples * 2, true);
+  writeStr(8, 'WAVE');
+  writeStr(12, 'fmt ');
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeStr(36, 'data');
+  view.setUint32(40, numSamples * 2, true);
+
+  let offset = 44;
+  for (let i = 0; i < numSamples; i++) {
+    let s = Math.max(-1, Math.min(1, floatArray[i]));
+    s = s < 0 ? s * 0x8000 : s * 0x7FFF;
+    view.setInt16(offset, s, true);
+    offset += 2;
+  }
+
+  const base64 = arrayBufferToBase64(buffer);
+  return `data:audio/wav;base64,${base64}`;
 }
 
 // ============================================================
