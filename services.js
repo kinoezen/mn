@@ -337,6 +337,7 @@ async function runTranslate() {
 
 // ============================================================
 // HUMANIZER — 1 тэмдэгт = 1 кредит
+// ШИНЭ runHum() — /api/humanize руу бодитоор fetch хийнэ.
 // ============================================================
 async function runHum() {
     const text = document.getElementById('hum-input')?.value.trim();
@@ -350,23 +351,27 @@ async function runHum() {
 
     if (btn) btn.textContent = '⏳ Хүмүүнжүүлж байна...';
     try {
-        const humanized = text.replace(/машин/g, 'гайхалтай').replace(/хиймэл/g, 'байгалийн')
-            .replace(/автомат/g, 'ухаалаг').replace(/технологи/g, 'арга');
+        const response = await fetch('/api/humanize', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Хүмүүнжүүлэх үед алдаа гарлаа');
         const beforeEl = document.getElementById('hum-before');
         const afterEl = document.getElementById('hum-after');
         const resultEl = document.getElementById('hum-result');
-        if (beforeEl) beforeEl.textContent = text;
-        if (afterEl) afterEl.textContent = humanized;
+        if (beforeEl) beforeEl.textContent = data.original;
+        if (afterEl) afterEl.textContent = data.humanized;
         if (resultEl) resultEl.style.display = 'grid';
         showToast('✅ Хүмүүнжүүлэлт амжилттай!', 'success');
         triggerServiceFeedback('humanizer', 'Humanizer');
     } catch (error) {
         console.error('Humanizer error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '✨ Хүмүүнжүүлэх'; }
 }
-
 // ============================================================
 // SRT СУБТИТР ОРЧУУЛАГЧ — 10 кредит/файл
 // ============================================================
