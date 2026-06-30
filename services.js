@@ -1,4 +1,5 @@
-// ============================================================
+// 
+
 // services.js — КиноЭзэн AI Үйлчилгээнүүд
 // КРЕДИТ СИСТЕМ + FEEDBACK ХОЛБОГДСОН ХУВИЛБАР
 // ============================================================
@@ -490,6 +491,16 @@ async function runScriptWriter() {
 
 // ============================================================
 // STT (Дуу → Текст) — 1 мин = 10 кредит
+// ЗАСВАР: Хуучин код /api/stt-г огт дуудаагүй, зөвхөн аудио
+// тоглуулаад browser-ийн built-in webkitSpeechRecognition руу
+// чиглүүлж байсан (тийм учраас "войс буцаад гараад ирэх" мэт
+// санагдаж байсан). Одоо file-аа /api/stt руу FormData-аар
+// явуулж, Groq-аас ирсэн жинхэнэ транскрипцийг харуулна.
+//
+// services.js дотроос ХУУЧИН runSTT() функцийг олоод (~280-р
+// мөр орчим, "STT (Дуу → Текст)" коммент доорх хэсэг), бүхэлд нь
+// устгаад ЭНЭ ФУНКЦЭЭР сольж тавь. startSpeechRecognition()
+// функцийг хэвээр үлдээж болно, шинэ runSTT() үүнийг дуудахгүй.
 // ============================================================
 async function runSTT() {
     const fileInput = document.getElementById('stt-file');
@@ -508,55 +519,46 @@ async function runSTT() {
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; } return; }
 
     if (btn) btn.textContent = '⏳ Боловсруулж байна...';
+    const resultDiv = document.getElementById('stt-result');
     try {
         const audioUrl = URL.createObjectURL(file);
-        const resultDiv = document.getElementById('stt-result');
         if (resultDiv) {
             resultDiv.classList.add('show');
-            resultDiv.innerHTML = `<div class="result-label">🎙️ Аудио боловсруулагдлаа</div>
+            resultDiv.innerHTML = `<div class="result-label">⏳ Текст рүү хөрвүүлж байна...</div>
+            <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
+                <source src="${audioUrl}">
+            </audio>`;
+        }
+
+        const formData = new FormData();
+        formData.append('audio', file);
+
+        const response = await fetch('/api/stt', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Текст рүү хөрвүүлэх үед алдаа гарлаа');
+        if (!data.transcript) throw new Error('Транскрипц ирсэнгуй');
+
+        if (resultDiv) {
+            resultDiv.innerHTML = `<div class="result-label">🎙️ Текст болсон</div>
             <audio controls style="width:100%;border-radius:8px;margin-bottom:10px;">
                 <source src="${audioUrl}">
             </audio>
-            <div style="font-size:13px;color:rgba(255,255,255,0.4);padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;">
-                🎤 Доорх товчоор микрофоноор ярьж болно:
-            </div>
-            <button onclick="startSpeechRecognition()" style="padding:10px 20px;border-radius:10px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);color:#4ade80;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;">🎤 Микрофоноор ярих</button>
-            <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;min-height:40px;"></div>`;
+            <div id="stt-text-result" style="margin-top:10px;padding:12px;background:rgba(255,255,255,0.03);border-radius:8px;color:rgba(255,255,255,0.8);font-size:14px;line-height:1.7;white-space:pre-wrap;">${data.transcript}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
-        showToast('✅ Аудио боловсруулагдлаа!', 'success');
+        showToast('✅ Текст амжилттай гарлаа!', 'success');
         triggerServiceFeedback('stt', 'Дуу → Текст');
     } catch (error) {
+        if (resultDiv) resultDiv.classList.remove('show');
         console.error('STT error:', error);
-        showToast('❌ Алдаа гарлаа.', 'error');
+        showToast('❌ ' + error.message, 'error');
     }
     if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; }
 }
-
-function startSpeechRecognition() {
-    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        showToast('❌ Таны браузер дуу танихыг дэмжихгүй байна.', 'error');
-        return;
-    }
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'mn-MN';
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    const resultEl = document.getElementById('stt-text-result');
-    if (resultEl) resultEl.textContent = '🎤 Ярьж байна...';
-    recognition.onresult = function(event) {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            transcript += event.results[i][0].transcript;
-        }
-        if (resultEl) resultEl.textContent = transcript;
-    };
-    recognition.onerror = function(event) {
-        if (resultEl) resultEl.textContent = '❌ Алдаа: ' + event.error;
-    };
-    recognition.start();
-}
-
 // ============================================================
 // ТЕКСТ ЗАСАГЧ — 1 тэмдэгт = 1 кредит
 // ============================================================
