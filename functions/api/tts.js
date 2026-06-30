@@ -221,8 +221,12 @@ async function callNaturalVoiceAPI(text) {
 
   const audioItem = Array.isArray(parsed) ? parsed[0] : parsed;
   if (!audioItem) {
-    throw new Error('Байгалийн хоолойн Space-ээс аудио үр дун ирсэнгуй');
+    throw new Error('Байгалийн хоолойн Space-ээс аудио үр дун ирсэнгуй. parsed=' + JSON.stringify(parsed).slice(0, 300));
   }
+
+  // ВРЕМЕННЫЙ DEBUG: audioItem-ийн БУГД БУТЦИЙГ шууд алдаа болгож
+  // харуулна — тэгвэл frontend дээрх toast-аас шууд харж болно.
+  throw new Error('DEBUG audioItem keys: ' + Object.keys(audioItem || {}).join(',') + ' | full: ' + JSON.stringify(audioItem).slice(0, 500));
 
   // ЗАСВАР: app.py дотор gr.Audio(type="numpy", ...) гэж заасан тул
   // Gradio заримдаа { value: { sample_rate, data: [...] } } эсвэл
