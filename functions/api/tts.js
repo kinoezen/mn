@@ -191,7 +191,23 @@ async function callNaturalVoiceAPI(text) {
       const d = line.slice(5).trim();
       if (sawError) {
         errorData = d;
-      } else if (d && d !== 'null' && d.length > bestLength) {
+        continue;
+      }
+      if (!d || d === 'null') continue;
+
+      // ЗАСВАР: d нь "null" текст биш, харин "[null]" (массив дотор
+      // null) байж болзошгуй — JSON.parse хийгээд бодит хоосон эсэхийг
+      // шалгана, зөвхөн string тааруулга хийхгуй.
+      let candidate;
+      try {
+        candidate = JSON.parse(d);
+      } catch (e) {
+        continue;
+      }
+      const firstEl = Array.isArray(candidate) ? candidate[0] : candidate;
+      if (firstEl === null || firstEl === undefined) continue;
+
+      if (d.length > bestLength) {
         bestDataLine = d;
         bestLength = d.length;
       }
