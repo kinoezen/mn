@@ -91,11 +91,12 @@
     #fbw-emoji-row { display: flex; justify-content: space-between; gap: 4px; }
     .fbw-emoji {
       flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px; padding: 8px 0; font-size: 22px; cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 8px; padding: 6px 0; font-size: 17px; cursor: pointer;
+      transition: all 0.2s; line-height: 1.1; overflow: hidden; white-space: nowrap;
+      letter-spacing: -1px;
     }
-    .fbw-emoji:hover { background: rgba(255,255,255,0.1); transform: scale(1.08); }
-    .fbw-emoji.selected { background: rgba(74,222,128,0.18); border-color: #4ade80; transform: scale(1.1); }
+    .fbw-emoji:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
+    .fbw-emoji.selected { background: rgba(74,222,128,0.18); border-color: #4ade80; transform: scale(1.06); }
     #fbw-skip {
       background: transparent; border: none; color: rgba(255,255,255,0.35);
       font-size: 11px; cursor: pointer; text-decoration: underline; padding: 2px;
