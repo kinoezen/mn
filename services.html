@@ -446,7 +446,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
             <span class="badge badge-hot">Алдартай</span>
-            <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
+            <span class="badge badge-credit">⚡ 50 тэмдэгт = 1 кредит</span>
           </div>
         </div>
       </div>
@@ -502,13 +502,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="svc-desc">AI орчуулгыг байгалийн монгол хэлрүү хөрвүүлнэ.</div>
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
-            <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
+            <span class="badge badge-credit">⚡ 10 тэмдэгт = 1 кредит</span>
           </div>
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('hum-box',this)">✨ Турших</button>
       <div class="svc-box" id="hum-box">
-        <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+        <div class="cost-pill">⚡ Үнэ: 10 тэмдэгт = 1 кредит</div>
         <label class="form-label">AI орчуулга / хатуу текст</label>
         <textarea id="hum-input" placeholder="Машинаар орчуулсан монгол текстийг энд оруулна уу..."></textarea>
         <button class="run-btn" onclick="runHum()">✨ Хүмүүнжүүлэх</button>
@@ -576,13 +576,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="svc-desc">YouTube, подкаст, кино тайлбарын script монголоор бичнэ.</div>
           <div class="badges">
             <span class="badge badge-free">Үнэгуй</span>
-            <span class="badge badge-credit">⚡ 5 кредит/script</span>
+            <span class="badge badge-credit">⚡ 10 кредит/script</span>
           </div>
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('script-writer-box',this)">✍️ Турших</button>
       <div class="svc-box" id="script-writer-box">
-        <div class="cost-pill">⚡ Үнэ: 5 кредит/script</div>
+        <div class="cost-pill">⚡ Үнэ: 10 кредит/script</div>
         <label class="form-label">Сэдэв / Агуулга</label>
         <textarea id="script-writer-input" placeholder="Жишээ: Монгол хоолны түухийн тухай видео..."></textarea>
         <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;">
@@ -612,7 +612,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="svc-desc">20+ хэлнээс монголруу, монголоос бусад хэлрүү орчуулна.</div>
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
-            <span class="badge badge-credit">⚡ 1 тэмдэгт = 2 кредит</span>
+            <span class="badge badge-credit">⚡ 10 тэмдэгт = 1 кредит</span>
           </div>
         </div>
       </div>
@@ -649,13 +649,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="svc-desc">Монгол ярианы аудио файлаас автоматаар текст гаргана.</div>
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
-            <span class="badge badge-credit">⚡ 1 мин = 10 кредит</span>
+            <span class="badge badge-credit">⚡ 1 мин = 50 кредит</span>
           </div>
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('stt-box',this)">🎙️ Турших</button>
       <div class="svc-box" id="stt-box">
-        <div class="cost-pill">⚡ Үнэ: 1 минут = 10 кредит</div>
+        <div class="cost-pill">⚡ Үнэ: 1 минут = 50 кредит</div>
         <div class="upload-area" id="stt-upload-area" onclick="document.getElementById('stt-file').click()"
           ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleSTTDrop(event)">
           <input type="file" id="stt-file" accept=".mp3,.wav,.m4a,.ogg" onchange="handleSTTFile(event)">
@@ -678,13 +678,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="svc-desc">Дүрэм, найруулга, цэг таслалын алдааг засна.</div>
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
-            <span class="badge badge-credit">⚡ 1 тэмдэгт = 1 кредит</span>
+            <span class="badge badge-credit">⚡ 10 тэмдэгт = 1 кредит</span>
           </div>
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('textedit-box',this)">📝 Турших</button>
       <div class="svc-box" id="textedit-box">
-        <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+        <div class="cost-pill">⚡ Үнэ: 10 тэмдэгт = 1 кредит</div>
         <label class="form-label">Засах текст</label>
         <textarea id="textedit-input" placeholder="Засах монгол текстийг энд оруулна уу..." style="height:110px;"></textarea>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
@@ -711,13 +711,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
           <div class="badges">
             <span class="badge badge-free">Үнэгүй</span>
             <span class="badge badge-new">🆕 Шинэ</span>
-            <span class="badge badge-credit">⚡ 5 кредит/тойм</span>
+            <span class="badge badge-credit">⚡ 10 кредит/тойм</span>
           </div>
         </div>
       </div>
       <button class="svc-btn" onclick="toggleBox('movie-review-box',this)">🎬 Турших</button>
       <div class="svc-box" id="movie-review-box">
-        <div class="cost-pill">⚡ Үнэ: 5 кредит/тойм</div>
+        <div class="cost-pill">⚡ Үнэ: 10 кредит/тойм</div>
         <label class="form-label">Кино нэр</label>
         <input type="text" id="movie-review-input" placeholder="Жишээ: Inception, Parasite...">
         <button class="run-btn" onclick="runMovieReview()">🎬 Тойм бичих</button>
@@ -738,7 +738,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('merge-sub-box',this)">🎞️ Турших</button>
       <div class="svc-box" id="merge-sub-box">
-        <div class="cost-pill">⚡ Үнэ: 50 кредит/видео</div>
+        <div class="cost-pill">⚡ Үнэ: 1000 кредит/видео</div>
         <label class="form-label">Видео файл</label>
         <div class="upload-area" id="merge-video-area" onclick="document.getElementById('merge-video-file').click()"
           ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleMergeVideoDrop(event)">
@@ -773,7 +773,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('video-split-box',this)">✂️ Турших</button>
       <div class="svc-box" id="video-split-box">
-        <div class="cost-pill">⚡ Үнэ: 30 кредит/видео</div>
+        <div class="cost-pill">⚡ Үнэ: 200 кредит/видео</div>
         <label class="form-label">Видео файл</label>
         <div class="upload-area" id="vsplit-area" onclick="document.getElementById('vsplit-file').click()"
           ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleVsplitDrop(event)">
@@ -838,7 +838,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('post-gen-box',this)">📱 Турших</button>
       <div class="svc-box" id="post-gen-box">
-        <div class="cost-pill">⚡ Үнэ: 3 кредит/пост</div>
+        <div class="cost-pill">⚡ Үнэ: 5 кредит/пост</div>
         <label class="form-label">Агуулга / Санаа</label>
         <textarea id="post-gen-input" placeholder="Постын агуулга эсвэл санаагаа бичнэ үү..."></textarea>
         <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;">
@@ -864,7 +864,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('thumbnail-box',this)">🖼️ Турших</button>
       <div class="svc-box" id="thumbnail-box">
-        <div class="cost-pill">⚡ Үнэ: 2 кредит/гарчиг</div>
+        <div class="cost-pill">⚡ Үнэ: 5 кредит/гарчиг</div>
         <label class="form-label">Видеогийн агуулга</label>
         <textarea id="thumbnail-input" placeholder="Видеогийн тухай товч тайлбарлана уу..."></textarea>
         <button class="run-btn" onclick="runThumbnail()">🖼️ Гарчиг үүсгэх</button>
@@ -885,7 +885,7 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('transcript-clean-box',this)">🧹 Турших</button>
       <div class="svc-box" id="transcript-clean-box">
-        <div class="cost-pill">⚡ Үнэ: 1 тэмдэгт = 1 кредит</div>
+        <div class="cost-pill">⚡ Үнэ: 10 тэмдэгт = 1 кредит</div>
         <label class="form-label">Транскрипт текст <span id="transcript-clean-count" style="color:#4ade80;float:right">0/6000</span></label>
         <textarea id="transcript-clean-input" placeholder="STT гаралтыг энд оруулна уу..." style="height:120px;" oninput="updateTranscriptCleanCount()"></textarea>
         <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
@@ -955,13 +955,13 @@ textarea:focus,input:focus{outline:none;border-color:#4ade80;}
       </div>
       <button class="svc-btn" onclick="toggleBox('pdf-ocr-box',this)">📑 Турших</button>
       <div class="svc-box" id="pdf-ocr-box">
-        <div class="cost-pill">⚡ Үнэ: 5 кредит/хуудас</div>
+        <div class="cost-pill">⚡ Үнэ: 15 кредит/хуудас</div>
         <label class="form-label">PDF файл</label>
         <div class="upload-area" id="pdf-ocr-area" onclick="document.getElementById('pdf-ocr-file').click()"
           ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handlePdfOcrDrop(event)">
           <input type="file" id="pdf-ocr-file" accept=".pdf" onchange="handlePdfOcrFile(event)">
           <div class="upload-icon">📄</div>
-          <div style="font-size:13px;color:rgba(255,255,255,0.5)">PDF файл оруулах (хамгийн ихдээ 20 хуудас)</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5)">PDF файл оруулах (хамгийн ихдээ 10 хуудас)</div>
           <div class="upload-name" id="pdf-ocr-file-name"></div>
         </div>
         <button class="run-btn" onclick="runPdfOcr()">📑 Текст гаргах</button>
