@@ -214,19 +214,19 @@ async function runTTS() {
 
     const limit = TTS_CHAR_LIMITS[ttsEngine];
     if (text.length > limit) {
-        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгүй байх ёстой)`, 'error');
+        showToast(`⚠️ Текст хэт урт (${limit} тэмдэгтээс ихгуй байх ёстой)`, 'error');
         return;
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Уусгэж байна...'; }
 
     const resultDiv = document.getElementById('tts-result');
     const isNatural = ttsEngine === 'natural';
 
     if (resultDiv) {
         resultDiv.classList.add('show');
-        resultDiv.innerHTML = `<div class="result-label">⏳ Дуу үүсгэж байна...</div>
+        resultDiv.innerHTML = `<div class="result-label">⏳ Дуу уусгэж байна...</div>
         <div id="tts-wake-msg" style="font-size:12px;color:#f4a261;margin-top:4px;display:none;">🌙 Сервер сэрж байна — түр хүлээнэ үү...</div>
         <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
             <div id="tts-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
@@ -293,8 +293,8 @@ async function runTTS() {
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Дуу үүсгэх уед алдаа гарлаа');
-        if (!data.audioUrl) throw new Error('Дуу үүсгэгдсэн ч URL олдсонгуй');
+        if (!response.ok) throw new Error(data.error || 'Дуу уусгэх уед алдаа гарлаа');
+        if (!data.audioUrl) throw new Error('Дуу уусгэгдсэн ч URL олдсонгуй');
 
         clearInterval(progressInterval);
         const bar = document.getElementById('tts-progress-bar');
@@ -306,14 +306,22 @@ async function runTTS() {
 
         setTimeout(() => {
             if (resultDiv) {
+                // ЗАСВАР: ӖМНӖ type ҮРГЭЛЖ "audio/mpeg" гэж хатуу бичигдсэн
+                // байсан тул Дорж хоолойн WAV файл (audio/wav) дотор
+                // MIME type зӨрчилдӨж, browser аудиог тоглуулж чадахгуй
+                // байсан (0:00/0:00 харагдах шалтгаан). Одоо audioUrl-аас
+                // ӨӨрӨӨс нь MIME type-ийг олж ашиглана.
+                const mimeMatch = data.audioUrl.match(/^data:([^;]+);/);
+                const mimeType = mimeMatch ? mimeMatch[1] : 'audio/mpeg';
                 resultDiv.innerHTML = `<div class="result-label">✅ Дуу бэлэн</div>
                 <audio controls style="width:100%;border-radius:8px;margin-top:6px;">
-                    <source src="${data.audioUrl}" type="audio/mpeg">
-                </audio>`;
+                    <source src="${data.audioUrl}" type="${mimeType}">
+                </audio>
+                <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:4px;">debug: ${mimeType}, len=${data.audioUrl.length}</div>`;
             }
         }, 400);
 
-        showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
+        showToast('✅ Дуу амжилттай уусгэгдлээ!', 'success');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
@@ -321,7 +329,7 @@ async function runTTS() {
         showToast('❌ ' + error.message, 'error');
     }
 
-    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
+    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу уусгэх'; }
 }
 
 // ============================================================
