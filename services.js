@@ -313,7 +313,7 @@ async function runTTS() {
             }
         }, 400);
 
-        showToast('✅ Дуу амжилттай уусгэгдлээ!', 'success');
+        showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
@@ -321,7 +321,7 @@ async function runTTS() {
         showToast('❌ ' + error.message, 'error');
     }
 
-    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу уусгэх'; }
+    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
 
 // ============================================================
