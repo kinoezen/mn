@@ -27,6 +27,13 @@ import { corsJson, corsOptions } from '../_shared/ai.js';
 const HF_SPACE_BASE = 'https://ezensait-mng.hf.space';
 const HF_CALL_URL = `${HF_SPACE_BASE}/gradio_api/call/generate_audio`;
 
+// ШИНЭ: "Дорж" (Байгалийн Монгол хоолой) — тусдаа GPU Space, удаан
+// гэхдээ маш байгалийн жинхэнэ хоолойтой, тиймээс зорьж хязгаарласан
+// (300 тэмдэгт хуртэл).
+const NATURAL_SPACE_BASE = 'https://kinoezen-hooloi.hf.space';
+const NATURAL_CALL_URL = `${NATURAL_SPACE_BASE}/gradio_api/call/generate_speech`;
+const NATURAL_CHAR_LIMIT = 300;
+
 const GEMINI_VOICE_MAP_KEYS = [
   'Лхагваа (эрэгтэй)', 'Доржоо (эрэгтэй)', 'Батбаяр (эрэгтэй)',
   'Мөнхбат (эрэгтэй)', 'Энхбаяр (эрэгтэй)', 'Ганбаатар (эрэгтэй)',
@@ -66,6 +73,16 @@ export async function onRequestPost({ request }) {
       return corsJson({ error: 'Текст оруулна уу' }, 400);
     }
 
+    // ШИНЭ: "Дорж" (байгалийн, удаан) хоолой — тусдаа Space, өөр
+    // дуудлагын логиктой (Gradio streaming, нэг хоолойтой)
+    if (engine === 'natural') {
+      if (text.length > NATURAL_CHAR_LIMIT) {
+        return corsJson({ error: `Энэ хоолойд текст ${NATURAL_CHAR_LIMIT} тэмдэгтээс ихгуй байх ёстой (байгалийн хоолой учир удаан тул хязгаарласан)` }, 400);
+      }
+      const audioUrl = await callNaturalVoiceAPI(text);
+      return corsJson({ audioUrl, slow: true });
+    }
+
     const limit = engine === 'gemini' ? 500 : 5000;
     if (text.length > limit) {
       return corsJson({ error: `Текст ${limit} тэмдэгтээс ихгуй байх ёстой` }, 400);
@@ -102,6 +119,112 @@ export async function onRequestPost({ request }) {
     const message = (err && err.message) ? err.message : 'TTS-д тодорхойгуй алдаа гарлаа';
     return corsJson({ error: message }, 500);
   }
+}
+
+// ============================================================
+// "Дорж" (Байгалийн Монгол хоолой) — streaming Gradio Space
+// generate_speech нь yield ашиглан олон удаа аудио буцаадаг
+// (өгуулбэр тус бугдийг). SSE урсгал дотор ОЛОН "data:" мор
+// ирнэ, бугдийг цуглуулж эцсийн (хамгийн сулийн) chunk-ийг авна
+// (учир нь Gradio streaming Audio component сулийн утгыг л
+// харуулдаг, гэхдээ бугдийг нэгтгэх боломжгуй тул хамгийн сулийн
+// бутэн chunk-ийг буцаана — ихэнхдээ энэ хамгийн бутэн дуу байдаг).
+// ============================================================
+async function callNaturalVoiceAPI(text) {
+  const postRes = await fetch(NATURAL_CALL_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      data: [
+        text,
+        'Дорж',   // voice — Space дотор "Bataa" гэж бичигдсэн ч UI дээр "Дорж" гэж харуулна
+        0.05,     // temperature
+        1.0,      // top_p
+        3.5,      // repetition_penalty
+        1500      // max_new_tokens
+      ]
+    })
+  });
+
+  if (!postRes.ok) {
+    const errText = await postRes.text().catch(() => '');
+    throw new Error(`Байгалийн хоолойн Space холбогдоход алдаа (${postRes.status}): ${errText.slice(0, 200)}`);
+  }
+
+  const postData = await postRes.json();
+  const eventId = postData.event_id;
+  if (!eventId) {
+    throw new Error('Байгалийн хоолойн Space-ээс event_id ирсэнгуй');
+  }
+
+  const getUrl = `${NATURAL_CALL_URL}/${eventId}`;
+  const getRes = await fetch(getUrl, {
+    method: 'GET',
+    headers: { 'Accept': 'text/event-stream' }
+  });
+
+  if (!getRes.ok) {
+    const errText = await getRes.text().catch(() => '');
+    throw new Error(`Байгалийн хоолойн уйлдвэрлэлийг авахад алдаа (${getRes.status}): ${errText.slice(0, 200)}`);
+  }
+
+  const rawText = await getRes.text();
+  const lines = rawText.split('\n');
+
+  let lastDataLine = null;
+  let sawError = false;
+  let errorData = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('event:')) {
+      const ev = line.slice(6).trim();
+      if (ev === 'error') sawError = true;
+    } else if (line.startsWith('data:')) {
+      const d = line.slice(5).trim();
+      if (d && d !== 'null') {
+        lastDataLine = d;
+        if (sawError) errorData = d;
+      }
+    }
+  }
+
+  if (sawError) {
+    console.error('Natural voice raw SSE:', rawText.slice(0, 1000));
+    throw new Error('Байгалийн хоолойн Space-ээс алдаа ирлээ: ' + (errorData || '(тодорхойгуй)').slice(0, 300));
+  }
+
+  if (!lastDataLine) {
+    throw new Error('Байгалийн хоолойн Space-ээс аудио өгөгдөл ирсэнгуй (хоосон урсгал)');
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(lastDataLine);
+  } catch (e) {
+    throw new Error('Байгалийн хоолойн хариу JSON биш байна: ' + lastDataLine.slice(0, 200));
+  }
+
+  const audioItem = Array.isArray(parsed) ? parsed[0] : parsed;
+  if (!audioItem) {
+    throw new Error('Байгалийн хоолойн Space-ээс аудио үр дун ирсэнгуй');
+  }
+
+  if (audioItem.url) {
+    return await fetchAndConvertToDataUrl(audioItem.url);
+  }
+  if (typeof audioItem === 'string' && audioItem.startsWith('http')) {
+    return await fetchAndConvertToDataUrl(audioItem);
+  }
+  if (audioItem.path) {
+    const fileUrl = `${NATURAL_SPACE_BASE}/gradio_api/file=${audioItem.path}`;
+    return await fetchAndConvertToDataUrl(fileUrl);
+  }
+  if (audioItem.data) {
+    return audioItem.data.startsWith('data:') ? audioItem.data : `data:audio/mpeg;base64,${audioItem.data}`;
+  }
+
+  throw new Error('Байгалийн хоолойн аудио хариуны бутэц танигдсангуй: ' + JSON.stringify(audioItem).slice(0, 200));
 }
 
 // ============================================================
@@ -172,7 +295,21 @@ async function callGradioAPI(inputsArray) {
   }
 
   if (eventType === 'error') {
-    const errMsg = Array.isArray(parsed) ? parsed.join(', ') : JSON.stringify(parsed);
+    // ЗАСВАР: ӖМНӖ зӖвхӖн parsed.join() хийдэг байсан, гэхдээ
+    // Gradio заримдаа parsed массив дотор null утга буцаадаг
+    // (жишээ: [null]), тэгвэл "HF Space-ээс алдаа ирлээ: "
+    // гэдэг хоосон шалтгаантай мессеж гарна. Одоо БУГД RAW
+    // хариуг (rawText) ӖГНГ нэмж буцаана, тэгвэл консол дотор
+    // яг юу болсныг харж болно.
+    let errMsg;
+    if (Array.isArray(parsed)) {
+      errMsg = parsed.filter(x => x !== null && x !== undefined).join(', ') || '(тодорхойгуй, HF Space-ийн raw лог-г шалгана уу)';
+    } else if (parsed === null) {
+      errMsg = '(HF Space null алдаа буцаалаа — Gradio дотор exception гарсан гэсэн уг, Space-ийн Logs tab-аас шалгана уу)';
+    } else {
+      errMsg = JSON.stringify(parsed);
+    }
+    console.error('HF Space raw SSE response:', rawText.slice(0, 1000));
     throw new Error('HF Space-ээс алдаа ирлээ: ' + errMsg.slice(0, 300));
   }
 
