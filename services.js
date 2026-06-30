@@ -416,7 +416,7 @@ async function runSrtTranslate() {
         const response = await fetch('/api/srt-translate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ srt: srtContent, targetLang })
+            body: JSON.stringify({ srtContent: srtContent, targetLang })
         });
 
         const data = await response.json();
