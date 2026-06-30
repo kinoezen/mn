@@ -3,22 +3,15 @@
 // URL: POST /api/tts
 // Body: { text, engine: 'gemini'|'edge', voice, geminiVoice, rate, pitch, volume }
 //
-// 2 хоолой дэмжигддэг:
-//   - Edge TTS (Батаа/Есуй): edge-tts-universal npm package-аар
-//   - Gemini TTS: Google Gemini API-аар
+// ЭНЭ ХУВИЛБАР: edge-tts-universal NPM PACKAGE-ИЙГ БҲХ ШИЛТГЭЭГуй!
+// package.json-д ХЭРЭГЦАА БАЙХГуй. Cloudflare Pages-ийн build
+// "No deployment available" гэж гацдаг асуудлыг АРИЛГАХЫН тулд
+// Microsoft-ийн Edge TTS WebSocket рҲҲ ШУУД холбогддог.
 //
-// ЭНЭ ХУВИЛБАРЫН ШИНЭ ЗУЙЛ:
-//   - package.json дотор edge-tts-universal-ийг ^1.6.0 (эсвэл
-//     сулийн хувилбар) болгож шинэчлэх ШААРДЛАГАТАЙ — Microsoft
-//     2026 онд Edge TTS-ийн authentication-ийг ӖӖРЧИЛСӖН тул
-//     хуучин ^1.4.0 хувилбар WebSocket холболтоо MUID cookie
-//     дутуугаас алдаатай хаагдаж, "Unexpected end of JSON input"
-//     алдаа гаргадаг байсан.
-//   - Доорх код алдааг ИЛУУ ТОДОРХОЙ message-тэйгээр буцаадаг
-//     болгосон тул deploy амжилтгуй ч (хуучин package хэвээр) —
-//     консол дотор яг шалтгааныг харж болно.
+// Хэрэв package.json дотор "edge-tts-universal" гэж бичигдсэн
+// мор хэвээр байгаа бол арилгахыг зӖвлӖж байна (шаардлагагуй),
+// гэхдээ үлдсэн ч энэ файл түунээс хамаарахгуй тул асуудал биш.
 // ============================================================
-import { EdgeTTS } from 'edge-tts-universal';
 import { corsJson, corsOptions } from '../_shared/ai.js';
 
 const GEMINI_VOICE_MAP = {
@@ -33,7 +26,6 @@ const GEMINI_VOICE_MAP = {
   'Нарантуяа (эмэгтэй)': 'Leda'
 };
 
-// Edge TTS-ийн хоолойн нэрс — ОЛОН хэлбэрийг хулеэж авна
 const EDGE_VOICE_MAP = {
   'Батаа': 'mn-MN-BataaNeural',
   'Батаа (эрэгтэй)': 'mn-MN-BataaNeural',
@@ -61,18 +53,38 @@ export async function onRequestPost({ request, env }) {
       return await handleGeminiTTS(env, text, geminiVoice);
     }
   } catch (err) {
-    // ӖМНӖ: зӖвхӖн err.message буцаадаг байсан, заримдаа
-    // err нь Error объект биш (TypeError stack, plain string,
-    // эсвэл undefined) учраас фронтенд "Unexpected end of JSON
-    // input" гэж харж байсан. Одоо БУГД тохиолдолд бат бих
-    // JSON буцаана.
     console.error('TTS endpoint error:', err);
     const message = (err && err.message) ? err.message : 'TTS-д тодорхойгуй алдаа гарлаа';
-    return corsJson({ error: message, debug: String(err) }, 500);
+    return corsJson({ error: message }, 500);
   }
 }
 
-// ---- EDGE TTS (Батаа / Есуй) ----
+// ============================================================
+// EDGE TTS — ШУУД WebSocket-оор Microsoft-ийн серверт холбогдоно
+// (Package шаардахгуй, зӖвхӖн Cloudflare Workers native WebSocket)
+// ============================================================
+
+const TRUSTED_CLIENT_TOKEN = '6A5AA1D4EAFF4E9FB37E23D68491D6F4';
+const WSS_URL = `wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=${TRUSTED_CLIENT_TOKEN}`;
+
+function generateUUID() {
+  return crypto.randomUUID().replace(/-/g, '');
+}
+
+function dateToString() {
+  const d = new Date();
+  return d.toUTCString().replace('GMT', 'GMT+0000 (Coordinated Universal Time)');
+}
+
+function escapeXml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 async function handleEdgeTTS(text, voiceName, rate, pitch, volume) {
   if (text.length > 5000) {
     return corsJson({ error: 'Edge TTS-д текст 5000 тэмдэгтээс ихгуй байх ёстой' }, 400);
@@ -85,42 +97,154 @@ async function handleEdgeTTS(text, voiceName, rate, pitch, volume) {
   const pitchStr = `${pitch >= 0 ? '+' : ''}${pitch ?? 0}Hz`;
   const volumeStr = `${volume >= 0 ? '+' : ''}${volume ?? 0}%`;
 
-  let tts, result;
+  let audioBuffer;
   try {
-    tts = new EdgeTTS(text, voice, {
-      rate: rateStr,
-      pitch: pitchStr,
-      volume: volumeStr
-    });
-
-    result = await tts.synthesize();
+    audioBuffer = await synthesizeEdgeTTS(text, voice, rateStr, pitchStr, volumeStr);
   } catch (synthErr) {
-    // edge-tts-universal-ийн ХУУЧИН хувилбар Microsoft-ийн шинэ
-    // WebSocket authentication-той (MUID cookie) зӖрчилдвӖл ЭНД
-    // унана. Тиймээс ИЛҲУ ОЙЛГОМЖТОЙ алдаа буцаана.
-    console.error('EdgeTTS synthesize алдаа:', synthErr);
-    throw new Error(
-      'Edge TTS холболт амжилтгуй (' + (synthErr?.message || synthErr) + '). ' +
-      'package.json доторх edge-tts-universal хувилбарыг ^1.6.0 буюу сулийн ' +
-      'хувилбар болгож шинэчилж дахин deploy хийх шаардлагатай байж магадгуй.'
-    );
+    console.error('EdgeTTS WebSocket алдаа:', synthErr);
+    throw new Error('Edge TTS холболт амжилтгуй: ' + (synthErr?.message || synthErr));
   }
 
-  if (!result || !result.audio) {
-    throw new Error('Edge TTS-ээс аудио хариу ирсэнгуй (result.audio байхгуй)');
-  }
-
-  const audioBuffer = await result.audio.arrayBuffer();
   if (!audioBuffer || audioBuffer.byteLength === 0) {
     throw new Error('Edge TTS-ээс хоосон аудио ирлээ (0 byte)');
   }
 
   const audioBase64 = arrayBufferToBase64(audioBuffer);
-
   return corsJson({ audioUrl: `data:audio/mpeg;base64,${audioBase64}`, usedVoice: voice });
 }
 
-// ---- GEMINI TTS (Лхагваа, Доржоо, ...) ----
+function synthesizeEdgeTTS(text, voice, rateStr, pitchStr, volumeStr) {
+  return new Promise((resolve, reject) => {
+    let ws;
+    try {
+      ws = new WebSocket(WSS_URL);
+    } catch (e) {
+      reject(new Error('WebSocket уусгэх боломжгуй: ' + e.message));
+      return;
+    }
+
+    const audioChunks = [];
+    let settled = false;
+
+    const finish = (fn, val) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      try { ws.close(); } catch (_) {}
+      fn(val);
+    };
+
+    const timeoutId = setTimeout(() => {
+      finish(reject, new Error('TTS хариу 15 секундэд ирсэнгуй (timeout)'));
+    }, 15000);
+
+    ws.addEventListener('open', () => {
+      const requestId = generateUUID();
+      const timestamp = dateToString();
+
+      const configMsg =
+        `X-Timestamp:${timestamp}\r\n` +
+        `Content-Type:application/json; charset=utf-8\r\n` +
+        `Path:speech.config\r\n\r\n` +
+        JSON.stringify({
+          context: {
+            synthesis: {
+              audio: {
+                metadataoptions: {
+                  sentenceBoundaryEnabled: 'false',
+                  wordBoundaryEnabled: 'false'
+                },
+                outputFormat: 'audio-24khz-48kbitrate-mono-mp3'
+              }
+            }
+          }
+        });
+
+      const ssml =
+        `<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='mn-MN'>` +
+        `<voice name='${voice}'>` +
+        `<prosody rate='${rateStr}' pitch='${pitchStr}' volume='${volumeStr}'>` +
+        `${escapeXml(text)}` +
+        `</prosody></voice></speak>`;
+
+      const ssmlMsg =
+        `X-RequestId:${requestId}\r\n` +
+        `Content-Type:application/ssml+xml\r\n` +
+        `X-Timestamp:${timestamp}Z\r\n` +
+        `Path:ssml\r\n\r\n` +
+        ssml;
+
+      try {
+        ws.send(configMsg);
+        ws.send(ssmlMsg);
+      } catch (e) {
+        finish(reject, new Error('Мэдээлэл илгээхэд алдаа гарлаа: ' + e.message));
+      }
+    });
+
+    ws.addEventListener('message', (event) => {
+      const data = event.data;
+
+      if (typeof data === 'string') {
+        if (data.includes('Path:turn.end')) {
+          if (audioChunks.length === 0) {
+            finish(reject, new Error('Аудио дата ирсэнгуй (turn.end ирсэн ч хоосон)'));
+            return;
+          }
+          const totalLen = audioChunks.reduce((sum, c) => sum + c.byteLength, 0);
+          const merged = new Uint8Array(totalLen);
+          let offset = 0;
+          for (const chunk of audioChunks) {
+            merged.set(chunk, offset);
+            offset += chunk.byteLength;
+          }
+          finish(resolve, merged.buffer);
+        }
+      } else {
+        let bin;
+        if (data instanceof ArrayBuffer) {
+          bin = new Uint8Array(data);
+        } else if (data && data.buffer) {
+          bin = new Uint8Array(data.buffer, data.byteOffset || 0, data.byteLength);
+        } else {
+          return;
+        }
+
+        if (bin.length < 2) return;
+        const headerLen = (bin[0] << 8) | bin[1];
+        const audioStart = 2 + headerLen;
+        if (bin.length > audioStart) {
+          audioChunks.push(bin.slice(audioStart));
+        }
+      }
+    });
+
+    ws.addEventListener('error', () => {
+      finish(reject, new Error('WebSocket холболтын алдаа (Microsoft-ийн сервер хариу буцаагуй байж магадгуй)'));
+    });
+
+    ws.addEventListener('close', (event) => {
+      if (!settled) {
+        if (audioChunks.length > 0) {
+          const totalLen = audioChunks.reduce((sum, c) => sum + c.byteLength, 0);
+          const merged = new Uint8Array(totalLen);
+          let offset = 0;
+          for (const chunk of audioChunks) {
+            merged.set(chunk, offset);
+            offset += chunk.byteLength;
+          }
+          finish(resolve, merged.buffer);
+        } else {
+          finish(reject, new Error(`WebSocket хаагдсан (code: ${event.code}), аудио ирсэнгуй`));
+        }
+      }
+    });
+  });
+}
+
+// ============================================================
+// GEMINI TTS (Лхагваа, Доржоо, ...)
+// ============================================================
 async function handleGeminiTTS(env, text, geminiVoiceName) {
   if (!env.GEMINI_API_KEY) {
     return corsJson({ error: 'Серверийн тохиргоо дутуу (GEMINI_API_KEY алга)' }, 500);
