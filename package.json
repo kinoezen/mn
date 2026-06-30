@@ -1,1 +1,9 @@
-
+{
+  "name": "mn-bhm",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "edge-tts-universal": "^1.4.0"
+  }
+}
