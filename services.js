@@ -219,14 +219,14 @@ async function runTTS() {
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Уусгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
 
     const resultDiv = document.getElementById('tts-result');
     const isNatural = ttsEngine === 'natural';
 
     if (resultDiv) {
         resultDiv.classList.add('show');
-        resultDiv.innerHTML = `<div class="result-label">⏳ Дуу уусгэж байна...</div>
+        resultDiv.innerHTML = `<div class="result-label">⏳ Дуу үүсгэж байна...</div>
         <div id="tts-wake-msg" style="font-size:12px;color:#f4a261;margin-top:4px;display:none;">🌙 Сервер сэрж байна — түр хүлээнэ үү...</div>
         <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
             <div id="tts-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
@@ -293,7 +293,7 @@ async function runTTS() {
         });
 
         const data = await response.json();
-        if (!response.ok) throw new Error(data.error || 'Дуу уусгэх уед алдаа гарлаа');
+        if (!response.ok) throw new Error(data.error || 'Дуу үүсгэх уед алдаа гарлаа');
         if (!data.audioUrl) throw new Error('Дуу уусгэгдсэн ч URL олдсонгуй');
 
         clearInterval(progressInterval);
@@ -321,7 +321,7 @@ async function runTTS() {
             }
         }, 400);
 
-        showToast('✅ Дуу амжилттай уусгэгдлээ!', 'success');
+        showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
@@ -329,7 +329,7 @@ async function runTTS() {
         showToast('❌ ' + error.message, 'error');
     }
 
-    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу уусгэх'; }
+    if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; }
 }
 
 // ============================================================
