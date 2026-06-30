@@ -159,25 +159,34 @@ function showToast(message, type = 'info') {
 }
 
 // ============================================================
-// TTS — ДУУ ҲСГЭГЧ (2 хоолойтой: Edge / Gemini) — ЭЦСИЙН ХУВИЛБАР
+// TTS — ДУУ ҲСГЭГЧ (3 хоолойтой: Edge / Gemini / Дорж-Байгалийн)
 // services.js доторх TTS-тэй холбоотой БУГД хуучин кодыг
 // (TTS_CHAR_LIMITS, ttsEngine, selEngine, updateTTSCount,
-// selVoice, runTTS — ХИЧНЭЭН ХЭСЭГТ ТАРСАН Ч БАЙСАН) олж,
-// БУГДИЙГ УСТГААД, ЭНЭ БУГД БЛОКООР сольж нэг газар оруулна.
+// selVoice, runTTS) олж, БУГДИЙГ УСТГААД, ЭНЭ БУГД БЛОКООР
+// сольж нэг газар оруулна.
+//
+// ШИНЭ:
+//   - 'natural' engine нэмэгдсэн (Дорж — Байгалийн Монгол хоолой,
+//     удаан учир 300 тэмдэгт хязгаартай)
+//   - Progress bar 1-100% бодит явцтай ойролцоо (HF Space сэрэх
+//     үед удаан, тиймээс эхний 10 секундэд "Түр хүлээнэ үү
+//     (сэрж байна...)" гэсэн тусгай мессеж харуулна)
 // ============================================================
 
 let ttsEngine = 'edge';
-const TTS_CHAR_LIMITS = { edge: 5000, gemini: 500 };
+const TTS_CHAR_LIMITS = { edge: 5000, gemini: 500, natural: 300 };
 
 function selEngine(engine, el) {
     ttsEngine = engine;
-    document.querySelectorAll('#engine-edge, #engine-gemini').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('#engine-edge, #engine-gemini, #engine-natural').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
 
     const edgeRow = document.getElementById('edge-voice-row');
     const geminiRow = document.getElementById('gemini-voice-row');
+    const naturalRow = document.getElementById('natural-voice-row');
     if (edgeRow) edgeRow.style.display = engine === 'edge' ? 'block' : 'none';
     if (geminiRow) geminiRow.style.display = engine === 'gemini' ? 'block' : 'none';
+    if (naturalRow) naturalRow.style.display = engine === 'natural' ? 'block' : 'none';
 
     updateTTSCount();
 }
@@ -213,19 +222,40 @@ async function runTTS() {
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Уусгэж байна...'; }
 
     const resultDiv = document.getElementById('tts-result');
+    const isNatural = ttsEngine === 'natural';
+
     if (resultDiv) {
         resultDiv.classList.add('show');
         resultDiv.innerHTML = `<div class="result-label">⏳ Дуу уусгэж байна...</div>
+        <div id="tts-wake-msg" style="font-size:12px;color:#f4a261;margin-top:4px;display:none;">🌙 Сервер сэрж байна — түр хүлээнэ үү...</div>
         <div style="background:rgba(255,255,255,0.08);border-radius:99px;height:8px;overflow:hidden;margin-top:8px;">
             <div id="tts-progress-bar" style="background:linear-gradient(90deg,#4ade80,#f4a261);height:100%;width:0%;transition:width 0.3s;"></div>
         </div>
         <div id="tts-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
     }
+
+    // ЗАСВАР: ШИНЭ progress logic — эхний 10 секундэд "Сэрж байна"
+    // мессеж харуулж, удаан байж болзошгуйг тооцож АЛХАМ ӨӨР
+    // хурдтайгаар (natural engine удаан тул аажуу, бусад хурдан)
+    // 1-аас 95% хуртэл явна (100% зөвхөн амжилттай дууссаны дараа).
     let fakeProgress = 0;
+    const wakeMsgEl = () => document.getElementById('tts-wake-msg');
+    const startTime = Date.now();
+
     const progressInterval = setInterval(() => {
-        if (fakeProgress < 90) {
-            fakeProgress += Math.random() * 8;
-            if (fakeProgress > 90) fakeProgress = 90;
+        const elapsedSec = (Date.now() - startTime) / 1000;
+
+        // 10 секундээс дээш бол "сэрж байна" мессежийг харуулна
+        if (elapsedSec > 10) {
+            const wm = wakeMsgEl();
+            if (wm) wm.style.display = 'block';
+        }
+
+        if (fakeProgress < 95) {
+            // natural engine удаан тул прогресс аажуу нэмэгдэнэ
+            const step = isNatural ? Math.random() * 2 : Math.random() * 8;
+            fakeProgress += step;
+            if (fakeProgress > 95) fakeProgress = 95;
             const bar = document.getElementById('tts-progress-bar');
             const txt = document.getElementById('tts-progress-text');
             if (bar) bar.style.width = fakeProgress + '%';
@@ -241,11 +271,10 @@ async function runTTS() {
         if (ttsEngine === 'gemini') {
             const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Лхагваа (эрэгтэй)';
             body = { text, engine: 'gemini', geminiVoice, rate: Number(rate), pitch: Number(pitch), volume: 0 };
+        } else if (ttsEngine === 'natural') {
+            // Дорж — Байгалийн хоолой, нэмэлт тохиргоо шаардахгуй
+            body = { text, engine: 'natural' };
         } else {
-            // selVoice() ОДОО АШИГЛАГДАЖ БАЙГАА .vbtn.on элементийн textContent-ийг
-            // ШУУД авна (Батаа эсвэл Есуй), trim хийнэ. Backend дотор
-            // EDGE_VOICE_MAP дотор хоёр хэлбэр (нэмэлт тайлбартай/тайлбаргуй)
-            // бугдийг дэмждэг тул энд яг ямар хэлбэрээр явуулсан хамаагуй.
             const voiceText = document.querySelector('#edge-voice-row .vbtn.on')?.textContent.trim() || 'Батаа';
             body = {
                 text,
@@ -272,6 +301,8 @@ async function runTTS() {
         const txt = document.getElementById('tts-progress-text');
         if (bar) bar.style.width = '100%';
         if (txt) txt.textContent = '100%';
+        const wm = wakeMsgEl();
+        if (wm) wm.style.display = 'none';
 
         setTimeout(() => {
             if (resultDiv) {
