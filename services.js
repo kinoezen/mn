@@ -675,7 +675,8 @@ async function runMovieReview() {
         if (resultDiv) {
             resultDiv.classList.add('show');
             resultDiv.innerHTML = `<div class="result-label">🎬 Тойм</div>
-            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.review}</div>`;
+            <div style="font-size:14px;line-height:1.8;color:rgba(255,255,255,0.85);white-space:pre-wrap;">${data.review}</div>
+            <button onclick="copyText(this)" style="margin-top:8px;padding:6px 14px;border-radius:6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:11px;cursor:pointer;">📋 Хуулах</button>`;
         }
         showToast('✅ Тойм амжилттай!', 'success');
         triggerServiceFeedback('movie-review', 'Кино тоймч');
