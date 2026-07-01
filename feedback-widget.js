@@ -88,12 +88,11 @@
     #fbw-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
     #fbw-body { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
     .fbw-q { font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; }
-    #fbw-emoji-row { display: flex; justify-content: space-between; gap: 4px; }
+    #fbw-emoji-row { display: flex; justify-content: space-between; gap: 3px; }
     .fbw-emoji {
       flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px; padding: 6px 0; font-size: 17px; cursor: pointer;
-      transition: all 0.2s; line-height: 1.1; overflow: hidden; white-space: nowrap;
-      letter-spacing: -1px;
+      border-radius: 8px; padding: 6px 2px; font-size: 13px; cursor: pointer;
+      transition: all 0.2s; line-height: 1.3; white-space: nowrap; text-align: center;
     }
     .fbw-emoji:hover { background: rgba(255,255,255,0.1); transform: scale(1.05); }
     .fbw-emoji.selected { background: rgba(74,222,128,0.18); border-color: #4ade80; transform: scale(1.06); }
