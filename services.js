@@ -338,7 +338,7 @@ async function runTranslate() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const cost = text.length * 2;
+    const cost = Math.max(1, Math.ceil(text.length / 10));
     const ok = await spendCreditsOrFail(cost, 'translate', `Орчуулга: ${text.length} тэмдэгт`, 'trans-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🌐 Орчуулах'; } return; }
 
@@ -380,7 +380,7 @@ async function runHum() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const cost = text.length;
+    const cost = Math.max(1, Math.ceil(text.length / 5));
     const ok = await spendCreditsOrFail(cost, 'humanizer', `Humanizer: ${text.length} тэмдэгт`, 'hum-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '✨ Хүмүүнжүүлэх'; } return; }
 
@@ -496,7 +496,7 @@ async function runScriptWriter() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const ok = await spendCreditsOrFail(5, 'script-writer', `Script бичигч: ${topic.slice(0,40)}`, 'script-writer-notice');
+    const ok = await spendCreditsOrFail(10, 'script-writer', `Script бичигч: ${topic.slice(0,40)}`, 'script-writer-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '✍️ Script бичих'; } return; }
 
     if (btn) btn.textContent = '⏳ Бичиж байна...';
@@ -543,7 +543,7 @@ async function runSTT() {
 
     const file = fileInput.files[0];
     const estimatedMinutes = Math.max(1, Math.ceil(file.size / (1024 * 1024)));
-    const cost = estimatedMinutes * 10;
+    const cost = estimatedMinutes * 50;
 
     const ok = await spendCreditsOrFail(cost, 'stt', `STT: ~${estimatedMinutes} мин`, 'stt-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎙️ Текст болгох'; } return; }
@@ -598,7 +598,7 @@ async function runTextEdit() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const cost = text.length;
+    const cost = Math.max(1, Math.ceil(text.length / 10));
     const ok = await spendCreditsOrFail(cost, 'textedit', `Текст засагч: ${text.length} тэмдэгт`, 'textedit-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📝 Засах'; } return; }
 
@@ -640,7 +640,7 @@ async function runMovieReview() {
     const btn = event.target;
     if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
 
-    const ok = await spendCreditsOrFail(5, 'movie-review', `Кино тойм: ${movieName}`, 'movie-review-notice');
+    const ok = await spendCreditsOrFail(10, 'movie-review', `Кино тойм: ${movieName}`, 'movie-review-notice');
     if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '🎬 Тойм бичих'; } return; }
 
     if (btn) btn.textContent = '⏳ Тойм бичиж байна...';
