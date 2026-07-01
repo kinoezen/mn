@@ -160,21 +160,21 @@ function showToast(message, type = 'info') {
 
 // ============================================================
 // TTS — ДУУ ҲСГЭГЧ (3 хоолойтой: Edge / Gemini / Дорж-Байгалийн)
-// services.js доторх TTS-тэй холбоотой БУГД хуучин кодыг
-// (TTS_CHAR_LIMITS, ttsEngine, selEngine, updateTTSCount,
-// selVoice, runTTS) олж, БУГДИЙГ УСТГААД, ЭНЭ БУГД БЛОКООР
-// сольж нэг газар оруулна.
-//
-// ШИНЭ:
-//   - 'natural' engine нэмэгдсэн (Дорж — Байгалийн Монгол хоолой,
-//     удаан учир 300 тэмдэгт хязгаартай)
-//   - Progress bar 1-100% бодит явцтай ойролцоо (HF Space сэрэх
-//     үед удаан, тиймээс эхний 10 секундэд "Түр хүлээнэ үү
-//     (сэрж байна...)" гэсэн тусгай мессеж харуулна)
 // ============================================================
 
 let ttsEngine = 'edge';
 const TTS_CHAR_LIMITS = { edge: 5000, gemini: 500, natural: 300 };
+
+// ЗАСВАР: Инженер тус бүрийн кредит тооцоолол
+//   - edge:    50 тэмдэгт = 1 кредит
+//   - natural (Дорж): 1 тэмдэгт = 1 кредит
+//   - gemini:  1 тэмдэгт = 2 кредит
+function calcTTSCost(text, engine) {
+    const len = text.length;
+    if (engine === 'gemini') return len * 2;
+    if (engine === 'natural') return len;
+    return Math.max(1, Math.ceil(len / 50)); // edge
+}
 
 function selEngine(engine, el) {
     ttsEngine = engine;
@@ -219,10 +219,18 @@ async function runTTS() {
     }
 
     const btn = document.getElementById('tts-run-btn');
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Үүсгэж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    // ЗАСВАР: Кредит хасалт нэмэгдсэн — инженер тус бүрээр өөр тариф
+    const cost = calcTTSCost(text, ttsEngine);
+    const engineLabel = ttsEngine === 'gemini' ? 'Gemini' : (ttsEngine === 'natural' ? 'Дорж' : 'Edge');
+    const ok = await spendCreditsOrFail(cost, 'tts', `TTS (${engineLabel}): ${text.length} тэмдэгт`, 'tts-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '▶ Дуу үүсгэх'; } return; }
 
     const resultDiv = document.getElementById('tts-result');
     const isNatural = ttsEngine === 'natural';
+
+    if (btn) btn.textContent = '⏳ Үүсгэж байна...';
 
     if (resultDiv) {
         resultDiv.classList.add('show');
@@ -234,10 +242,6 @@ async function runTTS() {
         <div id="tts-progress-text" style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:6px;">0%</div>`;
     }
 
-    // ЗАСВАР: ШИНЭ progress logic — эхний 10 секундэд "Сэрж байна"
-    // мессеж харуулж, удаан байж болзошгуйг тооцож АЛХАМ ӨӨР
-    // хурдтайгаар (natural engine удаан тул аажуу, бусад хурдан)
-    // 1-аас 95% хуртэл явна (100% зөвхөн амжилттай дууссаны дараа).
     let fakeProgress = 0;
     const wakeMsgEl = () => document.getElementById('tts-wake-msg');
     const startTime = Date.now();
@@ -245,14 +249,12 @@ async function runTTS() {
     const progressInterval = setInterval(() => {
         const elapsedSec = (Date.now() - startTime) / 1000;
 
-        // 10 секундээс дээш бол "сэрж байна" мессежийг харуулна
         if (elapsedSec > 10) {
             const wm = wakeMsgEl();
             if (wm) wm.style.display = 'block';
         }
 
         if (fakeProgress < 95) {
-            // natural engine удаан тул прогресс аажуу нэмэгдэнэ
             const step = isNatural ? Math.random() * 2 : Math.random() * 8;
             fakeProgress += step;
             if (fakeProgress > 95) fakeProgress = 95;
@@ -272,7 +274,6 @@ async function runTTS() {
             const geminiVoice = document.getElementById('gemini-voice-select')?.value || 'Лхагваа (эрэгтэй)';
             body = { text, engine: 'gemini', geminiVoice, rate: Number(rate), pitch: Number(pitch), volume: 0 };
         } else if (ttsEngine === 'natural') {
-            // Дорж — Байгалийн хоолой, нэмэлт тохиргоо шаардахгуй
             body = { text, engine: 'natural' };
         } else {
             const voiceText = document.querySelector('#edge-voice-row .vbtn.on')?.textContent.trim() || 'Батаа';
@@ -306,11 +307,6 @@ async function runTTS() {
 
         setTimeout(() => {
             if (resultDiv) {
-                // ЗАСВАР: ӖМНӖ type ҮРГЭЛЖ "audio/mpeg" гэж хатуу бичигдсэн
-                // байсан тул Дорж хоолойн WAV файл (audio/wav) дотор
-                // MIME type зӨрчилдӨж, browser аудиог тоглуулж чадахгуй
-                // байсан (0:00/0:00 харагдах шалтгаан). Одоо audioUrl-аас
-                // ӨӨрӨӨс нь MIME type-ийг олж ашиглана.
                 const mimeMatch = data.audioUrl.match(/^data:([^;]+);/);
                 const mimeType = mimeMatch ? mimeMatch[1] : 'audio/mpeg';
                 resultDiv.innerHTML = `<div class="result-label">✅ Дуу бэлэн</div>
@@ -322,6 +318,7 @@ async function runTTS() {
         }, 400);
 
         showToast('✅ Дуу амжилттай үүсгэгдлээ!', 'success');
+        triggerServiceFeedback('tts', 'Монгол TTS');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
@@ -376,7 +373,6 @@ async function runTranslate() {
 
 // ============================================================
 // HUMANIZER — 1 тэмдэгт = 1 кредит
-// ШИНЭ runHum() — /api/humanize руу бодитоор fetch хийнэ.
 // ============================================================
 async function runHum() {
     const text = document.getElementById('hum-input')?.value.trim();
@@ -535,16 +531,6 @@ async function runScriptWriter() {
 
 // ============================================================
 // STT (Дуу → Текст) — 1 мин = 10 кредит
-// ЗАСВАР: Хуучин код /api/stt-г огт дуудаагүй, зөвхөн аудио
-// тоглуулаад browser-ийн built-in webkitSpeechRecognition руу
-// чиглүүлж байсан (тийм учраас "войс буцаад гараад ирэх" мэт
-// санагдаж байсан). Одоо file-аа /api/stt руу FormData-аар
-// явуулж, Groq-аас ирсэн жинхэнэ транскрипцийг харуулна.
-//
-// services.js дотроос ХУУЧИН runSTT() функцийг олоод (~280-р
-// мөр орчим, "STT (Дуу → Текст)" коммент доорх хэсэг), бүхэлд нь
-// устгаад ЭНЭ ФУНКЦЭЭР сольж тавь. startSpeechRecognition()
-// функцийг хэвээр үлдээж болно, шинэ runSTT() үүнийг дуудахгүй.
 // ============================================================
 async function runSTT() {
     const fileInput = document.getElementById('stt-file');
@@ -605,9 +591,6 @@ async function runSTT() {
 }
 // ============================================================
 // ТЕКСТ ЗАСАГЧ — 1 тэмдэгт = 1 кредит
-// ШИНЭ runTextEdit() — /api/textedit руу бодитоор fetch хийнэ.
-// services.js доторх ХУУЧИН runTextEdit() функцийг ЭНЭ
-// ФУНКЦЭЭР бүхэлд нь СОЛИХ.
 // ============================================================
 async function runTextEdit() {
     const text = document.getElementById('textedit-input')?.value.trim();
@@ -1039,10 +1022,15 @@ async function runPlagiarism() {
 }
 
 // ============================================================
-// ШИНЭ runPdfOcr() — /api/pdf-ocr руу FormData-аар fetch хийнэ,
-// progress bar-тай. services.js доторх ХУУЧИН runPdfOcr()
-// функцийг ЭНЭ ФУНКЦЭЭР бухэлд нь СОЛИХ.
+// PDF → ТЕКСТ (OCR) — 50 тэмдэгт/хуудас ≈ 5 кредит/хуудас
+// ЗАСВАР: кредит хасалт нэмэгдсэн. PDF-ийн хуудасны тоог урьдчилж
+// мэдэхгүй тул файлын хэмжээгээр ойролцоогоор тооцоолж
+// (шинийн хуудас ~200KB гэж үзээд), урьдаас кредит хасна.
 // ============================================================
+function estimatePdfPages(fileSize) {
+    return Math.max(1, Math.min(10, Math.ceil(fileSize / (200 * 1024))));
+}
+
 async function runPdfOcr() {
     const fileInput = document.getElementById('pdf-ocr-file');
     if (!fileInput?.files || fileInput.files.length === 0) {
@@ -1050,7 +1038,24 @@ async function runPdfOcr() {
         return;
     }
     const btn = event.target;
-    if (btn) { btn.disabled = true; btn.textContent = '⏳ Боловсруулж байна...'; }
+    if (btn) { btn.disabled = true; btn.textContent = '⏳ Шалгаж байна...'; }
+
+    const file = fileInput.files[0];
+
+    if (file.size > 20 * 1024 * 1024) {
+        showToast('⚠️ PDF файл 20MB-ээс ихгуй байх ёстой', 'error');
+        if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; }
+        return;
+    }
+
+    // ЗАСВАР: 50 тэмдэгт/хуудас ≈ 5 кредит/хуудас — хуудасны тоог
+    // файлын хэмжээгээр ойролцоогоор тооцоолно
+    const estimatedPages = estimatePdfPages(file.size);
+    const cost = estimatedPages * 5;
+    const ok = await spendCreditsOrFail(cost, 'pdf-ocr', `PDF OCR: ~${estimatedPages} хуудас`, 'pdf-ocr-notice');
+    if (!ok) { if (btn) { btn.disabled = false; btn.textContent = '📑 Текст гаргах'; } return; }
+
+    if (btn) btn.textContent = '⏳ Боловсруулж байна...';
 
     const resultDiv = document.getElementById('pdf-ocr-result');
     if (resultDiv) {
@@ -1074,12 +1079,6 @@ async function runPdfOcr() {
     }, 400);
 
     try {
-        const file = fileInput.files[0];
-
-        if (file.size > 20 * 1024 * 1024) {
-            throw new Error('PDF файл 20MB-ээс ихгуй байх ёстой');
-        }
-
         const formData = new FormData();
         formData.append('pdf', file);
 
@@ -1116,6 +1115,7 @@ async function runPdfOcr() {
         }, 400);
 
         showToast(data.truncated ? '⚠️ PDF дутуу боловсруулагдлаа (хэт урт)' : '✅ PDF боловсруулагдлаа!', data.truncated ? 'error' : 'success');
+        triggerServiceFeedback('pdf-ocr', 'PDF → Текст (OCR)');
     } catch (error) {
         clearInterval(progressInterval);
         if (resultDiv) resultDiv.classList.remove('show');
