@@ -35,8 +35,7 @@ export async function onRequestPost({ request, env }) {
     // Groq руу дамжуулах шинэ FormData бэлдэх
     const groqForm = new FormData();
     groqForm.append('file', audioFile, audioFile.name || 'audio.mp3');
-    groqForm.append('model', 'whisper-large-v3-turbo');
-    groqForm.append('language', 'mn'); // монгол хэл заавал заах нь чанарыг сайжруулна
+    groqForm.append('model', 'whisper-large-v3');
     groqForm.append('response_format', 'json');
     groqForm.append('temperature', '0');
 
