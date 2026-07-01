@@ -393,7 +393,7 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="ava-row">
 <div class="ava-wrap">
 <div class="ava" id="avatarDisplay">
-<span id="avatarText">Л</span>
+<span id="avatarText">Х</span>
 <img id="avatarImg" style="display:none;" alt="avatar">
 </div>
 <div class="status-dot"></div>
@@ -410,24 +410,20 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div class="prof-info">
 <div class="prof-left">
 <div class="prof-name">
-Лхагваа
-<span class="badge">⭐ Алт</span>
+<span id="profNameText">Хэрэглэгч</span>
 </div>
-<div class="prof-email">lkhagvaa@gmail.com</div>
-<div class="prof-bio">🎬 Кино сонирхогч | TTS бүтээгч</div>
-<div class="prof-meta">
-<span><span class="icon">👥</span> 18 найз</span>
-<span><span class="icon">⏱️</span> 2 цагийн өмнө</span>
-</div>
+<div class="prof-email">—</div>
+<div class="prof-bio"></div>
+<div class="prof-meta" id="profMeta"></div>
 </div>
 </div>
 
-<!-- STATS -->
+<!-- STATS (ЗАСВАР: хатуу бичсэн хуурамч тоог арилгаад, бодит өгөгдлөөр дүүргэнэ) -->
 <div class="stats">
-<div class="stat"><div class="stat-val">34</div><div class="stat-label">Үзсэн</div></div>
-<div class="stat"><div class="stat-val">12</div><div class="stat-label">Хадгалсан</div></div>
-<div class="stat"><div class="stat-val">8</div><div class="stat-label">TTS</div></div>
-<div class="stat"><div class="stat-val">5</div><div class="stat-label">Humanize</div></div>
+<div class="stat"><div class="stat-val" id="statWatched">0</div><div class="stat-label">Үзсэн</div></div>
+<div class="stat"><div class="stat-val" id="statSaved">0</div><div class="stat-label">Хадгалсан</div></div>
+<div class="stat"><div class="stat-val" id="statTTS">0</div><div class="stat-label">TTS</div></div>
+<div class="stat"><div class="stat-val" id="statHumanize">0</div><div class="stat-label">Humanize</div></div>
 </div>
 
 <!-- WALLET (кредит хэтэвч) -->
@@ -450,7 +446,7 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 </div>
 </div>
 
-<!-- MENU -->
+<!-- MENU (ЗАСВАР: хатуу бичсэн 12/34 тоог арилгаад id-гаар бодит утга оруулна) -->
 <div class="menu">
 <div class="mitem" onclick="location.href='services.html'">
 <div class="mico g">🎤</div>
@@ -464,27 +460,25 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 </div>
 <div class="mitem" onclick="openModal('favorites')">
 <div class="mico r">❤️</div>
-<div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub">12 кино хадгалсан</div></div>
-<span class="mcount">12</span>
+<div class="mtext"><div class="mname">Дуртай кинонууд</div><div class="msub" id="favoritesSub">Хараахан хадгалсан зүйл байхгүй</div></div>
+<span class="mcount" id="favoritesCount" style="display:none;">0</span>
 <div class="marrow">›</div>
 </div>
 <div class="mitem" onclick="openModal('history')">
 <div class="mico b">📋</div>
-<div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub">34 кино үзсэн</div></div>
-<span class="mcount">34</span>
+<div class="mtext"><div class="mname">Үзсэн түүх</div><div class="msub" id="historySub">Хараахан үзсэн зүйл байхгүй</div></div>
+<span class="mcount" id="historyCount" style="display:none;">0</span>
 <div class="marrow">›</div>
 </div>
 </div>
 
-<!-- MOVIE GRID (Жишээ) -->
+<!-- MOVIE GRID (ЗАСВАР: хуурамч жишээ кино арилгаад бодит watch_history-с татна) -->
 <div class="section-title">
 <h3>🔥 Сүүлийн үзсэн</h3>
 <a href="#">Бүгдийг харах →</a>
 </div>
 <div class="movie-grid" id="recentMovies">
-<div class="movie-card"><img src="https://picsum.photos/200/120?random=1" alt=""><div class="info"><div class="title">Аватар 2</div><div class="date">2025-06-20</div></div></div>
-<div class="movie-card"><img src="https://picsum.photos/200/120?random=2" alt=""><div class="info"><div class="title">Дюн 2</div><div class="date">2025-06-19</div></div></div>
-<div class="movie-card"><img src="https://picsum.photos/200/120?random=3" alt=""><div class="info"><div class="title">Оддын дайн</div><div class="date">2025-06-18</div></div></div>
+<div class="sb-empty">Ачааллаж байна...</div>
 </div>
 
 <!-- PREMIUM -->
@@ -535,9 +529,9 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 <div style="background:#1a1a2e;border-radius:20px;padding:30px;max-width:400px;width:90%;border:1px solid rgba(255,255,255,0.06);">
 <h3 style="margin-bottom:16px;font-size:18px;">✏️ Профайл засах</h3>
 <form id="editForm">
-<input type="text" id="editName" placeholder="Нэр" value="Лхагваа" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
-<input type="email" id="editEmail" placeholder="Имэйл" value="lkhagvaa@gmail.com" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
-<input type="text" id="editBio" placeholder="Био" value="🎬 Кино сонирхогч | TTS бүтээгч" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
+<input type="text" id="editName" placeholder="Нэр" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+<input type="email" id="editEmail" placeholder="Имэйл" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:10px;font-size:14px;">
+<input type="text" id="editBio" placeholder="Био" style="width:100%;padding:12px;border-radius:10px;background:#12121e;border:1px solid rgba(255,255,255,0.08);color:#fff;margin-bottom:16px;font-size:14px;">
 <div style="display:flex;gap:10px;">
 <button type="button" onclick="closeEditModal()" style="flex:1;padding:12px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);cursor:pointer;">Цуцлах</button>
 <button type="submit" style="flex:2;padding:12px;border-radius:10px;background:#4ade80;border:none;color:#000;font-weight:600;cursor:pointer;">Хадгалах</button>
@@ -605,24 +599,35 @@ function getInitial(name){
   return name && name.length ? name.trim().charAt(0).toUpperCase() : 'Х';
 }
 
+// ЗАСВАР: сүүлд идэвхтэй байсныг харьцангуй цагаар харуулах жинхэнэ функц
+function relativeTime(isoStr){
+  if(!isoStr) return '';
+  const then = new Date(isoStr).getTime();
+  const now = Date.now();
+  const diffMin = Math.max(0, Math.round((now - then) / 60000));
+  if(diffMin < 1) return 'дөнгөж сая';
+  if(diffMin < 60) return diffMin + ' минутын өмнө';
+  const diffHour = Math.round(diffMin / 60);
+  if(diffHour < 24) return diffHour + ' цагийн өмнө';
+  const diffDay = Math.round(diffHour / 24);
+  return diffDay + ' өдрийн өмнө';
+}
+
 async function loadSession(){
   const token = localStorage.getItem('sb_token');
   const userRaw = localStorage.getItem('sb_user');
   if(!token || !userRaw){
-    // Нэвтрээгүй бол login руу буцаах
     location.href = 'login.html';
     return;
   }
   let user;
   try{ user = JSON.parse(userRaw); }catch(e){ location.href='login.html'; return; }
 
-  // Токен хүчинтэй эсэхийг шалгах (Supabase /user endpoint)
   try{
     const r = await fetch(`${SUPABASE_URL}/auth/v1/user`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
     });
     if(!r.ok){
-      // Токен хугацаа дууссан/хүчингүй
       localStorage.removeItem('sb_token');
       localStorage.removeItem('sb_user');
       location.href = 'login.html';
@@ -636,15 +641,24 @@ async function loadSession(){
 
   const name = (user.user_metadata && user.user_metadata.full_name) || (user.email ? user.email.split('@')[0] : 'Хэрэглэгч');
   const email = user.email || '';
+  const bio = (user.user_metadata && user.user_metadata.bio) || '';
   const initial = getInitial(name);
 
-  document.querySelector('.prof-name').innerHTML = name + ' <span class="badge">⭐ Алт</span>';
+  document.getElementById('profNameText').textContent = name;
   document.querySelector('.prof-email').textContent = email;
+  document.querySelector('.prof-bio').textContent = bio;
   document.getElementById('avatarText').textContent = initial;
   document.getElementById('editName').value = name;
   document.getElementById('editEmail').value = email;
+  document.getElementById('editBio').value = bio;
 
-  // Аватар зураг хадгалагдсан бол харуулах
+  // ЗАСВАР: "18 найз" гэсэн хуурамч тоог арилгаад, зөвхөн бодит
+  // "сүүлд идэвхтэй байсан" цагийг л харуулна (friends систем байхгүй тул)
+  const metaEl = document.getElementById('profMeta');
+  if(metaEl && user.last_sign_in_at){
+    metaEl.innerHTML = `<span><span class="icon">⏱️</span> ${relativeTime(user.last_sign_in_at)}</span>`;
+  }
+
   if(user.user_metadata && user.user_metadata.avatar_url){
     document.getElementById('avatarText').style.display='none';
     const img = document.getElementById('avatarImg');
@@ -653,7 +667,6 @@ async function loadSession(){
     document.getElementById('avaDelBtn').style.display='inline';
   }
 
-  // Ковер зураг хадгалагдсан бол харуулах
   if(user.user_metadata && user.user_metadata.cover_url){
     const cimg = document.getElementById('coverImg');
     cimg.style.display='block';
@@ -665,8 +678,75 @@ async function loadSession(){
   loadSidebar();
   loadStreak();
   loadRightSidebar();
+  loadProfileStats();
+  loadRecentMovies();
 }
 loadSession();
+
+// ===== ЗАСВАР: бодит статистик татах (34/12/8/5 хуурамч тооны оронд) =====
+async function loadProfileStats(){
+  const token = localStorage.getItem('sb_token');
+  if(!token) return;
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/get_profile_stats`,{
+      method:'POST',
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+      body:'{}'
+    });
+    if(!r.ok) return;
+    const rows = await r.json();
+    const s = Array.isArray(rows) ? rows[0] : rows;
+    if(!s) return;
+    document.getElementById('statWatched').textContent = s.watched_count ?? 0;
+    document.getElementById('statSaved').textContent = s.saved_count ?? 0;
+    document.getElementById('statTTS').textContent = s.tts_count ?? 0;
+    document.getElementById('statHumanize').textContent = s.humanizer_count ?? 0;
+
+    const favCountEl = document.getElementById('favoritesCount');
+    const histCountEl = document.getElementById('historyCount');
+    if(s.saved_count > 0){
+      favCountEl.textContent = s.saved_count;
+      favCountEl.style.display = 'inline-block';
+      document.getElementById('favoritesSub').textContent = s.saved_count + ' кино хадгалсан';
+    }
+    if(s.watched_count > 0){
+      histCountEl.textContent = s.watched_count;
+      histCountEl.style.display = 'inline-block';
+      document.getElementById('historySub').textContent = s.watched_count + ' кино үзсэн';
+    }
+  }catch(e){
+    console.error('Profile stats fetch error:', e);
+  }
+}
+
+// ЗАСВАР: "Сүүлийн үзсэн" хэсгийг жинхэнэ watch_history-с татна
+// (өмнө нь Аватар 2 / Дюн 2 / Оддын дайн гэсэн хуурамч жишээ байсан)
+async function loadRecentMovies(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  const grid = document.getElementById('recentMovies');
+  if(!token || !userId){ grid.innerHTML = '<div class="sb-empty">Нэвтрэх шаардлагатай</div>'; return; }
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/watch_history?user_id=eq.${userId}&select=*&order=watched_at.desc&limit=6`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    if(!r.ok){ grid.innerHTML = '<div class="sb-empty">Хараахан үзсэн кино байхгүй байна</div>'; return; }
+    const rows = await r.json();
+    if(!Array.isArray(rows) || rows.length===0){
+      grid.innerHTML = '<div class="sb-empty">Хараахан үзсэн кино байхгүй байна</div>';
+      return;
+    }
+    grid.innerHTML = rows.map(m => {
+      const title = escapeHtml(m.title || 'Нэргүй');
+      const date = m.watched_at ? new Date(m.watched_at).toLocaleDateString('mn-MN') : '';
+      const thumb = m.thumbnail_url ? escapeHtml(m.thumbnail_url) : '';
+      const imgHtml = thumb ? `<img src="${thumb}" alt="">` : `<div style="width:100%;height:100px;background:#222;"></div>`;
+      return `<div class="movie-card">${imgHtml}<div class="info"><div class="title">${title}</div><div class="date">${date}</div></div></div>`;
+    }).join('');
+  }catch(e){
+    grid.innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
+  }
+}
 
 // ===== LEFT SIDEBAR (зөвхөн computer) =====
 async function loadSidebar(){
@@ -674,7 +754,6 @@ async function loadSidebar(){
   const userId = getUserId();
   if(!token || !userId) return;
 
-  // Сүүлд үзсэн (watch_history хүснэгт байгаа тохиолдолд)
   try{
     const r = await fetch(`${SUPABASE_URL}/rest/v1/watch_history?user_id=eq.${userId}&select=*&order=watched_at.desc&limit=5`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
@@ -689,7 +768,6 @@ async function loadSidebar(){
     document.getElementById('sbRecent').innerHTML = '<div class="sb-empty">Ачаалж чадсангүй</div>';
   }
 
-  // Хадгалсан (saved_items хүснэгт байгаа тохиолдолд)
   try{
     const r = await fetch(`${SUPABASE_URL}/rest/v1/saved_items?user_id=eq.${userId}&select=*&order=created_at.desc&limit=5`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
@@ -822,13 +900,12 @@ async function claimDailyReward(){
   }
 }
 
-// ===== RIGHT SIDEBAR: мэдэгдэл + trending =====
+// ===== RIGHT SIDEBAR: мэдэгдэл =====
 async function loadRightSidebar(){
   const token = localStorage.getItem('sb_token');
   const userId = getUserId();
   if(!token || !userId) return;
 
-  // Мэдэгдэл (notifications хүснэгт байгаа тохиолдолд)
   try{
     const r = await fetch(`${SUPABASE_URL}/rest/v1/notifications?user_id=eq.${userId}&select=*&order=created_at.desc&limit=5`,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
@@ -955,8 +1032,6 @@ async function confirmTopup(){
     msgEl.textContent = 'Цэнэглэх дүнгээ сонгох эсвэл оруулна уу.';
     return;
   }
-  // ЗАСВАРЛАХ ШААРДЛАГАТАЙ: энд бодит төлбөрийн систем (QPay/Card) холбогдох ёстой.
-  // Одоогоор энэ зөвхөн интерфэйсийн mockup — төлбөр баталгаажуулалт хийгээгүй.
   msgEl.style.display='block';
   msgEl.style.background='rgba(251,191,36,0.15)';
   msgEl.style.color='#fbbf24';
@@ -1025,7 +1100,7 @@ async function uploadAvatar(e) {
   try{
     textEl.style.display='none';
     img.style.display='block';
-    img.src = URL.createObjectURL(file); // шуурхай preview
+    img.src = URL.createObjectURL(file);
 
     const oldUser = JSON.parse(localStorage.getItem('sb_user')||'{}');
     const oldAvatar = oldUser.user_metadata && oldUser.user_metadata.avatar_url;
@@ -1119,7 +1194,6 @@ saveBtn.disabled = true;
 
 try{
   const body = { data: { full_name: name, bio: bio } };
-  // Имэйл өөрчилсөн бол Supabase баталгаажуулах имэйл илгээнэ
   if(email && email !== document.querySelector('.prof-email').textContent){
     body.email = email;
   }
@@ -1131,7 +1205,7 @@ try{
   const data = await r.json();
   if(r.ok){
     localStorage.setItem('sb_user', JSON.stringify(data));
-    document.querySelector('.prof-name').innerHTML = name + ' <span class="badge">⭐ Алт</span>';
+    document.getElementById('profNameText').textContent = name;
     document.querySelector('.prof-email').textContent = data.email || email;
     document.querySelector('.prof-bio').textContent = bio;
     document.getElementById('avatarText').textContent = getInitial(name);
@@ -1148,9 +1222,7 @@ saveBtn.disabled = false;
 
 // ===== MODAL (Түүх / Дуртай) =====
 function openModal(type) {
-const title = type === 'favorites' ? '❤️ Дуртай кинонууд' : '📋 Үзсэн түүх';
-const count = type === 'favorites' ? 12 : 34;
-alert(title + '\nНийт ' + count + ' кино байна.\n(Supabase-аас татах код холбох боломжтой)');
+  location.href = 'services.html';
 }
 
 // ===== LOGOUT =====
