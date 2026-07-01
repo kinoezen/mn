@@ -567,9 +567,10 @@ const SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
 const SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
 let allPrograms=[],activeCat='',searchVal='',sortMode='new';
 
-async function sbFetch(table,params=''){const r=await fetch(`${SB_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`}});if(!r.ok)throw new Error(r.status);return r.json();}
-async function sbPost(table,data){const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});return r.ok;}
-async function sbPatch(table,filter,data){const r=await fetch(`${SB_URL}/rest/v1/${table}?${filter}`,{method:'PATCH',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${SB_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});return r.ok;}
+function sbAuthHeader(){const t=localStorage.getItem('sb_token');return t||SB_KEY;}
+async function sbFetch(table,params=''){const r=await fetch(`${SB_URL}/rest/v1/${table}?${params}`,{headers:{'apikey':SB_KEY,'Authorization':`Bearer ${sbAuthHeader()}`}});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbPost(table,data){const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${sbAuthHeader()}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});return r.ok;}
+async function sbPatch(table,filter,data){const r=await fetch(`${SB_URL}/rest/v1/${table}?${filter}`,{method:'PATCH',headers:{'apikey':SB_KEY,'Authorization':`Bearer ${sbAuthHeader()}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify(data)});return r.ok;}
 
 function san(s){if(!s)return'';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 function emoji(cat){return{'Кино':'🎬','Хэрэгсэл':'🔧','AI':'🤖','Тоглоом':'🎮','Бусад':'📦'}[cat]||'💻';}
