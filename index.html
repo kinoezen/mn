@@ -23,605 +23,774 @@
 {"@context":"https://schema.org","@type":"WebSite","name":"Кино Эзэн","url":"https://kinoezen.mn"}
 </script>
 <style>
-  /* ===== ROOT ===== */
-  :root {
-    --accent: #4ade80;
-    --accent2: #fbbf24;
-    --shadow-accent: 0 4px 24px rgba(74, 222, 128, 0.2);
-  }
 
-  /* ===== WEATHER BAR ===== */
+:root {
+  --accent:#4ade80;
+  --accent2:#fbbf24;
+  --shadow-accent:0 4px 24px rgba(74,222,128,0.2);
+}
+
+/* WEATHER */
+.weather-bar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  padding:4px 16px 8px;
+  color:#fff;
+  font-family:'Nunito',sans-serif;
+  font-size:15px;
+  background:transparent;
+}
+.weather-left {
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  align-items:center;
+}
+.weather-item {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-weight:600;
+  color:#e0e0e0;
+}
+.weather-item .weather-temp {
+  color:#4ade80;
+  font-weight:700;
+}
+.date-text {
+  font-size:14px;
+  font-weight:700;
+  background:linear-gradient(90deg,#4ade80,#fbbf24);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:0.5px;
+  white-space:nowrap;
+}
+
+/* AD BANNER */
+.ad-wrapper {
+  max-width:728px;
+  margin:8px auto;
+  padding:0 16px;
+}
+.ad-slider-container {
+  position:relative;
+  width:100%;
+  height:90px;
+  overflow:hidden;
+  border-radius:12px;
+  background:linear-gradient(135deg,#1a1a2e,#2a2a4e);
+}
+.ad-slider {
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.ad-slide {
+  display:none;
+  width:100%;
+  height:100%;
+  animation:adFade 0.6s ease;
+}
+.ad-slide.active {
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:10px;
+}
+.ad-banner {
+  display:flex;
+  align-items:center;
+  width:100%;
+  gap:10px;
+  flex-wrap:nowrap;
+  overflow:hidden;
+}
+.ad-banner img {
+  height:56px;
+  width:auto;
+  max-width:80px;
+  border-radius:6px;
+  object-fit:cover;
+  flex-shrink:0;
+}
+.ad-text {
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+}
+.ad-text strong {
+  color:#4ade80;
+  font-size:13px;
+  display:block;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.ad-text div {
+  color:rgba(255,255,255,0.6);
+  font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.ad-btn {
+  background:linear-gradient(90deg,#4ade80,#fbbf24);
+  border:none;
+  color:#0a0a14;
+  padding:6px 14px;
+  border-radius:30px;
+  font-weight:700;
+  font-size:11px;
+  cursor:pointer;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.ad-btn:hover {
+  opacity:0.9;
+}
+.ad-loading {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  color:rgba(255,255,255,0.2);
+  font-size:12px;
+  font-family:'Nunito',sans-serif;
+}
+.ad-dots {
+  display:none;
+}
+.ad-size-label {
+  position:absolute;
+  bottom:4px;
+  right:8px;
+  font-size:9px;
+  color:rgba(255,255,255,0.1);
+  pointer-events:none;
+}
+@keyframes adFade{0% {
+  opacity:0;
+  transform:scale(0.97);
+}100% {
+  opacity:1;
+  transform:scale(1);
+}}
+
+/* LOGO */
+.logo-text {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:30px;
+  letter-spacing:2px;
+  background:linear-gradient(90deg,#4ade80 0%,#86efac 25%,#fcd34d 55%,#fbbf24 80%,#f59e0b 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  filter:drop-shadow(0 0 8px rgba(74,222,128,0.3));
+}
+.btn-primary,.form-btn,.watch-btn {
+  background:linear-gradient(90deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);
+  border:none;
+  color:#0a0a14;
+}
+.btn-primary:hover,.form-btn:hover,.watch-btn:hover {
+  opacity:0.9;
+  transform:translateY(-1px);
+}
+
+/* MCAT */
+.mcat-card {
+  border:1px solid rgba(255,255,255,0.06);
+  transition:all 0.3s ease;
+}
+.mcat-card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(0,0,0,0.3);
+}
+.mcat-all .mcat-icon {
+  background:linear-gradient(135deg,#4ade80,#22c55e);
+}
+.mcat-product .mcat-icon {
+  background:linear-gradient(135deg,#ec4899,#8b5cf6);
+}
+.mcat-stars .mcat-icon {
+  background:linear-gradient(135deg,#facc15,#fb923c);
+}
+.mcat-movie .mcat-icon {
+  background:linear-gradient(135deg,#e63946,#f4a261);
+}
+.mcat-news .mcat-icon {
+  background:linear-gradient(135deg,#4ade80,#22c55e);
+}
+.mcat-travel .mcat-icon {
+  background:linear-gradient(135deg,#06b6d4,#3b82f6);
+}
+.mcat-science .mcat-icon {
+  background:linear-gradient(135deg,#a855f7,#7c3aed);
+}
+.mcat-ai .mcat-icon {
+  background:linear-gradient(135deg,#f59e0b,#ef4444);
+}
+.mcat-history .mcat-icon {
+  background:linear-gradient(135deg,#f97316,#dc2626);
+}
+.mcat-knowledge .mcat-icon {
+  background:linear-gradient(135deg,#10b981,#0891b2);
+}
+.mcat-lesson .mcat-icon {
+  background:linear-gradient(135deg,#f472b6,#ec4899);
+}
+.mcat-software .mcat-icon {
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+}
+.mcat-ads .mcat-icon {
+  background:linear-gradient(135deg,#60a5fa,#3b82f6);
+}
+.mcat-shop .mcat-icon {
+  background:linear-gradient(135deg,#f472b6,#ec4899);
+}
+.mcat-all .mcat-badge {
+  background:rgba(74,222,128,0.2);
+  color:#4ade80;
+}
+.mcat-movie .mcat-badge {
+  background:rgba(230,57,70,0.18);
+  color:#ff6b7a;
+}
+.mcat-news .mcat-badge {
+  background:rgba(74,222,128,0.18);
+  color:#4ade80;
+}
+.mcat-travel .mcat-badge {
+  background:rgba(6,182,212,0.18);
+  color:#06b6d4;
+}
+.mcat-science .mcat-badge {
+  background:rgba(168,85,247,0.18);
+  color:#c084fc;
+}
+.mcat-ai .mcat-badge {
+  background:rgba(245,158,11,0.18);
+  color:#fbbf24;
+}
+.mcat-history .mcat-badge {
+  background:rgba(249,115,22,0.18);
+  color:#fb923c;
+}
+.mcat-knowledge .mcat-badge {
+  background:rgba(16,185,129,0.18);
+  color:#34d399;
+}
+.mcat-product .mcat-badge {
+  background:rgba(236,72,153,0.18);
+  color:#f472b6;
+}
+.mcat-stars .mcat-badge {
+  background:rgba(250,204,21,0.2);
+  color:#fbbf24;
+}
+.mcat-lesson .mcat-badge {
+  background:rgba(236,72,153,0.2);
+  color:#f472b6;
+}
+.mcat-software .mcat-badge {
+  background:rgba(245,158,11,0.2);
+  color:#fbbf24;
+}
+.mcat-ads .mcat-badge {
+  background:rgba(59,130,246,0.2);
+  color:#60a5fa;
+}
+.mcat-shop .mcat-badge {
+  background:rgba(236,72,153,0.2);
+  color:#f472b6;
+}
+.hero-label-icon {
+  background:linear-gradient(135deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);
+}
+.hero-label-text {
+  color:#4ade80;
+}
+.ftag-new {
+  background:linear-gradient(90deg,#4ade80 0%,#86efac 30%,#fcd34d 60%,#fbbf24 100%);
+  color:#0a0a14;
+}
+.news-filter-btn {
+  padding:5px 12px;
+  border-radius:20px;
+  border:1px solid rgba(74,222,128,0.3);
+  background:rgba(74,222,128,0.06);
+  color:#ccc!important;
+  font-size:12px;
+  font-family:"Nunito",sans-serif;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.news-filter-btn:hover {
+  background:rgba(74,222,128,0.12);
+  color:#4ade80!important;
+}
+.news-filter-btn.active {
+  background:rgba(74,222,128,0.18);
+  border-color:#4ade80;
+  color:#4ade80!important;
+}
+
+/* SEARCH */
+.nav-search {
+  display:flex;
+  align-items:center;
+  background:rgba(255,255,255,0.06);
+  border-radius:30px;
+  padding:4px 12px;
+  border:1px solid rgba(255,255,255,0.08);
+  transition:border-color 0.3s;
+}
+.nav-search:focus-within {
+  border-color:#4ade80;
+}
+.nav-search span {
+  color:rgba(255,255,255,0.3);
+  font-size:14px;
+  margin-right:6px;
+}
+.nav-search input {
+  background:transparent;
+  border:none;
+  color:#fff;
+  padding:6px 4px;
+  font-size:13px;
+  outline:none;
+  width:140px;
+  font-family:'Nunito',sans-serif;
+}
+.nav-search input::placeholder {
+  color:rgba(255,255,255,0.3);
+}
+.mobile-search-btn {
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:30px;
+  padding:6px 10px;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+.mobile-search-btn:hover {
+  background:rgba(74,222,128,0.12);
+}
+
+/* MOBILE BOTTOM NAV */
+.mobile-bottom-nav {
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#0a0a14;
+  border-top:1px solid rgba(255,255,255,0.06);
+  padding:8px 0 env(safe-area-inset-bottom);
+  z-index:1000;
+}
+.mbn-inner {
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  max-width:100%;
+  margin:0;
+  padding:0 4px;
+}
+.mbn-item {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  padding:4px 6px;
+  color:rgba(255,255,255,0.4);
+  text-decoration:none;
+  transition:color 0.2s;
+  font-size:12px;
+  font-weight:700;
+  min-width:0;
+  flex:1;
+}
+.mbn-item .mbn-logo-icon {
+  width:42px;
+  height:42px;
+  background:linear-gradient(135deg,#4ade80,#fbbf24);
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:900;
+  color:#0a0a14;
+  flex-shrink:0;
+}
+.mbn-item span {
+  white-space:nowrap;
+  line-height:1.1;
+  font-size:12px;
+  font-weight:600;
+}
+.mbn-item.active {
+  color:#4ade80;
+}
+.mbn-item:hover {
+  color:rgba(255,255,255,0.7);
+}
+
+/* GRID, PAGINATION, FEATURED */
+.main-cats-grid {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:10px;
+  padding:0 24px 8px;
+}
+.pagination {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  padding:20px 0 10px;
+  flex-wrap:wrap;
+}
+.pagination button {
+  padding:6px 14px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:var(--bg3,#1e1e32);
+  color:#ccc;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.pagination button:hover {
+  border-color:#4ade80;
+  color:#4ade80;
+}
+.pagination button.active {
+  background:#4ade80;
+  border-color:#4ade80;
+  color:#0a0a14;
+}
+.pagination button:disabled {
+  opacity:0.3;
+  cursor:not-allowed;
+}
+.pagination .page-num {
+  min-width:36px;
+  text-align:center;
+}
+.featured-img {
+  width:100%;
+  height:240px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px 12px 0 0;
+  overflow:hidden;
+  position:relative;
+}
+.featured-img img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.featured-img .fallback-emoji {
+  font-size:64px;
+}
+#movie-genre-section {
+  display:block!important;
+}
+.see-all {
+  display:none!important;
+}
+.genre-toggle-btn {
+  display:none!important;
+}
+.news-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  padding:0 24px 24px;
+}
+
+/* USER DROPDOWN */
+.user-menu-wrap {
+  position:relative;
+  display:none;
+  align-items:center;
+}
+.user-avatar-btn {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #4ade80;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(74,222,128,0.35);
+  transition:box-shadow 0.2s,transform 0.2s;
+  display:block;
+  flex-shrink:0;
+}
+.user-avatar-btn:hover {
+  box-shadow:0 0 18px rgba(74,222,128,0.55);
+  transform:scale(1.05);
+}
+.user-dropdown {
+  display:none;
+  position:absolute;
+  right:0;
+  top:50px;
+  background:#12122a;
+  border:1px solid rgba(74,222,128,0.18);
+  border-radius:14px;
+  min-width:220px;
+  z-index:9999;
+  box-shadow:0 16px 48px rgba(0,0,0,0.65);
+  overflow:hidden;
+  animation:ddFadeIn 0.15s ease;
+}
+.user-dropdown.open {
+  display:block;
+}
+@keyframes ddFadeIn{from {
+  opacity:0;
+  transform:translateY(-6px);
+}to {
+  opacity:1;
+  transform:translateY(0);
+}}
+.dd-header {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.dd-header img {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border:1.5px solid #4ade80;
+  flex-shrink:0;
+}
+.dd-header-info {
+  min-width:0;
+}
+.dd-header-name {
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dd-header-email {
+  color:#666;
+  font-size:11px;
+  font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-top:1px;
+}
+.dd-item {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:11px 16px;
+  color:#bbb;
+  text-decoration:none;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  font-weight:600;
+  cursor:pointer;
+  transition:background 0.15s,color 0.15s;
+  border:none;
+  background:none;
+  width:100%;
+  text-align:left;
+}
+.dd-item:hover {
+  background:rgba(74,222,128,0.08);
+  color:#4ade80;
+}
+.dd-divider {
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.07);
+  margin:3px 0;
+}
+.dd-logout {
+  color:#ff6b6b!important;
+}
+.dd-logout:hover {
+  background:rgba(255,107,107,0.08)!important;
+  color:#ff4444!important;
+}
+
+/* RESPONSIVE */
+@media(min-width:901px){.news-grid {
+  grid-template-columns:repeat(4,1fr);
+}}
+@media(max-width:900px){
+  .main-cats-grid {
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+  padding:0 16px 8px;
+}
+  .mcat-icon {
+  width:36px;
+  height:36px;
+}.mcat-icon svg {
+  width:36px;
+  height:36px;
+}
+  .mcat-label {
+  font-size:11px;
+}.mcat-sub {
+  display:none;
+}
+  .news-grid {
+  grid-template-columns:repeat(2,1fr);
+}
+}
+@media(max-width:600px){
+  /* Weather fix — mobile дээр баганаар */
   .weather-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 4px 16px 8px;
-    margin: 0;
-    color: #fff;
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-  }
+  flex-direction:column;
+  align-items:flex-start;
+  gap:6px;
+  padding:4px 12px 10px;
+}
   .weather-left {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    align-items: center;
-  }
+  width:100%;
+  gap:10px;
+}
   .weather-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
-    color: #e0e0e0;
-  }
-  .weather-item .weather-temp {
-    color: #4ade80;
-    font-weight: 700;
-  }
+  font-size:12px;
+}
   .date-text {
-    font-size: 14px;
-    font-weight: 700;
-    background: linear-gradient(90deg, #4ade80, #fbbf24);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: 0.5px;
-  }
+  font-size:12px;
+  white-space:normal;
+}
 
-  /* ===== AD — 728×90 ===== */
-  .ad-wrapper {
-    max-width: 728px;
-    margin: 8px auto;
-    padding: 0 16px;
-  }
+  /* Ad fix — mobile дээр нэг мөрт хэвээр, давхардахгүй */
   .ad-slider-container {
-    position: relative;
-    width: 100%;
-    height: 90px;
-    overflow: hidden;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #1a1a2e, #2a2a4e);
-    border: none;
-    box-shadow: none;
-  }
-  .ad-slider {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  .ad-slide {
-    display: none;
-    width: 100%;
-    height: 100%;
-    animation: adFade 0.6s ease;
-  }
+  height:72px;
+}
   .ad-slide.active {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px;
-    gap: 10px;
-  }
-  .ad-slide .ad-banner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    gap: 10px;
-    flex-wrap: nowrap;
-  }
-  .ad-slide .ad-banner img,
-  .ad-slide .ad-banner video {
-    max-height: 60px;
-    border-radius: 6px;
-    object-fit: cover;
-  }
-  .ad-slide .ad-text {
-    flex: 1;
-    min-width: 80px;
-  }
-  .ad-slide .ad-text strong {
-    color: #4ade80;
-    font-size: 13px;
-    display: block;
-  }
-  .ad-slide .ad-text div {
-    color: rgba(255,255,255,0.6);
-    font-size: 11px;
-  }
+  padding:0 10px;
+  gap:8px;
+}
+  .ad-banner {
+  gap:8px;
+}
+  .ad-banner img {
+  height:44px;
+  max-width:60px;
+}
+  .ad-text strong {
+  font-size:11px;
+}
+  .ad-text div {
+  font-size:9px;
+}
   .ad-btn {
-    background: linear-gradient(90deg, #4ade80, #fbbf24);
-    border: none;
-    color: #0a0a14;
-    padding: 5px 14px;
-    border-radius: 30px;
-    font-weight: 700;
-    font-size: 11px;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .ad-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-  .ad-dots {
-    display: none;
-  }
-  .ad-size-label {
-    position: absolute;
-    bottom: 4px;
-    right: 8px;
-    font-size: 9px;
-    color: rgba(255,255,255,0.12);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    pointer-events: none;
-    z-index: 5;
-  }
-  @keyframes adFade {
-    0% { opacity: 0; transform: scale(0.96); }
-    100% { opacity: 1; transform: scale(1); }
-  }
-
-  /* ===== LOGO ===== */
-  .logo-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 30px;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, #4ade80 0%, #86efac 25%, #fcd34d 55%, #fbbf24 80%, #f59e0b 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.3));
-  }
-
-  .btn-primary, .form-btn, .watch-btn {
-    background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
-    border: none;
-    color: #0a0a14;
-  }
-  .btn-primary:hover, .form-btn:hover, .watch-btn:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
-  }
-
-  .mcat-card {
-    border: 1px solid rgba(255,255,255,0.06);
-    transition: all 0.3s ease;
-  }
-  .mcat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-  }
-
-  .mcat-all .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
-  .mcat-product .mcat-icon { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
-  .mcat-stars .mcat-icon { background: linear-gradient(135deg, #facc15, #fb923c); }
-  .mcat-movie .mcat-icon { background: linear-gradient(135deg, #e63946, #f4a261); }
-  .mcat-news .mcat-icon { background: linear-gradient(135deg, #4ade80, #22c55e); }
-  .mcat-travel .mcat-icon { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
-  .mcat-science .mcat-icon { background: linear-gradient(135deg, #a855f7, #7c3aed); }
-  .mcat-ai .mcat-icon { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-  .mcat-history .mcat-icon { background: linear-gradient(135deg, #f97316, #dc2626); }
-  .mcat-knowledge .mcat-icon { background: linear-gradient(135deg, #10b981, #0891b2); }
-  .mcat-lesson .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
-  .mcat-software .mcat-icon { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
-  .mcat-ads .mcat-icon { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
-  .mcat-shop .mcat-icon { background: linear-gradient(135deg, #f472b6, #ec4899); }
-
-  .mcat-all .mcat-badge { background: rgba(74,222,128,0.2); color: #4ade80; }
-  .mcat-movie .mcat-badge { background: rgba(230,57,70,0.18); color: #ff6b7a; }
-  .mcat-news .mcat-badge { background: rgba(74,222,128,0.18); color: #4ade80; }
-  .mcat-travel .mcat-badge { background: rgba(6,182,212,0.18); color: #06b6d4; }
-  .mcat-science .mcat-badge { background: rgba(168,85,247,0.18); color: #c084fc; }
-  .mcat-ai .mcat-badge { background: rgba(245,158,11,0.18); color: #fbbf24; }
-  .mcat-history .mcat-badge { background: rgba(249,115,22,0.18); color: #fb923c; }
-  .mcat-knowledge .mcat-badge { background: rgba(16,185,129,0.18); color: #34d399; }
-  .mcat-product .mcat-badge { background: rgba(236,72,153,0.18); color: #f472b6; }
-  .mcat-stars .mcat-badge { background: rgba(250,204,21,0.2); color: #fbbf24; }
-  .mcat-lesson .mcat-badge { background: rgba(236,72,153,0.2); color: #f472b6; }
-  .mcat-software .mcat-badge { background: rgba(245,158,11,0.2); color: #fbbf24; }
-  .mcat-ads .mcat-badge { background: rgba(59,130,246,0.2); color: #60a5fa; }
-  .mcat-shop .mcat-badge { background: rgba(236,72,153,0.2); color: #f472b6; }
-
-  .hero-label-icon {
-    background: linear-gradient(135deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
-  }
-  .hero-label-text {
-    color: #4ade80;
-  }
-  .ftag-new {
-    background: linear-gradient(90deg, #4ade80 0%, #86efac 30%, #fcd34d 60%, #fbbf24 100%);
-    color: #0a0a14;
-  }
-
-  .news-filter-btn {
-    padding: 5px 12px;
-    border-radius: 20px;
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    background: rgba(74, 222, 128, 0.06);
-    color: #ccc !important;
-    font-size: 12px;
-    font-family: "Nunito", sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .news-filter-btn:hover {
-    background: rgba(74, 222, 128, 0.12);
-    color: #4ade80 !important;
-  }
-  .news-filter-btn.active {
-    background: rgba(74, 222, 128, 0.18);
-    border-color: #4ade80;
-    color: #4ade80 !important;
-  }
-
-  .nav-search {
-    display: flex;
-    align-items: center;
-    background: rgba(255,255,255,0.06);
-    border-radius: 30px;
-    padding: 4px 12px;
-    border: 1px solid rgba(255,255,255,0.08);
-    transition: border-color 0.3s;
-  }
-  .nav-search:focus-within {
-    border-color: #4ade80;
-  }
-  .nav-search span {
-    color: rgba(255,255,255,0.3);
-    font-size: 14px;
-    margin-right: 6px;
-  }
-  .nav-search input {
-    background: transparent;
-    border: none;
-    color: #fff;
-    padding: 6px 4px;
-    font-size: 13px;
-    outline: none;
-    width: 140px;
-    font-family: 'Nunito', sans-serif;
-  }
-  .nav-search input::placeholder {
-    color: rgba(255,255,255,0.3);
-  }
-  .mobile-search-btn {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 30px;
-    padding: 6px 10px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .mobile-search-btn:hover {
-    background: rgba(74,222,128,0.12);
-  }
-
-  /* ===== MOBILE BOTTOM NAV ===== */
-  .mobile-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #0a0a14;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 8px 0 env(safe-area-inset-bottom);
-    z-index: 1000;
-  }
-  .mbn-inner {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    max-width: 100%;
-    margin: 0;
-    padding: 0 4px;
-  }
-  .mbn-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 4px 6px;
-    color: rgba(255, 255, 255, 0.4);
-    text-decoration: none;
-    transition: color 0.2s;
-    font-size: 12px;
-    font-weight: 700;
-    min-width: 0;
-    flex: 1;
-  }
-  .mbn-item .mbn-logo-icon {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #4ade80, #fbbf24);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    font-weight: 900;
-    color: #0a0a14;
-    flex-shrink: 0;
-  }
-  .mbn-item span {
-    white-space: nowrap;
-    line-height: 1.1;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .mbn-item.active {
-    color: #4ade80;
-  }
-  .mbn-item:hover {
-    color: rgba(255, 255, 255, 0.7);
-  }
+  font-size:10px;
+  padding:5px 10px;
+}
 
   .main-cats-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    padding: 0 24px 8px;
-  }
-
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    padding: 20px 0 10px;
-    flex-wrap: wrap;
-  }
-  .pagination button {
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: var(--bg3, #1e1e32);
-    color: #ccc;
-    font-size: 13px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .pagination button:hover {
-    border-color: #4ade80;
-    color: #4ade80;
-  }
-  .pagination button.active {
-    background: #4ade80;
-    border-color: #4ade80;
-    color: #0a0a14;
-  }
-  .pagination button:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-  .pagination .page-num {
-    min-width: 36px;
-    text-align: center;
-  }
-
-  .featured-img {
-    width: 100%;
-    height: 240px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px 12px 0 0;
-    overflow: hidden;
-    position: relative;
-  }
-  .featured-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .featured-img .fallback-emoji {
-    font-size: 64px;
-  }
-
-  #movie-genre-section {
-    display: block !important;
-  }
-  .see-all {
-    display: none !important;
-  }
-  .genre-toggle-btn {
-    display: none !important;
-  }
-
-  /* ===== МЭДЭЭНИЙ GRID ===== */
+  grid-template-columns:repeat(7,1fr);
+  gap:5px;
+  padding:0 12px 8px;
+}
+  .mcat-card {
+  padding:9px 4px 8px;
+  border-radius:10px;
+}
+  .mcat-icon {
+  width:28px;
+  height:28px;
+}.mcat-icon svg {
+  width:28px;
+  height:28px;
+}
+  .mcat-label {
+  font-size:9px;
+}.mcat-badge {
+  display:none;
+}.mcat-sub {
+  display:none;
+}
   .news-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    padding: 0 24px 24px;
-  }
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:0 12px 16px;
+}
+  .mbn-item .mbn-logo-icon {
+  width:36px;
+  height:36px;
+  font-size:18px;
+}
+  .mbn-item span {
+  font-size:10px;
+}
+}
+@media(max-width:400px){
+  .main-cats-grid {
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+}
+  .mcat-card {
+  padding:6px 2px 6px;
+}.mcat-icon {
+  width:22px;
+  height:22px;
+}.mcat-icon svg {
+  width:22px;
+  height:22px;
+}
+  .mcat-label {
+  font-size:8px;
+}
+  .ad-slider-container {
+  height:64px;
+}
+  .ad-btn {
+  font-size:9px;
+  padding:4px 8px;
+}
+  .mbn-item .mbn-logo-icon {
+  width:30px;
+  height:30px;
+  font-size:15px;
+}
+  .mbn-item span {
+  font-size:9px;
+}
+  .weather-item {
+  font-size:11px;
+}.date-text {
+  font-size:11px;
+}
+}
 
-  /* ===== USER DROPDOWN ===== */
-  .user-menu-wrap {
-    position: relative;
-    display: none;
-    align-items: center;
-  }
-  .user-avatar-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #4ade80;
-    cursor: pointer;
-    box-shadow: 0 0 10px rgba(74,222,128,0.35);
-    transition: box-shadow 0.2s, transform 0.2s;
-    display: block;
-    flex-shrink: 0;
-  }
-  .user-avatar-btn:hover {
-    box-shadow: 0 0 18px rgba(74,222,128,0.55);
-    transform: scale(1.05);
-  }
-  .user-dropdown {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 50px;
-    background: #12122a;
-    border: 1px solid rgba(74,222,128,0.18);
-    border-radius: 14px;
-    min-width: 220px;
-    z-index: 9999;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.65);
-    overflow: hidden;
-    animation: ddFadeIn 0.15s ease;
-  }
-  .user-dropdown.open {
-    display: block;
-  }
-  @keyframes ddFadeIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .dd-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-  }
-  .dd-header img {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 1.5px solid #4ade80;
-    flex-shrink: 0;
-  }
-  .dd-header-info {
-    min-width: 0;
-  }
-  .dd-header-name {
-    color: #fff;
-    font-weight: 700;
-    font-size: 13px;
-    font-family: 'Nunito', sans-serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .dd-header-email {
-    color: #666;
-    font-size: 11px;
-    font-family: 'Nunito', sans-serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 1px;
-  }
-  .dd-item {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 11px 16px;
-    color: #bbb;
-    text-decoration: none;
-    font-size: 13px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    border: none;
-    background: none;
-    width: 100%;
-    text-align: left;
-  }
-  .dd-item:hover {
-    background: rgba(74,222,128,0.08);
-    color: #4ade80;
-  }
-  .dd-divider {
-    border: none;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    margin: 3px 0;
-  }
-  .dd-logout {
-    color: #ff6b6b !important;
-  }
-  .dd-logout:hover {
-    background: rgba(255,107,107,0.08) !important;
-    color: #ff4444 !important;
-  }
-
-  /* ===== RESPONSIVE ===== */
-  @media (min-width: 901px) {
-    .news-grid {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  @media(max-width: 900px) {
-    .main-cats-grid {
-      grid-template-columns: repeat(7, 1fr);
-      gap: 7px;
-      padding: 0 16px 8px;
-    }
-    .mcat-icon { width: 36px; height: 36px; }
-    .mcat-icon svg { width: 36px; height: 36px; }
-    .mcat-label { font-size: 11px; }
-    .mcat-sub { display: none; }
-    .news-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media(max-width: 600px) {
-    .main-cats-grid {
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-      padding: 0 12px 8px;
-    }
-    .mcat-card { padding: 9px 4px 8px; border-radius: 10px; }
-    .mcat-icon { width: 28px; height: 28px; }
-    .mcat-icon svg { width: 28px; height: 28px; }
-    .mcat-label { font-size: 9px; }
-    .mcat-badge { display: none; }
-    .mcat-sub { display: none; }
-    .ad-slide .ad-banner { flex-wrap: wrap; justify-content: center; }
-    .ad-slide .ad-text strong { font-size: 11px; }
-    .ad-slide .ad-text div { font-size: 9px; }
-    .ad-btn { font-size: 9px; padding: 4px 10px; }
-    .ad-slider-container { height: 80px; }
-    .news-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 12px 16px; }
-    .mbn-item .mbn-logo-icon { width: 36px; height: 36px; font-size: 18px; }
-    .mbn-item span { font-size: 10px; }
-  }
-
-  @media(max-width: 400px) {
-    .main-cats-grid { grid-template-columns: repeat(7, 1fr); gap: 4px; }
-    .mcat-card { padding: 6px 2px 6px; }
-    .mcat-icon { width: 22px; height: 22px; }
-    .mcat-icon svg { width: 22px; height: 22px; }
-    .mcat-label { font-size: 8px; }
-    .ad-slider-container { height: 70px; }
-    .ad-slide .ad-text strong { font-size: 10px; }
-    .ad-btn { font-size: 8px; padding: 3px 8px; }
-    .mbn-item .mbn-logo-icon { width: 30px; height: 30px; font-size: 15px; }
-    .mbn-item span { font-size: 9px; }
-  }
 </style>
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- NAVBAR -->
 <nav class="nav" role="navigation" aria-label="Үндсэн цэс">
   <a href="index.html" class="logo" aria-label="Кино Эзэн нүүр хуудас">
     <div class="logo-icon">
@@ -653,24 +822,13 @@
       <span aria-hidden="true">🔍</span>
       <input type="text" placeholder="Хайлт..." id="search-input" aria-label="Хайлт" autocomplete="off" oninput="searchMovies()">
     </div>
-
-    <!-- ❌ Нэвтрээгүй үед -->
-    <div id="auth-buttons" style="display:flex; gap:8px; align-items:center;">
+    <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
       <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
       <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
     </div>
-
-    <!-- ✅ Нэвтэрсэн үед — профайл зураг + dropdown -->
     <div class="user-menu-wrap" id="user-menu">
-      <img
-        class="user-avatar-btn"
-        id="user-avatar"
-        src=""
-        alt="Профайл"
-        onclick="toggleUserDropdown()"
-      >
+      <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
       <div class="user-dropdown" id="user-dropdown">
-        <!-- Хэрэглэгчийн мэдээлэл -->
         <div class="dd-header">
           <img id="dd-avatar" src="" alt="">
           <div class="dd-header-info">
@@ -678,7 +836,6 @@
             <div class="dd-header-email" id="dd-email"></div>
           </div>
         </div>
-        <!-- Цэс -->
         <a href="profile.html" class="dd-item">👤 Профайл</a>
         <a href="profile.html#settings" class="dd-item">⚙️ Тохиргоо</a>
         <hr class="dd-divider">
@@ -693,7 +850,7 @@
   </div>
 </nav>
 
-<!-- ===== WEATHER ===== -->
+<!-- WEATHER -->
 <div class="weather-bar" role="complementary" aria-label="Цаг агаар">
   <div class="weather-left">
     <div class="weather-item">📅 <time id="today-date"></time></div>
@@ -703,26 +860,18 @@
   <div class="date-text">Кино Эзэн — Бүхнийг нэг дороос</div>
 </div>
 
-<!-- ===== AD — 728×90 ===== -->
+<!-- AD — Зөвхөн JS-ийн динамик реклам харуулна, static placeholder БАЙХГҮЙ -->
 <div class="ad-wrapper">
   <div class="ad-slider-container">
     <div class="ad-slider" id="ad-slider">
-      <div class="ad-slide active">
-        <div class="ad-banner">
-          <div class="ad-text">
-            <strong>🏢 Таны компанийн реклам энд</strong>
-            <div>Сарын 50,000₮-өөс эхлэн рекламаа байршуул</div>
-          </div>
-          <button class="ad-btn" onclick="location.href='#contact'">Холбоо барих</button>
-        </div>
-      </div>
+      <div class="ad-loading" id="ad-loading">Ачааллаж байна...</div>
     </div>
     <div class="ad-dots" id="ad-dots"></div>
     <div class="ad-size-label">728×90</div>
   </div>
 </div>
 
-<!-- ===== АНГИЛАЛ СОНГОХ ===== -->
+<!-- АНГИЛАЛ -->
 <section class="main-cats-section" aria-label="Үндсэн ангилал">
   <div class="section">
     <div class="section-header">
@@ -789,7 +938,7 @@
   </div>
 </section>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="hero-section" aria-label="Онцлох кино">
   <div class="hero-label">
     <div class="hero-label-icon">⭐</div>
@@ -808,7 +957,7 @@
   </div>
 </section>
 
-<!-- ===== MOVIES ===== -->
+<!-- MOVIES -->
 <section id="movies" aria-label="Кинонуудын жагсаалт">
   <div class="section">
     <div class="section-header">
@@ -831,7 +980,7 @@
   <div class="pagination" id="movie-pagination"></div>
 </section>
 
-<!-- ===== NEWS ===== -->
+<!-- NEWS -->
 <section id="news" aria-label="Мэдээ мэдээлэл">
   <div class="section">
     <div class="section-header" style="flex-wrap:wrap;gap:8px;">
@@ -844,10 +993,10 @@
   <div class="pagination" id="news-pagination"></div>
 </section>
 
-<!-- ===== MESSENGER FAB ===== -->
+<!-- MESSENGER FAB -->
 <a class="messenger-fab" href="https://m.me/lkhakd.da" target="_blank" rel="noopener noreferrer" aria-label="Messenger">💬</a>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="footer" id="contact" role="contentinfo">
   <div class="footer-grid">
     <div class="footer-col">
@@ -884,208 +1033,43 @@
   </div>
 </footer>
 
-<!-- ===== MOBILE BOTTOM NAV ===== -->
+<!-- MOBILE BOTTOM NAV -->
 <nav class="mobile-bottom-nav" aria-label="Доод цэс">
   <div class="mbn-inner">
-    <a class="mbn-item active" href="index.html" aria-label="Нүүр">
-      <div class="mbn-logo-icon">🏠</div>
-      <span>Нүүр</span>
-    </a>
-    <a class="mbn-item" href="lessons.html" aria-label="Сургалт">
-      <div class="mbn-logo-icon">📚</div>
-      <span>Сургалт</span>
-    </a>
-    <a class="mbn-item" href="programs.html" aria-label="Программ">
-      <div class="mbn-logo-icon">💻</div>
-      <span>Программ</span>
-    </a>
-    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ">
-      <div class="mbn-logo-icon">🤖</div>
-      <span>AI</span>
-    </a>
-    <a class="mbn-item" href="zar.html" aria-label="Зар">
-      <div class="mbn-logo-icon">📢</div>
-      <span>Зар</span>
-    </a>
-    <a class="mbn-item" href="profile.html" aria-label="Профайл">
-      <div class="mbn-logo-icon">👤</div>
-      <span>Профайл</span>
-    </a>
+    <a class="mbn-item active" href="index.html" aria-label="Нүүр"><div class="mbn-logo-icon">🏠</div><span>Нүүр</span></a>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт"><div class="mbn-logo-icon">📚</div><span>Сургалт</span></a>
+    <a class="mbn-item" href="programs.html" aria-label="Программ"><div class="mbn-logo-icon">💻</div><span>Программ</span></a>
+    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ"><div class="mbn-logo-icon">🤖</div><span>AI</span></a>
+    <a class="mbn-item" href="zar.html" aria-label="Зар"><div class="mbn-logo-icon">📢</div><span>Зар</span></a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл"><div class="mbn-logo-icon">👤</div><span>Профайл</span></a>
   </div>
 </nav>
-  <!-- ===== GOOGLE OAUTH HASH BRIDGE ===== -->
+
 <script>
 (function bridgeGoogleHashToLocalStorage(){
-  if(!location.hash || !location.hash.includes('access_token')) return;
-  const params = new URLSearchParams(location.hash.substring(1));
-  const accessToken = params.get('access_token');
-  if(accessToken){
-    localStorage.setItem('sb_token', accessToken);
-    history.replaceState(null, '', location.pathname);
-  }
+  if(!location.hash||!location.hash.includes('access_token'))return;
+  const params=new URLSearchParams(location.hash.substring(1));
+  const accessToken=params.get('access_token');
+  if(accessToken){localStorage.setItem('sb_token',accessToken);history.replaceState(null,'',location.pathname);}
 })();
 </script>
 
-<!-- ===== AUTH STATE — SUPABASE localStorage ===== -->
 <script>
-(function () {
-  const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-
-  // Хэрэглэгчийн мэдээлэл авах
-  function getUser() {
-    try {
-      const raw = localStorage.getItem('sb_user');
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  function getToken() {
-    return localStorage.getItem('sb_token') || null;
-  }
-
-  // Token хүчинтэй эсэхийг Supabase-ээс шалгах
-  async function verifyToken(token) {
-    try {
-      const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!res.ok) return null;
-      return await res.json();
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Avatar URL үүсгэх
-  function getAvatarUrl(user) {
-    if (user.user_metadata && user.user_metadata.avatar_url) {
-      return user.user_metadata.avatar_url;
-    }
-    const name = (user.user_metadata && user.user_metadata.full_name)
-      ? user.user_metadata.full_name
-      : (user.email || 'U');
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;
-  }
-
-  // Нэр авах
-  function getDisplayName(user) {
-    if (user.user_metadata && user.user_metadata.full_name) return user.user_metadata.full_name;
-    if (user.user_metadata && user.user_metadata.name) return user.user_metadata.name;
-    if (user.email) return user.email.split('@')[0];
-    return 'Хэрэглэгч';
-  }
-
-  // UI шинэчлэх — нэвтэрсэн
-  function showLoggedIn(user) {
-    const avatarUrl = getAvatarUrl(user);
-    const name      = getDisplayName(user);
-    const email     = user.email || '';
-
-    // Header avatar
-    const avatar = document.getElementById('user-avatar');
-    if (avatar) avatar.src = avatarUrl;
-
-    // Dropdown мэдээлэл
-    const ddAvatar = document.getElementById('dd-avatar');
-    if (ddAvatar) ddAvatar.src = avatarUrl;
-    const ddName = document.getElementById('dd-name');
-    if (ddName) ddName.textContent = name;
-    const ddEmail = document.getElementById('dd-email');
-    if (ddEmail) ddEmail.textContent = email;
-
-    // Харуулах/нуух
-    const authBtns = document.getElementById('auth-buttons');
-    if (authBtns) authBtns.style.display = 'none';
-    const userMenu = document.getElementById('user-menu');
-    if (userMenu) userMenu.style.display = 'flex';
-  }
-
-  // UI шинэчлэх — нэвтрээгүй
-  function showLoggedOut() {
-    localStorage.removeItem('sb_token');
-    localStorage.removeItem('sb_user');
-    const authBtns = document.getElementById('auth-buttons');
-    if (authBtns) authBtns.style.display = 'flex';
-    const userMenu = document.getElementById('user-menu');
-    if (userMenu) userMenu.style.display = 'none';
-  }
-
-  // Dropdown нээх/хаах
-  window.toggleUserDropdown = function () {
-    const dd = document.getElementById('user-dropdown');
-    if (!dd) return;
-    dd.classList.toggle('open');
-  };
-
-  // Гадна дарахад dropdown хаах
-  document.addEventListener('click', function (e) {
-    const menu = document.getElementById('user-menu');
-    const dd   = document.getElementById('user-dropdown');
-    if (!menu || !dd) return;
-    if (!menu.contains(e.target)) {
-      dd.classList.remove('open');
-    }
-  });
-
-  // Гарах
-  window.signOutUser = async function () {
-    const token = getToken();
-    if (token) {
-      try {
-        await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': `Bearer ${token}`
-          }
-        });
-      } catch (e) { /* чимээгүй алдаа */ }
-    }
-    showLoggedOut();
-    // Dropdown хаах
-    const dd = document.getElementById('user-dropdown');
-    if (dd) dd.classList.remove('open');
-  };
-
-  // ===== MAIN: auth state шалгах =====
-  async function checkAuth() {
-    const token = getToken();
-    const cachedUser = getUser();
-
-    if (!token) {
-      showLoggedOut();
-      return;
-    }
-
-    // Cached user байвал шууд харуулаад ар талд шалгана
-    if (cachedUser) {
-      showLoggedIn(cachedUser);
-    }
-
-    // Supabase-ээс шалгах (token хүчинтэй эсэх)
-    const liveUser = await verifyToken(token);
-    if (liveUser && liveUser.id) {
-      // Token хүчинтэй — user мэдээлэл шинэчлэх
-      localStorage.setItem('sb_user', JSON.stringify(liveUser));
-      showLoggedIn(liveUser);
-    } else {
-      // Token хуучирсан — гаргах
-      showLoggedOut();
-    }
-  }
-
-  // DOM бэлэн болмогц шалгана
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', checkAuth);
-  } else {
-    checkAuth();
-  }
+(function(){
+  const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+  const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+  function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
+  function getToken(){return localStorage.getItem('sb_token')||null;}
+  async function verifyToken(token){try{const res=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});if(!res.ok)return null;return await res.json();}catch(e){return null;}}
+  function getAvatarUrl(user){if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;const name=(user.user_metadata&&user.user_metadata.full_name)?user.user_metadata.full_name:(user.email||'U');return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;}
+  function getDisplayName(user){if(user.user_metadata&&user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata&&user.user_metadata.name)return user.user_metadata.name;if(user.email)return user.email.split('@')[0];return'Хэрэглэгч';}
+  function showLoggedIn(user){const avatarUrl=getAvatarUrl(user);const name=getDisplayName(user);const email=user.email||'';const avatar=document.getElementById('user-avatar');if(avatar)avatar.src=avatarUrl;const ddAvatar=document.getElementById('dd-avatar');if(ddAvatar)ddAvatar.src=avatarUrl;const ddName=document.getElementById('dd-name');if(ddName)ddName.textContent=name;const ddEmail=document.getElementById('dd-email');if(ddEmail)ddEmail.textContent=email;const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='none';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='flex';}
+  function showLoggedOut(){localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='flex';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='none';}
+  window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(!dd)return;dd.classList.toggle('open');};
+  document.addEventListener('click',function(e){const menu=document.getElementById('user-menu');const dd=document.getElementById('user-dropdown');if(!menu||!dd)return;if(!menu.contains(e.target))dd.classList.remove('open');});
+  window.signOutUser=async function(){const token=getToken();if(token){try{await fetch(`${SUPABASE_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});}catch(e){}}showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');};
+  async function checkAuth(){const token=getToken();const cachedUser=getUser();if(!token){showLoggedOut();return;}if(cachedUser)showLoggedIn(cachedUser);const liveUser=await verifyToken(token);if(liveUser&&liveUser.id){localStorage.setItem('sb_user',JSON.stringify(liveUser));showLoggedIn(liveUser);}else{showLoggedOut();}}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkAuth);else checkAuth();
 })();
 </script>
 
@@ -1093,34 +1077,40 @@
 <script src="script.js"></script>
 <script src="feedback-widget.js"></script>
 
-<!-- ===== РЕКЛАМ СЛАЙДЕР — Supabase-ийн ads хүснэгтээс бодитоор уншиж харуулна ===== -->
 <script>
+/* ===== РЕКЛАМ — зөвхөн нэг удаа дуудагдана, static placeholder БАЙХГҮЙ ===== */
 (function(){
-  const AD_SB_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
-  const AD_SB_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
-  function escHtml(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
-  function escAttr(s){return (s||'').replace(/"/g,'&quot;');}
+  const SB='https://smncsxlbyyhowfarxxlz.supabase.co';
+  const SK='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+  function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+  function eAttr(s){return(s||'').replace(/"/g,'&quot;');}
 
-  async function loadAdsSlider(){
+  async function loadAds(){
     const slider=document.getElementById('ad-slider');
+    const loading=document.getElementById('ad-loading');
     if(!slider)return;
     try{
-      const r=await fetch(`${AD_SB_URL}/rest/v1/ads?active=eq.true&order=created_at.desc`,{
-        headers:{apikey:AD_SB_KEY,Authorization:`Bearer ${AD_SB_KEY}`}
+      const r=await fetch(`${SB}/rest/v1/ads?active=eq.true&order=created_at.desc`,{
+        headers:{apikey:SK,Authorization:`Bearer ${SK}`}
       });
-      if(!r.ok)return; // алдаа гарвал хуучин static slide хэвээр үлдэнэ
+      if(!r.ok)throw new Error(r.status);
       const ads=await r.json();
-      if(!Array.isArray(ads)||!ads.length)return; // идэвхтэй реклам байхгүй бол хуучин placeholder харагдсаар байна
-
+      /* Loading текстийг устгана */
+      if(loading)loading.remove();
+      if(!Array.isArray(ads)||!ads.length){
+        /* Идэвхтэй реклам байхгүй бол default харуулна */
+        slider.innerHTML='<div class="ad-slide active"><div class="ad-banner"><div class="ad-text"><strong>🏢 Таны компанийн реклам энд</strong><div>Сарын 50,000₮-өөс эхлэн · ghermes211@gmail.com</div></div><button class="ad-btn" onclick="document.getElementById(\'contact\').scrollIntoView({behavior:\'smooth\'})">Холбоо барих</button></div></div>';
+        return;
+      }
+      /* Бодит рекламуудыг нэг удаа render хийнэ */
       slider.innerHTML=ads.map((a,i)=>{
-        // button_text дотор утасны дугаар бичсэн бол товч дарахад шууд залгах боломжтой болгоно
         const digits=(a.button_text||'').replace(/[^\d+]/g,'');
         const isPhone=digits.replace(/\+/g,'').length>=7;
         const action=isPhone?`location.href='tel:${digits}'`:`document.getElementById('contact').scrollIntoView({behavior:'smooth'})`;
-        const img=a.image_url?`<img src="${escAttr(a.image_url)}" alt="">`:'';
-        return`<div class="ad-slide${i===0?' active':''}"><div class="ad-banner">${img}<div class="ad-text"><strong>${escHtml(a.title||'')}</strong><div>${escHtml(a.description||'')}</div></div><button class="ad-btn" onclick="${action}">${escHtml(a.button_text||'Холбоо барих')}</button></div></div>`;
+        const img=a.image_url?`<img src="${eAttr(a.image_url)}" alt="">`:'';
+        return`<div class="ad-slide${i===0?' active':''}"><div class="ad-banner">${img}<div class="ad-text"><strong>${esc(a.title||'')}</strong><div>${esc(a.description||'')}</div></div><button class="ad-btn" onclick="${action}">${esc(a.button_text||'Холбоо барих')}</button></div></div>`;
       }).join('');
-
+      /* 1-ээс олон реклам байвал эргэлдэнэ */
       if(ads.length>1){
         let cur=0;
         setInterval(()=>{
@@ -1131,11 +1121,14 @@
           slides[cur].classList.add('active');
         },5000);
       }
-    }catch(e){console.error('Реклам ачааллахад алдаа:',e);}
+    }catch(e){
+      if(loading)loading.remove();
+      if(slider)slider.innerHTML='<div class="ad-slide active"><div class="ad-banner"><div class="ad-text"><strong>🏢 Таны компанийн реклам энд</strong><div>ghermes211@gmail.com</div></div><button class="ad-btn" onclick="document.getElementById(\'contact\').scrollIntoView({behavior:\'smooth\'})">Холбоо барих</button></div></div>';
+    }
   }
 
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadAdsSlider);}
-  else{loadAdsSlider();}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadAds);
+  else loadAds();
 })();
 </script>
 </body>
