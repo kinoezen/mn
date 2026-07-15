@@ -1052,6 +1052,16 @@
   const accessToken=params.get('access_token');
   if(accessToken){localStorage.setItem('sb_token',accessToken);history.replaceState(null,'',location.pathname);}
 })();
+(function captureReferralCode(){
+  const params=new URLSearchParams(location.search);
+  const ref=params.get('ref');
+  if(ref && /^[A-Za-z0-9]{4,10}$/.test(ref)){
+    localStorage.setItem('ke_pending_ref', ref.toUpperCase());
+    params.delete('ref');
+    const rest=params.toString();
+    history.replaceState(null,'',location.pathname + (rest?'?'+rest:'') + location.hash);
+  }
+})();
 </script>
 
 <script>
@@ -1068,7 +1078,30 @@
   window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(!dd)return;dd.classList.toggle('open');};
   document.addEventListener('click',function(e){const menu=document.getElementById('user-menu');const dd=document.getElementById('user-dropdown');if(!menu||!dd)return;if(!menu.contains(e.target))dd.classList.remove('open');});
   window.signOutUser=async function(){const token=getToken();if(token){try{await fetch(`${SUPABASE_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});}catch(e){}}showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');};
-  async function checkAuth(){const token=getToken();const cachedUser=getUser();if(!token){showLoggedOut();return;}if(cachedUser)showLoggedIn(cachedUser);const liveUser=await verifyToken(token);if(liveUser&&liveUser.id){localStorage.setItem('sb_user',JSON.stringify(liveUser));showLoggedIn(liveUser);}else{showLoggedOut();}}
+  async function tryRedeemReferral(token){
+    const code=localStorage.getItem('ke_pending_ref');
+    if(!code)return;
+    try{
+      const res=await fetch(`${SUPABASE_URL}/rest/v1/rpc/redeem_referral`,{
+        method:'POST',
+        headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+        body:JSON.stringify({p_code:code})
+      });
+      const data=await res.json();
+      localStorage.removeItem('ke_pending_ref');
+      if(data && data.ok){
+        showReferralToast(`🎁 Найзын урилгаар +${data.bonus.toLocaleString('mn-MN')} кредит нэмэгдлээ!`);
+      }
+    }catch(e){localStorage.removeItem('ke_pending_ref');}
+  }
+  function showReferralToast(text){
+    const t=document.createElement('div');
+    t.textContent=text;
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#161621;color:#4ade80;border:1px solid rgba(74,222,128,0.3);padding:14px 22px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:90vw;text-align:center;';
+    document.body.appendChild(t);
+    setTimeout(()=>{t.style.transition='opacity 0.4s';t.style.opacity='0';setTimeout(()=>t.remove(),400);},4000);
+  }
+  async function checkAuth(){const token=getToken();const cachedUser=getUser();if(!token){showLoggedOut();return;}if(cachedUser)showLoggedIn(cachedUser);const liveUser=await verifyToken(token);if(liveUser&&liveUser.id){localStorage.setItem('sb_user',JSON.stringify(liveUser));showLoggedIn(liveUser);tryRedeemReferral(token);}else{showLoggedOut();}}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkAuth);else checkAuth();
 })();
 </script>
