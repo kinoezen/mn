@@ -209,6 +209,22 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 .premium-btn{width:100%;padding:12px;border-radius:12px;background:linear-gradient(90deg,#7c3aed,#c084fc);border:none;color:#fff;font-size:14px;font-weight:600;cursor:pointer;transition:0.3s;}
 .premium-btn:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(124,58,237,0.3);}
 
+.ref-card{background:linear-gradient(135deg,#0f2818,#1a1050);border-radius:16px;padding:18px;margin-top:14px;border:1px solid rgba(74,222,128,0.15);}
+.ref-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+.ref-icon{font-size:26px;line-height:1;flex-shrink:0;}
+.ref-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;}
+.ref-sub{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
+.ref-sub b{color:#4ade80;}
+.ref-link-row{display:flex;gap:8px;margin-bottom:12px;}
+.ref-link{flex:1;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 12px;font-size:12px;color:rgba(255,255,255,0.7);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:monospace;}
+.ref-copy-btn{padding:10px 16px;border-radius:10px;background:#4ade80;color:#0a2a0a;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:0.2s;flex-shrink:0;}
+.ref-copy-btn:hover{background:#3fc771;}
+.ref-copy-btn.copied{background:#f4a261;}
+.ref-stats-row{display:flex;gap:16px;}
+.ref-stat{font-size:12px;color:rgba(255,255,255,0.5);}
+.ref-stat span{color:#fff;font-weight:700;font-size:13px;}
+.ref-stat.ref-earned span{color:#f4a261;}
+
 /* ===== LOGOUT ===== */
 .logout-btn{width:100%;padding:13px;border-radius:12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:#ef4444;font-size:14px;font-weight:500;cursor:pointer;margin-top:14px;display:flex;align-items:center;justify-content:center;gap:8px;transition:0.3s;}
 .logout-btn:hover{background:rgba(239,68,68,0.15);border-color:#ef4444;}
@@ -446,6 +462,26 @@ body{background:#0b0b14;color:#fff;font-family:var(--font-body),'Segoe UI',Arial
 </div>
 </div>
 
+
+<!-- REFERRAL (найзаа урьж кредит авах) -->
+<div class="ref-card">
+  <div class="ref-top">
+    <div class="ref-icon">🎁</div>
+    <div>
+      <div class="ref-title">Найзаа урьж, хоёулаа кредит аваарай</div>
+      <div class="ref-sub">Найз чинь холбоосоор бүртгүүлбэл та хоёулаа <b>+1,500 кредит</b> авна</div>
+    </div>
+  </div>
+  <div class="ref-link-row">
+    <div class="ref-link" id="refLink">kinoezen-mn.pages.dev/?ref=——</div>
+    <button class="ref-copy-btn" id="refCopyBtn" onclick="copyRefLink()">Хуулах</button>
+  </div>
+  <div class="ref-stats-row">
+    <div class="ref-stat"><span id="refCount">0</span> хүн урьсан</div>
+    <div class="ref-stat ref-earned"><span id="refEarned">0</span> кредит цуглуулсан</div>
+  </div>
+</div>
+
 <!-- MENU (ЗАСВАР: хатуу бичсэн 12/34 тоог арилгаад id-гаар бодит утга оруулна) -->
 <div class="menu">
 <div class="mitem" onclick="location.href='services.html'">
@@ -675,6 +711,7 @@ async function loadSession(){
   }
 
   loadWallet();
+  loadReferral();
   loadSidebar();
   loadStreak();
   loadRightSidebar();
@@ -893,6 +930,7 @@ async function claimDailyReward(){
     renderRewardGrid(cycleDay, true);
     updateClaimButton(cycleDay, true);
     loadWallet();
+    loadReferral();
   }catch(e){
     document.getElementById('streakMsg').textContent = 'Сүлжээний алдаа гарлаа.';
     btn.textContent = 'Дахин оролдох';
@@ -945,6 +983,49 @@ async function loadWallet(){
     document.getElementById('walletBalance').innerHTML = '0<span class="unit"> кр.</span>';
     document.getElementById('walletBalanceMnt').textContent = '≈ 0₮';
   }
+}
+
+let refCodeGlobal = '';
+async function loadReferral(){
+  const token = localStorage.getItem('sb_token');
+  const userId = getUserId();
+  if(!token || !userId) return;
+  try{
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=referral_code,referral_count`,{
+      headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}
+    });
+    const rows = await r.json();
+    const row = rows && rows[0];
+    if(!row) return;
+    refCodeGlobal = row.referral_code || '';
+    const count = row.referral_count || 0;
+    document.getElementById('refLink').textContent = 'kinoezen-mn.pages.dev/?ref=' + refCodeGlobal;
+    document.getElementById('refCount').textContent = count.toLocaleString('mn-MN');
+    document.getElementById('refEarned').textContent = (count * 1500).toLocaleString('mn-MN');
+    if(navigator.share) document.getElementById('refCopyBtn').textContent = 'Хуваалцах';
+  }catch(e){}
+}
+function copyRefLink(){
+  if(!refCodeGlobal) return;
+  const link = location.origin + '/index.html?ref=' + refCodeGlobal;
+  const shareText = '🎬 КиноЭзэн сайтад надтай нэгд! Энэ холбоосоор бүртгүүлбэл чи 10,000+ кредит үнэгүй авна: ' + link;
+  const btn = document.getElementById('refCopyBtn');
+  const done = ()=>{ btn.textContent='Хуулагдлаа ✓'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Хуулах'; btn.classList.remove('copied');},2000); };
+  if(navigator.share){
+    navigator.share({title:'КиноЭзэн', text:shareText}).catch(()=>{});
+    return;
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(done).catch(()=>{ fallbackCopy(link); done(); });
+  }else{
+    fallbackCopy(link); done();
+  }
+}
+function fallbackCopy(text){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
 }
 
 let historyLoaded = false;
