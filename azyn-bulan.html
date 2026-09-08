@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Азын булан — Кино Эзэн</title>
+<meta name="description" content="Азын булан — Хосын нийцэл, зүүдний тайлал, кино зөгнөл, IQ тест, царай зурхай. Зугаа цэнгээний AI тестүүд.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kinoezen-mn.pages.dev/azyn-bulan.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="navbar.css">
+<style>
+/* ===== AЗЫН БУЛАН — тестийн карт загвар (services.html-тэй ижил зарчим) ===== */
+.ab-hero {
+  padding: 28px 24px 10px;
+  text-align: center;
+}
+.ab-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.ab-hero h1 span {
+  background: linear-gradient(90deg,#a855f7,#f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ab-hero p {
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.ab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  padding: 20px 24px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (max-width: 640px) {
+  .ab-grid { grid-template-columns: 1fr; padding: 16px 16px 90px; }
+}
+
+.ab-card {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.ab-card.active { cursor: pointer; }
+.ab-card.active:hover {
+  transform: translateY(-4px);
+  border-color: rgba(168,85,247,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+.ab-card.soon { opacity: 0.55; }
+
+.ab-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+.ab-ico {
+  width: 46px;
+  height: 46px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.ab-ico.violet { background: linear-gradient(135deg,#6d28d9,#a78bfa); }
+.ab-ico.indigo { background: linear-gradient(135deg,#4338ca,#818cf8); }
+.ab-ico.red    { background: linear-gradient(135deg,#dc2626,#e63946); }
+.ab-ico.amber  { background: linear-gradient(135deg,#b45309,#fbbf24); }
+.ab-ico.pink   { background: linear-gradient(135deg,#db2777,#f472b6); }
+
+.ab-info { flex: 1; min-width: 0; }
+.ab-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; font-family: 'Nunito', sans-serif; }
+.ab-desc { font-size: 12.5px; color: rgba(255,255,255,0.45); line-height: 1.6; font-family: 'Nunito', sans-serif; }
+
+.ab-badges { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+.ab-badge {
+  font-size: 9px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  font-family: 'Nunito', sans-serif;
+}
+.ab-badge-free { background: rgba(74,222,128,0.15); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+.ab-badge-credit { background: rgba(99,179,255,0.10); color: #63b3ff; border: 1px solid rgba(99,179,255,0.20); }
+.ab-badge-soon { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); }
+
+.ab-btn {
+  margin-top: auto;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(168,85,247,0.10);
+  border: 1px solid rgba(168,85,247,0.25);
+  color: #c084fc;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  transition: all 0.25s;
+  font-family: 'Nunito', sans-serif;
+}
+.ab-btn:hover { background: rgba(168,85,247,0.20); border-color: rgba(168,85,247,0.45); }
+.ab-btn.disabled {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.3);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.ab-footer {
+  padding: 16px 18px 90px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.25);
+  font-family: 'Nunito', sans-serif;
+}
+
+/* MOBILE BOTTOM NAV — index.html-тэй ижил */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: #0a0a14;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 8px 0 env(safe-area-inset-bottom);
+  z-index: 1000;
+}
+.mbn-inner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 4px;
+}
+.mbn-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 6px;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  flex: 1;
+  min-width: 0;
+}
+.mbn-item .mbn-logo-icon {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg,#4ade80,#fbbf24);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: 900; color: #0a0a14; flex-shrink: 0;
+}
+.mbn-item span { white-space: nowrap; line-height: 1.1; font-size: 12px; font-weight: 600; }
+.mbn-item.active { color: #4ade80; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav" role="navigation" aria-label="Үндсэн цэс">
+  <a href="index.html" class="logo" aria-label="Кино Эзэн нүүр хуудас">
+    <div class="logo-icon">
+      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+      </svg>
+    </div>
+    <div class="logo-text">Кино Эзэн</div>
+  </a>
+  <button class="mobile-search-btn" id="mobile-search-btn" onclick="toggleMobileSearch && toggleMobileSearch()" aria-label="Хайх" style="visibility:hidden;">🔍</button>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Нүүр</a>
+    <a href="movies.html">Кинонууд</a>
+    <a href="lessons.html">Сургалт</a>
+    <a href="programs.html">Программ</a>
+    <a href="services.html">Үйлчилгээ</a>
+    <a href="profile.html">Профайл</a>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+      <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    </div>
+    <div class="user-menu-wrap" id="user-menu">
+      <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-header">
+          <img id="dd-avatar" src="" alt="">
+          <div class="dd-header-info">
+            <div class="dd-header-name" id="dd-name"></div>
+            <div class="dd-header-email" id="dd-email"></div>
+          </div>
+        </div>
+        <a href="profile.html" class="dd-item">👤 Профайл</a>
+        <a href="profile.html#settings" class="dd-item">⚙️ Тохиргоо</a>
+        <hr class="dd-divider">
+        <button class="dd-item dd-logout" onclick="signOutUser()">🚪 Гарах</button>
+      </div>
+    </div>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс" aria-expanded="false">☰</button>
+</nav>
+
+<!-- HERO -->
+<div class="ab-hero">
+  <h1>🔮 <span>Азын булан</span></h1>
+  <p>Кино темтэй зөгнөл, тест, зугаа цэнгээн — найзуудтайгаа хуваалцаад үзээрэй!</p>
+</div>
+
+<!-- ТЕСТИЙН КАРТУУД -->
+<div class="ab-grid">
+
+  <!-- 1. Хосын нийцэл — ИДЭВХТЭЙ -->
+  <div class="ab-card active" onclick="location.href='compatibility.html'">
+    <div class="ab-head">
+      <div class="ab-ico pink">💕</div>
+      <div class="ab-info">
+        <div class="ab-name">Хосын нийцэл</div>
+        <div class="ab-desc">Хоёр хүний нэр, төрсөн огноогоор нийцлийг тодорхойлно.</div>
+        <div class="ab-badges">
+          <span class="ab-badge ab-badge-free">Үнэгүй</span>
+          <span class="ab-badge ab-badge-credit">⚡ 10 кредит/тайлан</span>
+        </div>
+      </div>
+    </div>
+    <a href="compatibility.html" class="ab-btn">💕 Турших</a>
+  </div>
+
+  <!-- 2. Зүүдний тайлал — ТУН УДАХГҮЙ -->
+  <div class="ab-card soon">
+    <div class="ab-head">
+      <div class="ab-ico indigo">🌙</div>
+      <div class="ab-info">
+        <div class="ab-name">Зүүдний тайлал</div>
+        <div class="ab-desc">Зүүдээ бичээд, AI-аар зөнч маягаар тайлбарлуулна.</div>
+        <div class="ab-badges">
+          <span class="ab-badge ab-badge-soon">🔜 Тун удахгүй</span>
+        </div>
+      </div>
+    </div>
+    <span class="ab-btn disabled">🌙 Удахгүй нээгдэнэ</span>
+  </div>
+
+  <!-- 3. Кино зөгнөл — ТУН УДАХГҮЙ -->
+  <div class="ab-card soon">
+    <div class="ab-head">
+      <div class="ab-ico red">🎬</div>
+      <div class="ab-info">
+        <div class="ab-name">Кино зөгнөл</div>
+        <div class="ab-desc">Төрсөн огноо, дуртай жанраас киноны адилтгал зөгнөнө.</div>
+        <div class="ab-badges">
+          <span class="ab-badge ab-badge-soon">🔜 Тун удахгүй</span>
+        </div>
+      </div>
+    </div>
+    <span class="ab-btn disabled">🎬 Удахгүй нээгдэнэ</span>
+  </div>
+
+  <!-- 4. IQ / Оюуны тест — ТУН УДАХГҮЙ -->
+  <div class="ab-card soon">
+    <div class="ab-head">
+      <div class="ab-ico amber">🧠</div>
+      <div class="ab-info">
+        <div class="ab-name">IQ / Оюуны тест</div>
+        <div class="ab-desc">Логик, тоон бодлогоор оюуны чадвараа шалгана.</div>
+        <div class="ab-badges">
+          <span class="ab-badge ab-badge-soon">🔜 Тун удахгүй</span>
+        </div>
+      </div>
+    </div>
+    <span class="ab-btn disabled">🧠 Удахгүй нээгдэнэ</span>
+  </div>
+
+  <!-- 5. Царай зурхай — ТУН УДАХГҮЙ -->
+  <div class="ab-card soon">
+    <div class="ab-head">
+      <div class="ab-ico violet">👤</div>
+      <div class="ab-info">
+        <div class="ab-name">Царай зурхай</div>
+        <div class="ab-desc">Зургаараа AI зан чанар, азын шинжийг зугаатайгаар уншуулна.</div>
+        <div class="ab-badges">
+          <span class="ab-badge ab-badge-soon">🔜 Тун удахгүй</span>
+        </div>
+      </div>
+    </div>
+    <span class="ab-btn disabled">👤 Удахгүй нээгдэнэ</span>
+  </div>
+
+</div>
+
+<div class="ab-footer">© 2026 Кино Эзэн. Азын булан — зугаа цэнгээний зорилготой.</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+  <div class="mbn-inner">
+    <a class="mbn-item" href="index.html" aria-label="Нүүр"><div class="mbn-logo-icon">🏠</div><span>Нүүр</span></a>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт"><div class="mbn-logo-icon">📚</div><span>Сургалт</span></a>
+    <a class="mbn-item" href="programs.html" aria-label="Программ"><div class="mbn-logo-icon">💻</div><span>Программ</span></a>
+    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ"><div class="mbn-logo-icon">🤖</div><span>AI</span></a>
+    <a class="mbn-item" href="zar.html" aria-label="Зар"><div class="mbn-logo-icon">📢</div><span>Зар</span></a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл"><div class="mbn-logo-icon">👤</div><span>Профайл</span></a>
+  </div>
+</nav>
+
+<script>
+(function bridgeGoogleHashToLocalStorage(){
+  if(!location.hash||!location.hash.includes('access_token'))return;
+  const params=new URLSearchParams(location.hash.substring(1));
+  const accessToken=params.get('access_token');
+  if(accessToken){localStorage.setItem('sb_token',accessToken);history.replaceState(null,'',location.pathname);}
+})();
+</script>
+
+<script>
+(function(){
+  const SUPABASE_URL='https://smncsxlbyyhowfarxxlz.supabase.co';
+  const SUPABASE_KEY='sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+  function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
+  function getToken(){return localStorage.getItem('sb_token')||null;}
+  async function verifyToken(token){try{const res=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});if(!res.ok)return null;return await res.json();}catch(e){return null;}}
+  function getAvatarUrl(user){if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;const name=(user.user_metadata&&user.user_metadata.full_name)?user.user_metadata.full_name:(user.email||'U');return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;}
+  function getDisplayName(user){if(user.user_metadata&&user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata&&user.user_metadata.name)return user.user_metadata.name;if(user.email)return user.email.split('@')[0];return'Хэрэглэгч';}
+  function showLoggedIn(user){const avatarUrl=getAvatarUrl(user);const name=getDisplayName(user);const email=user.email||'';const avatar=document.getElementById('user-avatar');if(avatar)avatar.src=avatarUrl;const ddAvatar=document.getElementById('dd-avatar');if(ddAvatar)ddAvatar.src=avatarUrl;const ddName=document.getElementById('dd-name');if(ddName)ddName.textContent=name;const ddEmail=document.getElementById('dd-email');if(ddEmail)ddEmail.textContent=email;const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='none';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='flex';}
+  function showLoggedOut(){localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='flex';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='none';}
+  window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(!dd)return;dd.classList.toggle('open');};
+  document.addEventListener('click',function(e){const menu=document.getElementById('user-menu');const dd=document.getElementById('user-dropdown');if(!menu||!dd)return;if(!menu.contains(e.target))dd.classList.remove('open');});
+  window.signOutUser=async function(){const token=getToken();if(token){try{await fetch(`${SUPABASE_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});}catch(e){}}showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');};
+  async function checkAuth(){const token=getToken();const cachedUser=getUser();if(!token){showLoggedOut();return;}if(cachedUser)showLoggedIn(cachedUser);const liveUser=await verifyToken(token);if(liveUser&&liveUser.id){localStorage.setItem('sb_user',JSON.stringify(liveUser));showLoggedIn(liveUser);}else{showLoggedOut();}}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkAuth);else checkAuth();
+})();
+</script>
+
+<script>
+function toggleNav(){
+  const links=document.getElementById('nav-links');
+  const right=document.getElementById('nav-right');
+  if(links)links.classList.toggle('open');
+  if(right)right.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
