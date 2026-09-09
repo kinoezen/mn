@@ -157,6 +157,122 @@
 /* CREDIT GUEST BAR */
 .credit-bar-guest { text-align:center; padding:10px 16px; font-size:12.5px; color: rgba(255,255,255,0.5); font-family:'Nunito',sans-serif; }
 .credit-bar-guest a { color:#4ade80; font-weight:700; }
+/* USER DROPDOWN — index.html-тэй ижил */
+.user-menu-wrap {
+  position:relative;
+  display:none;
+  align-items:center;
+}
+.user-avatar-btn {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid #4ade80;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(74,222,128,0.35);
+  transition:box-shadow 0.2s,transform 0.2s;
+  display:block;
+  flex-shrink:0;
+}
+.user-avatar-btn:hover {
+  box-shadow:0 0 18px rgba(74,222,128,0.55);
+  transform:scale(1.05);
+}
+.user-dropdown {
+  display:none;
+  position:absolute;
+  right:0;
+  top:50px;
+  background:#12122a;
+  border:1px solid rgba(74,222,128,0.18);
+  border-radius:14px;
+  min-width:220px;
+  z-index:9999;
+  box-shadow:0 16px 48px rgba(0,0,0,0.65);
+  overflow:hidden;
+  animation:ddFadeIn 0.15s ease;
+}
+.user-dropdown.open {
+  display:block;
+}
+@keyframes ddFadeIn{from {
+  opacity:0;
+  transform:translateY(-6px);
+}to {
+  opacity:1;
+  transform:translateY(0);
+}}
+.dd-header {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+}
+.dd-header img {
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  object-fit:cover;
+  border:1.5px solid #4ade80;
+  flex-shrink:0;
+}
+.dd-header-info {
+  min-width:0;
+}
+.dd-header-name {
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dd-header-email {
+  color:#666;
+  font-size:11px;
+  font-family:'Nunito',sans-serif;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  margin-top:1px;
+}
+.dd-item {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:11px 16px;
+  color:#bbb;
+  text-decoration:none;
+  font-size:13px;
+  font-family:'Nunito',sans-serif;
+  font-weight:600;
+  cursor:pointer;
+  transition:background 0.15s,color 0.15s;
+  border:none;
+  background:none;
+  width:100%;
+  text-align:left;
+}
+.dd-item:hover {
+  background:rgba(74,222,128,0.08);
+  color:#4ade80;
+}
+.dd-divider {
+  border:none;
+  border-top:1px solid rgba(255,255,255,0.07);
+  margin:3px 0;
+}
+.dd-logout {
+  color:#ff6b6b!important;
+}
+.dd-logout:hover {
+  background:rgba(255,107,107,0.08)!important;
+  color:#ff4444!important;
+}
+
 </style>
 </head>
 <body>
