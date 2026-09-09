@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Зүүдний тайлал — Кино Эзэн</title>
+<meta name="description" content="Зүүдний тайлал — зүүдээ бичээд AI-аар уламжлалт зөнч маягаар тайлбарлуулна.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kinoezen-mn.pages.dev/dream.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="navbar.css">
+<style>
+.dr-wrap { max-width: 560px; margin: 0 auto; padding: 24px 20px 90px; }
+.dr-back { display:inline-block; color: rgba(255,255,255,0.45); font-size: 13px; font-family:'Nunito',sans-serif; text-decoration:none; margin-bottom: 14px; }
+.dr-back:hover { color: #818cf8; }
+
+.dr-hero { text-align: center; padding: 6px 0 22px; }
+.dr-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 1px;
+  color: #fff;
+  margin: 0 0 6px;
+}
+.dr-hero h1 span {
+  background: linear-gradient(90deg,#4338ca,#818cf8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.dr-hero p { color: rgba(255,255,255,0.5); font-size: 13.5px; font-family:'Nunito',sans-serif; }
+
+.dr-card {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.07);
+  margin-bottom: 18px;
+}
+.dr-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 8px; display:block; font-family:'Nunito',sans-serif; font-weight:600; }
+.dr-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 13px 14px;
+  color: #fff;
+  font-size: 13.5px;
+  font-family: 'Nunito', sans-serif;
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+.dr-textarea:focus { outline: none; border-color: #4338ca; }
+.dr-textarea::placeholder { color: rgba(255,255,255,0.28); }
+.dr-count { text-align: right; font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 4px; font-family:'Nunito',sans-serif; }
+
+.dr-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  background: linear-gradient(90deg,#4338ca,#818cf8);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: opacity 0.2s;
+  margin-top: 14px;
+}
+.dr-btn:hover { opacity: 0.9; }
+.dr-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.dr-result { display: none; }
+.dr-result.show { display: block; }
+
+.dr-teaser {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.85);
+  font-style: italic;
+  padding: 4px 2px 14px;
+  font-family: 'Nunito', sans-serif;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+  margin-bottom: 16px;
+}
+
+.dr-lock-wrap { position: relative; }
+.dr-detail-text {
+  font-size: 13.5px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.85);
+  white-space: pre-wrap;
+  font-family: 'Nunito', sans-serif;
+  filter: blur(7px);
+  user-select: none;
+  transition: filter 0.4s ease;
+}
+.dr-detail-text.unlocked { filter: none; user-select: text; }
+
+.dr-lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(26,26,46,0.2), rgba(26,26,46,0.85) 40%);
+}
+.dr-lock-overlay.hidden { display: none; }
+.dr-lock-icon { font-size: 26px; }
+.dr-unlock-btn {
+  padding: 11px 24px;
+  border-radius: 12px;
+  background: linear-gradient(90deg,#4338ca,#818cf8);
+  border: none;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+}
+.dr-unlock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.dr-cost-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; padding: 4px 12px; border-radius: 20px;
+  background: rgba(99,179,255,0.08); border: 1px solid rgba(99,179,255,0.20);
+  color: #63b3ff; font-family:'Nunito',sans-serif;
+}
+
+.dr-notice {
+  padding: 12px;
+  background: rgba(244,162,97,0.08);
+  border: 1px solid rgba(244,162,97,0.20);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 12px;
+  color: #f4a261;
+  margin-top: 10px;
+  display: none;
+  font-family: 'Nunito', sans-serif;
+}
+.dr-notice a { color: #f4a261; font-weight: 700; }
+.dr-notice.show { display: block; }
+
+.dr-report-label { font-size: 11px; color: #818cf8; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dr-share-btn {
+  margin-top: 12px; padding: 8px 16px; border-radius: 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6); font-size: 12px; cursor: pointer; font-family:'Nunito',sans-serif;
+  display: none;
+}
+.dr-share-btn.show { display: inline-block; }
+
+.dr-disclaimer { text-align:center; font-size:11px; color: rgba(255,255,255,0.25); margin-top: 18px; font-family:'Nunito',sans-serif; }
+
+.mobile-bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0a0a14; border-top: 1px solid rgba(255,255,255,0.06); padding: 8px 0 env(safe-area-inset-bottom); z-index: 1000; }
+.mbn-inner { display: flex; justify-content: space-around; align-items: center; padding: 0 4px; }
+.mbn-item { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 6px; color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700; flex: 1; min-width: 0; }
+.mbn-item .mbn-logo-icon { width: 42px; height: 42px; background: linear-gradient(135deg,#4ade80,#fbbf24); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; color: #0a0a14; flex-shrink: 0; }
+.mbn-item span { white-space: nowrap; line-height: 1.1; font-size: 12px; font-weight: 600; }
+.mbn-item.active { color: #4ade80; }
+
+.credit-bar-guest { text-align:center; padding:10px 16px; font-size:12.5px; color: rgba(255,255,255,0.5); font-family:'Nunito',sans-serif; }
+.credit-bar-guest a { color:#4ade80; font-weight:700; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav" role="navigation" aria-label="Үндсэн цэс">
+  <a href="index.html" class="logo" aria-label="Кино Эзэн нүүр хуудас">
+    <div class="logo-icon">
+      <svg viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="6" width="22" height="14" rx="3" fill="none" stroke="#4ade80" stroke-width="1.8"/>
+        <line x1="7" y1="6" x2="7" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="19" y1="6" x2="19" y2="20" stroke="#4ade80" stroke-width="1.4"/>
+        <line x1="2" y1="13" x2="24" y2="13" stroke="#4ade80" stroke-width="1.2"/>
+        <circle cx="4.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="4.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="8.5" r="1.1" fill="#fbbf24"/>
+        <circle cx="21.5" cy="17.5" r="1.1" fill="#fbbf24"/>
+        <path d="M11 10.2l5 2.8-5 2.8V10.2z" fill="#4ade80"/>
+      </svg>
+    </div>
+    <div class="logo-text">Кино Эзэн</div>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="index.html">Нүүр</a>
+    <a href="movies.html">Кинонууд</a>
+    <a href="lessons.html">Сургалт</a>
+    <a href="programs.html">Программ</a>
+    <a href="services.html">Үйлчилгээ</a>
+    <a href="profile.html">Профайл</a>
+  </div>
+  <div class="nav-right" id="nav-right">
+    <div id="auth-buttons" style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-login" onclick="location.href='login.html'">Нэвтрэх</button>
+      <button class="btn-join" onclick="location.href='login.html'">Бүртгүүлэх</button>
+    </div>
+    <div class="user-menu-wrap" id="user-menu">
+      <img class="user-avatar-btn" id="user-avatar" src="" alt="Профайл" onclick="toggleUserDropdown()">
+      <div class="user-dropdown" id="user-dropdown">
+        <div class="dd-header">
+          <img id="dd-avatar" src="" alt="">
+          <div class="dd-header-info">
+            <div class="dd-header-name" id="dd-name"></div>
+            <div class="dd-header-email" id="dd-email"></div>
+          </div>
+        </div>
+        <a href="profile.html" class="dd-item">👤 Профайл</a>
+        <a href="profile.html#settings" class="dd-item">⚙️ Тохиргоо</a>
+        <hr class="dd-divider">
+        <button class="dd-item dd-logout" onclick="signOutUser()">🚪 Гарах</button>
+      </div>
+    </div>
+  </div>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()" aria-label="Цэс" aria-expanded="false">☰</button>
+</nav>
+
+<div id="credit-bar-guest" class="credit-bar-guest">
+  💡 <a href="login.html">Нэвтэрч</a> дэлгэрэнгүй тайлан авахдаа кредит ашиглана уу
+</div>
+
+<div class="dr-wrap">
+  <a href="azyn-bulan.html" class="dr-back">← Азын булан</a>
+
+  <div class="dr-hero">
+    <h1>🌙 <span>Зүүдний тайлал</span></h1>
+    <p>Зүүдээ бичээд, уламжлалт зөнч маягаар тайлбарлуулаарай</p>
+  </div>
+
+  <!-- МАЯГТ -->
+  <div class="dr-card" id="dr-form-card">
+    <label class="dr-label">✍️ Зүүдээ 2-3 өгүүлбэрээр бич</label>
+    <textarea class="dr-textarea" id="dr-input" maxlength="800" placeholder="Жишээ: Би өндөр байшингийн орой дээрээс нисч байсан, дараа нь гэнэт усанд унасан..." oninput="updateCount()"></textarea>
+    <div class="dr-count"><span id="dr-count">0</span>/800</div>
+    <button class="dr-btn" id="dr-calc-btn" onclick="interpretDream()">🌙 Тайлбарлах (Үнэгүй)</button>
+  </div>
+
+  <!-- ҮР ДҮН -->
+  <div class="dr-card dr-result" id="dr-result-card">
+    <div class="dr-teaser" id="dr-teaser"></div>
+
+    <div class="dr-cost-pill" style="margin-bottom:10px;">⚡ 5 кредит</div>
+
+    <div class="dr-lock-wrap">
+      <div class="dr-report-label">🌙 ДЭЛГЭРЭНГҮЙ ТАЙЛБАР</div>
+      <div class="dr-detail-text" id="dr-detail-text"></div>
+      <div class="dr-lock-overlay" id="dr-lock-overlay">
+        <div class="dr-lock-icon">🔒</div>
+        <button class="dr-unlock-btn" id="dr-unlock-btn" onclick="unlockDetail()">Дэлгэрэнгүйг нээх — 5 кредит</button>
+      </div>
+    </div>
+    <div class="dr-notice" id="dr-notice">💎 Кредит хүрэлцэхгүй — <a href="pricing.html">тариф сонгох →</a></div>
+
+    <button class="dr-share-btn" id="dr-share-btn" onclick="copyDream()">📋 Хуулах</button>
+  </div>
+
+  <div class="dr-disclaimer">🎭 Зөвхөн зугаа цэнгээний зорилготой — жинхэнэ зөнч биш</div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" aria-label="Доод цэс">
+  <div class="mbn-inner">
+    <a class="mbn-item" href="index.html" aria-label="Нүүр"><div class="mbn-logo-icon">🏠</div><span>Нүүр</span></a>
+    <a class="mbn-item" href="lessons.html" aria-label="Сургалт"><div class="mbn-logo-icon">📚</div><span>Сургалт</span></a>
+    <a class="mbn-item" href="programs.html" aria-label="Программ"><div class="mbn-logo-icon">💻</div><span>Программ</span></a>
+    <a class="mbn-item" href="services.html" aria-label="AI үйлчилгээ"><div class="mbn-logo-icon">🤖</div><span>AI</span></a>
+    <a class="mbn-item" href="zar.html" aria-label="Зар"><div class="mbn-logo-icon">📢</div><span>Зар</span></a>
+    <a class="mbn-item" href="profile.html" aria-label="Профайл"><div class="mbn-logo-icon">👤</div><span>Профайл</span></a>
+  </div>
+</nav>
+
+<script>
+(function bridgeGoogleHashToLocalStorage(){
+  if(!location.hash||!location.hash.includes('access_token'))return;
+  const params=new URLSearchParams(location.hash.substring(1));
+  const accessToken=params.get('access_token');
+  if(accessToken){localStorage.setItem('sb_token',accessToken);history.replaceState(null,'',location.pathname);}
+})();
+</script>
+
+<script>
+// ============================================================
+// SUPABASE + КРЕДИТ (compatibility.html-тэй ИЖИЛ логик)
+// ============================================================
+const SUPABASE_URL = 'https://smncsxlbyyhowfarxxlz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Zjr9q57fQ5ZV-BF0StnvJA_Z1U_7qHO';
+
+function getUser(){try{const r=localStorage.getItem('sb_user');return r?JSON.parse(r):null;}catch(e){return null;}}
+function getToken(){return localStorage.getItem('sb_token')||null;}
+function isLoggedIn(){return !!getToken();}
+
+async function verifyToken(token){try{const res=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});if(!res.ok)return null;return await res.json();}catch(e){return null;}}
+function getAvatarUrl(user){if(user.user_metadata&&user.user_metadata.avatar_url)return user.user_metadata.avatar_url;const name=(user.user_metadata&&user.user_metadata.full_name)?user.user_metadata.full_name:(user.email||'U');return`https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1a5c30&color=4ade80&size=80&bold=true&format=png`;}
+function getDisplayName(user){if(user.user_metadata&&user.user_metadata.full_name)return user.user_metadata.full_name;if(user.user_metadata&&user.user_metadata.name)return user.user_metadata.name;if(user.email)return user.email.split('@')[0];return'Хэрэглэгч';}
+function showLoggedIn(user){const avatarUrl=getAvatarUrl(user);const name=getDisplayName(user);const email=user.email||'';const avatar=document.getElementById('user-avatar');if(avatar)avatar.src=avatarUrl;const ddAvatar=document.getElementById('dd-avatar');if(ddAvatar)ddAvatar.src=avatarUrl;const ddName=document.getElementById('dd-name');if(ddName)ddName.textContent=name;const ddEmail=document.getElementById('dd-email');if(ddEmail)ddEmail.textContent=email;const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='none';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='flex';const guestBar=document.getElementById('credit-bar-guest');if(guestBar)guestBar.style.display='none';}
+function showLoggedOut(){localStorage.removeItem('sb_token');localStorage.removeItem('sb_user');const authBtns=document.getElementById('auth-buttons');if(authBtns)authBtns.style.display='flex';const userMenu=document.getElementById('user-menu');if(userMenu)userMenu.style.display='none';const guestBar=document.getElementById('credit-bar-guest');if(guestBar)guestBar.style.display='block';}
+window.toggleUserDropdown=function(){const dd=document.getElementById('user-dropdown');if(!dd)return;dd.classList.toggle('open');};
+document.addEventListener('click',function(e){const menu=document.getElementById('user-menu');const dd=document.getElementById('user-dropdown');if(!menu||!dd)return;if(!menu.contains(e.target))dd.classList.remove('open');});
+window.signOutUser=async function(){const token=getToken();if(token){try{await fetch(`${SUPABASE_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${token}`}});}catch(e){}}showLoggedOut();const dd=document.getElementById('user-dropdown');if(dd)dd.classList.remove('open');};
+
+async function checkAuth(){const token=getToken();const cachedUser=getUser();if(!token){showLoggedOut();return;}if(cachedUser)showLoggedIn(cachedUser);const liveUser=await verifyToken(token);if(liveUser&&liveUser.id){localStorage.setItem('sb_user',JSON.stringify(liveUser));showLoggedIn(liveUser);}else{showLoggedOut();}}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',checkAuth);else checkAuth();
+
+function toggleNav(){
+  const links=document.getElementById('nav-links');
+  const right=document.getElementById('nav-right');
+  if(links)links.classList.toggle('open');
+  if(right)right.classList.toggle('open');
+}
+
+function showToast(message, type = 'info') {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+        background: ${type === 'success' ? 'rgba(74,222,128,0.15)' : 'rgba(255,255,255,0.08)'};
+        color: ${type === 'success' ? '#4ade80' : '#fff'};
+        padding: 12px 24px; border-radius: 12px; font-size: 14px; font-weight: 600;
+        font-family: 'Nunito', sans-serif; z-index: 9999;
+        border: 1px solid ${type === 'success' ? 'rgba(74,222,128,0.3)' : 'rgba(255,255,255,0.1)'};
+        backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        transition: all 0.3s; pointer-events: none;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+async function spendCreditsOrFail(amount, service, description, noticeId) {
+    if (!isLoggedIn()) {
+        window.location.href = 'login.html';
+        return false;
+    }
+    const token = getToken();
+    const noticeEl = noticeId ? document.getElementById(noticeId) : null;
+    if (noticeEl) noticeEl.classList.remove('show');
+
+    try {
+        const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/spend_credits`, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ p_amount: amount, p_service: service, p_description: description })
+        });
+
+        if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            const msg = (err.message || '').toLowerCase();
+            if (msg.includes('хүрэлцэхгүй') || msg.includes('insufficient') || r.status === 400) {
+                if (noticeEl) noticeEl.classList.add('show');
+                else showToast('💎 Кредит хүрэлцэхгүй байна!', 'error');
+            } else {
+                showToast('❌ Кредит хасах үед алдаа гарлаа.', 'error');
+            }
+            return false;
+        }
+        return true;
+    } catch (e) {
+        console.error('spendCreditsOrFail error:', e);
+        showToast('❌ Сүлжээний алдаа гарлаа.', 'error');
+        return false;
+    }
+}
+
+// ============================================================
+// ЗҮҮДНИЙ ТАЙЛАЛ
+// ============================================================
+function updateCount() {
+    const el = document.getElementById('dr-input');
+    document.getElementById('dr-count').textContent = el.value.length;
+}
+
+async function interpretDream() {
+    const input = document.getElementById('dr-input').value.trim();
+    if (!input) { showToast('⚠️ Зүүдээ бичнэ үү!', 'error'); return; }
+    if (input.length < 8) { showToast('⚠️ Арай дэлгэрэнгүй бичээрэй!', 'error'); return; }
+
+    const btn = document.getElementById('dr-calc-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Тайлбарлаж байна...';
+
+    try {
+        const response = await fetch('/api/dream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ dream_text: input })
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Тайлбарлах үед алдаа гарлаа');
+
+        document.getElementById('dr-teaser').textContent = data.teaser || '';
+        document.getElementById('dr-detail-text').textContent = data.detail || '';
+        document.getElementById('dr-detail-text').classList.remove('unlocked');
+        document.getElementById('dr-lock-overlay').classList.remove('hidden');
+        document.getElementById('dr-unlock-btn').disabled = false;
+        document.getElementById('dr-unlock-btn').textContent = 'Дэлгэрэнгүйг нээх — 5 кредит';
+        document.getElementById('dr-share-btn').classList.remove('show');
+
+        const card = document.getElementById('dr-result-card');
+        card.classList.add('show');
+        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (error) {
+        console.error('Dream error:', error);
+        showToast('❌ ' + error.message, 'error');
+    }
+
+    btn.disabled = false;
+    btn.textContent = '🌙 Тайлбарлах (Үнэгүй)';
+}
+
+async function unlockDetail() {
+    const btn = document.getElementById('dr-unlock-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Шалгаж байна...';
+
+    const dreamSnippet = document.getElementById('dr-input').value.trim().slice(0, 60);
+    const ok = await spendCreditsOrFail(5, 'dream', `Зүүдний тайлал: ${dreamSnippet}...`, 'dr-notice');
+
+    if (!ok) {
+        btn.disabled = false;
+        btn.textContent = 'Дэлгэрэнгүйг нээх — 5 кредит';
+        return;
+    }
+
+    document.getElementById('dr-detail-text').classList.add('unlocked');
+    document.getElementById('dr-lock-overlay').classList.add('hidden');
+    document.getElementById('dr-share-btn').classList.add('show');
+    showToast('✅ Тайлбар нээгдлээ!', 'success');
+}
+
+function copyDream() {
+    const teaser = document.getElementById('dr-teaser').innerText;
+    const detail = document.getElementById('dr-detail-text').innerText;
+    navigator.clipboard.writeText(teaser + '\n\n' + detail).then(() => showToast('📋 Хуулагдлаа!', 'success'));
+}
+</script>
+
+</body>
+</html>
