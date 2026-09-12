@@ -149,3 +149,51 @@ export function corsOptions() {
     }
   });
 }
+// ============================================================
+// ЗУРАГ ТАНИХ (VISION) — зөвхөн Царай зурхайд ашиглана.
+// Groq-ийн одоо холбогдсон model vision дэмждэггуй тул
+// зөвхөн Gemini ашиглана (fallback байхгуй).
+//
+// Ашиглах жишээ:
+//   import { callVisionAI } from '../_shared/ai.js';
+//   const { text } = await callVisionAI(env, systemPrompt, userText, imageBase64, mimeType);
+// ============================================================
+export async function callVisionAI(env, systemPrompt, userText, imageBase64, mimeType, options = {}) {
+  if (!env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY тохируулагдаагуй — зураг таних боломжгуй');
+  }
+  const temperature = options.temperature ?? 0.8;
+  const maxTokens = options.maxOutputTokens ?? 600;
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{
+        role: 'user',
+        parts: [
+          { text: userText },
+          { inline_data: { mime_type: mimeType, data: imageBase64 } }
+        ]
+      }],
+      systemInstruction: { parts: [{ text: systemPrompt }] },
+      generationConfig: {
+        temperature,
+        maxOutputTokens: maxTokens,
+        thinkingConfig: { thinkingBudget: 0 }
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const errText = await response.text();
+    throw new Error(`Gemini Vision API error (${response.status}): ${errText}`);
+  }
+
+  const data = await response.json();
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini Vision-ээс хариу ирсэн ч текст олдсонгуй (магадгуй зураг блоклогдсон)');
+  return { text: text.trim(), provider: 'gemini-vision' };
+}
